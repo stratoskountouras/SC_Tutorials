@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {text-decoration: underline}
+span.s5 {text-decoration: underline ; color: #0000bf}
+span.s6 {text-decoration: underline ; color: #0000ff}
+span.s7 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 6.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 2: MIDI in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Connecting</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Receiving Data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- MIDIIn</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Responders</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sending data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• MIDI clock</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Sending MIDI Clock data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Receiving MIDI Clock data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• MIDI files</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Utilities</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Third Party Implementations</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- dewdrop library</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- wslib</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- JITMIDIKtl</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- rd_ctl</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= MIDI IN SUPECOLLIDER =================</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== CONNECTING ======</b></p>
+<p class="p7">// MIDI support in SuperCollider quite extensive, and any device that your system recognizes SC can talk to. The MIDI-related classes are little more than hardware abstractions.</p>
+<p class="p7">// In SC, MIDI is implemented as a service. As such, there is a single MIDI input function that handles all messages - although you can choose to only use a specific subset of those messages within SC.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// In order to use MIDI, you have to instantiate the service: you do that by initializing the <i>MIDIClient</i>, which is the class that communicates with the CoreMIDI of your machine. This looks at the connected devices (<i>MIDIEndPoint</i>), and assigns a unique ID to each device, that you can later access by connecting a MIDIIn port.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p7">// here is how to connect a device:</p>
+<p class="p7">// • Step 1: Initialize the client</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>MIDIClient<span class="s2">.init;<span class="Apple-converted-space"> </span></span></p>
+<p class="p7">// • Step 2: Start the responder. Ex:</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.connect<span class="Apple-tab-span">	</span></p>
+<p class="p7">// • Step 3: Define what midi method you want to use, and create a function to do something with the data. Ex:</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.control = { <span class="s3">arg</span> src, chan, num, val;<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (num == 23, {p.play});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (num ==33, {p.release});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,num,val].postln; };</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// For more general information, look here: <a href="SC://UsingMIDI"><span class="s4">UsingMIDI</span></a></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== RECEIVING DATA ======</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ MIDIIn --</b></p>
+<p class="p7">// <a href="SC://MIDIIn"><span class="s4">MIDIIn</span></a><span class="Apple-tab-span">	</span>receives incoming data from a port, and has a number of methods for receiving different kinds of data. These are:</p>
+<p class="p10"><span class="Apple-tab-span">	</span>noteOff, noteOn, polytouch, control, program, touch, bend, sysex, sysrt, smpte</p>
+<p class="p7">// Evaluate the following chunk to post any incoming data from any port:</p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span><span class="s3">MIDIIn</span><span class="s2">.connect(0, </span><span class="s3">MIDIClient</span><span class="s2">.sources.at(0)); </span>// connect to port 0, you can change this to the port your device is connected</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// register functions:<span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.noteOff = { <span class="s3">arg</span> src, chan, num, vel; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,num,vel / 127].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.noteOn = { <span class="s3">arg</span> src, chan, num, vel; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,num,vel / 127].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.polytouch = { <span class="s3">arg</span> src, chan, num, vel; <span class="Apple-tab-span">	</span>[chan,num,vel / 127].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.control = { <span class="s3">arg</span> src, chan, num, val; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,num,val].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.program = { <span class="s3">arg</span> src, chan, prog; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,prog].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.touch = { <span class="s3">arg</span> src, chan, pressure; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,pressure].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.bend = { <span class="s3">arg</span> src, chan, bend; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,bend - 8192].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.sysex = { <span class="s3">arg</span> src, sysex; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>sysex.postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.sysrt = { <span class="s3">arg</span> src, chan, val; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,val].postln; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">MIDIIn</span>.smpte = { <span class="s3">arg</span> src, chan, val; <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[chan,val].postln; };</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// Have a look at the MIDIIn file for more information</p>
+<p class="p7">// NOTE:<span class="Apple-converted-space">  </span>You can only have one MIDIIn instance active at a time!</p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Responders --</b></p>
+<p class="p7">// Many interfaces only send a specific kind of data, so you don't have to be receiving everything; instead, you can use one of the <a href="SC://MIDIResponder"><span class="s4">MIDIResponder</span></a> subclasses. These also allow you to have any number of responders active simultaneously. There are 6 different responders, and all function similarly, inheriting many characteristics from their common superclass:</p>
+<p class="p9"><span class="s2"><b><span class="Apple-tab-span">	</span></b><a href="SC://NoteOnResponder"><span class="s5">NoteOnResponder</span></a></span></p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>NoteOffResponder</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span><a href="SC://CCResponder"><span class="s5">CCResponder</span></a></span></p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>BendResponder</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>TouchResponder</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>ProgramChangeResponder</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== SENDING DATA ======</b></p>
+<p class="p7">// <a href="SC://MIDIOut"><span class="s4">MIDIOut</span></a> is the class that allows you to control MIDI devices from within SuperCollider.<span class="Apple-converted-space">  </span>Unlike with MIDIIn, you can create multiple MIDIOut instances, but you have to provide the port number (index of the MIDIEndPoint in the MIDIClient.destinations array) and - optionally - the unique ID (uid). You can also define the device to use by name with the .newByName method, which can be handy if your ports change - which is likely if you're using several devices.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// You can get the available ports like this</p>
+<p class="p10"><span class="s3">MIDIClient</span>.destinations</p>
+<p class="p7">// You can send any type of data that you can receive: noteOff, noteOn, polytouch, control, program, touch, bend, sysex, sysrt, smpte</p>
+<p class="p8"><br></p>
+<p class="p7">// Besides sending to external devices, you can also send MIDI data to other software. Naturally, OSC messages are prefferable, but not all software is OSC-enabled, so you may have to use MIDI. You can find information on how to do that in different Operating Systems in the MIDIOut helpfile</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== MIDI CLOCK ======</b></p>
+<p class="p7">// MIDI provides you with the ability to synchronize devices by sending ticks - although as this is the MIDI world, don't expect anything spectacularly robust or with great resolution. More information can be found in the <a href="SC://UsingMIDI"><span class="s4">UsingMIDI</span></a> file.</p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Sending MIDI clock data --</b></p>
+<p class="p7">// You can send clock data with <a href="SC://MIDIOut"><span class="s4">MIDIOut</span></a>. There is also <a href="SC://MIDIClockOut"><span class="s4">MIDIClockOut</span></a> (part of crucial_lib, which is included in the SC distribution), a more convenient specialized class sending clock data out that is controllable by a TempoClock</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Receiving MIDI clock data --</b></p>
+<p class="p7">// You can synchronize SC to an external MIDI clock with sysrt or with smpte. sysrt uses 24 ticks per quarter note. The MIDIIn class has has methods for both (<a href="SC://MIDIIn"><span class="s4">MIDIIn</span></a>.sysrt and MIDIn.smpte. There is also <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDISyncClock.html"><span class="s6">MIDISyncClock</span></a> from the dewdrop library (a quark), which implements this functionaity</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== MIDI FILES ======</b></p>
+<p class="p7">// You can use the <span class="s4">[<a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/SimpleMIDIFile.html"><span class="s6">SimpleMIDIFile</span></a></span><span class="s6">]</span> Class from the wslib quark to read or write MIDI files in and from SC. Here is an example from Wouter Snoei (the wslib creator):</p>
+<p class="p8"><br></p>
+<p class="p7">// download a fugue</p>
+<p class="p11">"curl http://www.bachcentral.com/BachCentral/AOF/dou1.mid -o ~/Desktop/dou1.mid"<span class="s2">.unixCmd;</span></p>
+<p class="p7">// read it</p>
+<p class="p11"><span class="s2">m = </span><span class="s3">SimpleMIDIFile</span><span class="s2">.read( </span>"~/Desktop/dou1.mid"<span class="s2"> );</span></p>
+<p class="p7">// plot it:</p>
+<p class="p10">m.plot;</p>
+<p class="p7">// play it (an undocumented 'experimental' method), only plays one voice</p>
+<p class="p10">m.p.play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== UTILITIES ======</b></p>
+<p class="p7">// A couple of handy utilities for handling note-related information, either incoming or outgoing are:</p>
+<p class="p7"><span class="s2">.<a href="SC://cpsmidi"><span class="s4">cpsmidi</span></a> </span>// convert frequency to MIDI</p>
+<p class="p7"><span class="s2">.<a href="SC://midicps"><span class="s4">midicps</span></a> </span>// convert MIDI to frequency</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== THIRD PARTY IMPLEMENTATIONS ======</b></p>
+<p class="p7">// There are a few libraries out there implementing MIDI functionality more extensively than what is there in the original distribution. These are all <a href="SC://Quarks"><span class="s4">Quarks</span></a> that you can download.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// The dewdrop library is the quark with the most midi implementations, and it's well worth checking out. wslib conains some useful utilities and nice GUI, and JITMIDIKtl has some classes that are created to receive data from specific devices.</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*<span class="Apple-converted-space"> </span></p>
+<p class="p7"><b>// ------ from dewdrop lib (quark) --</b></p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/Voicer.html">Voicer</a></span> // (voice stealing implementation)</p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/BasicMIDISocket.html">BasicMIDISocket<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/VoicerMIDISocket.html">VoicerMIDISocket<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/LinkedVoicerSequencer.html">LinkedVoicerSequencer<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/BasicMIDIControl.html">BasicMIDIControl<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/CCAllocator.html">CCAllocator<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/CControl.html">CControl<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDIBufManager.html">MIDIBufManager<span class="s6"></span></a></span></p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwChucklib/Help/MBM.html">MBM</a></span> (MIDIBufManager)</p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDIRecBuf.html">MIDIRecBuf<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwTimeline/timeline-overview.html">timeline-overview<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/miditest.html">miditest<span class="s6"></span></a></span></p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>// ------ from wslib (quark) --</b></p>
+<p class="p7">==<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/SimpleMIDIFile.html">SimpleMIDIFile</a></span> //(MIDI file read-write)</p>
+<p class="p7">// GUIs</p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/MIDIWindow.html">MIDIWindow</a></span><span class="Apple-converted-space">  </span>// a graphic interface for connecting to different ports</p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/MIDIBendWindow.html">MIDIBendWindow</a></span> // a graphic interface for midi pitchbend data.</p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ixiViews/help/MIDIKeyboard.html">MIDIKeyboard</a></span> // a keyboard GUI widget</p>
+<p class="p7">// utilities</p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/midiname.html">midiname</a></span> //notenumber to notename and backwards conversion</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>// ------ JITMIDIKtl (quark) --</b></p>
+<p class="p7">// useful for hooking up specific devices</p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/MIDIKtl.html">MIDIKtl<span class="s6"></span></a></span></p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/MIDIKtl_howTo.html">MIDIKtl_howTo<span class="s6"></span></a></span></p>
+<p class="p7">// currently (June 2010) supports:</p>
+<p class="p12"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/PFKtl.html">PFKtl</a></span><span class="s7">, <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/PDKtl.html"><span class="s6">PDKtl</span></a>, <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/NanoKtl.html"><span class="s6">NanoKtl</span></a>, <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/BCRKtl.html"><span class="s6">BCRKtl</span></a>, <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/FFLV2Ktl.html"><span class="s6">FFLV2Ktl</span></a>,<span class="Apple-converted-space">  </span><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/JITMIDIKtl/UC33Ktl.html"><span class="s6">UC33Ktl</span></a></span></p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>// ------ rd_ctl (quark) --</b></p>
+<p class="p7"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/rd_ctl/help/Controller.help.scd">Controller</a></span> // create a control GUI interface, easily mapable to MIDI, and with some curve mapping functions</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7">//-----------------------------------------------</p>
+<p class="p1">// reading: Chapter 12: 'Real-time performance of computer music', from 'Computer Music', by Charles Dodge is a good reference for using MIDI devices in electronic music performance</p>
+</body>
+</html>

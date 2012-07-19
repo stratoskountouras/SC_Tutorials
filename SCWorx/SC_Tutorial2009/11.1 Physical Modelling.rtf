@@ -1,0 +1,702 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf440
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fnil\fcharset77 Monaco;\f2\fswiss\fcharset77 ArialMS;
+\f3\fswiss\fcharset77 Arial-BoldMS;\f4\fswiss\fcharset77 Arial-ItalicMS;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red128\green0\blue128;
+\red191\green0\blue0;\red0\green255\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Physical Modelling Synthesis\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\cf3 Server\cf0 .default=s=\cf3 Server\cf0 .internal;\
+
+\f1 s.boot;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs48 \cf0 \
+For a sound synthesis method that truly reflects what goes on in real instruments, you need to take account of the physics of musical instruments. The mathematical equations of acoustics are the basis of 
+\f3\b physical modelling
+\f2\b0  synthesis. They are tough to build, hard to control, but probably supply the most realistic sounds of the synthesis methods short of the inexpressive method of sampling. \
+\
+Because they're based on real instrument mechanics, the control parameters for them are familiar to musicians, though perhaps more from an engineer's point of view- lip tension, bore length, string cross sectional area, bow velocity... Controlling physical models in an intuitive musical way is itself a subject of open research. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There are a number of techniques in physical modelling, including \
+\
+\cf4 modal synthesis\cf0  (being a study of the exact modes of vibration of acoustic systems: related to analysis + additive synthesis) \
+\
+\cf4 delay line (waveguide) models\cf0  (building physical models out of combinations of simple units like delays and filters, which model the propagation of sound waves in a medium) \
+ \
+\cf4 mass-spring models\cf0  (based on dynamical equations; elementary masses and springs can be combined into larger models of strings, membranes, acoustic chambers, instrument bodies...) \
+\
+\
+\
+We won't be going too deeply into the engineering- it's a hard topic and an open research area. Good physical models can be very computationally expensive, and easy to use real time models are in many cases still out of reach. There are however an increasing number of successful designs, and certainly bound to be more to come. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+To hear a quick example, here's a physical model of a stiff string I built. Parameters such as the Young's modulus, density and radius of a string lead to calculated mode frequencies and damped decay times.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs18 \cf5 //adapted from 2.18 Vibrations of a Stiff String, p61, Thomas D. Rossing and Neville H. Fletcher (1995) Principles of Vibration and Sound. New York: Springer-Verlag \cf0 \
+(\
+\cf3 var\cf0  modes,modefreqs,modeamps;\
+\cf3 var\cf0  mu,t,e,s,k,f1,l,c,a,beta,beta2,density;\
+\cf3 var\cf0  decaytimefunc;\
+\cf3 var\cf0  material;\
+\
+material= \cf2 \\nylon\cf0 ; \cf5 // \\steel\cf0 \
+\
+\cf5 //don't know values of E and mu for a nylon/gut string\cf0 \
+\cf5 //so let's try steel\cf0 \
+\
+\cf5 //radius 1 cm\cf0 \
+a=0.01;\
+\
+s=pi*a*a;\
+\
+\cf5 //radius of gyration\cf0 \
+k=a*0.5;\
+\
+\
+if (material ==\cf2 \\nylon\cf0 ,\{\
+\
+e=2e+7; \
+\
+density=2000; \
+\
+\},\{\cf5 //steel\cf0 \
+\
+e= 2e+11; \cf5 // 2e+7; //2e+11 steel;\cf0 \
+\
+\cf5 //density p= 7800 kg m-3 \cf0 \
+\cf5 //linear density kg m = p*S\cf0 \
+\
+density=7800; \
+\});\
+\
+mu=density*s;\
+\
+t=100000;\
+\
+c= (t/mu).sqrt;	\cf5 //speed of sound on wave\cf0 \
+\
+l=1.8;	\cf5 //0.3\cf0 \
+\
+f1= c/(2*l);\
+\
+beta= (a*a/l)*((pi*e/t).sqrt);\
+\
+beta2=beta*beta;\
+\
+modes=10;\
+\
+modefreqs= \cf3 Array\cf0 .fill(modes,\{\cf3 arg\cf0  i; \
+\cf3 var\cf0  n,fr;\
+n=i+1;\
+\
+fr=n*f1*(1+beta+beta2+(n*n*pi*pi*beta2*0.125));\
+\
+if(fr>21000, \{fr=21000\}); \cf5 //no aliasing\cf0 \
+\
+fr\
+\});\
+\
+decaytimefunc= \{\cf3 arg\cf0  freq;\
+\cf3 var\cf0  t1,t2,t3;\
+\cf3 var\cf0  m,calc,e1dive2;\
+\
+\cf5 //VS p 50 2.13.1 air damping\cf0 \
+\
+m=(a*0.5)*((2*pi*freq/(1.5e-5)).sqrt);\
+\
+calc= 2*m*m/((2*(2.sqrt)*m)+1);\
+\
+t1= (density/(2*pi*1.2*freq))*calc;\
+\
+e1dive2=0.01; \cf5 //a guess!\cf0 \
+\
+t2= e1dive2/(pi*freq);\
+\
+\cf5 //leave G as 1\cf0 \
+t3= 1.0/(8*mu*l*freq*freq*1);\
+\
+1/((1/t1)+(1/t2)+(1/t3))\
+\};\
+\
+modeamps=\cf3 Array\cf0 .fill(modes,\{\cf3 arg\cf0  i; decaytimefunc.value(modefreqs.at(i))\});\
+\
+modefreqs.postln;\
+modeamps.postln;\
+\
+\{\
+\cf3 var\cf0  output;\
+\cf5 //EnvGen.ar(Env.new([0.001,1.0,0.9,0.001],[0.001,0.01,0.3],'exponential'),WhiteNoise.ar)\cf0 \
+\cf5 //could slightly vary amps and phases with each strike?\cf0 \
+\
+output=\cf3 EnvGen\cf0 .ar(\
+\cf3 Env\cf0 .new([0,1,1,0],[0,10,0]),doneAction:2)*\
+\cf5 //slight initial shape favouring lower harmonics- 1.0*((modes-i)/modes)\cf0 \
+\cf3 Mix\cf0 .fill(modes,\{\cf3 arg\cf0  i; \cf3 XLine\cf0 .ar(1.0,modeamps.at(i),10.0)*\cf3 SinOsc\cf0 .ar(modefreqs.at(i),0,1.0/modes)\});\
+\
+\cf3 Pan2\cf0 .ar(output,0)\
+\}.play;\
+\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs48 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Most physical models tend to follow a paradigm of a non-linear exciter, and a linear resonantor. \
+\
+
+\f3\b exciter
+\f2\b0 - human lips in brass instruments, a reed in woodwind, the bow/plectrum/quill/hammer/fingers for strings, the beater/stick/brush/mallet/hands for percussion\
+\
+
+\f3\b resonator
+\f2\b0 - the bore of wind instruments, the string of a string instrument, the membrane of a drum.  \
+\
+So the exciter is the energy source of the sound, whilst the resonantor is typically an instrument body that propagates the sound. The resonator is coupled to the air which transmits sound, but in most physical models we imagine a pickup microphone on the body and miss out the voyage in air of the sound (or we add separate reverberation models and the like).  \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The following is a piano sound by James McCartney that shows off how a short strike sound can be passed through filters to make a richer emulation of a real acoustic event. First you'll hear the piano hammer sound, then the rich tone. \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f4\i \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\i0\fs18 \cf0 \
+(\
+\cf5 // this shows the building of the piano excitation function used below\
+\cf0 \{\
+	\cf3 var\cf0  strike, env, noise;\
+	strike = \cf3 Impulse\cf0 .ar(0.01);\
+	env = \cf3 Decay2\cf0 .ar(strike, 0.008, 0.04);\
+	noise = \cf3 LFNoise2\cf0 .ar(3000, env);\
+	[strike, \cf3 K2A\cf0 .ar(env), noise]\
+\}.plot(0.03); //.scope\
+)
+\f4\i\fs48 \
+
+\f1\i0\fs18 \
+\
+(\
+\cf5 // hear the energy impulse alone without any comb resonation\
+\cf0 \{\
+	\cf3 var\cf0  strike, env, noise;\
+	strike = \cf3 Impulse\cf0 .ar(0.01);\
+	env = \cf3 Decay2\cf0 .ar(strike, 0.008, 0.04);\
+	noise = \cf3 LFNoise2\cf0 .ar(3000, env);\
+	10*noise\
+\}.scope\
+)
+\f4\i\fs48 \
+
+\f1\i0\fs18 \
+\
+\
+\cf5 //single strike with comb resonation \cf0 \
+\
+(\
+\{\
+	\cf3 var\cf0  strike, env, noise, pitch, delayTime, detune;\
+	strike = \cf3 Impulse\cf0 .ar(0.01);\
+	env = \cf3 Decay2\cf0 .ar(strike, 0.008, 0.04);\
+	\
+	pitch = (36 + 54.rand); \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 	\cf3 Pan2\cf0 .ar(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 			\cf5 // array of 3 strings per note\cf0 \
+			\cf3 Mix\cf0 .ar(\cf3 Array\cf0 .fill(3, \{ \cf3 arg\cf0  i;\
+				\cf5 // detune strings, calculate delay time :\cf0 \
+				detune = #[-0.05, 0, 0.04].at(i);\
+				delayTime = 1 / (pitch + detune).midicps;\
+				\cf5 // each string gets own exciter :\cf0 \
+				noise = \cf3 LFNoise2\cf0 .ar(3000, env); \cf5 // 3000 Hz was chosen by ear..\cf0 \
+				\cf3 CombL\cf0 .ar(noise,		\cf5 // used as a string resonator\cf0 \
+					delayTime, 		\cf5 // max delay time\cf0 \
+					delayTime,			\cf5 // actual delay time\cf0 \
+					6) 				\cf5 // decay time of string\cf0 \
+			\})),\
+			(pitch - 36)/27 - 1 \cf5 // pan position: lo notes left, hi notes right\cf0 \
+		)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 	\
+\}.scope\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 // synthetic piano patch (James McCartney)\cf0 \
+\cf3 var\cf0  n;\
+n = 6;	\cf5 // number of keys playing\cf0 \
+play(\{\
+	\cf3 Mix\cf0 .ar(\cf3 Array\cf0 .fill(n, \{	\cf5 // mix an array of notes\cf0 \
+		\cf3 var\cf0  delayTime, pitch, detune, strike, hammerEnv, hammer;\
+	\
+		\cf5 // calculate delay based on a random note\cf0 \
+		pitch = (36 + 54.rand); \
+		strike = \cf3 Impulse\cf0 .ar(0.1+0.4.rand, 2pi.rand, 0.1); \cf5 // random period for each key\cf0 \
+		hammerEnv = \cf3 Decay2\cf0 .ar(strike, 0.008, 0.04); \cf5 // excitation envelope\cf0 \
+		\cf3 Pan2\cf0 .ar(\
+			\cf5 // array of 3 strings per note\cf0 \
+			\cf3 Mix\cf0 .ar(\cf3 Array\cf0 .fill(3, \{ \cf3 arg\cf0  i;\
+				\cf5 // detune strings, calculate delay time :\cf0 \
+				detune = #[-0.05, 0, 0.04].at(i);\
+				delayTime = 1 / (pitch + detune).midicps;\
+				\cf5 // each string gets own exciter :\cf0 \
+				hammer = \cf3 LFNoise2\cf0 .ar(3000, hammerEnv); \cf5 // 3000 Hz was chosen by ear..\cf0 \
+				\cf3 CombL\cf0 .ar(hammer,		\cf5 // used as a string resonator\cf0 \
+					delayTime, 		\cf5 // max delay time\cf0 \
+					delayTime,			\cf5 // actual delay time\cf0 \
+					6) 				\cf5 // decay time of string\cf0 \
+			\})),\
+			(pitch - 36)/27 - 1 \cf5 // pan position: lo notes left, hi notes right\cf0 \
+		)\
+	\}))\
+\})\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f4\i\fs48 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\i0 \cf0 A simple form of physical modelling sound synthesis (related to what we've just heard above) is Karplus-Strong synthesis. 
+\f4\i \
+
+\f2\i0 \
+You start with a noise source in a delay line of length based on the pitch of note you would like. Then you successively filter the delay line until all the sound has decayed. You get a periodic sound because the loop (the delayline) is of fixed length. \
+\
+Here's a simple version:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs18 \cf0 \
+(\
+ \
+\{\
+\cf3 var\cf0  freq,time, ex, delay, filter, local;\
+ \
+freq= 100;\
+time= freq.reciprocal;\
+\
+ex= \cf3 WhiteNoise\cf0 .ar(\cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 ([1.0,1.0,0.0,0.0], [time,0,100])));\
+\
+local= \cf3 LocalIn\cf0 .ar(1);\
+\
+filter= \cf3 LPZ1\cf0 .ar(ex+local); \cf5 //apply filter\cf0 \
+\
+delay= \cf3 DelayN\cf0 .ar(filter, time, time);  \
+\
+\cf3 LocalOut\cf0 .ar(delay*0.95); \
+\
+\cf3 Out\cf0 .ar(0, \cf3 Pan2\cf0 .ar(filter,0.0))\
+\}.play\
+\
+)\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs48 \cf0 I can modulate the length of the delay line to make a vibrato! \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf0  \
+ \
+ \
+(\
+ \
+\{\
+\cf3 var\cf0  freq,time, ex, delay, filter, local;\
+ \
+freq= 440;\
+time= freq.reciprocal;\
+\
+ex= \cf3 WhiteNoise\cf0 .ar(\cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 ([1.0,1.0,0.0,0.0], [time,0,100])));\
+\
+freq= SinOsc.ar(6, 0, 10, freq);\
+time= freq.reciprocal;  \
+\
+local= \cf3 LocalIn\cf0 .ar(1);\
+\
+filter= \cf3 LPZ1\cf0 .ar(ex+local); \cf5 //apply filter\cf0 \
+\
+delay= \cf3 DelayN\cf0 .ar(filter, time, time);  \
+\
+\cf3 LocalOut\cf0 .ar(delay*0.99); \
+\
+\cf3 Out\cf0 .ar(0, \cf3 Pan2\cf0 .ar(filter,0.0))\
+\}.play\
+\
+)\
+ 
+\f4\i\fs48 \
+
+\f1\i0\fs18 \
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf0 Contributions from Thor Magnusson giving an alternative viewpoint:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs18 \cf0 \
+\
+\cf5 // we use a noise ugen to generate a burst\cf0 \
+(\
+\{  \
+ \cf3 var\cf0  burstEnv, att = 0, dec = 0.001; \cf5 //Variable declarations \cf0 \
+ burstEnv = \cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 .perc(att, dec), gate: \cf3 Impulse\cf0 .kr(1)); \cf5 //envelope \cf0 \
+ \cf3 PinkNoise\cf0 .ar(burstEnv); \cf5 //Noise, amp controlled by burstEnv \cf0 \
+\}.play  \
+)\
+\
+\cf5 // but then we use Comb delay to create the delay line that creates the tone\cf0 \
+\
+\
+\cf5 // let's create a synthdef using Karplus-Strong\cf0 \
+\cf3 SynthDef\cf0 (\cf2 \\ks_guitar\cf0 , \{ \cf3 arg\cf0  note, pan, rand, delayTime, noiseType=1;\
+	\cf3 var\cf0  x, y, env;\
+	env = \cf3 Env\cf0 .new(#[1, 1, 0],#[2, 0.001]);\
+	\cf5 // A simple exciter x, with some randomness.\cf0 \
+	x = \cf3 Decay\cf0 .ar(\cf3 Impulse\cf0 .ar(0, 0, rand), 0.1+rand, \cf3 WhiteNoise\cf0 .ar); \
+ 	x = \cf3 CombL\cf0 .ar(x, 0.05, note.reciprocal, delayTime, \cf3 EnvGen\cf0 .ar(env, doneAction:2)); \
+	x = \cf3 Pan2\cf0 .ar(x, pan);\
+	\cf3 Out\cf0 .ar(0, \cf3 LeakDC\cf0 .ar(x));\
+\}).store;\
+\
+\cf5 // and play the synthdef\cf0 \
+(\
+\{\
+	20.do(\{\
+		\cf3 Synth\cf0 (\cf2 \\ks_guitar\cf0 , [\cf2 \\note\cf0 , 220+(400.rand), \
+					\cf2 \\pan\cf0 , 1.0.rand2, \
+					\cf2 \\rand\cf0 , 0.1+0.1.rand, \
+					\cf2 \\delayTime\cf0 , 2+1.0.rand]);\
+					\
+	   (1.0.rand + 0.5).wait;\
+	\});\
+\}.fork\
+)\
+\
+\cf5 // here using patterns\cf0 \
+a = \cf3 Pdef\cf0 (\cf2 \\kspattern\cf0 , \
+		\cf3 Pbind\cf0 (\cf2 \\instrument\cf0 , \cf2 \\ks_guitar\cf0 , \cf5 // using our sine synthdef\cf0 \
+					\cf2 \\note\cf0 , \cf3 Pseq\cf0 .new([60, 61, 63, 66], \cf3 inf\cf0 ).midicps, \cf5 // freq arg\cf0 \
+					\cf2 \\dur\cf0 , \cf3 Pseq\cf0 .new([0.25, 0.5, 0.25, 1], \cf3 inf\cf0 ),  \cf5 // dur arg\cf0 \
+					\cf2 \\rand\cf0 , \cf3 Prand\cf0 .new([0.2, 0.15, 0.15, 0.11], \cf3 inf\cf0 ),  \cf5 // dur arg\cf0 \
+					\cf2 \\pan\cf0 , 2.0.rand-1,\
+					\cf2 \\delayTime\cf0 , 2+1.0.rand;  \cf5 // envdur arg\cf0 \
+\
+		)\
+).play;\
+\
+\cf5 // compare using whitenoise and pinknoise as an exciter:\cf0 \
+\
+\cf5 // whitenoise\cf0 \
+\
+(\
+\{  \
+ \cf3 var\cf0  burstEnv, att = 0, dec = 0.001; \
+ \cf3 var\cf0  burst, delayTime, delayDecay = 0.5; \
+ \cf3 var\cf0  midiPitch = 69; \cf5 // A 440 \cf0 \
+ delayTime = midiPitch.midicps.reciprocal; \
+ burstEnv = \cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 .perc(att, dec), gate: \cf3 Impulse\cf0 .kr(1/delayDecay));  \
+ burst = \cf3 WhiteNoise\cf0 .ar(burstEnv);  \
+ \cf3 CombL\cf0 .ar(burst, delayTime, delayTime, delayDecay, add: burst);  \
+\}.play  \
+) \
+\
+\cf5 // pinknoise\cf0 \
+(\
+\{  \
+ \cf3 var\cf0  burstEnv, att = 0, dec = 0.001; \
+ \cf3 var\cf0  burst, delayTime, delayDecay = 0.5; \
+ \cf3 var\cf0  midiPitch = 69; \cf5 // A 440 \cf0 \
+ delayTime = midiPitch.midicps.reciprocal; \
+ burstEnv = \cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 .perc(att, dec), gate: \cf3 Impulse\cf0 .kr(1/delayDecay));  \
+ burst = \cf3 PinkNoise\cf0 .ar(burstEnv);  \
+ \cf3 CombL\cf0 .ar(burst, delayTime, delayTime, delayDecay, add: burst);  \
+\}.play  \
+) \
+\
+\
+\
+\cf5 // Note that delayTime is controlling the pitch here. The delay time is reciprocal to the pitch. // 1/100th of a sec is 100Hz, 1/400th of a sec is 400Hz.\cf0 \
+\
+\
+(\
+\cf3 SynthDef\cf0 (\cf2 \\KSpluck\cf0 , \{ \cf3 arg\cf0  midiPitch = 69, delayDecay = 1.0;\
+	\cf3 var\cf0  burstEnv, att = 0, dec = 0.001;\
+	\cf3 var\cf0  signalOut, delayTime;\
+\
+	delayTime = [midiPitch, midiPitch + 12].midicps.reciprocal;\
+	burstEnv = \cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 .perc(att, dec)); \
+	signalOut = \cf3 PinkNoise\cf0 .ar(burstEnv); \
+	signalOut = \cf3 CombL\cf0 .ar(signalOut, delayTime, delayTime, delayDecay, add: signalOut); \
+	\cf3 DetectSilence\cf0 .ar(signalOut, doneAction:2);\
+	\cf3 Out\cf0 .ar(0, signalOut)\
+	\}\
+).store;\
+)\
+\
+(\
+\cf5 //Then run this playback task\cf0 \
+r = \cf3 Task\cf0 (\{\
+	\{\cf3 Synth\cf0 (\cf2 \\KSpluck\cf0 , \
+		[\
+		\cf2 \\midiPitch\cf0 , rrand(30, 90), \cf5 //Choose a pitch\cf0 \
+		\cf2 \\delayDecay\cf0 , rrand(0.1, 3.0) \cf5 //Choose duration\cf0 \
+		]);\
+		\cf5 //Choose a wait time before next event\cf0 \
+		[0.125, 0.125, 0.25].choose.wait;\
+	\}.loop;\
+\}).play\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f4\i\fs48 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\i0\fs18 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs44 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs48 \cf6 Further interesting sources:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs44 \cf0 \
+Some useful filter UGens for modelling instrument bodies and oscillators for sources:\
+[\cf3 \ul \ulc3 Klank\cf0 \ulnone ]\
+[\cf3 \ul Ringz\cf0 \ulnone ]	\cf5 //single resonating component of a Klank resonator bank\cf0 \
+[\cf3 \ul Resonz\cf0 \ulnone ]\
+[\cf3 \ul Decay\cf0 \ulnone ]\
+[\cf3 \ul Formant\cf0 \ulnone ]\
+[\cf3 \ul Formlet\cf0 \ulnone ]\
+\
+\
+\
+Further examples:\
+\
+[\cf3 \ul Spring\cf0 \ulnone ]\
+[\cf3 \ul Ball\cf0 \ulnone ]\
+[\cf3 \ul TBall\cf0 \ulnone ]\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs48 \cf0 STK Library:\
+\
+\ul http://sourceforge.net/projects/sc3-plugins/\ulnone \
+\
+PMSC Library: (great fun!)\
+\
+\ul http://swiki.hfbk-hamburg.de:8888/MusicTechnology/802\ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs18 \cf0 \
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 // Paul Lansky ported the STK physical modeling kit by Perry Cook and Gary Scavone\cf0 \
+\cf5 // for SuperCollider. It can be found on his website. \cf0 \
+\cf5 // Here are two examples using a mandolin and a violin bow\cf0 \
+	\
+\
+\cf5 // let's try the mandolin\cf0 \
+\{\cf3 StkMandolin\cf0 .ar(mul:3)\}.play  \
+\
+(\cf3 SynthDef\cf0 (\cf2 \\mando\cf0 , \{\cf3 arg\cf0  freq, bodysize, pickposition, stringdamping, stringdetune, aftertouch;\
+	\cf3 var\cf0  signal;\
+	signal = \cf3 StkMandolin\cf0 .ar(freq, bodysize, pickposition, stringdamping, stringdetune, aftertouch);\
+	\cf3 Line\cf0 .kr(1,1,2,doneAction:2); \cf5 //force deallocation\cf0 \
+	\cf3 Out\cf0 .ar(0, signal);\
+\}).load(s)\
+)\
+\
+\
+(\
+\cf3 Synth\cf0 (\cf2 \\mando\cf0 , [	\cf2 \\freq\cf0 , rrand(300, 600), \
+					\cf2 \\bodysize\cf0 , rrand(22, 64), \
+					\cf2 \\pickposition\cf0 , rrand(22, 88),\
+					\cf2 \\stringdamping\cf0 , rrand(44, 80),\
+					\cf2 \\stringdetune\cf0 , rrand(1, 10),\
+					\cf2 \\aftertouch\cf0 , rrand(44, 80)\
+					]);\
+)\
+\
+\
+\
+(\
+\cf3 Task\cf0 (\{\
+	100.do(\{\
+		\cf3 Synth\cf0 (\cf2 \\mando\cf0 , [	\cf2 \\freq\cf0 , rrand(300, 600), \
+					\cf2 \\bodysize\cf0 , rrand(22, 64), \
+					\cf2 \\pickposition\cf0 , rrand(22, 88),\
+					\cf2 \\stringdamping\cf0 , rrand(44, 80),\
+					\cf2 \\stringdetune\cf0 , rrand(1, 10),\
+					\cf2 \\aftertouch\cf0 , rrand(44, 80)\
+					]);\
+		1.wait;\
+	\})\
+\}).start;\
+)\
+\
+\cf5 // and the StkBowed UGen:\cf0 \
+\
+(\
+\cf3 SynthDef\cf0 (\cf2 \\bow\cf0 , \{\cf3 arg\cf0  freq, bowpressure = 64, bowposition = 64, vibfreq=64, vibgain=64, loudness=64;\
+	\cf3 var\cf0  signal;\
+	signal = \cf3 StkBowed\cf0 .ar(freq, bowpressure, bowposition, vibfreq, vibgain, loudness);\
+	signal = signal * \cf3 EnvGen\cf0 .ar(\cf3 Env\cf0 .linen, doneAction:2);\
+	\cf3 Out\cf0 .ar([0,1], signal);\
+\}).load(s)\
+)\
+\
+(\
+\cf3 Task\cf0 (\{\
+	100.do(\{\
+		\cf3 Synth\cf0 (\cf2 \\bow\cf0 , [		\cf2 \\freq\cf0 , rrand(200, 440), \
+							\cf2 \\bowpressure\cf0 , rrand(22, 64), \
+							\cf2 \\bowposition\cf0 , rrand(22, 64),\
+							\cf2 \\vibfreq\cf0 , rrand(22, 44),\
+							\cf2 \\vibgain\cf0 , rrand(22, 44)\
+					]);\
+		1.wait;\
+	\})\
+\}).start;\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f4\i\fs48 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\i0\fs36 \cf0 \
+\
+\
+}

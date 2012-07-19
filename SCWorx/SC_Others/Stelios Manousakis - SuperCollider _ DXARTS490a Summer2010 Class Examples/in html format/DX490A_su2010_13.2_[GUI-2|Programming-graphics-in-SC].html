@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Monaco; color: #000000; min-height: 14.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #606060}
+span.s5 {color: #000000}
+span.s6 {color: #bf0000}
+span.s7 {color: #007300}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 13.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>SuperCollider as a visual programming environment</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Drawing and animation</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pen</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SCDraw / SCDrawServer</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Working with Images</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SCImage</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SCImageFilter</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Quartz Composer in SC</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SCQuartzComposerView</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= SUPERCOLLIDER AS A VISUAL PROGRAMMING ENVIRONMENT =================</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Probably the last thing that comes to mind when thinking about SuperCollider are its graphics capabilities, but the truth is that it can be quite powerful in this aspect. SC draws in a similar manner as Processing does, but has a far superior algorithmic backbone. Of course, it is not optimized for graphics, so it can be slow, but one can integrate Quartz Composer<span class="Apple-converted-space">  </span>(in Mac OS X), opening .qtz patches within SC and without having to bother with OSC communication.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ====== DRAWING AND ANIMATION ======<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Pen --</b></p>
+<p class="p7">// <a href="SC://Pen"><span class="s2">Pen</span></a> is a class that allows you to algorithmically draw inside an Window (SCPen and SCWindow for CocoaGUI).<span class="Apple-converted-space"> </span></p>
+<p class="p7">// To draw, you need to call the drawHook function or the drawFunc function (when drawing inside an UserView/SCUserView), and then refresh the window to view the results of your actions.</p>
+<p class="p8"><br></p>
+<p class="p7">// Here is an example by James McCartney:</p>
+<p class="p10">(</p>
+<p class="p7">// By James McCartney</p>
+<p class="p10"><span class="s3">var</span> w, h = 700, v = 700, seed, run = <span class="s3">true</span>, phase = 0;</p>
+<p class="p10">w = <span class="s3">Window</span>(<span class="s4">"wedge"</span>, <span class="s3">Rect</span>(40, 40, h, v), <span class="s3">false</span>);</p>
+<p class="p10">w.view.background = <span class="s3">Color</span>.rand(0,0.3);</p>
+<p class="p7"><span class="s5">w.onClose = { run = </span><span class="s3">false</span><span class="s5"> }; </span>// stop the thread on close</p>
+<p class="p10">w.front;</p>
+<p class="p7">// store an initial seed value for the random generator</p>
+<p class="p10">seed = <span class="s3">Date</span>.seed;</p>
+<p class="p10">w.drawHook = {</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.width = 2;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.use {</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// reset this thread's seed for a moment</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">thisThread</span>.randSeed = <span class="s3">Date</span>.seed;</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// now a slight chance of a new seed or background color</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (0.006.coin) { seed = <span class="s3">Date</span>.seed; };</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (0.02.coin) { w.view.background = <span class="s3">Color</span>.rand(0,0.3); };</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// either revert to the stored seed or set the new one</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">thisThread</span>.randSeed = seed;</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// the random values below will be the same each time if the seed has not changed</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// only the phase value has advanced</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.translate(h/2, v/2);</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// rotate the whole image</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// negative random values rotate one direction, positive the other</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.rotate(phase * 1.0.rand2);</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// scale the rotated y axis in a sine pattern</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.scale(1, 0.3 * sin(phase * 1.0.rand2 + 2pi.rand) + 0.5 );</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// create a random number of annular wedges</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>rrand(6,24).do {</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.color = <span class="s3">Color</span>.rand(0.0,1.0).alpha_(rrand(0.1,0.7));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.beginPath;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pen</span>.addAnnularWedge(<span class="s3">Point</span>(0,0), a = rrand(60,300), a + 50.rand2, 2pi.rand </p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>+ (phase * 2.0.rand2), 2pi.rand);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (0.5.coin) {<span class="s3">Pen</span>.stroke}{<span class="s3">Pen</span>.fill};</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10">};</p>
+<p class="p8"><br></p>
+<p class="p7">// fork a thread to update 20 times a second, and advance the phase each time</p>
+<p class="p10">{ while { run } { w.refresh; 0.05.wait; phase = phase + 0.01pi;} }.fork(<span class="s3">AppClock</span>)</p>
+<p class="p8"><br></p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// For a couple more demos look at these files:</p>
+<p class="p11"><span class="s3">Document</span><span class="s5">.open(</span>"examples/GUI examples/rotary hommage duchamp.scd"<span class="s5">)</span></p>
+<p class="p11"><span class="s3">Document</span><span class="s5">.open(</span>"examples/GUI examples/Nick's LetterGimmick.scd"<span class="s5">)</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// You should also check out Frederik Olofsson's blog, where he has a tutorial and several very nice examples of AudioVisuals with SC:</p>
+<p class="p11">"open http://www.fredrikolofsson.com/f0blog/?q=node/316"<span class="s5">.unixCmd</span></p>
+<p class="p10">and:</p>
+<p class="p11">"open http://www.fredrikolofsson.com/f0blog/files/audiovisuals_with_sc-examples.zip"<span class="s5">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p7">// You may also want to get these extensions to the Pen class:</p>
+<p class="p11">"open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/743"<span class="s5">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ SCDraw / SCDrawServer --</b></p>
+<p class="p7">// These two classes are in the SCAnimation quark by Don Craig, and are intended for realtime (SCDrawServer) and non-realtime (SCDraw) procedural animation. These classes use Pen, so they can do everything Pen can, plus some extra things. Have a look at the help-files for more information and some examples.</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s4">"SCAnimation"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== WORKING WITH IMAGES ======</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ SCImage --</b></p>
+<p class="p7">// You can load, create and save images within SC using the <a href="SC://SCImage"><span class="s2">SCImage</span></a> class.</p>
+<p class="p8"><br></p>
+<p class="p7">// Load an image from your computer</p>
+<p class="p11"><span class="s5">i = </span><span class="s3">SCImage</span><span class="s5">.new(</span>"/Library/Desktop Pictures/Ripples Blue.jpg"<span class="s5">);</span></p>
+<p class="p10">[i.width, i.height].postln;</p>
+<p class="p10">i.plot;</p>
+<p class="p10">i.free;</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p7">// Or, load an image from the web: URL string - http:// or ftp:// - blocks until image is downloaded</p>
+<p class="p11"><span class="s5">i = </span><span class="s3">SCImage</span><span class="s5">.new(</span>"http://www.washington.edu/dxarts/images/logo.gif"<span class="s5">);</span></p>
+<p class="p10">i.plot;</p>
+<p class="p10">i.url;</p>
+<p class="p10">i.free;</p>
+<p class="p8"><br></p>
+<p class="p7">// Let's do some simple operations to an image:</p>
+<p class="p7">// add an image to a window</p>
+<p class="p10">w = <span class="s3">SCWindow</span>.new.front;</p>
+<p class="p10">w.view.background = <span class="s3">Color</span>(0.6,0.2,0.2);</p>
+<p class="p11"><span class="s5">i = </span><span class="s3">SCImage</span><span class="s5">.new(</span>"http://www.washington.edu/dxarts/images/logo.gif"<span class="s5">);</span></p>
+<p class="p10">w.view.backgroundImage_(i, 1, 0.6); <span class="s6">// (image, tileMode, alpha);</span></p>
+<p class="p8"><br></p>
+<p class="p7">// grab the image:</p>
+<p class="p10">g = <span class="s3">SCImage</span>.fromWindow(w, <span class="s3">Rect</span>(0, 0, 85, 95));</p>
+<p class="p10">g.plot(freeOnClose:<span class="s3">true</span>);</p>
+<p class="p10">w.close;</p>
+<p class="p8"><br></p>
+<p class="p7">// create another window;</p>
+<p class="p10">w = <span class="s3">SCWindow</span>.new.front;</p>
+<p class="p10">w.view.background = <span class="s3">Color</span>(0.2,0.6,0.6);</p>
+<p class="p10">w.view.backgroundImage_(g, 4, 0.6); <span class="s6">// (image, tileMode, alpha)</span></p>
+<p class="p10">g.free;</p>
+<p class="p8"><br></p>
+<p class="p7">// grab the new image, and create another window</p>
+<p class="p10">j = <span class="s3">SCImage</span>.fromWindow(w, <span class="s3">Rect</span>(0, 0, 190, 190));</p>
+<p class="p10">j.plot(freeOnClose:<span class="s3">true</span>);</p>
+<p class="p11"><span class="s5">j.write(</span>"~/Desktop/my_drawing.png"<span class="s5">); </span><span class="s6">// write the image</span></p>
+<p class="p10">w.close;</p>
+<p class="p10">j.free</p>
+<p class="p8"><br></p>
+<p class="p7">// Now, create a 2D slider with that image as a background</p>
+<p class="p10">(</p>
+<p class="p11"><span class="s5">a = </span><span class="s3">SCImage</span><span class="s5">.new(</span>"~/Desktop/my_drawing.png"<span class="s5">);</span></p>
+<p class="p11"><span class="s5">w = </span><span class="s3">SCWindow</span><span class="s5">.new(</span>"SCImage background"<span class="s5">);</span></p>
+<p class="p10">l = <span class="s3">SC2DSlider</span>.new(w, <span class="s3">Rect</span>(10,10,190,190)).backgroundImage_(a, 4, 1);</p>
+<p class="p10">w.front;</p>
+<p class="p10">a.free; <span class="s6">// safe</span></p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p10">l.knobColor = <span class="s3">Color</span>(1, 0, 0, 0.4)<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// For more information, see the <a href="SC://SCImage"><span class="s2">SCImage</span></a> helpfile</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ SCImageFilter --</b></p>
+<p class="p7">// You can apply CoreImage Filters to an SCImage, using the <a href="SC://SCImageFilter"><b>SCImageFilter</b></a> - and there are dozens of filters available!!!!</p>
+<p class="p7">// You can find a list and more info about these filters here:</p>
+<p class="p7">// <span class="s2">http://developer.apple.com/documentation/GraphicsImaging/Reference/CoreImageFilterReference/Reference/reference.html</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p7">// the image to use; scaled-down for faster computation</p>
+<p class="p10">a = <span class="s3">SCImage</span>.new(<span class="s4">"/Library/Desktop Pictures/Plants/Peony.jpg"</span>).scalesWhenResized_(<span class="s3">true</span>).setSize(500, 400);</p>
+<p class="p10">a.plot;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// posterize<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIColorPosterize<span class="s5">);</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// Roy Lichtenstein</p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIComicEffect<span class="s5">);</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// a glass blur</p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIGlassLozenge<span class="s5">);</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// Kaleidoscope</p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIKaleidoscope<span class="s5">);</span></p>
+<p class="p10">h.count_(6); <span class="s6">// h</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// image adjustments</p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIColorControls<span class="s5">);</span></p>
+<p class="p10">h.saturation_(0.5).brightness_(0.2).contrast_(0.7);</p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// Add glow</p>
+<p class="p13"><span class="s5">h = </span>SCImageFilter<span class="s5">.new(</span><span class="s7">\CIBloom</span><span class="s5">);</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s5">(</span>// Invert colors</p>
+<p class="p12"><span class="s5">h = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span>\CIColorInvert<span class="s5">);</span></p>
+<p class="p7"><span class="s5">a.addFilter(h); </span>// first call needed</p>
+<p class="p7"><span class="s5">a.plot; </span>// there should have it</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// Image masking and sequences of filters:</p>
+<p class="p10">(</p>
+<p class="p7"><span class="s5">f = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span><span class="s7">\CIColorMonochrome</span><span class="s5">); </span>// create a GrayScale image</p>
+<p class="p7"><span class="s5">g = </span><span class="s3">SCImageFilter</span><span class="s5">.new(</span><span class="s7">\CISourceInCompositing</span><span class="s5">); </span>// compositing we will use</p>
+<p class="p10">f.color_(<span class="s3">Color</span>.black);</p>
+<p class="p10">f.intensity_(1.0);</p>
+<p class="p7"><span class="s5">b = </span><span class="s3">SCImage</span><span class="s5">.new(</span><span class="s4">"~/Desktop/my_drawing.png"</span><span class="s5">); </span>// use the first image we created in this file, and saved onto the destop</p>
+<p class="p7">// apply a sequence of filters:</p>
+<p class="p10">a.applyFilters(</p>
+<p class="p12"><span class="s5"><span class="Apple-tab-span">	</span>[f, </span><span class="s3">SCImageFilter</span><span class="s5">(</span>\CIColorInvert<span class="s5">),<span class="Apple-converted-space"> </span></span></p>
+<p class="p12"><span class="s5"><span class="Apple-tab-span">	</span></span><span class="s3">SCImageFilter</span><span class="s5">(</span>\CIMaskToAlpha<span class="s5">)]</span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>); </span>// grayscale + invert + maskToAlpha = create a mask</p>
+<p class="p7"><span class="s5">g.backgroundImage_(a); </span>// set up background image</p>
+<p class="p7"><span class="s5">b.applyFilters(g); </span>// create masked image</p>
+<p class="p10">a.free;</p>
+<p class="p7"><span class="s5">w = b.plot(freeOnClose:</span><span class="s3">true</span><span class="s5">, background:</span><span class="s3">Color</span><span class="s5">.clear); </span>// set to clear color to see plainly the image</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// You can also load Non-built In Plugins (add them in /Library/Graphics/Image Units/).</p>
+<p class="p7">// Get some free plug-ins here:</p>
+<p class="p11">"open http://www.noiseindustries.com/products"<span class="s5">.unixCmd</span></p>
+<p class="p9"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// For more information, see the <a href="SC://SCImageFilter"><span class="s2">SCImageFilter</span></a> helpfile</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== QUARTZ COMPOSER IN SC ======<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ SCQuartzComposerView --</b></p>
+<p class="p7">// Quartz Composer is a Apple's visual programming environment using objects and patchcords (similar idea as with Max/MSP, PureData and many other environments) for processing and rendering graphics in Mac OS X. It comes free with the Apple Developer Tools and is extremely efficient, as it is highly optimized for OS X and Apple comptuer hardware.</p>
+<p class="p8"><br></p>
+<p class="p7">// <a href="SC://SCQuartzComposerView"><span class="s2">SCQuartzComposerView</span></a> is a class that let's you integrate QC compositions within SuperCollider, allowing you to merge the best of the two worlds: QC optimized graphics and SC's algorithmic capabilities (QC really lacks on that aspect).</p>
+<p class="p7">// When making a composition/patch in QC, you can choose to publich inputs and outputs; the names that you give these inputs and outputs are kept in a dictionary, and can be accessed from within SC using the methods <b>setInputValue</b>, <b>getInputValue</b> and <b>getOutputValue</b></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • Here is a simple example, only loading a QC composition, playing and stopping it:</p>
+<p class="p14"><br></p>
+<p class="p10">(</p>
+<p class="p7">// make a window for the viewer</p>
+<p class="p11"><span class="s5">w = </span><span class="s3">SCWindow</span><span class="s5">(</span>"Simple QC Test"<span class="s5">).front;</span></p>
+<p class="p7">// create a button to load patches</p>
+<p class="p10">b = <span class="s3">SCButton</span>(w, <span class="s3">Rect</span>(0, 0, 150, 20))</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span>.states_([[</span>"pick another QC file"<span class="s5">]])</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_({ <span class="s3">File</span>.openDialog(<span class="s4">""</span>, { <span class="s3">|path|</span> m.path_(path) }) });</p>
+<p class="p7">// create the QC viewer</p>
+<p class="p10">m = <span class="s3">SCQuartzComposerView</span>(w, <span class="s3">Rect</span>(0,20,400, 260));</p>
+<p class="p7">// add the path of the patch to use</p>
+<p class="p11"><span class="s5">m.path = </span>"/Applications/SuperCollider/Help/GUI/Cocoa-GUI/SCQuartzComposerView"<span class="s5"> ++ </span>"/Cells.qtz"<span class="s5">;</span></p>
+<p class="p10">)</p>
+<p class="p7"><span class="s5">m.start; </span>// start it</p>
+<p class="p7"><span class="s5">m.stop; </span>// stop it</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><span class="Apple-converted-space"> </span></p>
+<p class="p7">// • Now, a more involved example, using QC's inputs for controlling a composition from SC.</p>
+<p class="p10">(</p>
+<p class="p10">~qcWin = <span class="s3">SCWindow</span>(<span class="s4">"Kandinsky"</span>, <span class="s3">Rect</span>(0,0,720,576), border: <span class="s3">false</span>).front;</p>
+<p class="p10">b = <span class="s3">SCButton</span>(~qcWin, <span class="s3">Rect</span>(0, 0, 150, 20))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.states_([[<span class="s4">"Close Me"</span>]])</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_({~qcWin.close});</p>
+<p class="p10">q = <span class="s3">SCQuartzComposerView</span>(~qcWin, <span class="s3">Rect</span>(0,20,720,576));</p>
+<p class="p7">// put the "QuartzComposer_patch_support" folder and all its contents together with this file for it to work</p>
+<p class="p11"><span class="s5">q.path = </span><span class="s3">Document</span><span class="s5">.current.path.dirname ++ </span>"/QuartzComposer_patch_support/Simple-QC_Kandinsky.qtz"<span class="s5">;</span></p>
+<p class="p10">q.resize = 5;</p>
+<p class="p10">q.start;</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// get the names of input and output keys</p>
+<p class="p10">q.inputKeys;</p>
+<p class="p10">q.outputKeys;</p>
+<p class="p7">// you can see the published inputs and outputs in the composition inside Quartz Composer if you want</p>
+<p class="p10">q.openInQC;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// Now, to control this composition directly from within SC.</p>
+<p class="p7">// mapping envelopes to use in the function, one env for each input</p>
+<p class="p10">~xEnv = <span class="s3">Env</span>([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);</p>
+<p class="p10">~yEnv = <span class="s3">Env</span>([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);</p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p7">// a function that includes a task to control each input in real time, and a task per parameter for recreating the envelopes in real-time</p>
+<p class="p10">~imgMove = {<span class="s3">arg</span> xmul, ymul, speed, jit;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> task, envSpeed;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>envSpeed = speed * 1500;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>envSpeed.postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>t = <span class="s3">Task</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>q.x_pos_((jit[0] * -1).rrand(jit[0]) + xmul * ~xEnv[((i % 1000) * 0.001)]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>speed[0].wait(speed[1]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>p = <span class="s3">Task</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>q.y_pos_((jit[1] * -1).rrand(jit[1]) + ymul * ~yEnv[((i % 1000) * 0.001)]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>speed[0].wait(speed[1]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>e = <span class="s3">Task</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~xEnv = <span class="s3">Env</span>([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>envSpeed[0].wait(envSpeed[1]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>f = <span class="s3">Task</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~yEnv = <span class="s3">Env</span>([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>envSpeed[0].wait(envSpeed[1]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>t.play(<span class="s3">AppClock</span>);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>p.play(<span class="s3">AppClock</span>);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>e.play(<span class="s3">AppClock</span>);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>f.play(<span class="s3">AppClock</span>);</p>
+<p class="p10">};</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// start the function</p>
+<p class="p10">~imgMove.value(1, 1, [0.05, 0.25], [0.5, 0.005])</p>
+<p class="p7">// fullscreen mode if you like</p>
+<p class="p10">~qcWin.fullScreen</p>
+<p class="p7">// individual control over each task</p>
+<p class="p10">p.stop;</p>
+<p class="p10">t.stop;<span class="Apple-converted-space"> </span></p>
+<p class="p10">e.stop;</p>
+<p class="p10">f.stop;</p>
+<p class="p10">p.start;<span class="Apple-converted-space"> </span></p>
+<p class="p10">t.start;</p>
+<p class="p10">e.start;</p>
+<p class="p10">f.start;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • You can also use QC to create GUIs as controls for your synths:</p>
+<p class="p7">// Here is an example from the <a href="SC://SCQuartzComposerView"><span class="s2">SCQuartzComposerView</span></a> help file (there are more there)</p>
+<p class="p8"><br></p>
+<p class="p7">////////// Control some audio: Stupid Pan Example</p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p10">w = <span class="s3">SCWindow</span>(<span class="s4">"Stupid Pan Example"</span>, <span class="s3">Rect</span>(0,20,600, 150)).front;</p>
+<p class="p10">m = <span class="s3">SCQuartzComposerView</span>(w, <span class="s3">Rect</span>(0,20,600, 100));</p>
+<p class="p10">m.path = <span class="s3">Document</span>.current.path.dirname ++ <span class="s4">"/Stupid Pan.qtz"</span>;</p>
+<p class="p10">m.resize = 5;</p>
+<p class="p10">m.start;</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p10">s.boot;</p>
+<p class="p7">// use mouse to set pan position</p>
+<p class="p10">(</p>
+<p class="p10">{</p>
+<p class="p10">loop({</p>
+<p class="p10">{ <span class="s3">Pan2</span>.ar(<span class="s3">Saw</span>.ar(mul: 0.1) * <span class="s3">EnvGen</span>.ar(<span class="s3">Env</span>.perc, timeScale: 4, doneAction: 2), m.x_pos) }.play;</p>
+<p class="p10">1.wait;</p>
+<p class="p10">});</p>
+<p class="p10">}.fork(<span class="s3">AppClock</span>);</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// Here is an online repository of QC patches:</p>
+<p class="p11">"open http://kineme.net/"<span class="s5">.unixCmd</span></p>
+</body>
+</html>

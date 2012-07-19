@@ -1,0 +1,541 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Geneva;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red0\green0\blue255;\red0\green112\blue0;\red0\green255\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs48 \cf0 Using and Writing Classes in SuperCollider\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs36 \cf2 \
+\cf3 Server\cf0 .default=s=\cf3 Server\cf0 .internal;\
+\cf2 \
+\cf0 \
+What is Object Oriented Programming? \
+\
+Think of a jelly mould; it is a template from which we can make as many jellies as we have time and gelatinous matter. There is only one mould, but lots of jellies. \
+\
+In object oriented programming we call the mould a class, and the jellies we make from it objects or instances.   \
+\
+A class is an abstract description of properties of some category. We can make a class for whatever concept we choose- if we made a class for Giraffe, it might descibe the potential for long necks and four long legs and a certain range of allowable stripiness. Using the class, we can instantiate actual giraffe objects, and make as many of them as we like, a whole herd. The individual giraffes might vary slightly in the length of their necks and legs, the stripiness of their bodies and how aggressive they are towards tourists, but they will basically conform to the category, the Giraffe class, describing giraffedom. \
+\
+There is more to Object Oriented Programming than that, but I'll reveal it slowly.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+SuperCollider is an Object Oriented Programming Language, and you should have noticed by now that words keep turning up with capital letters at the start:\
+\
+\cf3 SinOsc\cf0 \
+\cf3 LFSaw\cf0 \
+\cf3 LPF\cf0 \
+\
+These are the classes, the abstract descriptions for particular types of audio object. When we make objects from the recipes, we get particular instances of a sine oscillator, or a low frequency saw wave or a low pass filter. We can have as many sine oscillator objects as we like in our piece, but we create them from the SinOsc class.\
+\
+\
+\{\cf3 Mix\cf0 .new([\cf3 SinOsc\cf0 .ar(440),\cf3 SinOsc\cf0 .ar(550),\cf3 SinOsc\cf0 .ar(660)])*0.3\}.play\
+\
+\
+The way the SinOsc class is making each SinOsc object here is through a class method of the class, ar.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+A class method is just a function, but it is a function tied to a class. Typically, such class methods are the recipes for making objects. In fact, the most common one is new:\
+\
+w=\cf3 SCWindow\cf0 .new(\cf4 "new window object"\cf0 , \cf3 Rect\cf0 .new(100,100,400,400));\
+\
+which is used so commonly in SC, that there is a special shortcut of missing it out:\
+\
+w= \cf3 SCWindow\cf0 (\cf4 "new window object"\cf0 , \cf3 Rect\cf0 .new(100,100,400,400));\
+\
+w= \cf3 SCWindow\cf0 (); \cf2 //accept defaults\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+As well as class methods, we have instance methods. These are functions which any created instance (object) can respond to.\
+\
+w.front;	\cf2 //make window appear by calling an instance method on the instance (object) we just made\cf0 \
+\
+\cf2 //call an instance method (backColor_) on the view object belonging to the window object\
+\cf0 w.view.backColor_(\cf3 rgb\cf0 (255,0,45));\
+\
+\
+\
+Note how in the first case we called a function (using the dot) on a class name- \cf3 SCWindow\cf0 .new and in the second we called a function on a variable holding an individual object- w.front\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+How do you know what the class methods and instance methods of any class are? You can see \
+this as follows:\
+\
+\cf3 SCWindow\cf0 		\cf2 //select the text and press cmd+d to get the Help file\
+\cf0 \
+\cf3 SCWindow\cf0 		\cf2 //select the text and press cmd+J to go to the code definition\
+\cf0 \
+new			\cf2 //select the text and press cmd+Y to see all the classes that respond to new\
+\cf0 \
+Try the last procedure with the following:\
+\
+ar\
+\
+backColor_\
+\
+series\
+\
+\
+\
+Whenever you see a response like Meta_SomeClass:, this is a class method\
+When you see SomeClass:, this is an instance method. \
+\
+If you go to the class definition file using cmd+J, you'll see lists of functions. Some have names that begin with a *, like *ar or *new- these are class methods. Some have names with no asterisk- these are instance methods. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Now, a feature of SuperCollider is that every class you ever make has some position within a class hierarchy. This is a taxonomy of all the different things you can make, and how they relate to one another. \
+\
+For instance, a\cf3  SinOsc\cf0  is a type of \cf3 UGen\cf0  (unit generator). \
+\
+An \cf3 Array\cf0  is a type of\cf3  ArrayedCollection\cf0 . \
+\
+This relating of types allows classes to share common properties and avoids the programmer \
+having to code lots of similar functions again and again- they can be kept in one place.  \
+\
+Witness:\
+\
+\
+\cf3 Collection\cf0 .dumpClassSubtree \cf2 //show all classes derived from Collection\cf0 \
+\
+\
+for further information on querying the class hierarchy see:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 [{\field{\*\fldinst{HYPERLINK "SC://Internal-Snooping"}}{\fldrslt \cf5 Internal-Snooping}}]	//select the text within the brackets and press cmd+d
+\fs36 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+In fact, everything derives at root from a basic class, confusingly called Object. In SuperCollider, all other classes inherit the properties of the Object class. We say that all classes derive from Object.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 Object\cf0 .dumpClassSubtree		\cf2 //try running this to see the whole hierarchy\cf0 \
+\
+There is a big tree structure of classes. As we go down the hierarchy from Object, classes become increasingly specialised.  Classes that specialise, that derive from something else, are called subclasses. The class they derive from is the superclass. \
+\
+When you create new classes you derive from an existing class using the colon. Hence\
+\
+\cf3 SinOsc\cf0   : \cf3 UGen\cf0 			\cf2 //SinOsc is a subclass of UGen; UGen is the super class for SinOsc\
+\cf0 \
+This means that SinOsc is a more specialised UGen, one that deals exclusively with making sine waves. \
+\
+By default, you derive from Object, so if you don't specify any class to derive from explicitly, you are making a subclass of Object. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+In making our own derivations, we start general and get more specific, hence we might have\
+\
+SavannahBeast: SavannahHerbivore: Giraffe: AlbinoGiraffe\
+\
+As part of our hierarchy, but we could have a more extensive set of categories. The tree might look like:\
+\
+						SavannahBeast\
+						/				\\\
+SavannahCarnivore						SavannahHerbivore					\
+	/			\\								/               \\\
+Lion			Hyena						Giraffe           Thomson's Gazelle\
+												|\
+											AlbinoGiraffe\
+\
+\
+\
+\
+This is just hypothetical, and obviously real animals are much more complex than the simple models I'm suggesting here, but its enough for you to see the way we can go about classifying relationships between the categories we wish to work with. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+As well as methods, classes and objects can have associated variables. This is because in Object Oriented programming the data is stored with the functions that act on that data. You can see this is common sense, for going back to our Giraffe class, we might want data to tell us how tall an individual giraffe is (held in an instance variable) or we might want data telling us the natural predators of the giraffe species (held in a class variable, since I assume it's the same for every giraffe). \
+\
+in the class definitions, \
+\
+\cf3 var\cf0  <>height; 				\cf2 //is an instance variable\
+\cf0 \
+\cf3 classvar\cf0  <>predators; 		\cf2 //is a class variable\
+\cf0 \
+in the client code (the code that uses my hypothetical Giraffe class) I might have:\
+\
+g= \cf3 Giraffe\cf0 .new; \
+\
+g.height = 2.4; 		\cf2 //set the height in metres of this particular Giraffe\
+\cf0 \
+\cf3 Giraffe\cf0 .predators = [\cf6 \\lion\cf0 , \cf6 \\hyena\cf0 , \cf6 \\man\cf0 ];	\cf2 //set the predators of the entire giraffe species\
+\cf0 \
+\
+Note how the instance variable is called from an instance stored in a variable, but the class variable is called via the class name. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+An important issue is that of access. Some data is only used internally in a class, for secret calculations that normal users don't need to know about; other data is freely available to people who use the class. \
+\
+This is shown by the < and > signs. \
+\
+< is the getter method, meaning that someone outside the class can read this data\
+> is the setter method, meaning that someone outside the class can write new values for this data.\
+\
+If neither is there, nobody outside the class can access that data, but it is freely available to the code written for the class itself. \
+\
+So if we have the simple class definition:   \cf3 Giraffe\cf0  \{ \cf3 var\cf0  <height; \}\
+\
+I can go \
+\
+g=\cf3 Giraffe\cf0 .new; \
+\
+h= g.height; 	      \cf2 //there is a getter, so I can read the current value\
+\cf0 \
+but I cannot go\
+\
+g.height = 2.3;	\cf2 //there is no setter\
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf7 Using extension libraries and recompiling the library\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+Go to the SCClassLibrary folder in the SuperCollider application directory. \
+\
+We can add or remove class definition files (those that end in .sc) from here, and then we recompile the library using cmd+K to update our class definitions. \
+\
+\
+When you get hold of extension libraries for SuperCollider you're getting hold of lots of additional classes that people have written. Installing the third party library consists of you adding it into your SCClassLibrary so that it is compiled as part of SuperCollider.  \
+\
+\
+(note: you can also put the classes in a specific extensions directory on your system, which will be discussed with third party libraries next week)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The claret symbol ^\
+\
+We are in a position to make our own classes now. The final syntax you just need to be aware of is the use of the claret symbol ^, which is used in the methods (the functions) of the class to denote where a function returns.\
+\
+In defining your own normal functions \
+\
+f= \{\cf3 arg\cf0  a; a*a\}		\cf2 //return the square of the argument  \
+\cf0 \
+\
+In a method for a class, there's no need for an equals sign, this is defining an instance method called 'f':\
+\
+f \{\cf3 arg\cf0  a;  ^a*a\}\
+\
+You are probably wondering why the claret is used at all; why bother? The reason is that a method can return at any point, or at multiple points based on the logic:\
+\
+mymethod \{\cf3 arg\cf0  a;  if(a==4, ^7);  a=(a*9)%7; ^if(a==6, 5, a)\}\
+\
+A normal function could not do this. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Making a new class\
+\
+\cf3 NastySynth\cf0  \{\
+\cf3 	classvar\cf0  <>wackiness=200;\
+	\
+	*ar \{\cf3 arg\cf0  wackymult=1; \
+		\
+		^\cf3 CombN\cf0 .ar(\
+			(\cf3 SinOsc\cf0 .ar(\
+				\cf3 LFNoise0\cf0 .ar(9, wackymult*wackiness, \cf3 MouseY\cf0 .kr(100,400)), 7, \cf3 MouseX\cf0 .kr(0.0,0.75)\
+			)%0.3)\
+		,0.3,0.3, 5)\
+	\}\
+\
+\}\
+\
+Put this definition in a new window, save it as NastySynth.sc in the SCClassLibrary folder.\
+Recompile- the class count should go up.  \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Now run this client code one line at a time-\
+\
+\cf3 NastySynth\cf0 .wackiness= 200; \
+\{\cf3 NastySynth\cf0 .ar\}.play\
+\{\cf3 NastySynth\cf0 .ar(0.01)\}.play\
+\{\cf3 NastySynth\cf0 .ar(\cf3 SinOsc\cf0 .kr(\cf3 MouseX\cf0 .kr(0,100)))\}.play\
+\cf3 NastySynth\cf0 .wackiness= 4000; \
+\{\cf3 NastySynth\cf0 .ar\}.play\
+\{\cf3 NastySynth\cf0 .ar(0.01)\}.play\
+\{\cf3 NastySynth\cf0 .ar(\cf3 SinOsc\cf0 .kr(\cf3 MouseX\cf0 .kr(0,100)))\}.play\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Finally, lets show the use of derived classes\
+\
+Put the file SuperMario.sc in your DefaultLibrary and recompile. \
+\
+Now run this client code:\
+\
+(\
+\cf3 var\cf0  sm;\
+\
+sm=\cf3 SuperMario\cf0 (1.5);\
+\cf3 SuperMario\cf0 .companyaffiliation= \cf6 \\Nintendo\cf0 ;\
+sm.graspofItalian= 1.0; \
+sm.dostuff;\
+)\
+\
+\
+\
+(\
+u=\cf3 UltraPlumber\cf0 .new.height_(1.5);\
+\
+\cf3 UltraPlumber\cf0 .dungareesupplier= \cf6 \\Levi\cf0 ;\
+\cf3 SuperMario\cf0 .companyaffiliation.postln;\
+\
+u.graspofItalian= 0.7; \
+\
+u.dostuff;\
+)\
+\
+\cf2 //and you can run these lines whilst its playing\
+\cf0 u.craftiness= 1500;	\
+u.height= 7.3; \
+u.ubendification= 0.1;\
+u.sizeoftool=2.0;\
+\
+\
+\
+\
+\
+\
+\
+}

@@ -1,0 +1,292 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red191\green0\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Buffers and Sound Files\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\cf3 Server\cf0 .default=s=\cf3 Server\cf0 .local;\
+s.boot;\
+\
+To do sample playback and manipulation, for streaming files off disk, for recording and wavetables and many other processes, it is necessary to handle memory buffers on the Server. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There are 1024 individual buffers by default. The Buffer memory is allocated as needed from the operating system.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 \
+(
+\f1\fs18 You can check defaults by looking at the ServerOptions class and Main:startup. The Buffer memory is not the memSize option; memSize is just some reserved memory for use by plug-ins like delay lines. So you should still set memSize big because UGens like CombN or DelayN need to use it for their allocations.  \
+)
+\f0\fs36  \
+\
+We'll deal with buffers using the convenience wrapper class appropriately called Buffer.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //allocate a one channel buffer of 441000 sample frames (10 sec at standard sampling rate)\cf0 \
+b=\cf3 Buffer\cf0 .alloc(s, 10*44100, 1);  \cf4 // s= server, 10*44100 num frames, 1 = 1 channel, i.e. mono\cf0 \
+\
+If you check scsynth's memory use in your operating system (e.g. for OS X use the Terminal with the top command or Activity Monitor) before and after running this line (top command would work) you should see it has gone up\
+\
+b.bufnum 	\cf4 //which buffer are we using? This is an essential parameter to pass to lots of UGens\cf0 \
+\
+\cf4 //restore that memory and free that bufferID\cf0 \
+b.free\
+\
+To prepare buffers for playback by loopers or disk streamers, there are other methods of the Buffer class you'll see called. \
+\
+To work with sample playback there are a variety of possible UGens to use.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ul \ulc0 PlayBuf\ulnone \
+\
+(\
+\cf4 //this loads into a buffer the default sound that comes with SuperCollider\cf0 \
+\cf4 //.read brings in the whole sound at once\cf0 \
+b = \cf3 Buffer\cf0 .read(s,\cf5 "sounds/a11wlk01.wav"\cf0 );\
+\
+\cf3 SynthDef\cf0 (\cf5 "playbuf"\cf0 ,\{ \cf3 arg\cf0  out=0,bufnum=0, rate=1, trigger=1, startPos=0, loop=1;\
+	\cf3 Out\cf0 .ar(out,\
+		\cf3 Pan2\cf0 .ar(\cf3 PlayBuf\cf0 .ar(1,bufnum, \cf3 BufRateScale\cf0 .kr(bufnum)*rate, trigger, \cf3 BufFrames\cf0 .ir(bufnum)*startPos, loop),0.0)\
+	)\
+\}).send(s); \
+)\
+\
+BufRateScale is vital because the soundfile I've loaded is actually at 11025Hz sampling rate, and my audio output is at 44100Hz - so it adjusts for different possible sampling rates. The BufFrames UGen returns, well, the number of frames in the soundfile. But note the .ir - this is initialisation rate, i.e. it the UGen only runs once when first created, it doesn't need to be continually recalculated.\
+\
+\
+\cf4 //note how even though the soundfile doesn't loop, the Synth is not deallocated when done\cf0 \
+\cf4 //(it has no envelope function). you'll need to cmd+period to kill it  \cf0 \
+\cf3 Synth\cf0 (\cf2 \\playbuf\cf0 , [\cf2 \\out\cf0 , 0, \cf2 \\bufnum\cf0 , b.bufnum]);\
+ \
+ \cf4 //play at half rate\cf0 \
+\cf3 Synth\cf0 (\cf2 \\playbuf\cf0 , [\cf2 \\out\cf0 , 0, \cf2 \\bufnum\cf0 , b.bufnum, \cf2 \\rate\cf0 , 0.5]);\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf4 //Example with GUI controlling Synth \cf0 \
+(\
+\cf3 var\cf0  w, rateslid, trigslid, startposslid, loopslid, a; \
+\
+a=\cf3 Synth\cf0 (\cf2 \\playbuf\cf0 , [\cf2 \\out\cf0 , 0, \cf2 \\bufnum\cf0 , b.bufnum]);\
+\
+w=\cf3 SCWindow\cf0 (\cf5 "PlayBuf Example"\cf0 ,\cf3 Rect\cf0 (10,200,300,150));\
+\
+w.front;\
+\
+\cf4 //control positioning of new GUI elements so I don't have to think too hard about it\cf0 \
+w.view.decorator= \cf3 FlowLayout\cf0 (w.view.bounds);\
+\
+\cf4 //James' shortcut slider class\cf0 \
+\cf4 //100@24 means a Point of size 100 by 24\cf0 \
+\cf4 //|ez| is the same as arg ez;  - the slider object is being passed into the callback action function\cf0 \
+rateslid= \cf3 EZSlider\cf0 (w, 250@24, \cf5 "Rate"\cf0 , \cf3 ControlSpec\cf0 (0.5, 10, \cf2 'exponential'\cf0 , 0.1), \{\cf3 |ez|\cf0  a.set(\cf2 \\rate\cf0 ,ez.value)\}, 1);\
+\
+trigslid= \cf3 EZSlider\cf0 (w, 250@24, \cf5 "Trigger"\cf0 , \cf3 ControlSpec\cf0 (0, 1, \cf2 'lin'\cf0 , 1), \{\cf3 |ez|\cf0  a.set(\cf2 \\trigger\cf0 ,ez.value)\}, 1);\
+\
+startposslid= \cf3 EZSlider\cf0 (w, 250@24, \cf5 "StartPos"\cf0 , \cf3 ControlSpec\cf0 (0.0, 1.0, \cf2 'lin'\cf0 , 0.01), \{\cf3 |ez|\cf0  a.set(\cf2 \\startPos\cf0 ,ez.value)\}, 0);\
+\
+loopslid= \cf3 EZSlider\cf0 (w, 250@24, \cf5 "Loop"\cf0 , \cf3 ControlSpec\cf0 (0, 1, \cf2 'lin'\cf0 , 0.1), \{\cf3 |ez|\cf0  a.set(\cf2 \\loop\cf0 ,ez.value)\}, 1);\
+\
+w.onClose_(\{a.free;\});\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\ul BufRd\
+\ulnone \
+BufRd is similar to PlayBuf but lets you directly read from a buffer (note you could also use this with non-soundfiles) via a phase argument. This is more convenient for taking custom control of how you read through a sample. \
+\
+(\
+\cf4 //this loads into a buffer the default sound that comes with SuperCollider\cf0 \
+\cf4 //.read brings in the whole sound at once\cf0 \
+b = \cf3 Buffer\cf0 .read(s,\cf5 "sounds/a11wlk01.wav"\cf0 );\
+\
+\cf4 //using Mouse to scrub through- X position is normalised position 0 to 1 phase through the source file \cf0 \
+\cf3 SynthDef\cf0 (\cf5 "bufrd"\cf0 ,\{ \cf3 arg\cf0  out=0,bufnum=0;\
+	\cf3 Out\cf0 .ar(out,\
+		\cf3 Pan2\cf0 .ar(\cf3 BufRd\cf0 .ar(1, bufnum, \cf3 K2A\cf0 .ar(\cf3 BufFrames\cf0 .ir(b.bufnum)*\cf3 MouseX\cf0 .kr(0.0,1.0)).lag(\cf3 MouseY\cf0 .kr(0.0,1.0))),0.0)\
+	)\
+\}).play(s); \
+)\
+\
+The K2A is needed to convert control rate Mouse to run at audio rate- this is because the BufRd needs to know where it is reading for every sample.\
+\
+.lag (which is a shortcut to get a Lag UGen) puts a smooth 'catch-up delay' (amount controlled by MouseY) on the scratching. \
+\
+[\cf3 \ul BufRd\cf0 \ulnone ] \cf4 //the help file has more examples\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\ul DiskIn\
+\ulnone \
+Here we only read a small part of the soundfile at a time; you would use this for streaming a large file off disk. \
+\
+(\
+\cf4 //Prepare to stream- you'll need a big file to stream- replace the filename here with one valid for your machine\cf0 \
+b=\cf3 Buffer\cf0 .cueSoundFile(s,\cf5 "sounds/break"\cf0 ,0, 1);\
+)\
+\
+\cf3 SynthDef\cf0 (\cf2 \\diskin\cf0 ,\{\cf3 Out\cf0 .ar(0,\cf3 DiskIn\cf0 .ar(1, b.bufnum))\}).play(s);\
+\
+\
+You can only playback, you can't modulate the streaming rate in any way. But this allows you to bring in files for any processing you desire to do. \
+\
+[\cf3 \ul DiskIn\cf0 \ulnone ] \cf4 //help file- you will probably want to look at the 'Object messaging style' further down the page, for now. \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There are various other UGens that leverage buffers- try exploring help files for \
+\
+[\cf3 \ul Index\cf0 \ulnone ]	\cf4 //buffer as array of data for UGen\cf0 \
+\
+[\cf3 \ul Osc\cf0 \ulnone ]		\cf4 //buffer as wavetable\cf0 \
+\
+[\cf3 \ul FFT\cf0 \ulnone ]		\cf4 //buffer as complex Fourier data, gets passed through the phase vocoder processing chain\cf0 \
+\
+[\cf3 \ul \ulc3 Shaper\cf0 \ulnone ]	\cf4 //buffer for wave shaping distortion/complex sound generation\cf0 \
+\
+\
+You'll probably see some other ways of using the Buffer class to set or get information in server side Buffers from the language. \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs18 \cf0 (Sometimes this uses the messaging style- the exhaustive list is here: [\ul Server-Command-Reference\ulnone ])\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

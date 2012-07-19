@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 12.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p10 {margin: 0.0px 0.0px 12.0px 0.0px; font: 13.0px Optima; color: #bf0000; min-height: 15.0px}
+p.p11 {margin: 0.0px 0.0px 12.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p12 {margin: 0.0px 0.0px 12.0px 0.0px; font: 11.0px Optima; color: #bf0000}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Optima; color: #000000; min-height: 15.0px}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Optima; color: #606060}
+p.p17 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Lucida Grande; color: #000000; min-height: 15.0px}
+span.s1 {font: 14.0px Optima}
+span.s2 {color: #0000bf}
+span.s3 {color: #000000}
+span.Apple-tab-span {white-space:pre}
+table.t1 {width: 700.0px}
+td.td1 {width: 696.0px; padding: 2.0px 2.0px 2.0px 2.0px}
+ul.ul1 {list-style-type: disc}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p5"><b>Indices of class examples<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Index A (per lesson, sequential)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Index B (per subject)</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>//================= ABOUT THESE EXAMPLES =================</b></p>
+<p class="p8"><br></p>
+<table width="700.0" cellspacing="0" cellpadding="0" class="t1">
+<tbody>
+<tr>
+<td valign="middle" class="td1">
+<p class="p9">/*</p>
+<p class="p9">These files were written for the course DXARTS 490a, "Real-time &amp; Interactive Computer Music and Algorithmic Media with the SuperCollider Programming Language", taught at the University of Washington's Center for Digital Arts and Experimental Media (DXARTS) in Summer 2010.</p>
+<p class="p9">The course was an intensive, one-month long course, meant as a continuation of the DXARTS 461/2/3 Digital Sound series ("Digital Sound Synthesis," "Digital Sound Processing," and "Advanced Digital Sound Processing and Synthesis."), taught by Josh Parmenter (461/2) and Juan Pampin (463) and TA'ed by Stelios Manouakis.<span class="Apple-converted-space">  </span>This year-long series focused on the fundamentals of sound synthesis, Non-Real-Time composition and audio-based research, therefore these subjects are not addressed as thoroughly in these example files.<span class="Apple-converted-space">  </span>However, the example files from the year-long series can be found here: http://www.dxarts.washington.edu/courses/461-3/</p>
+<p class="p9">The focus of DX490a was on real-time and interactive applications, involving sound but also other modalities, as well to provide a more in-depth knowledge of the SuperCollider programming language; this is what the examples below are about.</p>
+<p class="p9">When creating these examples I made an effort to also compile together files from the documentation relative to each subject, and make an easier to navigate map of what already is there for future reference (I frequently turn back to those myself). I also added many comments in an effort to make these files as meaningful and understandable as possible without the accompanying lecture when they were taught.</p>
+<p class="p9">I have used to methods to index these files: <b>Index A</b> follows the sequence of how the class was taught, and should make good sense if one wants to follow everything from the beginning. <b>Index B</b> is a per-subject categorization, better as a reference guide.</p>
+<p class="p10"><br></p>
+<p class="p11">NOTE: These examples were only tested on Mac OSX, and therefore there are bound to be incompatibilities with Linux and, many more, with Windows. Maybe someone can contribute to fix this at some point...</p>
+<p class="p10"><br></p>
+<p class="p12">ACKNOWLEDGMENTS: A big thanks to the people whose tutorials I consulted many times, and some of whose examples you will find credited in here: Josh Parmenter (DX490 class from 2007), Nic Collins (Computer Music workshop), Thor Magnusson (ixi SC tutorial), James Harkins (Patterns tutorial), and of course the most valuable sc-users list, Josh - once again - for actually teaching me how to use SC and the developers community for working hard to make SC the amazing tool it is.<span class="Apple-converted-space">  </span>Hopefully, these examples will help more people to find that out :-)</p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 12.0px 0.0px; font: 13.0px Optima; color: #bf0000">*/</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="p8"><br></p>
+<p class="p7"><b>//================= INDEX A (PER LESSON) =================</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Evaluate this first, to grab the path of the current folder, this will be used to open all the example files. Make sure you keep them all in the same folder with this file:</p>
+<p class="p8"><br></p>
+<p class="p7"><b>// EVALUATE THIS FIRST:</b></p>
+<p class="p13"><span class="Apple-tab-span">	</span>~dx490_path = <span class="s2">Document</span>.current.path.dirname;<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.0_[Resources].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.0_[Resources].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.1_[SC-Architecture_+_language].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.1_[SC-Architecture_+_language].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.2_[scsynth].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/ DX490A_su2010_01.2_[scsynth].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.3_[Startup].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.3_[Startup].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.1_[Server-language_communication].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.1_[Server-language_communication].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.3_[Quarks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.3_[Quarks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.4_[Trackpad-Multitouch].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"DX490A_su2010_02.4_[Trackpad-Multitouch].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_03.1_[Timing|Clocks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_03.1_[Timing|Clocks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_06.1_[Interfacing-2|MIDI].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_06.1_[Interfacing-2|MIDI].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_06.2_[Mapping].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_06.2_[Mapping].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_07.1_[Interfacing-3|HID].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_07.1_[Interfacing-3|HID].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_07.2_[Example_ProcMod_w.HID].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_07.1_[Interfacing-3|HID].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_09.1_[Interfacing-5|Arduino].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_09.1_[Interfacing-5|Arduino].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_09.2_[Interfacing-6|Wii].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_09.2_[Interfacing-6|Wii].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_10.2_[Networking-1|Within_one_computer].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_10.2_[Networking-1|Within_one_computer].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_11.1_[Managing_Large_Projects].zip</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/ DX490A_su2010_11.1_[Managing_Large_Projects].zip"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_13.1_[GUI-1|Basics].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_13.1_[GUI-1|Basics].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_14.1_[Patterns].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_14.1_[Patterns].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/X490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_16.1_[Networking-2|LAN_(local)].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_16.1_[Networking-2|LAN_(local)].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_17.1_[Standalones].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_17.1_[Standalones].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_17.2_[AudioUnit_Plug-ins].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_17.2_[AudioUnit_Plug-ins].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p15"><b>//================= INDEX B (PER SUBJECT) =================</b></p>
+<p class="p14"><br></p>
+<p class="p15"><b>// ====== FUNDAMENTALS, EXTENSIONS, ETC ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p15">// • DX490A_su2010_01.0_[Resources].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.0_[Resources].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.1_[SC-Architecture_+_language].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.1_[SC-Architecture_+_language].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.2_[scsynth].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/ DX490A_su2010_01.2_[scsynth].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_01.3_[Startup].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_01.3_[Startup].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.1_[Server-language_communication].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.1_[Server-language_communication].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.3_[Quarks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.3_[Quarks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_11.1_[Managing_Large_Projects].zip</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/ DX490A_su2010_11.1_[Managing_Large_Projects].zip"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/X490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_17.1_[Standalones].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_17.1_[Standalones].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_17.2_[AudioUnit_Plug-ins].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_17.2_[AudioUnit_Plug-ins].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p15"><b>// ====== INTERFACING ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p15">// • DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_02.4_[Trackpad-Multitouch].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"DX490A_su2010_02.4_[Trackpad-Multitouch].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_06.1_[Interfacing-2|MIDI].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_06.1_[Interfacing-2|MIDI].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_06.2_[Mapping].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_06.2_[Mapping].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_07.1_[Interfacing-3|HID].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_07.1_[Interfacing-3|HID].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_07.2_[Example_ProcMod_w.HID].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_07.1_[Interfacing-3|HID].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_09.1_[Interfacing-5|Arduino].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_09.1_[Interfacing-5|Arduino].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_09.2_[Interfacing-6|Wii].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_09.2_[Interfacing-6|Wii].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p15"><b>// ====== SCHEDULING ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p15">// • DX490A_su2010_03.1_[Timing|Clocks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_03.1_[Timing|Clocks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15"><span class="s3"><span class="Apple-tab-span">	</span></span>// • DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_14.1_[Patterns].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_14.1_[Patterns].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p15"><b>// ====== NETWORKING ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p15">// • DX490A_su2010_10.2_[Networking-1|Within_one_computer].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_10.2_[Networking-1|Within_one_computer].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_16.1_[Networking-2|LAN_(local)].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_16.1_[Networking-2|LAN_(local)].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p15">// • DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html"<span class="s3">);</span></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p15"><b>// ====== GUI &amp; GRAPHICS ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p15">// • DX490A_su2010_13.1_[GUI-1|Basics].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_13.1_[GUI-1|Basics].html"<span class="s3">);</span></p>
+<p class="p14"><span class="Apple-tab-span">	</span></p>
+<p class="p15">// • DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html</p>
+<p class="p16"><span class="s3"><span class="Apple-tab-span">	</span></span><span class="s2">Document</span><span class="s3">.open( ~dx490_path ++ </span>"/DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html"<span class="s3">);</span></p>
+<p class="p17"><br></p>
+<p class="p17"><br></p>
+</body>
+</html>

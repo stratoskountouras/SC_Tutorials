@@ -1,0 +1,220 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
+{\fonttbl\f0\fnil\fcharset77 Geneva;}
+{\colortbl;\red255\green255\blue255;\red0\green255\blue0;\red0\green0\blue191;\red0\green115\blue0;
+\red96\green96\blue96;\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 SynthDefs (Synth Definitions)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+The \{\}.play notation is not the preferred one for SuperCollider 3, but it allowed us to get started with synthesis quickly. What you will often see from now on is a use of the SynthDef construct to define networks of unit generators instead. Lots of synths are then created from a single SynthDef recipe, which is especially important for making clouds of similar sounds and other granular and ensemble processes. \
+\
+SynthDef = Synthesizer Definition\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+In order to synthesise and process sounds in SuperCollider you have to write a recipe for the UGen network in program code. This recipe is written using a particular language construct, the SynthDef. \
+\
+\cf3 SynthDef\cf0 (\cf4 \\sine\cf0 , \{\cf3 Out\cf0 .ar(0,\cf3 SinOsc\cf0 .ar(\cf3 Rand(440,880)\cf0 ,0,0.1))\}).load(s); \
+\
+Once a recipe is known to the system, you can create an individual synthesiser to that specification: \
+\
+\cf3 Synth\cf0 (\cf4 \\sine\cf0 ); \
+\
+In fact, it can be used as many times over as you desire (run these lines one at a time):\
+\
+a=\cf3 Synth\cf0 (\cf4 \\sine\cf0 );  \
+b=\cf3 Synth\cf0 (\cf4 \\sine\cf0 );  \
+c=\cf3 Synth\cf0 (\cf4 \\sine\cf0 ); \
+ \
+And these lines one at a time to individually stop each synth:\
+\
+a.free;\
+b.free;\
+c.free;\
+\
+Note how each of the Synths got initialised to a random frequency from 440 to 880 when created; this is due to the Rand UGen in the SynthDef above\
+\
+There are shortcuts to do this in one step:\
+\
+\cf3 SynthDef\cf0 (\cf4 \\saw\cf0 , \{\cf3 Out\cf0 .ar(0,\cf3 Saw\cf0 .ar(\cf3 Rand\cf0 (440,880),0.1))\}).play(s);\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+You may see some variations in the way the SynthDef is made and used:\
+\
+\cf3 SynthDef\cf0 (\cf5 "aaa"\cf0 ,\{\cf3 Out\cf0 .ar(0,\cf3 SinOsc\cf0 .ar(440,0,0.1))\}).send(s)\
+\
+\cf3 Synth\cf0 (\cf5 "aaa"\cf0 ); \cf6 //now this\cf0 \
+\
+\\aaa is the same as "aaa" for the purposes of naming the SynthDef recipe here. The SynthDef was sent rather than loaded, but that is a technical detail to do with storing SynthDefs on disk rather than just using them directly. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+If you look in the synthdefs folder in the SuperCollider application directory, you'll see various files that each represent individual SynthDefs. These are automatically loaded up when you start the synthesis server (via that Boot button). \
+\
+.send - just sends the SynthDef to the synthesis server at this moment, doesn't place any file on disk\
+\
+.writeDefFile - just writes the SynthDef into a file on disk, doesn't load it to the synthesis server. \
+\
+.load - writes the file on disk, so it's loaded every time you start the synthesis server from now on, and also sends it immediately so it's available right away. \
+\
+There are further versions you might see like .writeOnce and .store - we'll get to these when we need them. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The only difference to our canned SinOsc example from earlier is the SynthDef wrapper and the use of the Out UGen. The full explanation of the Out UGen is deferred until we discuss busses, but you can think of it for now as saying 'play on the first audio output of the computer'. \
+\
+\cf3 SynthDef\cf0 (\cf4 \\sine\cf0 ,\{\cf3 arg\cf0  freq=440, amp=0.1; \cf3 Out\cf0 .ar(0,\cf3 SinOsc\cf0 .ar(freq,0,amp))\}).load(s); \cf6 //added frequency argument to recipe, note how the name of the SynthDef can either be specified as a literal \\sine and a string "sine"- you'll see both ways in examples, which is why you're being warned now\cf0 \
+\
+\cf3 Synth\cf0 (\cf5 "sine"\cf0 ); \cf6 //now this accepts the default\cf0 \
+\
+\cf3 Synth\cf0 (\cf5 "sine"\cf0 ,[\cf4 \\freq\cf0 ,880]); \cf6 //this makes another Synth from the recipe an octave up, by being explicit about the frequency argument to the SynthDef\cf0 \
+\
+You can see how this allows us to make lots of related Synths from a common recipe with slight variations in sound between them. \
+\
+\
+a=\cf3 Synth\cf0 (\cf4 \\sine\cf0 );  \
+b=\cf3 Synth\cf0 (\cf4 \\sine\cf0 ,[\cf4 \\freq\cf0 ,550]);  \
+c=\cf3 Synth\cf0 (\cf4 \\sine\cf0 ,[\cf4 \\freq\cf0 ,660, \\amp, 0.5]); \
+\
+And these lines one at a time to individually stop each synth:\
+\
+a.free;\
+b.free;\
+c.free;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Exercise:\
+\
+Try taking a simple synthesis patch you've been working on and turn it into a SynthDef. \
+\
+As a prototype you want something like:\
+\
+(\
+\cf3 SynthDef\cf0 (\cf4 \\synthdefname\cf0 ,\{\cf3 arg\cf0  input1; \cf6 //any arguments go here\cf0 \
+\
+\cf6 //some code for UGens - the sort of thing that went inside \{\}.play before\cf0 \
+\
+\cf3 Out\cf0 .ar(0, finaloutput) \cf6 //finaloutput is the final result UGen you want to hear\cf0 \
+\}).send(s)\
+)\
+\
+\
+\
+\cf3 Synth\cf0 (\cf4 \\synthdefname\cf0 , [\cf4 \\input1\cf0 , inputval1]); \cf6 //inputval1 is the constant \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

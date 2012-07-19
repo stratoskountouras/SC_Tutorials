@@ -1,0 +1,332 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;\f2\fnil\fcharset0 Geneva;
+}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 10.2:
+\b0 \
+
+\b 	Networking 1: Within a computer (SC with itself and other programs)
+\b0 \
+
+\fs28 		Contents:\
+			\'95 General\
+			\'95 OSC within SuperCollider\
+				- Messages to the default server by IP and port\
+				- Messages to other servers by IP and port\
+			\'95 SuperCollider and other programs\
+				- PureData\
+				- Max/MSP/Jitter\
+				- Processing\
+				- Python\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ================= NETWORKING 1: OSC MESSAGING WITHIN A COMPUTER =================
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== GENERAL ======
+\b0 \cf3 \
+\
+\cf2 // As we've seen before (classes 1&2 in these examples), SC3 uses a client/server model, with its two components, sclang and scserver, connected in a network and communicating via OSC messaging. This makes it very easy to send messages to both sclang or scserver from another application within your computer, or even through a network from another computer.\cf3 \
+\cf2 // You can send messages to both the server and the language if you know their IP address and which port they are listening to. By default, the server listens internally (within your computer) in the loopback IP address "127.0.0.1" and port 57110. This is setable, so you can change it. The language listens by default in the loopback IP address "127.0.0.1" and port 57120 - also configurable. If you want to access sclang or scserver with a remote device, you need to first connect to the computer that runs them via Local-Area-Network, using that computer's IP. Connecting to a machine through the internet is also possible, but a bit more complicated - we'll see how to do that in a later example.\cf3 \
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+
+\b \cf2 // ====== OSC WITHIN SUPERCOLLIDER ======
+\b0 \cf3 \
+\
+\cf2 // To see how this works, let's send some messages to the local server by addressing it via its IP and port. The object to use is {\field{\*\fldinst{HYPERLINK "SC://NetAddr"}}{\fldrslt \cf2 \ul \ulc2 NetAddr}}\cf3 \
+\
+\cf2 // We can check what port sclang listens to, as well as what its IP address is:\cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf4 NetAddr\cf3 .langPort; \cf2 // retrieve the current port SC is listening to\cf3 \
+\cf4 NetAddr\cf3 .localAddr; \cf2 // retrieve the current IP and port\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ------ Messages to the default server by IP and port --
+\b0 \cf3 \
+\
+\cf2 // send a synth to the default server\cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf5 \\test2\cf3 , \{\cf4 arg\cf3  outbus = 0, freq = 220;\
+	\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq, 0, 0.25));\
+\}).send(s)\
+)\
+\
+(\
+\cf4 var\cf3  n, id;\
+\cf2 //use the loopback address and the default port\cf3 \
+a = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 57110); \
+id = s.nextNodeID;\
+id.postln;\
+a.sendMsg(\cf6 "/s_new"\cf3 , \cf5 \\test2\cf3 , id, 0, 1);   \cf2 //sendMsg works out the correct OSC message for you\cf3 \
+\cf4 SystemClock\cf3 .sched(1.0, \{a.sendMsg(\cf6 "/n_free"\cf3 , id)\});\
+s.queryAllNodes;\
+)\
+s.queryAllNodes\
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs24 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+\
+
+\b \cf2 // ------ Messages to other servers by IP and port --
+\b0 \cf3 \
+\
+\cf2 // We could also create a new server and send it messages, instead of using the ones that are already open:\cf3 \
+\
+\cf2 // make a new server, and assign it the loopback IP address (as we're working locally on one machine) and a new port\cf3 \
+a = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 58110); \
+d = \cf4 Server\cf3 .new(\cf6 "DX490a"\cf3 , a);\
+ \cf2 // make the gui window for the server\cf3 \
+d.makeWindow;\
+\cf2 // boot it\cf3 \
+d.boot;\
+\cf2 // play something to try it out:\cf3 \
+\{\cf4 PinkNoise\cf3 .ar(0.5)\}.play(d);\
+\cf2 // stop the server\cf3 \
+d.quit;\
+\
+\
+\
+\cf2 // Now, just for kicks, let's create a few servers and have them make a clarinet-like sound, each playing a single harmonic. This will go on for 5 seconds, then all servers will be turned of:\cf3 \
+(\
+\cf4 var\cf3  serverArray, harms, amps;\
+harms = [1, 2, 3, 5, 7, 9];\
+amps = [1, 0.2, 0.5, 0.4, 0.1, 0.05] * 0.2;\
+serverArray = \cf4 Array\cf3 .newClear(6);\
+6.do\{\cf4 |i|\cf3 \
+	serverArray[i] = \cf4 Server\cf3 .new(\cf6 "TestServer"\cf3 ++i, \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 60010 + (i*1000)));\
+	serverArray[i].makeWindow;\
+	serverArray[i].window.bounds = \cf4 Rect\cf3 (290, i * 120, 290, 100);\
+	serverArray[i].boot;\
+	serverArray[i].waitForBoot(\{\
+		\{\cf4 SinOsc\cf3 .ar([220, 221] * (harms[i]), 0, amps[i])\}.play(serverArray[i]);\
+		\cf4 SystemClock\cf3 .sched(5.0, \{serverArray[i].quit\})\
+	\})\
+\}\
+)\
+\
+\cf2 // There is also a potentially handy Quark by Julian Rorhuber you may want to check out: {\field{\*\fldinst{HYPERLINK "SC://BroadcastServer"}}{\fldrslt \cf2 \ul \ulc2 BroadcastServer}}; it allows you to send messages to remote servers, from a specific server's perspective, using a list of NetAddrs (this makes more sense for servers in remote machines)\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs24 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ====== SUPERCOLLIDER AND OTHER PROGRAMS ======
+\b0 \cf3 \
+\
+\cf2 // SuperCollider can talk to any software that has an OSC implementation in it, either locally within a machine, or remotely. Here is a non-comprehensive list of some software that can talk to SC via OSC\cf3 \
+\cf6 "open http://swiki.hfbk-hamburg.de/MusicTechnology/659"\cf3 .unixCmd\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\
+\cf2 // This code chunk below can be very handy for posting any incoming messages, even if there are no responders set to catch them:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // post all incoming traffic except the server status messages\cf3 \
+(\
+\cf4 thisProcess\cf3 .recvOSCfunc = \{ \cf4 |time, addr, msg|\cf3  \
+	if(msg[0] != \cf5 'status.reply'\cf3 ) \{\
+		\cf6 "time: % sender: %\\nmessage: %\\n"\cf3 .postf(time, addr, msg)\};\
+\}\
+);\
+\cf2 // stop posting.\cf3 \
+\cf4 thisProcess\cf3 .recvOSCfunc = \cf4 nil\cf3 ;\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Here are a few examples:\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Pure Data --
+\b0 \cf3 \
+\cf2 //Load the PD_&_SC_via-OSC.pd patch into PureData\cf3 \
+\
+\cf2 //\'95 PureData to SuperCollider\cf3 \
+	\cf2 // test the connection:\cf3 \
+	o = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/to_SC'\cf3 , \{\cf4 arg\cf3  time, responder, msg, addr;\
+		[time, responder, msg, addr].postln;\
+	\}).add;\
+	o.remove;\
+	\
+	(\
+	\cf2 // make a synth\cf3 \
+	x = \cf4 SynthDef\cf3 (\cf5 \\sine\cf3 , \{\cf4 arg\cf3  freq=440; \
+		\cf4 Out\cf3 .ar(0, (\cf4 SinOsc\cf3 .ar([freq, freq * 1.015], 0, 0.1)))\})\
+		.play;\
+	\cf2 // make the responder\cf3 \
+	o = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/to_SC'\cf3 , \{\cf4 arg\cf3  time, responder, msg, addr;\
+		msg.postln;\
+		x.set(\cf5 \\freq\cf3 ,msg[1]);\
+	\}).add;\
+	)\
+	o.remove;\
+\
+\
+\cf2 //\'95 SuperCollider to PureData	\cf3 \
+	\cf2 // Use loopback IP and the same port as the pd patch to communicate\cf3 \
+	~pdOut = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 47110);\
+	\cf2 // test it with one message:\cf3 \
+	~pdOut.sendMsg(\cf6 "/from_SC"\cf3 , 500);\
+	\cf2 // send some random frequencies\cf3 \
+	(\
+	\{\
+	14.do\{\cf4 arg\cf3  i; \
+		~pdOut.sendMsg(\cf6 "/from_SC"\cf3 , rrand(200, ((i * 100) + 100)));  \
+		0.1.wait;\
+		\} \
+	\}.fork\
+	)\
+	\
+	\
+\
+
+\b \cf2 // ------ Max/MSP/Jittter --
+\b0 \cf3 \
+\cf2 //Load the Max_&_SC_via-OSC.maxpat patch into Max/MSP\cf3 \
+\
+\cf2 //\'95 Max/MSP to SuperCollider\cf3 \
+\
+	\cf2 // test the connection:\cf3 \
+	o = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/from_Max'\cf3 , \{\cf4 arg\cf3  time, responder, msg, addr;\
+		msg.postln;\
+	\}).add;\
+	o.remove;\
+	\
+	(\
+	\cf2 // make a synth\cf3 \
+	x = \cf4 SynthDef\cf3 (\cf5 \\sine\cf3 , \{\cf4 arg\cf3  freq=440; \
+		\cf4 Out\cf3 .ar(0, (\cf4 SinOsc\cf3 .ar([freq, freq * 1.015], 0, 0.1)))\})\
+		.play;\
+	\cf2 // make the responder\cf3 \
+	o = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/from_Max'\cf3 , \{\cf4 arg\cf3  time, responder, msg, addr;\
+		msg.postln;\
+		x.set(\cf5 \\freq\cf3 ,msg[1].midicps);\
+	\}).add;\
+	)\
+	o.remove;\
+\
+\cf2 //\'95 SuperCollider to Max/MSP	\cf3 \
+	\cf2 // Use loopback IP and the same port as the Max patch to communicate\cf3 \
+	~maxOut = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 48110);\
+	\cf2 // test it with one message:\cf3 \
+	~maxOut.sendMsg(\cf6 "/from_SC"\cf3 , 500);\
+	\cf2 // send some random frequencies\cf3 \
+	(\
+	\{\
+	14.do\{\cf4 arg\cf3  i; \
+		~maxOut.sendMsg(\cf6 "/from_SC"\cf3 , rrand(200, ((i * 100) + 100)));  \
+		0.1.wait;\
+		\} \
+	\}.fork\
+	)\
+	\
+		\
+	\
+
+\b \cf2 // ------ Processing --
+\b0 \cf3 \
+\cf2 // To get Processing to send and receive OSC messages\'a0you will need to download the OSC library oscP5.  in Mac OSX you'll need to put it ino ~/Documents/Processing (for Windows installation info, look at the library readme). You can download the library here:\cf3 \
+\cf6 "open http://processing.org/discourse/yabb2/YaBB.pl?num=1133669730/0#0"\cf3 .unixCmd\
+\
+\cf2 //\'95 Processing to SuperCollider\cf3 \
+\
+	\cf2 // test the connection:\cf3 \
+	o = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/Processing_to-SC'\cf3 , \{\cf4 arg\cf3  time, responder, msg, addr;\
+		msg.postln;\
+	\}).add;\
+	o.remove;\
+	\
+\cf2 //\'95 SuperCollider to Processing	\cf3 \
+	\cf2 // Use loopback IP and the same port as the pd patch to communicate\cf3 \
+	~processingOut = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , 49110);\
+	\cf2 // test it with one message:\cf3 \
+	~processingOut.sendMsg(\cf6 "/from_SC"\cf3 , 500);\
+	\cf2 // send some random frequencies\cf3 \
+	(\
+	\{\
+	14.do\{\cf4 arg\cf3  i; \
+		~processingOut.sendMsg(\cf6 "/from_SC"\cf3 , rrand(200, ((i * 100) + 100)));  \
+		0.1.wait;\
+		\} \
+	\}.fork\
+	)\
+\
+\
+\
+
+\b \cf2 // ------ Python --
+\b0 \cf3 \
+\cf2 // You 'll need to install the pyOSC library in Python to get it to send/receive OSC:\cf3 \
+\cf6 "open https://trac.v2.nl/wiki/pyOSC"\cf3 .unixCmd\
+\
+\cf2 // \'95 Python-to-SC\cf3 \
+\cf2 // You need to load the basic_send.py Python example to your Python environment (ex. IDLE) to use this example. Then, create the responders in SC, and finally run the Python code.\cf3 \
+\
+	\cf2 // create a NetAddr with the loopback IP if within the same computer. However, Python sends data through a semi-randomized port nr for some reason, so use nil as the port!\cf3 \
+	a = \cf4 NetAddr\cf3 (\cf6 "127.0.0.1"\cf3 , \cf4 nil\cf3 ); \
+	o = \cf4 OSCresponderNode\cf3 (a, \cf5 '/chat'\cf3 , \{ \cf4 |time, resp, msg|\cf3  (\cf6 "time:"\cf3  + time).postln; msg.postln \}).add;\
+	o.remove; \cf2 // remove the OSCresponderNode when you are done\cf3 \
+	\
+	\
+\cf2 //\'95 SC-to-Python\cf3 \
+\cf2 // You need to load the basic_receive.py Python example to your Python environment (ex. IDLE) to use this example\cf3 \
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 	\cf2 // create a NetAddr with the loopback IP if within the same computer and the same port set in the Python code\cf3 \
+	a = \cf4 NetAddr\cf3 .new(\cf6 "127.0.0.1"\cf3 , 9000); \
+	\cf2 // send the application the message "chatback" with the parameter "What up, Monty?"\cf3 \
+	a.sendMsg(\cf6 "/chatback"\cf3 , \cf6 "What up, Monty?"\cf3 );\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+
+\f1\fs18 \cf3 	\
+	\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+}

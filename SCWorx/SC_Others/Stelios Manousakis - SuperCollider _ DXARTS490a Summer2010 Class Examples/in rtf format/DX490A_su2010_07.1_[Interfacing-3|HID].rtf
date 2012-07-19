@@ -1,0 +1,337 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 LucidaGrande;\f2\fnil\fcharset0 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 7.1:
+\b0 \
+
+\b 	Interfacing 3: Human Interface Devices (HID) in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95 General\
+				- Connecting\
+				- Receiving data\
+				- Types of data-slots\
+				- An example: Internal trackpad (MBP)\
+				- Mapping actions\
+				- Naming input-slots\
+			\'95 Example: 3DConnexxion's SpaceNavigator\
+\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= HID DEVICES IN SUPERCOLLIDER =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== GENERAL ======
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // HID devices include most computer peripherals: keyboards, mice, gamepads, joysticks and most game controllers in general, as well as some more specialized devices.\cf3 \
+\cf2 // In SuperCollider, there is a cross-platform Class for accessing HID devices: {\field{\*\fldinst{HYPERLINK "SC://GeneralHID"}}{\fldrslt \cf2 \ul \ulc2 GeneralHID}}. \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Connecting --
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // The first thing you need to do is look at the devices that are connected to your machine:\cf3 \
+\cf4 GeneralHID\cf3 .buildDeviceList\
+\cf2 // You can make a list of the devices:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 d = \cf4 GeneralHID\cf3 .deviceList;\
+\cf2 // or post in a more legible format:\cf3 \
+\cf4 GeneralHID\cf3 .postDevices;\
+\cf2 // You then can pick a specific device  and open it for usage:\cf3 \
+a = \cf4 GeneralHID\cf3 .open(d[2])\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 a.close; \cf2 // you can close a device like this\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // get info on the device\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 a.info\
+\cf2 // Another useful method for accessing is to refer to the device by name, with the GeneralHID.findBy method. First, get all the arguments like this:\cf3 \
+a.info.findArgs\
+\cf2 // this info corresponds to: vendor ID, productID, location ID, version ID\cf3 \
+d = \cf4 GeneralHID\cf3 .findBy(1118, 40, -49152000, 258); \
+d = \cf4 GeneralHID\cf3 .findBy(*a.info.findArgs); \
+\pard\pardeftab560\ql\qnatural
+\cf3 a = \cf4 GeneralHID\cf3 .open(d)\
+\
+
+\b \cf2 // ------ Receiving data --
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // IMPORTANT: Once you've established a connection to one or more devices, you need to start the eventloop to query data!\cf3 \
+\cf4 GeneralHID\cf3 .startEventLoop\
+\cf2 //  In MacOSX you can also set the rate of the loop, although the default of 0.005, should be fine\cf3 \
+\cf4 GeneralHID\cf3 .startEventLoop(0.005)\
+\
+\cf2 // Now that the device is connected and running, let's look at what it can do:\cf3 \
+a.slots;\
+\cf2 // or more readable:\cf3 \
+a.caps; \cf2 // capacities\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Types of data-slots --
+\b0 \cf3 \
+\cf2 // there are different types of slots:
+\f1 \cf2 \uc0\u8232 
+\f0 \cf2 // button (type 1): has only on/off (1/0) states
+\f1 \cf2 \uc0\u8232 
+\f0 \cf2 // relative (type 2): counts up or down (scrollwheel for example)
+\f1 \cf2 \uc0\u8232 
+\f0 \cf2 // absolute (type 3): continuous value between 0 and 1: 
+\f1 \cf2 \uc0\u8232 
+\f0 \cf2 // some other may show up on Linux (Syn (type 0) and Miscellaneous (type 4)), but these are generally not very useful.\cf3 \
+\
+\cf2 // You can use the debug function to see if data is coming in:\cf3 \
+a.debug_(\cf4 true\cf3 );\
+\cf2 // this takes up some resources, so use it only to have a look, then:\cf3 \
+a.debug_(\cf4 false\cf3 );\
+\
+\
+
+\b \cf2 // ------ An example: internal trackpad (MBP) --
+\b0 \cf3 \
+\cf2 // lets get some acceleration data, plus the button action from the internal trackpad (on a MacBookPro):\cf3 \
+a.close; \cf2 // close previous device\cf3 \
+a = \cf4 GeneralHID\cf3 .open(d[4]); \cf2 // the location could be different in your machine...\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf4 GeneralHID\cf3 .startEventLoop; \cf2 // start eventloop if you haven't yet\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 a.debug_(\cf4 true\cf3 );\
+a.debug_(\cf4 false\cf3 );\
+\cf2 // you can also check individual slots:\cf3 \
+a.slots[3][48].debug_(\cf4 true\cf3 ); \cf2 // get acceleration on the X axis. Notice that no acceleration is 0.5, acceleration to the right goes down to 0, and acceleration to the left goes up to 1 - well, in my machine at least...\cf3 \
+a.slots[3][48].debug_(\cf4 false\cf3 ); \
+\cf2 // there is also a quick-and-dirty GUI to look at the data:\cf3 \
+a.makeGui\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Mapping actions --
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // You can use the 
+\b .action 
+\b0 method on a specific slot to map a function to an individual input parameter. Note that to get the value you have to call .value on the function's argument:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 a.slots[3][48].action_(\{\cf4 |in|\cf3  \cf5 "mouse X acceleration is: "\cf3 .post; (in.value - 0.5).postln\});\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // To unmap, just use an empty function:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 a.slots[3][48].action_(\{\})\
+\
+\
+\
+
+\b \cf2 // ------ Naming input-slots --
+\b0 \cf3 \
+\cf2 // The GeneralHID class contains a dictionary, so you can give a name to a specific slot and access it thusly - something  that can make your code much more readable:\cf3 \
+a.add(\cf6 \\mouseAccel_X\cf3 , [3, 48]);\
+a.add(\cf6 \\mouseAccel_Y\cf3 , [3, 49]);\
+a.add(\cf6 \\mouseButton\cf3 , [1, 1]);\
+\
+a[\cf6 \\mouseAccel_X\cf3 ].action_(\{\cf4 |in|\cf3  \cf5 "mouse X acceleration is: "\cf3 .post; (in.value - 0.5).postln\});\
+a[\cf6 \\mouseAccel_Y\cf3 ].action_(\{\cf4 |in|\cf3  \cf5 "mouse Y acceleration is: "\cf3 .post; (in.value - 0.5).postln\});\
+a[\cf6 \\mouseButton\cf3 ].action_(\{\cf4 |in|\cf3  \cf5 "mouse Button was "\cf3 .post; if(in.value == 1, \{\cf5 "Pressed"\cf3 .postln\}, \{\cf5 "Released!"\cf3 .postln\})\});\
+\
+( \cf2 // stop it:\cf3 \
+a[\cf6 \\mouseAccel_X\cf3 ].action_(\{\});\
+a[\cf6 \\mouseAccel_Y\cf3 ].action_(\{\});\
+a[\cf6 \\mouseButton\cf3 ].action_(\{\});\
+)\
+\
+\cf2 // The GeneralHID class also has a method to automatically create control buses for you and send data to a synth running on the server, which can be handy if you're not using Ctk stuff\cf3 \
+s.boot;\
+a[\cf6 \\mouseAccel_X\cf3 ].createBus(s); \cf2 // you need to define the server where the bus will be created\cf3 \
+a[\cf6 \\mouseAccel_Y\cf3 ].createBus(s); \cf2 // you need to define the server where the bus will be created\cf3 \
+\
+\
+\
+\cf4 SynthDef\cf3 (\cf6 \\theremin\cf3 , \{\cf4 |outbus = 0, freq = 220, amp = 0|\cf3 \
+	freq = ((freq + 0.5) * 1000) + 200; \cf2 // scale the freq values a bit\cf3 \
+	amp = (amp - 0.5).abs; \cf2 // we only care about acceleration, no matter which direction it goes towards\cf3 \
+	\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq + (freq *  \cf4 SinOsc\cf3 .ar(7, 0, 0.02)), mul:  \cf4 Lag\cf3 .kr((amp))))\
+\}).load(s);\
+	\
+\cf2 // a very weird theremin controller:\cf3 \
+t = \cf4 Synth\cf3 .new(\cf6 \\theremin\cf3 )\
+t.map(\cf6 \\freq\cf3 , a[\cf6 \\mouseAccel_X\cf3 ].bus);\
+t.map(\cf6 \\amp\cf3 , a[\cf6 \\mouseAccel_Y\cf3 ].bus);\
+t.free\
+\
+\
+\cf2 // Although you can do everything you need with the GeneralHID class, there are 3 more specialized classes implementing specific functionalities of that class. You can check their helpfiles: \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://GeneralHIDDevice"}}{\fldrslt \cf4 \ul \ulc4 GeneralHIDDevice}}\
+{\field{\*\fldinst{HYPERLINK "SC://GeneralHIDSlot"}}{\fldrslt \cf4 \ul \ulc4 GeneralHIDSlot}}\
+{\field{\*\fldinst{HYPERLINK "SC://GeneralHIDSpec"}}{\fldrslt \cf4 \ul \ulc4 GeneralHIDSpec}}\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+
+\b \cf2 // ====== Example: 3DConnexxion's SpaceNavigator ======
+\b0 \cf3 \
+\cf2 // The 3DConnexxion SpaceNavigator is an HID device with 6 degrees of freedom and 2 buttons. You need to install drivers in your machine to make it work:\cf3 \
+\cf5 "open http://www.3dconnexion.com/service/drivers.html"\cf3 .unixCmd\
+\cf2 // After installing the drivers, you may want to tweak some of the preferences, deactivating the buttons from the system (in System Preferences for OSX), and possibly reversing the axes for convenience (the examples below work with all axes reversed)\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\cf2 // connect to the Space Navigator by name (this works on the device I have in my hands, you may have to find the values yourself with the .info.findArgs method)\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf4 GeneralHID\cf3 .postDevices;\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // n = GeneralHID.findBy(1133, 50726, -49213440, 1028);\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 d = \cf4 GeneralHID\cf3 .deviceList;\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 a = \cf4 GeneralHID\cf3 .open(d[2]);\
+\cf2 // start the eventloop if its not running already:\cf3 \
+\cf4 GeneralHID\cf3 .startEventLoop\
+a.makeGui;\
+a.slots;\
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 /*\
+// Here's what the Space Navigator spits out:\
+IdentityDictionary[ \
+// the buttons\
+	(1 -> IdentityDictionary[\
+		(1 -> GeneralHIDSlot(Button, type: 1, id: 1, value: 0)), \
+		(2 -> GeneralHIDSlot(Button, type: 1, id: 2, value: 0)), \
+		(75 -> GeneralHIDSlot(Button, type: 1, id: 75, value: 0)) ]), // non-existent in hardware!\
+// the LED\
+	(17 -> IdentityDictionary[ \
+		(75 -> GeneralHIDSlot(LED, type: 17, id: 75, value: 0)) ]),\
+// the 6 axes \
+	(3 -> IdentityDictionary[ \
+		(48 -> GeneralHIDSlot(Absolute, type: 3, id: 48, value: 0.5)), \
+		(52 -> GeneralHIDSlot(Absolute, type: 3, id: 52, value: 0.5)), \
+		(53 -> GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5)),\
+		(49 -> GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5)),\
+		(50 -> GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.685)),\
+		(51 -> GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5))])];\
+*/\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 // get the current values:\cf3 \
+\cf2 // what's the current state of the buttons:\cf3 \
+a.slots[1][1].value; \cf2 // button on left of logo\cf3 \
+a.slots[1][2].value; \cf2 // button on right of logo\cf3 \
+a.slots[1][75].value; \cf2 // non-existent in hardware\cf3 \
+a.slots[17][75].value; \cf2 // LED - not a control...\cf3 \
+\cf2 // continuous controls:\cf3 \
+a.slots[3][48].value; \cf2 // pan right/left (right/left movement)\cf3 \
+a.slots[3][49].value; \cf2 // pan up/down (push down / pull up)\cf3 \
+a.slots[3][50].value; \cf2 // zoom (push front / pull back)\cf3 \
+a.slots[3][51].value; \cf2 // tilt (nose down / nose up)\cf3 \
+a.slots[3][52].value; \cf2 // spin (rotate right/left)\cf3 \
+a.slots[3][53].value; \cf2 // roll (right shoulder down / left shoulder down)\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\cf2 // let's make a dictionary for legibility:\cf3 \
+(\
+\pard\pardeftab560\ql\qnatural
+\cf3 a.add(\cf6 \\leftBtn\cf3 , [1, 1]);\
+a.add(\cf6 \\rightBtn\cf3 , [1, 2]);\
+a.add(\cf6 \\r_l_pan\cf3 , [3, 48]);\
+a.add(\cf6 \\u_d_pan\cf3 , [3, 49]);\
+a.add(\cf6 \\push_pull\cf3 , [3, 50]);\
+a.add(\cf6 \\tilt\cf3 , [3, 51]);\
+a.add(\cf6 \\spin\cf3 , [3, 52]);\
+a.add(\cf6 \\roll\cf3 , [3, 53]);\
+)\
+\
+\cf2 // Now, let's make some noise!:\cf3 \
+(\
+\cf2 // load a simple FM synth, no mapping inside the synth\cf3 \
+~combfm = \cf4 CtkSynthDef\cf3 ( \cf6 \\combFM\cf3 , \{ \cf4 |outbus = 0, freq = 440, harm = 1, modix = 1, delay = 0.1, pan = 0, amp = 0.5|\cf3 \
+	\cf4 var\cf3  car, mod, out, dev, modfreq;\
+	modfreq = freq * harm;\
+	dev = modix * modfreq;\
+	mod = \cf4 SinOsc\cf3 .ar(modfreq, 0, dev);\
+	car = \cf4 SinOsc\cf3 .ar(freq + (mod * modix));\
+	out = \cf4 Out\cf3 .ar(outbus, (\cf4 Pan2\cf3 .ar(\cf4 CombC\cf3 .ar(car, 0.5, delay, 0.5), pan, amp)));
+\f1 \uc0\u8232 
+\f0 \});\
+\
+\cf2 // create as many control buses as the parameters of the controlling interface\cf3 \
+~ctrl = 6.collect(\{\cf4 CtkControl\cf3 .play\});\
+\
+\cf2 // create some envelopes to handle the parameter mapping as you wish\cf3 \
+~panEnv = \cf4 Env\cf3 ([-1, 1], [1], \cf6 \\lin\cf3 );\
+~ampEnv = \cf4 Env\cf3 ([0.001, 0.7], [1], 3);\
+~modEnv = \cf4 Env\cf3 ([1, 50], [1], 2);\
+~freqEnv = \cf4 Env\cf3 ([40, 3000], [1], 4);\
+\cf2 //~cutEnv = Env([50, 8000], [1], 2);\cf3 \
+~delEnv = \cf4 Env\cf3 ([0, 0.5], [1], 2);\
+~harmEnv = \cf4 Env\cf3 ([0.1, 10], [1], 2);\
+\
+\
+\cf2 // within each slot's action: fill the appropriate CtkControl bus with the values coming in from the device slot:\cf3 \
+a[\cf6 \\r_l_pan\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[0].set([~panEnv[val.value]])\});\
+	\cf2 /* what this does:\
+		1. pick the control slot:\
+		a.slots[3][48]\
+		2. .action returns a value\
+				.action_(\{|val| ...\})\
+		3. which we use as an index to get a value from an Env (used here as a mapping curve)\
+					~panEnv[val.value]\
+		4. and the result is used to set the current value of the control bus\
+						~ctrl[0].set([.....])	\
+		*/\cf3 \
+a[\cf6 \\u_d_pan\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[1].set([~modEnv[val.value]])\});\
+a[\cf6 \\push_pull\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[2].set([~ampEnv[val.value]])\});\
+a[\cf6 \\tilt\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[3].set([~delEnv[val.value]])\});\
+a[\cf6 \\spin\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[4].set([~freqEnv[val.value]])\});\
+a[\cf6 \\roll\cf3 ].action_(\{\cf4 |val|\cf3  ~ctrl[5].set([~harmEnv[val.value]])\});\
+)\
+\
+\cf2 // now, start it!:\cf3 \
+\
+~note = ~combfm.new().pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(~ctrl[2]).delay_(~ctrl[3]).freq_(~ctrl[4]).harm_(~ctrl[5]).play;\
+\
+\cf2 // free it\cf3 \
+~note.free\
+\
+}

@@ -1,0 +1,488 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 8.1:
+\b0 \
+
+\b 	Interfacing 4: Feature extraction in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95\'a0About\
+			\'95 Feature extraction in SC\
+				- Amplitude\
+				- Pitch\
+				- Time-related\
+				- timbre\
+\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= ABOUT =================
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 /* \
+\'95\'a0Psychological dimensions of sound:\
+	- loudness\
+	- pitch\
+	- duration\
+	- timbre\
+	\
+\'95 Data you can get:\
+	- continuous: description of a particular characteristic in time.\
+	- switches/triggers: detection of specific behaviors, energy in specific areas, etc\
+	\
+\'95\'a0Analysis domains:\
+	- analysis of the psychological dimensions of sound (pshycoacoustic analysis / feature extraction)\
+	- analysis of organizational qualities through gestalt-driven analysis (cognitive analysis / machine listening)\
+		> Our brains attempt to make sense of our noisy world, compressing the torrent of incoming sensual data by finding symmetry, order, simplicity and patterns. A set of laws has been postulated by Gestalt psychologists to explain different strategies our brain uses to group objects together:\
+			proximity, closure, similarity, continuity, symmetry, common fate\
+			"open http://www.infovis-wiki.net/index.php?title=Gestalt_Laws".unixCmd\
+		\
+\
+*/\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= FEATURE EXTRACTION IN SUPERCOLLIDER =================
+\b0 \cf3 \
+\cf2 // There are really a lot of UGens that analyze signals in SC. You would most commonly use those for audio, but they can be quite effective for any kind of incoming signal.\cf3 \
+\
+\cf2 /* These examples are very basic, but you can refer to:\
+	- class example 2.1_[Server-language communication] for receiving analysis data in sclang, and \
+	- class example 6.2_[Mapping] about mapping strategies\
+*/\cf3 \
+\
+\
+
+\b \cf2 // ====== AMPLITUDE ======
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ------ Examples  --
+\b0 \cf3 \
+\
+\cf2 // The most fundamental UGen is {\field{\*\fldinst{HYPERLINK "SC://Amplitude"}}{\fldrslt \cf2 \ul \ulc2 Amplitude}}:\cf3 \
+\
+
+\b \cf2 // \'95 continuous:
+\b0 \cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\ampTest\cf3 , \{\cf4 arg\cf3  inbus, attack, decay;\
+	\cf4 var\cf3  amp, src;\
+	src = \cf4 WhiteNoise\cf3 .ar(0.5);\
+	amp = \cf4 Amplitude\cf3 .ar(\cf4 In\cf3 .ar(inbus), attack, decay);\
+	amp.poll;\
+	\cf4 Out\cf3 .ar(0, src * amp);\
+\});\
+)\
+\
+\cf2 // try out a few different configuration of the analysis UGen\cf3 \
+b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.01).decay_(0.01).play;\
+b.free;\
+\
+b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.1).decay_(1).play;\
+b.free;\
+\
+b = a.new.inbus_(s.options.numInputBusChannels).attack_(1.0).decay_(1).play;\
+b.free;\
+\
+\
+
+\b \cf2 // \'95 triggers:
+\b0 \cf3 \
+\cf2 // You can get amplitude data into sclang, and do something with it.\cf3 \
+\cf2 /* But:\
+	- use Trig1 to limit the nr of data you get!\
+	- allow yourself to set the trigger threshold and Trig1 'silent' duration from outside\
+*/\cf3 \
+\
+\cf2 // This tracks incoming audio from your soundcard - beware of feedback \cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\ampTest\cf3 , \{\cf4 arg\cf3  inbus, attack, decay, id, thresh, tdur;\
+	\cf4 var\cf3  amp;\
+	amp = \cf4 Amplitude\cf3 .ar(\cf4 In\cf3 .ar(inbus), attack, decay);\
+	\cf4 SendTrig\cf3 .ar(\cf4 Trig1\cf3 .ar(amp > thresh, tdur), id, amp); \
+\});\
+	\
+c = \cf4 CtkSynthDef\cf3 (\cf5 \\sin\cf3 , \{\cf4 arg\cf3  outbus = 0, freq = 220;\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(440, 0, \cf4 XLine\cf3 .kr(0.1, 0.0001, 1, doneAction: 2)))\
+\});\
+	\
+o = \cf4 OSCresponderNode\cf3 (s.addr, \cf5 '/tr'\cf3 , \{\cf4 arg\cf3  time, resp, msg;\
+	[time, resp, msg].postln;\
+	c.new.play\
+	\}).add; \
+)\
+b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.01).decay_(0.01).id_(100).thresh_(0.15).tdur_(1).play;\
+\
+o.remove;\
+b.free;\
+\
+
+\b \cf2 // ------ A list of AMPLITUDE tracking UGens in SC --
+\b0 \cf3 \
+\cf2 // >> Amplitude following\cf3 \
+\cf4 Amplitude\cf3  \cf2 // amplitude follower\cf3 \
+\cf4 PeakFollower\cf3  \cf2 // peak amp tracker\cf3 \
+\cf4 EnvDetect\cf3  \cf2 // amplitude follower\cf3 \
+\cf4 WAmp\cf3 \
+\cf2 // >> Amplitude minimum/maximum \cf3 \
+\cf4 Peak\cf3 \
+\cf4 DetectSilence\cf3 \
+\cf2 // >> Amplitude utilities\cf3 \
+\cf2 // pshychoacoustic utilities\cf3 \
+\cf4 AmpComp\cf3  / \cf4 AmpCompA\cf3 \
+\cf4 Loudness\cf3  \cf2 // get loudness in sones\cf3 \
+\cf2 // >> Signal operations:\cf3 \
+\cf4 Compander\cf3 \
+\cf4 Limiter\cf3 \
+\cf4 Normalizer\cf3  \cf2 // normalize to nominal level\cf3 \
+\
+\
+
+\b \cf2 // ====== PITCH ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Examples  --\cf3 \
+
+\b0 \cf2 // These examples use the incoming audio from your soundcard - beware of feedback \cf3 \
+\
+
+\b \cf2 // \'95 continuous:
+\b0 \cf3 \
+\cf2 // Using the Pitch UGen: pretty good!\cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus, high = 1000, low = 60;\
+	\cf4 var\cf3  in, freq, hasFreq;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	#freq, hasFreq = \cf4 Pitch\cf3 .kr(in, high, low, high);\
+	freq.poll;\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(freq * 4, 0, 0.1) * hasFreq)\
+	\});\
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).play;\
+b.free;\
+\
+\
+\cf2 // The Tartini UGen is a more expensive, but is also better\cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus;\
+	\cf4 var\cf3  in, freq, hasFreq;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	#freq, hasFreq = \cf4 Tartini\cf3 .kr(in);\
+	freq.poll;\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(freq * 4, 0, 0.1))\
+	\});\
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).play;\
+b.free;\
+\
+
+\b \cf2 // \'95 triggers:
+\b0 \cf3 \
+\cf2 // Triggering is much trickier with pitch, as precise pitch is close to impossible, so better to look for a specific region/register.\cf3 \
+\cf2 // This example will provide a trigger if the incoming audio is between 1500-1700Hz\cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus, low = 1500, high = 1700, id, tdur = 0.5;\
+	\cf4 var\cf3  in, freq, hasFreq, trig1, trig2, trig;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	#freq, hasFreq = \cf4 Tartini\cf3 .kr(in);\
+	freq.poll;\
+	trig1 = freq > low;\
+	trig2 = freq < high;\
+	trig = \cf4 Trig1\cf3 .kr((trig1 + trig2 - 1).poll, tdur);\
+	\cf4 SendTrig\cf3 .kr(trig, id, freq);\
+\});\
+	\
+b = a.new.inbus_(s.options.numOutputBusChannels).id_(100).play;\
+\
+z = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  freq;\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(freq, 0, \cf4 XLine\cf3 .kr(0.1, 0.0001, 1, doneAction: 2)))\
+\});\
+		\
+o = \cf4 OSCresponderNode\cf3 (s.addr, \cf5 '/tr'\cf3 , \{\cf4 arg\cf3  time, resp, msg;\
+	[time, resp, msg].postln;\
+	z.new.freq_(msg[3] * 0.5).play;\
+\}).add; \
+)\
+\
+b.free;\
+o.remove; \cf2 // don't forget to remove the responder\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ A list of PITCH tracking UGens in SC --
+\b0 \cf3 \
+\cf4 Pitch\cf3 \
+\cf4 Tartini\cf3 \
+\cf4 ZeroCrossing\cf3 \
+\cf2 // >> more/advanced/experimental (ie: use at your own risk):\cf3 \
+\cf4 KeyTrack\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== TIME-RELATED (ONSETS, ETC) ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Examples  --
+\b0 \cf3 \
+\cf2 // There are a few different strategies for finding onsets. You can use some of the pre-cooked classes, or devise your own methods:\cf3 \
+\cf2 // These examples use the incoming audio from your soundcard - beware of feedback \cf3 \
+\
+\cf2 // comparing a signal with a delayed version of itself (an example by Josh Parmenter):\cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\ampTest\cf3 , \{\cf4 arg\cf3  inbus, level = 0.5, attack, decay, id;\
+	\cf4 var\cf3  amp, src, del, diff;\
+	src = \cf4 In\cf3 .ar(inbus, 1);\
+	amp = \cf4 Amplitude\cf3 .ar(src, attack, decay);\
+	del = \cf4 DelayN\cf3 .ar(amp, 0.01, 0.01);\
+	diff = (amp / del.max(0.001)).ampdb * \
+		\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 0, 1], [0.1, 0.1])).poll;\
+	\cf4 SendTrig\cf3 .ar(\cf4 Trig1\cf3 .ar(diff > level, 1), id, diff);\
+\});\
+\
+z = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(440, 0, \cf4 XLine\cf3 .kr(0.1, 0.0001, 1, doneAction: 2)))\
+\});\
+		\
+o = \cf4 OSCresponderNode\cf3 (s.addr, \cf5 '/tr'\cf3 , \{\cf4 arg\cf3  time, resp, msg;\
+	[time, resp, msg].postln;\
+	\cf2 // now - actually do something once the trigger happens\cf3 \
+	z.new.play;\
+\}).add; \
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).level_(36).attack_(0.01).decay_(0.01).id_(100).play;\
+b.level_(12); \cf2 // level is in db\cf3 \
+o.remove; \
+b.free;\
+\
+\cf2 // or use the Slope UGen instead:\cf3 \
+(\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\ampTest\cf3 , \{\cf4 arg\cf3  inbus, level = 0.5, attack, decay, id;\
+	\cf4 var\cf3  amp, src, slope;\
+	src = \cf4 In\cf3 .ar(inbus, 1);\
+	amp = \cf4 Amplitude\cf3 .ar(src, attack, decay);\
+	slope = \cf4 Slope\cf3 .ar(amp);\
+	\cf4 SendTrig\cf3 .ar(\cf4 Trig1\cf3 .ar(slope > level, 1), id, slope);\
+\});\
+\
+z = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(440, 0, \cf4 XLine\cf3 .kr(0.1, 0.0001, 1, doneAction: 2)))\
+\});\
+		\
+o = \cf4 OSCresponderNode\cf3 (s.addr, \cf5 '/tr'\cf3 , \{\cf4 arg\cf3  time, resp, msg;\
+	[time, resp, msg].postln;\
+	\cf2 // now - actually do something once the trigger happens\cf3 \
+	z.new.play;\
+\}).add; \
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).level_(0.2).attack_(0.01).decay_(0.01).id_(100).play;\
+b.level_(200); \cf2 // angle?\cf3 \
+o.remove; \
+b.free;\
+\
+\
+
+\b \cf2 // ------ A list of TIME (onset, rhythm, etc) tracking UGens in SC --
+\b0 \cf3 \
+\cf4 Onsets\cf3 \
+\cf4 Coyote\cf3 \
+\cf2 // >> more/advanced/experimental (ie: use at your own risk):\cf3 \
+\cf4 BeatTrack\cf3 \
+\cf4 BeatTrack2\cf3 \
+\cf4 AutoTrack\cf3 \
+\cf4 OnsetDS\cf3  / \cf4 XiiOnsets\cf3  \cf2 // no help file\cf3 \
+\cf4 SLOnset\cf3 \
+\cf4 Concat\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== TIMBRE ======
+\b0 \cf3 \
+\cf2 // There is a big variety of UGens that you can use for tracking characteristics on the spectrum of a signal in SC.\cf3 \
+\
+
+\b \cf2 // ------ Examples --
+\b0 \cf3 \
+\
+\cf2 // For example, SpecFlatness tells you how noisy a signal is (noise = 1, sine = 0)\cf3 \
+(\
+f = \cf4 Buffer\cf3 .alloc(s,2048,1); \cf2 // a buffer for the FFT to use\cf3 \
+\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus;\
+	\cf4 var\cf3  in, freq, chain, flat;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	chain = \cf4 FFT\cf3 (f, in);\
+	flat = \cf4 SpecFlatness\cf3 .kr(chain).poll;\
+	flat = flat ** 3;\
+	flat.poll;\
+	\cf4 Out\cf3 .ar(0, \cf4 BPF\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(0.5), 400, flat.max(0.0001)));\
+\});\
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).play;\
+b.free;\
+\
+\
+\cf2 // FFTPeak finds the bin with the strongest magnitude and outputs its frequency and magnitude:\cf3 \
+(\
+f = \cf4 Buffer\cf3 .alloc(s, 2048, 1); \cf2 // a buffer for the FFT to use\cf3 \
+\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus;\
+	\cf4 var\cf3  in, chain, freq, mag;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	chain = \cf4 FFT\cf3 (f, in);\
+	#\'a0freq, mag = \cf4 FFTPeak\cf3 .kr(chain).poll;\
+	\cf2 //peak = flat ** 3;\cf3 \
+	\cf2 //flat.poll;\cf3 \
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(freq, 0, mag * 0.001));\
+\});\
+)\
+b = a.new.inbus_(s.options.numOutputBusChannels).play;\
+b.free;\
+\
+\
+
+\b \cf2 // ------ A list of SPECTRAL FEATURE tracking UGens in SC --
+\b0 \cf3 \
+\cf4 SpecCentroid\cf3 \
+\cf4 SpecFlatness\cf3 \
+\cf4 SpecPcile\cf3 \
+\cf4 FFTCrest\cf3 \
+\cf4 FFTComplexDev\cf3 \
+\cf4 FFTFlux\cf3 \
+\cf4 FFTPeak\cf3 \
+\cf4 FFTRumble\cf3 \
+\cf4 FFTSlope\cf3 \
+\cf4 FFTSpread\cf3 \
+\cf4 FFTSubbandFlatness\cf3  / \cf4 FFTSubbandFlux\cf3  / \cf4 FFTSubbandPower\cf3 \
+\cf4 Goertzel\cf3  \cf2 // detect presence of a frequency\cf3 \
+\cf2 // You can also use filters to divide a signal into different ranges, and then detect energy for example in it\cf3 \
+\cf2 // >> more/advanced/experimental (ie: use at your own risk):\cf3 \
+\cf4 PV_CommonMag\cf3 \
+\cf4 MFCC\cf3 \
+\cf4 FrameCompare\cf3 \
+\cf4 Qitch\cf3 \
+\cf4 CQ_Diff\cf3 \
+\cf2 // These don't spit data, but re-synthesize for you:\cf3 \
+\cf4 PV_NoiseSynthF\cf3 \
+\cf4 PV_PartialSynthF\cf3 \
+\
+\
+
+\b \cf2 // ====== STATISTICAL UTILITIES ======
+\b0 \cf3 \
+\cf2 // It can be very useful, after analyzing a signal, to make a statistical analysis and get a better idea about its behavior\cf3 \
+\cf4 AverageOutput\cf3 \
+\cf4 TrigAvg\cf3 \
+\cf4 Max\cf3 \
+\cf4 RunningMax\cf3 \
+\cf4 RunningMin\cf3 \
+\cf4 RunningSum\cf3 \
+\cf4 Slope\cf3 \
+\cf4 Crest\cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd"}}{\fldrslt \cf4 \ul \ulc4 StatUGens}} \cf2 // PseudoUGens, built on RunningSum UGen; no help-file for the individual UGens\cf3 \
+	\cf4 DynamicScaleUGen\cf3  \
+	\cf4 FluctuationUGen\cf3 \
+	\cf4 KurtosisUGen\cf3 \
+	\cf4 MaxDynScaleUGen\cf3 \
+	\cf4 MinDynScaleUGen\cf3 \
+	\cf4 SkewUGen\cf3 \
+	\cf4 StdDevUGen\cf3 \
+\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== COMBINING FEATURES ======
+\b0 \cf3 \
+\
+\cf2 // An example combining onset, amplitude and pitch analysis (by Josh P)\cf3 \
+\cf2 // This examples use the incoming audio from your soundcard - beware of feedback \cf3 \
+\cf2 // Sing or whistle on the mic:\cf3 \
+(\
+\cf4 var\cf3  freq, amp;\
+\cf2 /* combining triggers - setting variable in the lang */\cf3 \
+\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\pitch\cf3 , \{\cf4 arg\cf3  inbus, attack, decay, id1, id2, id3, \
+		level = 6;\
+	\cf4 var\cf3  in, amp, del, diff, freq, hasFreq, trig1, trig2, trig;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	amp = \cf4 Amplitude\cf3 .ar(in, attack, decay);\
+	del = \cf4 DelayN\cf3 .ar(amp, 0.01, 0.01);\
+	\cf2 // delays the trigger itself\cf3 \
+	diff = \cf4 DelayN\cf3 .ar((amp / del.max(0.001)).ampdb * \
+		\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 0, 1], [0.1, 0.1])), 0.025, 0.025);\
+	trig = \cf4 Trig1\cf3 .ar(diff > level, 1); \cf2 // for amplitude\cf3 \
+	\cf4 SendTrig\cf3 .ar(trig, id1, \cf4 RunningSum\cf3 .kr(amp, 40)); \cf2 // output the peak amplitude of the analysis\cf3 \
+	\cf2 // send another trig with id2 for freq\cf3 \
+	#freq, hasFreq = \cf4 Pitch\cf3 .kr(in);\
+	\cf4 SendTrig\cf3 .ar(trig, id2, freq);\
+	\cf2 // finally! send a last trigger with a slight delay, to ensure the \cf3 \
+	\cf2 // variables for the above two triggers have been set\cf3 \
+	\cf4 SendTrig\cf3 .ar(\cf4 DelayN\cf3 .ar(trig, 0.01, 0.01), id3, freq);\
+	\});\
+	\
+b = a.new.inbus_(s.options.numOutputBusChannels).level_(50)\
+	.id1_(100).id2_(101).id3_(102).play;\
+\
+z = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  freq, amp;\
+	\cf4 Out\cf3 .ar(1, \cf4 SinOsc\cf3 .ar(freq, 0, amp * \cf4 XLine\cf3 .kr(0.1, 0.0001, 4, doneAction: 2)))\
+	\});\
+		\
+o = \cf4 OSCresponderNode\cf3 (\cf4 nil\cf3 , \cf5 '/tr'\cf3 , \{\cf4 arg\cf3  time, resp, msg;\
+	case \
+		\{msg[2] == 100\}\
+		\{amp = msg[3]; (\cf6 "Amp is: "\cf3 ++amp).postln;\}\
+		\{msg[2] == 101\}\
+		\{freq = msg[3]; (\cf6 "Freq is: "\cf3 ++freq).postln;\}\
+		\{msg[2] == 102\}\
+		\{\
+			\cf6 "Go!"\cf3 .postln;\
+			\cf2 // now - actually do something once the trigger happens\cf3 \
+			10.do(\{\cf4 arg\cf3  i;\
+				z.new(0 + (i * 0.1.rand))\
+					.freq_(freq * ((i + 1 * 2))).amp_(amp * 0.1).play;\
+				\})\
+		\}\
+	\}).add; \
+)\
+b.level_(12);\
+b.free;\
+o.remove;\
+}

@@ -1,0 +1,667 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 6.2:
+\b0 \
+
+\b 	Mapping Strategies
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Simple mapping\
+				A few different treatments\
+				- Using math\
+				- Using SimpleNumber methods\
+				- Using ControlSpec\
+				- Using Envelopes\
+			\'95 More complex mapping strategies\
+			\'95\'a0Pseudo-cognitive mapping\
+			\'95 Mapping data to parameters\
+			\'95 Mapping in layers\
+			\'95 Direct vs 'modulation' mapping\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= MAPPING STRATEGIES =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== SIMPLE MAPPING ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ A few different treatments, using simple math --
+\b0 \cf3 \
+\
+\cf2 // A Routine to simulate incoming data: \cf3 \
+(\
+~dataMap = \{\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // what comes in, goes out:\cf3 \
+			i.postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value\
+r.stop\
+\
+\
+\cf2 //\'95  
+\b shift
+\b0  the data\cf3 \
+(\
+~dataMap = \{\cf4 arg\cf3  shift;\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // shifted/transposed data\cf3 \
+			(i + shift).postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value(1000)\
+r.stop;\
+\
+\
+\cf2 // \'95 
+\b invert
+\b0  the data\cf3 \
+(\
+~dataMap = \{\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // inverted data\cf3 \
+			((i * -1) + 100).postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value(1000)\
+r.stop;\
+\
+\cf2 // \'95 
+\b compress/expand
+\b0  the data\cf3 \
+(\
+~dataMap = \{\cf4 arg\cf3  mult;\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // compressed/expanded data\cf3 \
+			(i * mult).postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value(0.10)\
+r.stop;\
+\
+\
+\cf2 // \'95\'a0
+\b limit
+\b0  the data\cf3 \
+(\
+~dataMap = \{\cf4 arg\cf3  limits;\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // limit/clip the data\cf3 \
+			i.clip(limits[0], limits[1]).postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value([20, 50])\
+r.stop;\
+\
+\
+\cf2 // \'95\'a0
+\b quantize
+\b0  the data\cf3 \
+(\
+~dataMap = \{\cf4 arg\cf3  roundTo;\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // quantize the data\cf3 \
+			i.round(roundTo).postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value(10)\
+r.stop;\
+\
+\cf2 // \'95\'a0
+\b segment
+\b0  the data\cf3 \
+(\
+~dataMap = \{\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // segment the data: split into different parameters\cf3 \
+			c = case\
+				\{i < 25\} \{\cf5 "send to param 1: "\cf3 .post; i.postln\}\
+				\{i > 25 and: \{i < 50\}\} \{\cf5 "send to param 2: "\cf3 .post; i.postln\}\
+				\{i > 51 and: \{i < 101\}\} \{\cf5 "send to param 3: "\cf3 .post; i.postln\};\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value\
+r.stop;\
+\
+\
+\
+
+\b \cf2 // ------ Using SimpleNumber methods --
+\b0 \cf3 \
+\cf2 // There are also a lot of methods you can call on a SimpleNumber that can be very useful for mapping. There are many Unary and several Binary operators (open up the {\field{\*\fldinst{HYPERLINK "SC://SimpleNumber"}}{\fldrslt \cf2 \ul \ulc2 SimpleNumber}} help, or press Cmd-y on the class  to view them):\cf3 \
+\cf2 // For example, here are some Unary methods:\cf3 \
+(\
+~dataMap = \{\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+		\cf2 // try out a few different methods:\cf3 \
+			i.exp.postln;\
+			\cf2 // i.sin.postln;\cf3 \
+			\cf2 // i.cos.postln;\cf3 \
+			\cf2 //i.reciprocal.postln;\cf3 \
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value\
+r.stop;\
+\
+\cf2 // you could even call 'audio-processing' methods (like distortion) if you like:\cf3 \
+(\
+~dataMap = \{\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // first scale down range, say from 0-5\cf3 \
+			i = i * 0.05;\
+			\cf2 // try out different methods\cf3 \
+			\cf2 //i.distort.postln;\cf3 \
+			i.softclip.postln;\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value\
+r.stop;\
+\
+\
+\cf2 // There are quite a few useful binary operators, as well:\cf3 \
+\cf2 // For example:\cf3 \
+\cf2 /*	linlin(inMin, inMax, outMin, outMax) : linear to linear mapping\
+	linexp(inMin, inMax, outMin, outMax): linear to exponential mapping\
+	explin(inMin, inMax, outMin, outMax): exponential to linear mapping\
+	expexp(inMin, inMax, outMin, outMax): exponential to exponential mapping\
+	lincurve(inMin = 0, inMax = 1, outMin = 0, outMax = 1, curve = -4, clip = \\minmax)\
+*/\cf3 \
+\
+(\
+~dataMap = \{\cf4 arg\cf3  inMin, inMax, outMin, outMax;\
+r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // try a few different ones; note that values above or below the specified 'in' range will be clipped with these methods:\cf3 \
+			i.linlin(inMin, inMax, outMin, outMax).postln;\
+\cf2 //			i.linexp(inMin, inMax, outMin, outMax).postln;\cf3 \
+\cf2 //			i.explin(inMin, inMax, outMin, outMax).postln;\cf3 \
+\cf2 //			i.expexp(inMin, inMax, outMin, outMax).postln;\cf3 \
+\cf2 //			(i*0.01).lcurve(1, 0, 1).postln;\cf3 \
+\cf2 //			i.gaussCurve(1, 0, 10).postln;\cf3 \
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataMap.value(0.000001, 100, 300, 1000)\
+r.stop;\
+\
+\
+\
+\
+
+\b \cf2 // ------ Using ControlSpec --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://ControlSpec"}}{\fldrslt \cf2 \ul \ulc2 ControlSpec}}, a type of Spec (i.e. 'input data specification') is a class most commonly used to map values coming from GUI sliders and knobs, so that their range (which is always 0-1) can be converted to another range and with a specific curve, and then used for a specific type of parameter, such as frequency, amplitude, phase, etc. \cf3 \
+\
+\cf2 // A ControlSpec (for mapping values coming from a GUI) is created like this:\cf3 \
+\cf4 ControlSpec\cf3 .new(minval, maxval, warp, step, default, units)\
+\cf2 // but you can use it for numbers like this:\cf3 \
+\cf4 ControlSpec\cf3 .new(minval, maxval, warp, step)\
+\cf2 // a nice thing about it, is that it contains the min/max values to map to, a curve function (warp: this is the same as we 've seen in Env; you can look at {\field{\*\fldinst{HYPERLINK "SC://Warp"}}{\fldrslt \cf2 \ul \ulc2 Warp}}), as well as a  rounding function (step)\cf3 \
+\cf2 // You can also use a shortcut:\cf3 \
+[minVal, maxVal, warp, default, units].asSpec; \
+\cf2 // or, for non-GUI use:\cf3 \
+[minVal, maxVal, warp].asSpec;\
+\
+(\
+~dataMap = \{\cf4 arg\cf3  minval, maxval, warp, step;\
+	\cf2 // make the spec:\cf3 \
+	c = \cf4 ControlSpec\cf3 (minval, maxval, warp, step);\
+	\cf2 // make a GUI slider just to see better what happens:	\cf3 \
+	z = \cf4 EZSlider\cf3 (label: \cf5 " test "\cf3 );\
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // first map to 0-1 range:\cf3 \
+			i = i * 0.01;\
+			\cf2 // then use the controlspec:\cf3 \
+			i = c.map(i).postln;\
+			z.value_(i);\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play(\cf4 AppClock\cf3 )\
+\};\
+)\
+~dataMap.value(0.000001, 1, \cf6 \\exp\cf3 , 0.0000000005);\
+r.stop;\
+\
+\
+\cf2 // As this class is commonly used for controlling synthesis, Spec (and its subclass, ControlSpec) contains a Dictionary of specifications, so you can just call the name of the mapping you want to use. Some names include \\freq, \\lofreq, \\midfreq, \\phase, \\rq, \\midinote, \\db, \\amp, \\pan, \\rate, \\delay, etc. You can see a full list in the {\field{\*\fldinst{HYPERLINK "SC://Spec"}}{\fldrslt \cf2 \ul \ulc2 Spec}} helpfile.\cf3 \
+(\
+~dataMap = \{\
+	\cf2 // make the spec:\cf3 \
+	d = \cf6 \\rq\cf3 .asSpec;\
+	\cf2 // make a GUI slider to see better:	\cf3 \
+	z = \cf4 EZSlider\cf3 (label: \cf5 " test "\cf3 );\
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // first map to 0-1 range:\cf3 \
+			i = i * 0.01;\
+			\cf2 // then use the controlspec:\cf3 \
+			i = d.map(i).postln;\
+			z.value_(i);\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play(\cf4 AppClock\cf3 )\
+\};\
+)\
+~dataMap.value;\
+r.stop;\
+\
+\
+\
+
+\b \cf2 // ------ Using Envelopes --
+\b0 \cf3 \
+\cf2 // This is all very good, but you may want something more customizable. One of my favorite methods is to use envelopes, as this allows for more complex mappings, multiple curves and practically makes any kind of response possible:\cf3 \
+(\
+~dataMap = \{\
+	\cf2 // make a GUI slider to see better:	\cf3 \
+	z = \cf4 EZSlider\cf3 (label: \cf5 " test "\cf3 );\
+	\cf2 // make an envelope:\cf3 \
+	e = \cf4 Env\cf3 ([0, 0.5, 0.85, 1], [1, 3, 1].normalizeSum, [2, -6, 3]).plot;\
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // first map to 0-1 range:\cf3 \
+			i = i * 0.01;\
+			\cf2 // then use the envelope:\cf3 \
+			i = e[i].postln;\
+			z.value_(i);\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play(\cf4 AppClock\cf3 )\
+\};\
+)\
+~dataMap.value;\
+r.stop;\
+\
+\
+\
+
+\b \cf2 // ====== MORE COMPLEX MAPPING STRATEGIES ======
+\b0 \cf3 \
+\
+\cf2 // Apart from the above types of mapping, it may be useful to manipute incoming data in more radical manners.\cf3 \
+\
+\cf2 // \'95 
+\b Non-linear 
+\b0 transformations can be very useful, and are easy to implement using envelopes.\cf3 \
+(\
+~dataMap = \{\
+	\cf2 // make a GUI slider to see better:	\cf3 \
+	z = \cf4 EZSlider\cf3 (label: \cf5 " test "\cf3 );\
+	\cf2 // make an envelope:\cf3 \
+	e = \cf4 Env\cf3 ([0, 0.5, 0.3, 0.9, 0.05, 1], [1, 3, 2, 4, 1].normalizeSum, [2, -6, 3, 12, -4]).plot;\
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // first map to 0-1 range:\cf3 \
+			i = i * 0.01;\
+			\cf2 // then use the envelope:\cf3 \
+			i = e[i].postln;\
+			z.value_(i);\
+			0.01.wait;\
+		\}\
+	\}\
+\};\
+r.play(\cf4 AppClock\cf3 )\
+\};\
+)\
+~dataMap.value;\
+r.stop;\
+\
+\
+\cf2 // \'95\'a0You may want to add some 
+\b delay
+\b0  to the response\cf3 \
+(\
+\cf2 // a delay function:\cf3 \
+~delay = \{\cf4 |in, delay|\cf3 \
+	\cf4 var\cf3  routine;\
+	routine = \cf4 Routine\cf3 \{\
+		delay.wait;\
+		\{z.value_(in)\}.defer; \cf2 // just for viewing\cf3 \
+	\}.play\
+\};\
+\
+\cf2 // let's simulate some input\cf3 \
+~data = \{\cf4 arg\cf3  dataSpeed, delay;\
+	\cf2 // make a GUI slider to see better:\cf3 \
+	w = \cf4 Window\cf3 .new.front;	\
+	w.view.decorator = \cf4 FlowLayout\cf3 ( w.view.bounds, 10@10, 20@5 );\
+	y = \cf4 EZSlider\cf3 (w, 350@30, label: \cf5 " test "\cf3 );\
+	z = \cf4 EZSlider\cf3 (w, 350@30, label: \cf5 " delayed "\cf3 );\
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // create a random value and send it to the interpolator function\cf3 \
+			x = 0.0.rrand(1);\
+			\{y.value_(x)\}.defer; \cf2 // just for viewing\cf3 \
+			~delay.value(x, delay);\
+			dataSpeed.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+\
+~data.value(0.5, 0.25);\
+r.stop;\
+\
+\
+\cf2 //
+\b  \'95\'a0
+\b0 You may want to 
+\b reduce or expand data
+\b0  (decimation/interpolation). \cf3 \
+\cf2 // You can do linear interpolation, but I suggest using '{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/interpolate.html"}}{\fldrslt \cf2 \ul \ulc2 interpolate}}', a very nice extension from the wslib quark\cf3 \
+\
+\cf2 // Here is a function that will automatically interpolate between a new value and the last interpolated value\cf3 \
+(\
+~interpolator = \{\cf4 |in, steps = 100, interpTime = 1, interpol = \\spline|\cf3 \
+	\cf4 var\cf3  memory = [0, 0];\
+	\cf4 var\cf3  wait = interpTime / steps;\
+	q.stop; \cf2 // stop any previous instances\cf3 \
+	memory.put(0, b);\
+	memory.put(1, in); \cf2 // this now contains the previous and the current value\cf3 \
+	\cf2 // now, interpolate between the previous and the current value\cf3 \
+	q = \cf4 Routine\cf3 \{\
+		steps.do\{\cf4 |inc|\cf3 \
+			b = memory.intAt(inc/steps);\
+			\{z.value_(b)\}.defer; \cf2 // just for viewing		\cf3 \
+			(wait).wait;\
+			\};\
+	\}.play;\
+\};\
+\cf2 // let's simulate some input\cf3 \
+~data = \{\cf4 arg\cf3  dataSpeed, interpolSpeed;\
+	\cf2 // make GUI sliders to see better:	\cf3 \
+	w = \cf4 Window\cf3 .new.front;	\
+	w.view.decorator = \cf4 FlowLayout\cf3 ( w.view.bounds, 10@10, 20@5 );\
+	y = \cf4 EZSlider\cf3 (w, 350@30, label: \cf5 " test"\cf3 );\
+	z = \cf4 EZSlider\cf3 (w, 350@30, label: \cf5 " interp"\cf3 );\
+\
+	b = 0.5; \cf2 // initialization value\cf3 \
+	r = \cf4 Routine\cf3  \{\
+	loop \{\
+		100.do\{ \cf4 arg\cf3  i;\
+			\cf2 // create a random value and send it to the interpolator function\cf3 \
+			x = 0.0.rrand(1);\
+			\{y.value_(x)\}.defer; \cf2 // just for viewing\cf3 \
+			~interpolator.value(x, 100, interpolSpeed, \cf6 \\spline\cf3 );\
+			dataSpeed.wait;\
+		\}\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~data.value(1, 0.25); \cf2 // this will reach to the input values, as the interpolation time is short\cf3 \
+r.stop;\
+~data.value(1,  2); \cf2 // this will not reach to the input values, as the interpolation time is longer than the step time\cf3 \
+r.stop;\
+\
+\cf2 // \'95\'a0Instead of getting the absolute values, it may make more sense to get the 
+\b rate of change
+\b0 , or 
+\b acceleration
+\b0  of incoming values:\cf3 \
+\cf2 // Here is a much more expressive than the previously viewed mouse-theremin example, using acceleration to convert movement energy to amplitude\cf3 \
+s.boot;\
+(\
+play(\
+	\{\
+		\cf4 var\cf3  f;\
+		f = \cf4 MouseY\cf3 .kr(4000, 200, \cf6 'exponential'\cf3 , 0.8);\
+		\cf4 SinOsc\cf3 .ar(\
+			freq: f+ (f*\cf4 SinOsc\cf3 .ar(7,0,0.02)),\
+			mul: \cf4 Lag\cf3 .kr(\cf4 Slope\cf3 .kr(\cf4 MouseX\cf3 .kr(0, 0.1)))\
+			\cf2 // try uncommenting the original version and commenting the one above\cf3 \
+			\cf2 //mul: MouseX.kr(0, 0.9) \cf3 \
+		)\
+	\}\
+)\
+)\
+\cf2 // now move your mouse around!\cf3 \
+\
+\
+\cf2 // \'95\'a0Another thing you may want to do - especially with raw sensor data - is to 
+\b smooth out / filter
+\b0  your input, so that you eliminate noise and weird spikes. A low-pass filter will do the trick. This is what Lag does above; try without it:\cf3 \
+(\
+play(\
+	\{\
+		\cf4 var\cf3  f;\
+		f = \cf4 MouseY\cf3 .kr(4000, 200, \cf6 'exponential'\cf3 , 0.8);\
+		\cf4 SinOsc\cf3 .ar(\
+			freq: f+ (f*\cf4 SinOsc\cf3 .ar(7,0,0.02)),\
+			mul: \cf4 Slope\cf3 .kr(\cf4 MouseX\cf3 .kr(0, 0.1))\
+			\cf2 //mul: Lag.kr(Slope.kr(MouseX.kr(0, 0.1)))\cf3 \
+			\cf2 // try uncommenting the original version and commenting the one above\cf3 \
+			\cf2 //mul: MouseX.kr(0, 0.9) \cf3 \
+		)\
+	\}\
+)\
+)\
+\
+\
+
+\b \cf2 // ====== PSEUDO-COGNITIVE MAPPING ======
+\b0 \cf3 \
+\
+\
+\
+\cf2 // \'95 Perform 
+\b statistical analysis 
+\b0 on an input to deduce its character. There are two quarks containing some very useful statistic methods that you should download:\cf3 \
+\cf2 // MathLib quark: {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MathLib/help/extStatistics.html"}}{\fldrslt \cf2 \ul \ulc2 extStatistics}}, contains some additional methods for Collection and Sequencable Collection for stats\cf3 \
+\cf2 // SenseWorld quark: contains the {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/SensorData.help.scd"}}{\fldrslt \cf2 \ul \ulc2 SensorData}} class with several statistics methods, as well as {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd"}}{\fldrslt \cf2 \ul \ulc2 StatUGens}}, a set of pseudo-UGens to perform statistical operations on the server, which can be very useful with audio signals\cf3 \
+\
+(\
+a = \cf4 SensorData\cf3 .new; \cf2 // some of the methods below are specific to this class\cf3 \
+\cf2 // others need an array: let's use a circular one; with every incoming number we'll rotate it to the left, and the write incoming data to its end;\cf3 \
+m = 0!200; \cf2 // how big should the circular array/window be?\cf3 \
+a.ltlen_(200); \cf2 // use the same window length for both methods\cf3 \
+~dataStats = \{\
+	\cf4 var\cf3  vals, stDev, mean, fluct, peak;\
+	\cf2 // make a GUI slider to see better:	\cf3 \
+	\cf2 // make an envelope:\cf3 \
+	r = \cf4 Routine\cf3  \{\
+		loop \{			\
+				\cf2 // create some random values, with a low-pass distribution\cf3 \
+				t = \cf4 Tendency\cf3 (0, 1.0, \cf6 \\lpRand\cf3 );\
+				v = t[v];\
+				\cf2 // now, add this to the SensorData class, and get some stats\cf3 \
+				a.addValue(v);\
+				\cf5 "standard deviation is: "\cf3 .post; \
+					a.longStdDev.postln;\
+				\cf5 "mean is: "\cf3 .post; \
+					a.longMean.postln;\
+				\cf5 "fluctuation is: "\cf3 .post; \
+					a.fluctuation.postln;\
+				\cf5 "current peak is: "\cf3 .post; \
+					a.lastPeak.postln;	\
+				\cf2 // add it to the circular array, and get some stats	\cf3 \
+				m = m.shift(-1);\
+				m.putLast(v);	\
+				\cf5 "kurtosis is: "\cf3 .post; \
+					m.kurtosis.postln;	\
+				\cf5 "skew is: "\cf3 .post;\
+					m.skew.postln;\
+			0.5.wait;\
+	\}\
+\};\
+r.play\
+\};\
+)\
+~dataStats.value;\
+r.stop;\
+\
+\
+\cf2 // \'95 
+\b Pattern recognition: 
+\b0 You can scan an incoming stream for a specific pattern and do something once you detect that pattern. \cf3 \
+\cf2 // Type while the Window is in focus and match a word\cf3 \
+\cf2 // The version below does not account for elapsed time, but you could implement that if you wanted to...\cf3 \
+~pattern = \cf5 "match"\cf3 .ascii; \cf2 // word to match\cf3 \
+(\
+\cf4 var\cf3  memory = \cf4 Array\cf3 .newClear(~pattern.size); \cf2 // create an array to store incoming data in. This will work as a circular memory space, where all the incoming data will be written, and which is going to be checked agains the pattern for similarity\cf3 \
+w = \cf4 Window\cf3 .new(\cf5 "key-tester"\cf3 );\
+w.view.keyDownAction = \{ \cf4 arg\cf3  view, char, modifiers, unicode, keycode;\
+	memory = memory.shift(-1); \cf2 //rotate array to discard the oldest item and make space for the newest one\cf3 \
+	memory.putLast(unicode); \cf2 //add the newest input as the last item of our circular memory array\cf3 \
+	if (~pattern == memory, \{w.background_(\cf4 Color\cf3 .rand)\});\
+\};\
+w.front\
+)\
+\
+\
+
+\b \cf2 // ====== MAPPING DATA TO PARAMETERS ======
+\b0 \cf3 \
+\cf2 // No examples for these yet, but you can easily get the idea:\cf3 \
+\
+\cf2 // \'95\'a0
+\b one-to-one
+\b0 :
+\b  
+\b0 one control parameter mapped directly to a synthesis parameter. This is a very typical - and often not powerful enough  - mapping in electronic music. \cf3 \
+\
+\cf2 // The next two mappings are much more 'physical-like'; instrumental parameters are always more complex with a lot of cross-talk\cf3 \
+\cf2 // \'95 
+\b one-to-many
+\b0 : one control parameter mapped to multiple synthesis parameters\cf3 \
+\
+\cf2 // \'95 
+\b many-to-one
+\b0 : many control parameters influencing together a synthesis parameter\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== MAPPING IN LAYERS ======
+\b0 \cf3 \
+\
+\cf2 // \'95 
+\b single-layer
+\b0 : control synthesis directly\cf3 \
+\
+\cf2 // \'95 
+\b n-layers:
+\b0  Go from the control parameters to the synthesis parameters through any number of intermediate parameters. For example: control a cognitive parameter, which is mapped to a set of perceptual parameters, which are mapped to synthesis parameters, with networks of mapping existing in-between each layer.\cf3 \
+\
+\
+
+\b \cf2 // ====== DIRECT vs 'MODULATION' MAPPING ======
+\b0 \cf3 \
+\cf2 // A control could be mapped directly to a parameter, in which case if there is no incoming data there will be no change, or it could be mapped to control and sculpt an algorithmic process that runs autonomously on its own.\cf3 \
+\
+}

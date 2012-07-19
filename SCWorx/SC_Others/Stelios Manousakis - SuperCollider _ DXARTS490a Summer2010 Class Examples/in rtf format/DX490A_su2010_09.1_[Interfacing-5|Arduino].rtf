@@ -1,0 +1,388 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue191;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 9.1:
+\b0 \
+
+\b 	Interfacing 5: Arduino in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95\'a0Connecting (5 steps)\
+			\'95 Activating and setting pins: digital/analog, input/output\
+				- Digital ports\
+				- Digital pins\
+				- Analog ports and pins\
+			\'95 Reading data (inputs)\
+				- Digital read\
+				- Analog read\
+			\'95 Writing data (outputs)\
+				- Digital write\
+				- PWM write\
+			\'95 Disconnecting\
+			\'95 Sound example\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= ARDUINO AND SUPERCOLLIDER =================
+\b0 \cf3 \
+\cf2 // The Arduino is a microcontroller development platform; it is an open-source hardware/software system. You can find more info here: \cf3 \
+\cf4 "open http://www.arduino.cc"\cf3 .unixCmd\
+\cf2 // Connects via the SerialPort\cf3 \
+\cf2 // Best results using the SCPyduino Class in SC, which is what this file deals with\cf3 \
+\cf2 // Needs Firmata firmaware uploaded into Arduino (could also work with your own)\cf3 \
+\cf2 // There is also the ArduinoSMS class (Arduino quark)\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== CONNECTING ======
+\b0 \cf3 \
+
+\b \cf2 /* 
+\b0 \
+
+\b \'95 Step 1:
+\b0  Load the 
+\b Standard Firmata
+\b0  firmware to your Arduino board (Standard_Firmata.pde). Note that this seems to currently load best using the Arduino v0016 software (June 2010).\
+	You will have to do the following steps to upload the firmware:\
+	(A): connect the Arduino board to your computer\
+	(B): In the Arduino software:\
+		(a): select the type of board you have from Tools/Board\
+		(b): select the port you plugged the board into, from Tools/Serial Port\
+		(c): open the firmare from File/Sketchbook/Examples/Library-Firmata/StandardFirmata\
+		(d): make sure your firmware runs on the maximum baud rate. The StandardFirmata firmata firmware contains a line around the end of the 'void setup()' loop:\
+			Firmata.begin();\
+		Change it to:\
+			Firmata.begin(115200) // this is probably the default though, at least this is what SCPyduino assumes...\
+		If you are using your own firmware, this would be written as Serial.begin(115200)\
+		(e): press the upload to I/O Board button from the software's interface (shortcut: Cmd-u)\
+	(C): quit Arduino (this is important, as only one software can access the same serial port at a time!) \
+	\
+	You can find more info on Firmata here:\
+	"open http://www.firmata.org/wiki/Main_Page".unixCmd\
+*/\cf3 \
+\
+\cf2 // Now, in SuperCollider:\cf3 \
+
+\b \cf2 // \'95 Step 2: 
+\b0 Install the 
+\b SCPyduino
+\b0  SuperCollider quark, if it's not installed yet:\cf3 \
+	\cf5 Quarks\cf3 .install( \cf4 "SCPyduino"\cf3 , checkoutIfNeeded: \cf5 false\cf3 )\
+\
+
+\b \cf2 // \'95 Step 3:
+\b0  list all devices; this will bring up an array of available serial devices:\cf3 \
+	\cf5 SerialPort\cf3 .listDevices\
+	\cf2 // or view the array like this:\cf3 \
+	\cf5 SerialPort\cf3 .devices\
+	\
+
+\b \cf2 // \'95 Step 4:
+\b0  Now, from this array, select the index where your Arduino is located (usually that's the usbserial one):\cf3 \
+	~port = \cf5 SerialPort\cf3 .devices[2];\
+	\cf2 // OR, you could also access the path name directly here, once you know how it is named in your computer. For example, in my MBP machine:\cf3 \
+	p = \cf5 SerialPort\cf3 (\cf4 "/dev/tty.usbserial-A40015nw"\cf3 ) \cf2 // this doesn't seem to always work though...\cf3 \
+	\cf2 // If you are NOT using StandardFirmata, but your own firmware, you can configure a number of settings of your SerialPort, upon connecting it to SC:\cf3 \
+		\cf2 /* SerialPort instance creation arguments (from the {\field{\*\fldinst{HYPERLINK "SC://SerialPort"}}{\fldrslt \cf2 \ul \ulc2 SerialPort}} helpfile)\
+		//	port           device path or index\
+		//	baudrate       baudrate [4800..230400]\
+		//	databits       5 | 6 | 7 | 8\
+		//	stopbits       true | false\
+		//	parity         nil | 'even' | 'odd'\
+		//	crtscts        hardware flow control (true | false)\
+		//	xonxoff        software flow control (true | false)\
+		//	exclusive      open the device exclusively (true | false) \
+		*/\cf3 \
+	\cf2 // For example\cf3 \
+	(\
+	p = \cf5 SerialPort\cf3 (\
+		\cf5 SerialPort\cf3 .devices[2], \cf2 // port name\cf3 \
+		baudrate: 115200); \cf2 // maximum baud rate for the Arduino; this will NOT work with StandardFirmata\cf3 \
+	)\
+	\
+
+\b \cf2 // \'95 Step 5: 
+\b0 Create an instance of the SCPyduino object, using the port defined above; then wait for a bit to post the firmata version, which will be returned if the connection is OK:\cf3 \
+	(\
+	~connectArduino = \cf5 Routine\cf3 \{\
+		~arduino = \cf5 SCPyduino\cf3 .new(~port);\
+		4.wait;\
+		\cf4 "The Firmata firmware version on this Arduino board is: "\cf3 .post;\
+		~arduino.firmataVersion.postln\}.play;\
+	)\
+\
+\
+
+\b \cf2 // ====== ACTIVATING AND SETTING PINS: DIGITAL/ANALOG, INPUTS/OUTPUTS ======
+\b0 \cf3 \
+\cf2 // StandardFirmata lets you set from the client application whether your pins will be used as outputs or inputs, and as digital (true/false) or analog (10-bit data). In our case, we do that calling the appropriate pin and method in the SCPyduino class. \cf3 \
+\
+
+\b \cf2 // ------ Digital Ports  --
+\b0 \cf3 \
+\cf2 // In Firmata, the digital pins are split into digitalPort arrays, with pins [0..7] belonging to .digitalPorts[0] and pins [8..13] belonging to .digitalPorts[1] (only this many are implemented in SCPyduino).\cf3 \
+\cf2 // The appropriate ports have to be set and activated before we can read/write data from/to any pins:\cf3 \
+\
+~arduino.digitalPorts[1].active_(1);\
+\
+
+\b \cf2 // ------ Digital  Pins --
+\b0 \cf3 \
+\cf2 // Arduino's digital pins have three possible modes:\cf3 \
+\cf2 /*\
+	digital_output : write data to pin; this mode is enumerated as 0\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf2 	digital_input : read data from pin;  this mode is enumerated as 1\
+	digital_pwm : for PWM output (only on pins: 3, 5, 6, 9, 10, 11 with the standard size Arduino);  this mode is enumerated as  2\
+\pard\pardeftab560\ql\qnatural
+\cf2 */\cf3 \
+\
+\
+
+\b \cf2 // ------ Analog ports and Pins --
+\b0 \cf3 \
+\cf2 // Analog pins also need to be activated in order to read incoming values. In the current SCPyduino implementation there is an array of 6 analog ports available, with each index corresponding to the hardware pin of that number:\cf3 \
+~arduino.analog[0].active_(1); \cf2 // activates polling for analog pin 0 on the Arduino microcontroller\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+\
+
+\b \cf2 // ====== READING DATA (INPUTS) ======
+\b0 \cf3 \
+\cf2 // As with all protocols, we need to sample incoming data at regular intervals. First, we need to tell the microcontroller to poll the activated ports and pins, using the 
+\b .iterate 
+\b0 message. Then, we need a loop to keep sampling the data.\cf3 \
+\
+\
+
+\b \cf2 // ------ Digital read --
+\b0 \cf3 \
+\cf2 // activate port 0 (PORTA)\cf3 \
+~arduino.digitalPorts[0].active_(1);\
+\cf2 // set the mode for digital pin 2 to digital_input\cf3 \
+~arduino.digital[2].mode_(~arduino.digital_input);\
+\
+\cf2 // read digital pin 2 and post value (true/false):\cf3 \
+(\
+a = fork \{\
+	loop \{\
+		~arduino.iterate;\
+		~arduino.digital[2].value.postln;\
+	\}\
+\};\
+)\
+a.stop\
+\
+\
+
+\b \cf2 // ------ Analog read --
+\b0 \cf3 \
+\cf2 //activate analog pin 0\cf3 \
+~arduino.analog[0].active_(1)\
+\cf2 //post value of analog pin 0\cf3 \
+(\
+a = fork\{\
+	loop\{\
+		~arduino.iterate;\
+		~arduino.analog[0].value.postln;\
+	\}\
+\};\
+)\
+a.stop;\
+\cf2 //deactivate reporting analog values\cf3 \
+~arduino.analog[0].active(0);\
+\
+\
+
+\b \cf2 // ====== WRITING DATA (OUTPUTS) ======
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ------ Digital write --
+\b0 \cf3 \
+\cf2 //Activate digital port 1 (PORTB) on the Arduino\cf3 \
+~arduino.digitalPorts[1].active_(1)\
+\cf2 // Set the mode for digital pin 13 to digital output\cf3 \
+~arduino.digital[13].mode_(~arduino.digital_output);\
+\cf2 // try it out manually:\cf3 \
+~arduino.digital[13].write(1);\cf2 //turn on LED\cf3 \
+~arduino.digital[13].write(0);\cf2 //turn off LED\cf3 \
+\cf2 //Make the LED blink\cf3 \
+(\
+a = fork\{ \
+	loop\{\
+		~arduino.digital[13].write(1);\
+		0.25.wait;\cf2 // on for this long\cf3 \
+		~arduino.digital[13].write(0);\
+		0.25.wait; \cf2 // off for this long\cf3 \
+	\}\
+\};\
+)\
+a.stop; \cf2 // stop writing data\cf3 \
+\
+\
+
+\b \cf2 // ------ PWM write --
+\b0 \cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf2 // PWM (Pulse Width Modulation) is only possible on pins: 3, 5, 6, 9, 10, 11 with the standard size Arduino.\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // Activate digital port 0 (PORTA) on the Arduino\cf3 \
+~arduino.digitalPorts[0].active_(1);\
+\cf2 // Set the mode for digital pin 3 to pwm output\cf3 \
+~arduino.digital[3].mode_(~arduino.digital_pwm);\
+\cf2 //pulsating LED\cf3 \
+(\
+\cf5 var\cf3  i;\
+a = fork\{\
+	5000.do \{ \cf5 |i|\cf3 \
+		i = (((i % 500) / 500) * 2pi);\
+		~arduino.digital[3].write(sin(i) + 1 * 0.5);\
+		0.005.wait;\
+	\}\
+\}\
+)\
+a.stop;\
+\
+\
+\
+
+\b \cf2 // ====== DISCONNECTING ======
+\b0 \cf3 \
+\cf2 // VERY IMPORTANT!: don't forget to close your serial port once you're done (or if you want to access your Arduino board from another software)! Otherwise you may freeze up SC...\cf3 \
+~arduino.close\
+\
+\
+\
+
+\b \cf2 // ====== SOUND EXAMPLE ======
+\b0 \cf3 \
+\cf2 // Here is a very simple sound example, using analog and digital inputs and outputs to control and monitor a synth.\cf3 \
+\cf2 /* What this example uses:\
+- a switch to turn the synth on and off\
+- a logarithmic pot to control frequency\
+- an LED to show if the synth is on or off\
+- an LED to show how high the frequency is\
+*/\cf3 \
+\
+\
+\cf2 // a very simple synth:\cf3 \
+~synth = \cf5 CtkSynthDef\cf3 ( \cf6 \\sine\cf3 , \{ \cf5 |outbus = 0, freq = 440, amp = 0.5|\cf3 \
+	\cf5 Out\cf3 .ar(outbus, \cf5 SinOsc\cf3 .ar(\cf5 Lag\cf3 .kr(freq, 0.05), 0, amp))\});\
+	\
+\cf2 // Connect and activate the Arduino first:\cf3 \
+(\
+~connectArduino = \cf5 Routine\cf3 \{\
+	\cf2 // \'95 1: Connect to the arduino:\cf3 \
+	~arduino = \cf5 SCPyduino\cf3 .new(~port);\
+	4.wait;\
+	\cf4 "The Firmata firmware version on this Arduino board is: "\cf3 .post;\
+	~arduino.firmataVersion.postln;\
+	0.25.wait;\
+	\cf2 // \'95 2: Activate the ports and pins:\cf3 \
+	\cf2 // activate port 0 (PORTA)\cf3 \
+	~arduino.digitalPorts[0].active_(1);\
+	\cf2 //Activate digital port 1 (PORTB) on the Arduino\cf3 \
+	~arduino.digitalPorts[1].active_(1);\
+	\cf2 //activate analog pin 0\cf3 \
+	~arduino.analog[0].active_(1);\
+	\cf2 // set the mode for digital pin 2 to digital_input\cf3 \
+	~arduino.digital[2].mode_(~arduino.digital_input);\
+	\cf2 // set the mode for digital pin 13 to digital output\cf3 \
+	~arduino.digital[13].mode_(~arduino.digital_output);\
+	\cf2 // Set the mode for digital pin 3 to pwm output\cf3 \
+	~arduino.digital[3].mode_(~arduino.digital_pwm);\
+	\}.play;\
+)\
+\
+\cf2 // now run the loop:\cf3 \
+(\
+~arduinoRWr = fork \{\
+	\cf2 // the ON/OFF switch will be a bit tricky, as we want to only report a changing state\cf3 \
+	\cf5 var\cf3  change, state, switch; \cf2 // for the toggle\cf3 \
+	\cf5 var\cf3  pot, freq, memArray; \cf2 // for the pot\cf3 \
+	change = 0 ! 2; \cf2 // compare the toggle's state with the previous value\cf3 \
+	memArray = 0 ! 10; \cf2 // add a low-pass filtering mechanism for the pot\cf3 \
+	loop \{\
+		\cf2 // for everything\cf3 \
+		~arduino.iterate;\
+		\cf2 // \'95 deal with the ON/OFF switch first, and turn on/off the LED to show the state:\cf3 \
+		if (~arduino.digital[2].value == \cf5 false\cf3 , \{state = 0\}, \{state = 1\});\
+		change = change.shift(-1);\
+		change.put((change.size -1), state);\
+		switch = case \
+			\{change[0] < change[1]\} \cf2 // means the toggle was turned ON\cf3 \
+				\{\
+				\cf4 "ON"\cf3 .postln;\
+				if (~note.isPlaying == \cf5 false\cf3 , \{~note = ~synth.new().play\}); \cf2 // turn the synth on\cf3 \
+				~arduino.digital[13].write(1); \cf2 // turn the LED on\cf3 \
+				\}\
+			\{change[0] > change[1]\} \cf2 // means the toggle was turned OFF\cf3 \
+				\{ \
+				\cf4 "OFF"\cf3 .postln;\
+				if (~note.isPlaying == \cf5 true\cf3 , \{~note.free\}); \cf2 // turn the synth off\cf3 \
+				~arduino.digital[13].write(0); \cf2 // turn the LED off\cf3 \
+				\};\
+		\cf2 // \'95 now, the freq pot input, and freq LED output:\cf3 \
+		\cf2 // post data before low-pass\cf3 \
+		\cf4 "raw data: "\cf3 .post;\
+		freq = ((~arduino.analog[0].value * 5) + 100).postln;\
+		~arduino.digital[3].write(freq / 6000); \cf2 // a frequency of about 6000Hz would give out max intensity\cf3 \
+		\cf2 // add a low-pass mechanism	\cf3 \
+		memArray = memArray.shift(-1);\
+		memArray.put((memArray.size -1), freq);\
+		freq = memArray.sum / memArray.size;\
+		\cf2 // post data after the low-pass\cf3 \
+		\cf4 "lpf-ed data: "\cf3 .post;\
+		freq.postln;\
+		~note.freq_(freq);\
+\
+	\}\
+\};\
+)\
+\
+\cf2 // stop the loop\cf3 \
+~arduinoRWr.stop\
+\
+\cf2 // don't forget to free the Serial Port!\cf3 \
+~arduino.close\
+}

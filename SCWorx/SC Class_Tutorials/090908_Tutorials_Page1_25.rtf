@@ -1,0 +1,115 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs22 \cf2 //Evaluating one line of code\cf3 \
+\
+1+2\
+\
+\
+\cf2 //Testing some sounds\cf3 \
+\
+\{ \cf4 SinOsc\cf3 .ar(440, 0 ,0.1) \}.play;\
+\
+\cf2 //Start sound 1 and store its synth in variable a\cf3 \
+a = \{ \cf4 Ringz\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(\cf4 Decay\cf3 .kr(\cf4 Impulse\cf3 .kr(2.3,0,0,0.1))),1000, 0.1)\
+\}.play;\
+\
+\cf2 //After that, start sound 2 and store its sythn in variable b\cf3 \
+b = \{\cf4 RPLF\cf3 .ar(\cf4 LFSaw\cf3 .ar([200, 300\},0, 0.1), \cf4 LFNoise\cf3 ([6.9,7], 600, 800), 0.1)\
+\}.play;\
+\
+\cf2 // to stop sound 1, free the synth stored in variable a \cf3 \
+a.free; \
+\cf2 // to stop sound 2, free the synth stored in variable b \cf3 \
+b.free; \
+\
+\
+\cf2 //Return value vs. effects of evaluating code \cf3 \
+5.do \{[\cf5 "hello"\cf3 , \cf5 "there"\cf3 ].choose.postln\}\
+\
+\
+\
+\cf2 //Documenting your code: Comments\cf3 \
+\
+\cf4 var\cf3  rpt; \cf2 // rpt holds the number of repetitions of the pattern \cf3 \
+\
+\
+\cf2 //Program statements. Evaluating blocks of code\cf3 \
+\
+(\
+\cf4 Routine\cf3  (\{			\cf2 //make a routine with the following code:\cf3 \
+	w = \cf4 SCWindow\cf3 .new(\cf5 ""\cf3 , \cf4 Rect\cf3 (400, 400, 200, 200)); \cf2 //make a window\cf3 \
+	w.front;		\cf2 //make the window visible\cf3 \
+	30.do \{ 		\cf2 //repeat 30 times\cf3 \
+					\cf2 //set the background of the window to a random color\cf3 \
+		w.view.background = \cf4 Color\cf3 .rand;\
+		0.1.wait; 	\cf2 //wait 0.1 seconds between repetitions\cf3 \
+	\};				\cf2 //end of the repeated part\cf3 \
+	1.wait;			\cf2 //after the repetitions, wait one more second\cf3 \
+	w.close;		\cf2 //the close the window\cf3 \
+\}).play(\cf4 AppClock\cf3 )	\cf2 //play the routine with the Application Clock\cf3 \
+					\cf2 //AppClock is required if GUI elements are involved\cf3 \
+)\
+\
+\
+\
+\cf2 //Dealing with error messages caused by syntax mistakes\cf3 \
+\
+\
+(\
+\cf4 Routine\cf3 (\{\
+	w = \cf4 SCWindow\cf3 .new(\cf5 ""\cf3 ,\cf4 Rect\cf3 (400, 400, 200, 200));\
+	w.front;\
+	30.do \{\
+		w.view.background = \cf4 Color\cf3 .rand;\
+		0.1.wait;\
+	\} \cf2 //requires a semicolon\cf3 \
+	1.wait;\
+	w.close;\
+\}).play(\cf4 AppClock\cf3 )\
+)\
+\
+\
+\cf2 //Balancing parentheses\cf3 \
+\
+\{ \cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(10, 500, 600), 0, 0.1), \cf4 LFNoise0\cf3 .kr(5)) \} \
+\{ \cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(10, 500, 600), 0, 0.1), \cf4 LFNoise0\cf3 .kr(5)) \} \
+\{ \cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(10, 500, 600), 0, 0.1), \cf4 LFNoise0\cf3 .kr(5)) \} \
+\{ \cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(10, 500, 600), 0, 0.1), \cf4 LFNoise0\cf3 .kr(5)) \} \
+\{ \cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(10, 500, 600), 0, 0.1), \cf4 LFNoise0\cf3 .kr(5)) \} \
+\
+\{ \cf4 Ringz\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(\cf4 Decay\cf3 .kr(\cf4 Impulse\cf3 .kr(2,0,0.01)),440,0.1)) \}.play \
+\
+\
+\cf2 //Getting help from the system\cf3 \
+\
+\cf4 Server\cf3 .local\
+\
+\cf4 Object\cf3 -dump\
+\
+Server.local.inspect;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

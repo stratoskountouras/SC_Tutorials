@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000}
+p.p14 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #bf0000}
+p.p15 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #0000bf}
+span.s3 {color: #bf0000}
+span.s4 {color: #007300}
+span.s5 {color: #000000}
+span.s6 {color: #606060}
+span.s7 {text-decoration: underline}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 2.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 1: Standard Computer Peripherals</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Mouse</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- in the server</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- in the language</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Keyboard</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- in the server</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- in the language</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== MOUSE ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p8">// A simple mouse has three different controls: X position, Y position, and a button. These are implemented in SuperCollider as control-rate UGens, therefore one can use them inside a SynthDef.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Mouse in the server<span class="Apple-converted-space">  </span>------</b></p>
+<p class="p7"><br></p>
+<p class="p8">// ------ MouseX ------</p>
+<p class="p9"><br></p>
+<p class="p10">{ <span class="s2">SinOsc</span>.ar(<a href="SC://MouseX"><span class="s2">MouseX</span></a>.kr(40, 10000, 1), 0, 0.1) }.play; <span class="s3">// with exponential mapping</span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// ------ MouseY ------</p>
+<p class="p7"><br></p>
+<p class="p10">{ <span class="s2">SinOsc</span>.ar(<a href="SC://MouseY"><span class="s2">MouseY</span></a>.kr(10000, 40, 1, 1), 0, 0.1) }.play; <span class="s3">// with exponential mapping and lag</span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// ------ MouseButton ------</p>
+<p class="p7"><br></p>
+<p class="p10">{ <span class="s2">SinOsc</span>.ar(<a href="SC://MouseButton"><span class="s2">MouseButton</span></a>.kr(400, 440, 0.1), 0, 0.1) }.play;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// ------ Examples ------</p>
+<p class="p7"><br></p>
+<p class="p8">/* <i>Mouse-theremin</i> from here:</p>
+<p class="p8">Document.open("examples/demonstrations/Theremin.scd")</p>
+<p class="p8">*/</p>
+<p class="p10">(</p>
+<p class="p10">play(</p>
+<p class="p10"><span class="Apple-tab-span">	</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">var</span> f;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>f = <span class="s2">MouseY</span>.kr(4000, 200, <span class="s4">'exponential'</span>, 0.8);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq: f+ (f*<span class="s2">SinOsc</span>.ar(7,0,0.02)),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>mul: <span class="s2">MouseX</span>.kr(0, 0.9)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>}</p>
+<p class="p10">)</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">/*<i> Josh's record scratcher</i> from here:</p>
+<p class="p8">Document.open("/Applications/SuperCollider/examples/pieces/Record Scratcher.scd")</p>
+<p class="p8">// move mouse to scrub the record.</p>
+<p class="p8">// press mouse button to 'stop the record', you can scrub while it is stopped.</p>
+<p class="p8">*/</p>
+<p class="p10">(</p>
+<p class="p10">s.boot;</p>
+<p class="p7"><br></p>
+<p class="p10"><span class="s2">SynthDef</span>(<span class="s4">\scratch</span>, {<span class="s2">arg</span> gate = 1, buffer;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s2">var</span> buf, speed, env;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s2">EnvGen</span>.kr(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Env</span>([0,1,0], [0.1, 0.1], <span class="s4">\sin</span>, 1),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>gate, doneAction: 20);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>speed = <span class="s2">MouseX</span>.kr(-10, 10);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>speed = speed - <span class="s2">DelayN</span>.kr(speed, 0.1, 0.1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>speed = <span class="s2">MouseButton</span>.kr(1, 0, 0.3) + speed ;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>buf = <span class="s2">PlayBuf</span>.ar(1, buffer, speed * <span class="s2">BufRateScale</span>.kr(buffer), loop: 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(0, (buf * env).dup );</p>
+<p class="p10">}).load(s);</p>
+<p class="p7"><br></p>
+<p class="p11"><span class="s5">a = </span><span class="s2">Buffer</span><span class="s5">.read(s, </span>"sounds/a11wlk01.wav"<span class="s5">);</span></p>
+<p class="p12"><span class="s5">b = </span><span class="s2">Synth</span><span class="s5">(</span>\scratch<span class="s5">, [</span>\buffer<span class="s5">, a]);</span></p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p10">b.set(<span class="s4">\gate</span>, 0); a.free;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Mouse in the language<span class="Apple-converted-space">  </span>------</b></p>
+<p class="p8">// To get mouse vaues in the language you'll need to use one of the Server-to-language tools mentioned in the Class2.1 example:</p>
+<p class="p7"><br></p>
+<p class="p10">{<span class="s2">SendReply</span>.kr(<span class="s2">Impulse</span>.kr(5), <span class="s4">\mouse</span>, [<span class="s2">MouseX</span>.kr, <span class="s2">MouseY</span>.kr, <span class="s2">MouseButton</span>.kr.round], 2323)}.play;</p>
+<p class="p7"><br></p>
+<p class="p10">r = <span class="s2">OSCresponder</span>(<span class="s2">nil</span>, <span class="s4">'mouse'</span>, { <span class="s2">|t, r, msg|</span> <span class="s6">"mouse-stuff"</span>.postln; msg.postln }).add;</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s5">r.remove; </span>// don't forget to .remove!</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// You could also use the GetMouse class (<a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Republic/GetMouseX.html">GetMouseX</a> and <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Republic/GetMouseY.html">GetMouseY</a>), which is part of the Republic quark. This is an sclang side version, so it doesn't need the server to be on.</p>
+<p class="p8">// Install it if you don't have it:</p>
+<p class="p10"><span class="s2">Quarks</span>.install( <span class="s6">"Republic"</span>, checkoutIfNeeded: <span class="s2">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== KEYBOARD ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Keystrokes in the server ------</b></p>
+<p class="p8">// In a similar manner as with the mouse, there is a control-rate UGen for keystrokes, <a href="SC://KeyState"><span class="s7">KeyState</span></a>. It checks for keycode values</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s5">{ </span><span class="s2">SinOsc</span><span class="s5">.ar(800, 0, </span><span class="s2">KeyState</span><span class="s5">.kr(38, 0, 0.1)) }.play; </span>// press 'j' (ATT: does not prevent typing!)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Keystrokes in the language ------</b></p>
+<p class="p8">// In the language, there is a method for in SCView (the abstract Class of all GUIs) and Document that does something similar, called .keyDownAction, and there is also a .keyUpAction</p>
+<p class="p7"><br></p>
+<p class="p8">// an example with a GUI window: this will only work if you the window is focused, which is useful, as it prevents typing:</p>
+<p class="p10">(</p>
+<p class="p11"><span class="s5">w = </span><span class="s2">SCWindow</span><span class="s5">.new(</span>"key-tester"<span class="s5">);</span></p>
+<p class="p10">w.view.keyDownAction = { <span class="s2">arg</span> view, char, modifiers, unicode, keycode;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[char, modifiers, unicode, keycode].postln;</p>
+<p class="p10">};</p>
+<p class="p10">w.front</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// And a cool example from Josh Parmenter with Document (no typing prevention):</p>
+<p class="p10">(</p>
+<p class="p10">d = <span class="s2">Document</span>.current;</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s5">d.keyDownAction_({</span><span class="s2">arg</span><span class="s5"> ...args; </span>//"..." puts everything into an array</p>
+<p class="p10"><span class="Apple-tab-span">	</span>(args[1]==$c).if({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>args[0].background_(<span class="s2">Color</span>.rand);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p10">args.postln;</p>
+<p class="p10">});</p>
+<p class="p10">)</p>
+<p class="p8">// now, type 'c'</p>
+<p class="p13"><span class="s2">Document</span>.current.keyDownAction=<span class="s2">nil</span> <span class="s3">// stop it</span></p>
+<p class="p14"><span class="s5">d.background_(</span><span class="s2">Color</span><span class="s5">.white); </span>// back to the standard color</p>
+<p class="p15"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// You can have a look at this example too if you want: [<a href="SC://modifiers"><span class="s7">modifiers</span></a><span class="s7">]</span></p>
+<p class="p7"><br></p>
+<p class="p8">// Here is a site where you can find a table with the keycode values of your keyboard</p>
+<p class="p11">"open http://www.asciitable.com/"<span class="s5">.unixCmd</span></p>
+<p class="p7"><br></p>
+</body>
+</html>

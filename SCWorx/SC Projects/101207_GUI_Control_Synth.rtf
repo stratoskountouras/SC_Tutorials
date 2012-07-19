@@ -1,0 +1,76 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue191;\red0\green115\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 // This is an example of using two sliders in order to control the frequency and velocity of a Synth\cf0 \
+\cf2 // Cygnus Tue, 07 December 2010, 15:24PM\cf0 \
+\
+\
+\cf3 SynthDef\cf0 (\cf4 \\testsaw\cf0 , \{\cf3 |freq = 400, amp = 0.01|\cf0 \
+	\cf3 Out\cf0 .ar(0 , \cf3 Saw\cf0 .ar(freq, amp))\}).send(s);\
+	\
+	\
+	\
+	\
+\cf3 Synth\cf0 (\cf4 \\testsaw\cf0 );\
+\
+(\
+\cf3 var\cf0  slid, syn, slid2, text;\
+\
+w = \cf3 Window\cf0 (\cf5 "Demo Slider"\cf0 , \cf3 Rect\cf0 (500, 500, 500, 200));\
+slid = \cf3 Slider\cf0 (w, \cf3 Rect\cf0 (20, 40, 150, 20)).background_(\cf3 Color\cf0 .rand);\
+slid2 = \cf3 Slider\cf0 (w, \cf3 Rect\cf0 (20, 140, 150, 20)).background_(\cf3 Color\cf0 .rand);\
+\
+\pard\pardeftab560\ql\qnatural
+\cf0 c = \cf3 NumberBox\cf0 (w, \cf3 Rect\cf0 (20, 70, 150, 20));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 d = \cf3 NumberBox\cf0 (w, \cf3 Rect\cf0 (20, 170, 150, 20));\
+\
+\pard\pardeftab560\ql\qnatural
+\cf0 text = \cf3 StaticText\cf0 (w, \cf3 Rect\cf0 (200, -50, 250, 200));\
+text.string = (\cf5 "This is an example of using two sliders in order to control the frequency and velocity of a Synth"\cf0 );	\
+text.font = \cf3 Font\cf0 (\cf5 "Monaco"\cf0 , 11);\
+\
+\
+b = \cf3 Button\cf0 (w, \cf3 Rect\cf0 (250,100,140,50));\
+				\
+				b.states = ([\
+					[\cf5 "press to start synth"\cf0 , \cf3 Color\cf0 .black, \cf3 Color\cf0 .red],\
+					[\cf5 "press to stop synth"\cf0 , \cf3 Color\cf0 .white, \cf3 Color\cf0 .black],\
+					\
+				]);\
+				\
+				b.action = (\{ \cf3 |butt|\cf0 \
+				\
+				if (butt.value == 1, \{syn = \cf3 Synth\cf0 (\cf4 \\testsaw\cf0 );\}, \{syn.free\});\
+				butt.value.postln;\
+				\
+				\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+slid.action = (\{\
+	c.value = 440 + (1000 * slid.value;);\
+	syn.set(\cf4 \\freq\cf0 , 440 + (1000 * slid.value));\
+	\});\
+	\
+	\
+	\
+slid2.action = (\{\
+	d.value = slid2.value;\
+	syn.set(\cf4 \\amp\cf0 , slid2.value);\
+	\
+	\});\
+\
+\
+\
+\
+w.front;\
+w.onClose = \{syn.free;\};\
+)}

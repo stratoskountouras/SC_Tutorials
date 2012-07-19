@@ -1,0 +1,367 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 3.2:
+\b0 \
+
+\b 	Scheduling in SuperCollider: 1
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Streams\
+				- Routines\
+				- Tasks\
+					Task in a function\
+					Task in a task\
+				- \{\}.fork\
+				- loop \{\}\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= STREAMS =================
+\b0 \cf3 \
+\cf2 /* One way to trigger multiple events on the Server through the language in real-time without having to constanly evaluate lines of code is by using timed streams. \
+In SC, streams are implemeted as 'lazy' sequences of values. 'Lazy' means that they will only get evaluated when it's their time to give an output, rather than evaluating everything at once, storing it, and then outputing it sequencially, as you would do with, for example, a .do loop.\
+\
+You get a value from a Stream-type class with the 
+\b .next
+\b0  or 
+\b .value 
+\b0 message. When it runs out of values it will give you 
+\i \cf2 nil
+\i0 \cf2 . But you can restart most streams with the 
+\b .reset
+\b0  message. You can also embed one stream inside another stream, allowing one stream to control another using the 
+\b .embedInStream
+\b0  message\
+\
+Streams can also be timed using any of the three types of Clocks available in SC; you just pass the clock as an argument to them.\
+*/\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== ROUTINES ======
+\b0 \cf3 \
+\cf2 // One way to write a function as a stream is by using {\field{\*\fldinst{HYPERLINK "SC://Routine"}}{\fldrslt \cf2 \ul \ulc2 Routine}}. You separate it's different sequential components with 'yield':\cf3 \
+\
+r = \cf4 Routine\cf3 .new(\{ 1.yield; 2.yield; \});\
+r.next.postln;\
+r.next.postln;\
+r.next.postln;\
+r.reset\
+\cf2 // a more complex example:\cf3 \
+(\
+r = \cf4 Routine\cf3 (\{\
+		x = 1.0.rand;\
+		2.yield; \cf2 // 1st\cf3 \
+		y = 100;\
+		x.yield; \cf2 // 2nd\cf3 \
+		\cf5 "post me!"\cf3 .yield; \cf2 //3rd\cf3 \
+		(x * y).yield; \cf2 //4th\cf3 \
+		x = 1.0.rand;\
+		x.yield; \cf2 // 5th\cf3 \
+		(x * y).yield; \cf2 // 6th\cf3 \
+		y = 1000;\
+		(x * y).yield; \cf2 //7th\cf3 \
+	\});	\
+10.do(\{ r.value.postln \});\
+)\
+\
+\cf2 // You can use it to make sound:\cf3 \
+s.boot;\
+(\
+\cf4 SynthDef\cf3 (\cf6 \\gray\cf3 , \{\cf4 arg\cf3  outBus = 0, freq = 400, amp = 1, dur = 1;\
+	\cf4 var\cf3  env, src, fdbin, fdbout;\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 1, 0], [0.05, 0.95], \cf6 \\sin\cf3 ), timeScale: dur, levelScale: amp, doneAction: 2);\
+	src = \cf4 LPF\cf3 .ar(\cf4 GrayNoise\cf3 .ar(amp), freq, env);\
+	\cf4 Out\cf3 .ar(outBus, \cf4 Pan2\cf3 .ar(src, \cf4 Rand\cf3 .new(-0.7, 0.7)));\
+\}).load(s);\
+)\
+\
+(\
+r = \cf4 Routine\cf3 (\{\
+		x = 500.rrand(5000).postln;\
+		\cf5 "1st"\cf3 .yield; \
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:0.6]));\
+		\cf5 "2nd"\cf3 .yield;\
+		x = 500.rrand(5000).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:0.6]));\
+		\cf5 "3rd"\cf3 .yield;\
+	\});	\
+)\
+r.next\
+r.next\
+r.next\
+\
+\cf2 // You can also use a clock to playback a Routine. In this case, a float or integer before the '.yield' (which can be named .wait as well, btw) is needed to tell the clock how long to wait between each step.\cf3 \
+(\
+r = \cf4 Routine\cf3 (\{\
+		x = 500.rrand(5000).postln;\
+		0.5.yield; \
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:0.6]));\
+		1.yield;\
+		x = 500.rrand(5000).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:0.6]));\
+		0.25.yield;\
+		x = 500.rrand(5000).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:0.6]));\
+	\});	\
+)\
+\cf4 TempoClock\cf3 .sched(0, r)\
+r.reset; \cf2 // must reset before playing again:\cf3 \
+\cf4 TempoClock\cf3 .sched(0, r)\
+\
+\cf2 // more simply though, you can just .play the Routine:\cf3 \
+r.reset;\
+r.play(\cf4 TempoClock\cf3 (2)); \cf2 // the argument for the tempo clock will define the relative playback speed of the routine now\cf3 \
+r.reset;\
+r.play(\cf4 TempoClock\cf3 (0.5));\
+\
+\
+\cf2 // You can embed embed .do functions inside a Routine, and as this is a 'lazy' event, you can use inf.do to have something that will just keep on playing, without crashing your computer - provided there is a positive wait time!\cf3 \
+\
+(\
+r = \cf4 Routine\cf3 (\{\
+	\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+		x = 500.rrand(1500).postln;\
+		f =  x + (((i % 7) * 1000));		\
+		y = 0.4.rrand(0.8).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:f, amp:y]));\
+		0.25.rrand(0.75).wait; \cf2 // NEVER forget this!!!! \cf3 \
+	\})\
+\}).play\
+)\
+r.stop; \cf2 // stop the routine\cf3 \
+r.reset; \cf2 // reset\cf3 \
+r.play(\cf4 TempoClock\cf3 (0.5)); \cf2 // play slower\cf3 \
+r.stop; \cf2 // stop the routine\cf3 \
+\
+\
+\
+\
+\
+\
+
+\b \cf2 // ====== TASKS ======
+\b0 \cf3 \
+\cf2 // A {\field{\*\fldinst{HYPERLINK "SC://Task"}}{\fldrslt \cf2 \ul \ulc2 Task}} is something like a fancier Routine: one that you can pause and resume at will.\cf3 \
+\
+(\
+t = \cf4 Task\cf3 (\{\
+	\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+		x = 500.rrand(1500).postln;\
+		f =  x + (((i % 7) * 1000));		\
+		y = 0.4.rrand(0.8).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:f, amp:y]));\
+		0.25.rrand(0.75).wait; \cf2 // NEVER forget this!!!! \cf3 \
+	\})\
+\}).play\
+)\
+\
+t.pause; \
+t.resume;\
+t.reset;\
+t.stop;\
+t.play(\cf4 TempoClock\cf3 (0.5)); \cf2 // play slower\cf3 \
+t.stop;\
+\
+\
+\
+
+\b \cf2 // ------ Task inside a function --
+\b0  \cf3 \
+\cf2 // You can create a Task through a function (a slightly modified example by Josh Parmenter):\cf3 \
+\
+\cf2 // first, load this SynthDef:\cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf6 \\sine\cf3 , \{\cf4 arg\cf3  freq = 400, amp = 1, dur = 1;\
+	\cf4 var\cf3  env, src;\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 1, 0], [0.5, 0.5], \cf6 \\sin\cf3 ), timeScale: dur, levelScale: amp, doneAction: 2);\
+src = \cf4 SinOsc\cf3 .ar(freq, 0, env);\
+\cf4 Out\cf3 .ar(0, \cf4 Pan2\cf3 .ar(src, \cf4 Rand\cf3 .new(-0.7, 0.7)));\
+\}).load(s);\
+)\
+\
+\cf2 // now, a function that incorporates a Task:\cf3 \
+(\
+~tFunc = \{\cf4 arg\cf3  basefreq, numnotes;\
+	\cf4 var\cf3  task;\
+	task = \cf4 Task\cf3 (\{\
+		\cf4 var\cf3  freqs, durs, amps;\
+		\cf2 // calculate an array of frequencies for the notes\cf3 \
+		freqs = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i;\
+			basefreq * ((i + 1) - 0.5).rrand((i + 1) + 0.5)\});\
+		freqs.postln;\
+		\cf2 // calculate an array of durations for the notes\cf3 \
+		durs = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i; (numnotes-(i-1.0)).rand\});\
+		durs.postln;\
+		\cf2 // calculate an array of amplitudes for the notes\cf3 \
+		amps = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i; (i + 1).reciprocal\});\
+		amps.postln;\
+		\cf2 // now generate the notes\cf3 \
+		numnotes.do(\{\
+				\cf4 arg\cf3  i;\
+				s.sendBundle(0.1, [\cf6 \\s_new\cf3 , \cf6 \\sine\cf3 , s.nextNodeID, 0, 1, \cf6 \\freq\cf3 , freqs[i], \cf6 \\dur\cf3 , durs[i], \cf6 \\amp\cf3 , amps[i] * amps.sum.reciprocal]);\
+				0.1.rrand(0.5).wait; \cf2 // and wait a bit between each new note\cf3 \
+			\})\
+	\}); \cf2 // this is where the Task ends\cf3 \
+	task.play; \cf2 // you have to tell the function to play it!\cf3 \
+	\};\
+);\
+\
+a = ~tFunc.value(440, 10); \cf2 // this returns the Task... so it can still be paused and resumed!\cf3 \
+b = ~tFunc.value(220, 30);\
+a.pause;\
+a.resume;\
+b.pause;\
+b.resume;\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+
+\b \cf2 // ------ A Task of Tasks --
+\b0 \cf3 \
+\cf2 ///// You can also create a task of tasks:\cf3 \
+\cf2 // Use almost the same function as above, except it doesn't play the task\cf3 \
+\
+(\
+~tFunc = \{\cf4 arg\cf3  basefreq, numnotes;\
+	\cf4 var\cf3  task;\
+	task = \cf4 Task\cf3 (\{\
+		\cf4 var\cf3  freqs, durs, amps;\
+		\cf2 // calculate an array of frequencies for the notes\cf3 \
+		freqs = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i;\
+			basefreq * ((i + 1) - 0.5).rrand((i + 1) + 0.5)\});\
+		freqs.postln;\
+		\cf2 // calculate an array of durations for the notes\cf3 \
+		durs = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i; (numnotes-(i-1.0)).rand\});\
+		durs.postln;\
+		\cf2 // calculate an array of amplitudes for the notes\cf3 \
+		amps = \cf4 Array\cf3 .fill(numnotes, \{\cf4 arg\cf3  i; (i + 1).reciprocal\});\
+		amps.postln;\
+		\cf2 // now generate the notes\cf3 \
+		numnotes.do(\{\
+				\cf4 arg\cf3  i;\
+				s.sendBundle(0.1, [\cf6 \\s_new\cf3 , \cf6 \\sine\cf3 , s.nextNodeID, 0, 1, \cf6 \\freq\cf3 , freqs[i], \cf6 \\dur\cf3 , durs[i], \cf6 \\amp\cf3 , amps[i] * amps.sum.reciprocal]);\
+				0.1.rrand(0.5).wait; \cf2 // and wait a bit between each new note\cf3 \
+			\})\
+	\}); \cf2 // this is where the Task ends\cf3 \
+	\cf2 // don't tell the function to play the task\cf3 \
+	\};\
+\
+\cf2 // ~tFuncArray is an array of Tasks\cf3 \
+~tFuncArray = \cf4 Array\cf3 .fill(10, \{\cf4 arg\cf3  i; ~tFunc.value(220.rrand(440) * (i + 1), 10.rrand(20))\});\
+~tFuncArray.postln;\
+\cf2 // iterate through the array of Tasks, play them, and wait in between, with a Task of Tasks\cf3 \
+~tFuncArrayTask = \cf4 Task\cf3 (\{\
+	~tFuncArray.do(\{\cf4 arg\cf3  aTask, i;\
+		aTask.postln;\
+		aTask.play;\
+		1.rrand(5).wait;\
+	\});\
+\});\
+)\
+\
+~tFuncArray[3].play; \cf2 // play a specific task\cf3 \
+~tFuncArray[3].stop; \cf2 // play a specific task\cf3 \
+~tFuncArray.choose.play; \cf2 // play a task at random\cf3 \
+~tFuncArrayTask.play; \cf2 // play the task of tasks\cf3 \
+~tFuncArrayTask.pause;\
+~tFuncArrayTask.resume;\
+~tFuncArrayTask.reset;\
+~tFuncArrayTask.play;\
+\
+\cf2 // pause the Task of Tasks AND each individual Task (if it is playing)\cf3 \
+(\
+~tFuncArrayTask.pause;\
+\cf2 // iterate over the array of Tasks \cf3 \
+~tFuncArray.do(\{\cf4 arg\cf3  aTask, i; \
+	\cf2 // aTask is the individual Task in each slot of the Array... check if it is playing\cf3 \
+	aTask.pause;\
+\})\
+)\
+~tFuncArrayTask.resume;\
+~tFuncArrayTask.stop;\
+\
+\
+\
+\
+
+\b \cf2 // ====== \{\}.FORK======
+\b0 \cf3 \
+\cf2 // You can also use the .fork method and create a stream by looping a function. This is is essentially a shortcut to wrap your function in a Routine and play it as a stream. You can pass the Clock you want to use as an argument to  fork:\cf3 \
+\
+(\
+\cf4 Speech\cf3 .init(16);\
+\{16.do\{\cf4 |i|\cf3  \
+	i.postln;\
+	\cf4 Speech\cf3 .setSpeechRate(i, 20.rrand(300));\
+	\cf4 Speech\cf3 .channels[i].voice_(i).speak(\cf5 "d'oh!"\cf3 );\
+	0.2.rrand(0.5).wait;\
+	\}\}.fork(\cf4 TempoClock\cf3 )\
+)\
+\
+\
+\
+
+\b \cf2 // ====== LOOP \{\}======
+\b0 \cf3 \
+\cf2 // Instead of inf.do, you can also use a loop around your stream function. \cf3 \
+\cf2 // (Do make sure that you never use either inf.do or a loop in any construct that doesn't incorporate .wait or .yield!!!)\cf3 \
+\
+(\
+t = \cf4 Task\cf3 (\{\
+	loop (\{\
+		x = 500.rrand(5000).postln;	\
+		y = 0.4.rrand(0.8).postln;\
+		\cf4 Synth\cf3 (\cf6 \\gray\cf3 , ([freq:x, amp:y]));\
+		0.25.rrand(0.75).wait; \cf2 // NEVER forget this!!!! \cf3 \
+	\})\
+\})\
+)\
+t.play;\
+t.stop;\
+\
+\
+\cf2 /* Have a look here:\
+[{\field{\*\fldinst{HYPERLINK "SC://Stream"}}{\fldrslt \cf2 \ul \ulc2 Stream}}]\
+
+\b [{\field{\*\fldinst{HYPERLINK "SC://Streams-Patterns-Events1"}}{\fldrslt 
+\b0 \cf7 \ul \ulc7 Streams-Patterns-Events1}}] 
+\b0 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 [{\field{\*\fldinst{HYPERLINK "SC://ServerTiming"}}{\fldrslt \cf7 \ul \ulc7 ServerTiming}}]\
+\pard\pardeftab560\ql\qnatural
+\cf2 */\cf3 \
+}

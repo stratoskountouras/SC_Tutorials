@@ -1,0 +1,686 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green255\blue0;\red191\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red0\green0\blue0;\red0\green0\blue191;\red0\green115\blue0;\red191\green0\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Patterns\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // run this code to get ready\cf0 \
+Server.default= s = \cf4 Server\cf0 .local; \
+s.boot;\
+\
+\
+Patterns provide a facility for easily exploring generative music/algorithmic composition. Rather than making single synthesis events, we're looking much more at how we schedule lots of events over time. \
+\
+We'll work backwards! We'll start with what seems magical then explain some of how it works. \
+\
+\
+\
+\
+To fully understand how Patterns do what they do requires some effort- some of the detail is hidden 'below the surface' in SuperCollider's own libraries, but the good news is that you can use their  power without needing to go very far into the implementation.\
+\
+In the following, all the names beginning with capital P are examples of Patterns. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf3 // run this line\cf0 \
+a = \cf4 Pbind\cf0 .new.play(quant:1.0);\
+\
+a.stop;		\cf3 // Or stop it with cmd+period; \cf0 \
+\
+\cf3 // now run this line\cf0 \
+\cf4 Pbind\cf0 (\cf5 \\freq\cf0 , 440).play(quant:1.0);\
+\
+\cf3 // run this, go back and run some of the others at the same time\cf0 \
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\dur\cf0 ,0.125,\
+	\cf5 \\midinote\cf0 , \cf4 Pseq\cf0 ([0, 4, 0, 7, 4, 0, 0] + 60,\cf4 inf\cf0 ), \
+	\cf5 \\amp\cf0 , \cf4 Prand\cf0 ([0.125, 0.2, 0.25],\cf4 inf\cf0 )\
+).play(quant:1.0)\
+)\
+\
+\
+The quant parameter allows the delay of scheduling to the next beat, so that patterns started up at different times lock in to each other.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\freq\cf0 , 770		\cf3 // try changing me to another number!\cf0 \
+).play;\
+)\
+\
+The Pbind class allows you to match properties of a sound event (like \cf5 \\freq\cf0 ) to your provided parameter values. Now compare this:\
+\
+(\cf6 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf7 Pbind\cf6 (\
+	\cf8 \\freq\cf6 , \cf7 Pseq\cf6 ([100,200,300],\cf7 inf\cf6 )       \cf9 // try a different list\cf6 \
+).play;\
+\cf0 )\
+\
+The Pseq is an example of a Pattern, which can be thought of as generating a sequence of values\
+\
+ 100, 200, 300, 100, 200, 300, ...\
+\
+returning the next one in the sequence each time it is evaluated\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There are many useful types of Pattern class to try. Here are some specific examples:\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 // loops through the sequence of the array, perpetually:\cf0 \
+\cf4 Pseq\cf0 ([0,1,2,3],\cf4 inf\cf0 )	 \
+\
+\cf3 // next value is a random member of the array, after 5 times stop:\cf0 \
+\cf4 Prand\cf0 ([0,1,2,3],5)\
+\
+\cf3 // next value is a random member of the array \cf0 \
+\cf3 // except you can't repeat the previous value:\cf0 \
+\cf4 Pxrand\cf0 ([0,1,2,3],\cf4 inf\cf0 )	\
+\
+\cf3 // next value is a weighted choice from the first array\cf0 \
+\cf3 // using the weights given in the second argument. \cf0 \
+\cf3 // After returning one value, stop:\cf0 \
+\cf4 Pwrand\cf0 ([0,1,2,3], [0.5,0.3,0.1,0.1], 1)	\
+\cf3 // next value is the result of evaluating the \cf0 \
+\cf3 // given function, in this case 4.rand:\cf0 \
+\cf4 Pfunc\cf0 (\{ 4.rand \})\
+\
+\
+To explore more Pattern types, a good starting point is the following help file:\
+\
+[\cf4 \ul \ulc4 Streams\cf0 \ulnone ]	\cf3 // select the text within the box then cmd+d\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Patterns are generators for Streams. An example of a Stream is the Routine (see Scheduling)\
+\
+To demonstrate how a Pattern turns into a Stream, ".asStream" is used:\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //run this one line at a time, observing the Post window\cf0 \
+\
+a = \cf4 Pseq\cf0 ([1, 3, 400],1);  \cf3 //make Pattern, a Pseq\cf0 \
+\
+x = a.asStream;			\cf3 //turn this Pattern into a specific Stream\cf0 \
+\
+x.next;					\cf3 //ask for the next value in the Stream\cf0 \
+\
+x.next;					\cf3 //and so on ...\cf0 \
+\
+x.next;\
+\
+x.next;\
+\
+y=a.asStream\
+\
+y.next\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf3 // this means that from one pattern one can generate many independent streams:\cf0 \
+\
+(\
+\cf4 var\cf0  a, x, y;\
+\
+a = \cf4 Pshuf\cf0 ([1, 2, 3], \cf4 inf\cf0 );\
+x = a.asStream;	\cf3 // this creates a Routine from the Pattern.\cf0 \
+y = a.asStream;\
+x.nextN(10).postln;\
+y.nextN(10);\
+)\
+\
+\
+\
+\
+\
+\cf3 // a sound example:\cf0 \
+\
+(\
+\cf4 var\cf0  a =  \cf4 Pshuf\cf0 ([1, 1, 0, 1, 0], 3);\
+\cf4 Pbind\cf0 (\
+	\cf5 \\dur\cf0 , 0.125,\
+	\cf5 \\midinote\cf0 , a * 7 + 60, \
+	\cf5 \\amp\cf0 , a * 0.1\
+).play\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf3 // Patterns can be built of arbitrary complexity by nesting -\cf0 \
+\
+\cf4 Pseq\cf0 ([\cf4 Pseq\cf0 ([100, 200, 300], 2), 400, 500, 600], \cf4 inf\cf0 );\
+\
+\
+\
+\cf3 // Examples of nested Patterns\cf0 \
+\
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\freq\cf0 , \cf4 Pseq\cf0 ([\cf4 Pseq\cf0 ([100, 200, 300], 2), 400, 500, 600],\cf4 inf\cf0 )\
+).play;\
+)\
+\
+\
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\freq\cf0 , \cf4 Pseq\cf0 ([\cf4 Prand\cf0 ([440, 442, 445, 448]), \cf4 Pxrand\cf0 ([840, 741, 642], 2)], \cf4 inf\cf0 )\
+\cf3 // Pxrand never repeats the same value from the array twice in a row\cf0 \
+).play;\
+)\
+\
+\
+\
+\cf3 // Note how we get one random value from the first array, \cf0 \
+\cf3 // followed by two different values from the second.\cf0 \
+(\
+	a = \cf4 Pseq\cf0 ([\cf4 Prand\cf0 ([440, 442, 445, 448]), \cf4 Pxrand\cf0 ([840, 741, 642], 2)],\cf4 inf\cf0 ).asStream;\
+	20.do(\{a.next.postln;\});\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+To get back to Pbind, there's stuff going on behind the scenes, which SuperCollider is doing for you...\
+\
+Let's bring some of the hidden variables into view!\
+\
+(\
+\cf4 var\cf0  clock;\
+\
+clock = \cf4 TempoClock\cf0 (1.5); \cf3 // tempoclock at 90 bpm\cf0 \
+\
+\cf4 Pbind\cf0 (\
+	\cf5 \\freq\cf0 , \cf4 Pseq\cf0 ([440, 660, 990, 880, 770], \cf4 inf\cf0 ),     \cf3 // frequency in hertz\cf0 \
+	\cf5 \\dur\cf0 , \cf4 Pseq\cf0 ([1.0, 0.5],\cf4 inf\cf0 ),			              \cf3 // duration of event in beats\cf0 \
+	\cf5 \\legato\cf0 , 0.5,							              \cf3 // proportion of inter onset time to play\cf0 \
+	\cf5 \\pan\cf0 , \cf4 Pseq\cf0 ([0.5, -0.5],\cf4 inf\cf0 ),\
+	\cf5 \\instrument\cf0 , \cf5 \\default\cf0 					\
+).play(clock);\
+)\
+\
+The Pbind class always takes pairs of arguments, a literal \\property and an associated Pattern (or value, or stream) that returns the values to be tied to that property. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+You can see the default properties by looking at the defaults defined in this class:\
+\
+[Meta_Event:makeParentEvents]		\cf3 // cmd+J\cf0 \
+\
+You can define your own properties, and have the values passed directly to your own synthesis function. \
+\
+The explanation is deferred until later at the end of this file as an optional topic but to prove it's possible: \
+\
+\cf3 // run me first\cf0 \
+(\
+\cf4 SynthDef\cf0 (\cf5 \\alicepavelinstr\cf0 , \{\cf4 arg\cf0  out=0, alice=440, pavel=0.5, pan=0.0, gate=1;\
+			\cf4 var\cf0  z;			\
+			z = \cf4 Resonz\cf0 .ar(\cf4 Pulse\cf0 .ar(alice, pavel),\cf4 XLine\cf0 .kr(5000,1000),0.1,5) * \cf4 Linen\cf0 .kr(gate, 0.01, 0.1, 0.3, 2);\
+			\cf4 Out\cf0 .ar(out, \cf4 Pan2\cf0 .ar(z, pan));\
+			 \}\
+).store //memStore\
+)\
+\
+(\
+\cf4 var\cf0  clock;\
+\
+clock = \cf4 TempoClock\cf0 (1.5); \cf3 // tempoclock at 90 bpm\cf0 \
+\
+\cf4 Pbind\cf0 (\
+	\cf5 \\alice\cf0 , \cf4 Pseq\cf0 (440*[1,2,3],\cf4 inf\cf0 ),   \cf3 // freq\cf0 \
+	\cf5 \\pavel\cf0 , \cf4 Pseq\cf0 ([0.1,0.5, 0.8],\cf4 inf\cf0 ),		\cf3 // pulse width\cf0 \
+	\cf5 \\dur\cf0 , \cf4 Pseq\cf0 ([0.5,0.25,0.25],\cf4 inf\cf0 ),				\cf3 // duration of event in beats\cf0 \
+	\cf5 \\legato\cf0 , 0.5,							\cf3 // proportion of inter onset time to play\cf0 \
+	\cf5 \\instrument\cf0 , \cf5 \\alicepavelinstr\cf0 			\cf3 // your own synthesiser\cf0 \
+).play(clock);\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+You might have noticed that all the properties are independent of one another. \
+What happens if frequency depends on amplitude? \
+\
+(\
+\cf4 Pbind\cf0 (\cf3 // cobinding of properties\cf0 \
+	[\cf5 \\freq\cf0 , \cf5 \\amp\cf0 ], \
+	\cf4 Pseq\cf0 ([\
+		[440,0.4],\
+		[330,0.1],\
+		\cf4 Pfuncn\cf0 (\{\
+			[550.rand, 0.8.rand]\
+		\}, 1)\
+	], \cf4 inf\cf0 )\
+).play\
+)\
+\
+\
+\cf3 // checking already decided properties of the Event that will be performed\cf0 \
+\cf3 // before setting a new value\cf0 \
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\freq\cf0 , \cf4 Pseq\cf0 ([ 440, 330, \cf4 Pfuncn\cf0 (\{ 550.rand + 40 \}, 1)], \cf4 inf\cf0 ),\
+	\cf5 \\amp\cf0 , \cf4 Pfunc\cf0 (\{ \cf4 arg\cf0  event; \
+			event.postln; \
+			if(event.freq > 350, \{\
+				\cf10 "here"\cf0 .postln; \
+				rrand(0.1,0.5);\
+			\}, 0.05); \
+		\})\
+).play\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Now we're ready to do some prettier things with Patterns, by playing multiple simultaneous voices and adding some polyphony and involvement to the music!\
+ \
+\
+\cf3 // two simultaneous voices using Ppar\cf0 \
+(\
+	\cf4 var\cf0  melodypat, basspat;\
+	\
+	melodypat = \cf4 Pbind\cf0 ( \
+			[\cf5 \\midinote\cf0 , \cf5 \\dur\cf0 ], \
+			\cf4 Prand\cf0 ([\
+				[60, 0.75],[64, 0.5],[66, 0.5],[69, 0.25],\
+				[67,0.75],[64,0.5],[60,0.5],[57,0.25]\
+			],inf)\
+	);\
+	\
+	basspat = \cf4 Pbind\cf0 ( \
+			\cf5 \\midinote\cf0 , \cf4 Pseq\cf0 ([48, 42], \cf4 inf\cf0 ),\
+			\cf5 \\dur\cf0 , 1\
+	);\
+	\
+	\cf4 Ppar\cf0 ([ melodypat, basspat ]).play(\cf4 TempoClock\cf0 (3)); 		\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Henon map / attractor (returns points in -1.5<x<1.5, -0.4<y<0.4), which are then used for pan (x values) and degrees from a dorian scale (y values) (code adapted from Staffan Liljegren)\
+\
+(\
+p = \cf4 Prout\cf0 (\{ \
+	\cf4 var\cf0  x0, y0, x, y;\
+	x0 = 0; y0 = 0;\
+	\
+	loop(\{\
+		x = y0 + 1 - (1.4 * x0 * x0); \
+		y = 0.3 * x0; \
+		x0=x; y0=y;\
+		[x, (y*14).asInteger].yield;\
+	\}); \
+\});\
+\
+\cf3 // \\degree is the degree of the scale provided in \\scale- \cf0 \
+\cf3 // this is where the dorian tuning comes from\cf0 \
+b = \cf4 Pbind\cf0 (\cf5 \\scale\cf0 , [0,2,4,5,7,9,11], \cf5 \\dur\cf0 ,0.125,[\cf5 \\pan\cf0 , \cf5 \\degree\cf0 ], p);\
+\
+\cf3 // the order of arguments in Pbindf has been switched since SC2- this may change back again- be careful! \cf0 \
+\cf4 Ptpar\cf0 ([ 0.0, \cf4 Pbindf\cf0 (b, \cf5 \\octave\cf0 , 4,\cf5 \\stretch\cf0 , 3.0), 4.0, b]).play(\cf4 TempoClock\cf0 (1));\
+)\
+\
+\
+Pbindf is a filter Pbind - this means it operates on the Pattern b, adjusting the current properties \
+of the environment - in this case \cf5 \\octave\cf0  and \cf5 \\stretch\cf0 \
+\
+Note how this allows a slow version of b in the bass and a faster version higher up coming in after 4 seconds\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Note that you can use normal Patterns without Pbind and they are often extremely useful for quickly generating sequences of values for algorithmic composition. This example is parallel to the Scheduling tutorial.\
+\
+(\
+\cf3 // run me first-\cf0 \
+\cf4 SynthDef\cf0 (\cf5 \\pulsepan\cf0 ,\{\cf4 arg\cf0  freq;\
+		\cf4 Out\cf0 .ar(0,\
+			\cf4 Pan2\cf0 .ar(\
+				\cf4 LFCub\cf0 .ar(freq*0.5, \cf4 Rand\cf0 (0.4, 0.6), 0.2)\
+				* (\cf4 XLine\cf0 .kr(0.001, 1, 0.9, doneAction:2)),\
+				\cf4 Rand\cf0 (-1.0, 1.0)\
+			)\
+		)\
+\}).send(s)\
+)\
+\
+\
+(\
+\cf4 var\cf0  p, t;\
+\
+p = \cf4 Pseq\cf0 ([100, 200, 300, 330, 478, \cf4 Prand\cf0 ([987, 789], 1)],\cf4 inf\cf0 ).asStream;\
+\
+t = \cf4 Routine\cf0 (\{\
+		loop(\{\
+			\cf4 Synth\cf0 (\cf5 \\pulsepan\cf0 ,[\cf5 \\freq\cf0 ,p.next]); \cf3 // get next frequency value from pattern\cf0 \
+			0.1.wait;\
+		\});\
+	\});\
+\cf4 SystemClock\cf0 .sched(0.0,t)\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 A little more detail about .store and SynthDescLib: \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+The SynthDescLib facility allows you to use your own SynthDefs with patterns and bind to the SynthDef arguments.\
+\
+The command\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 SynthDescLib\cf0 .global.read\
+\
+will prepare a library of SynthDesc objects - SynthDef descriptions - from all the synthdefs in your synthdefs folder. \
+\
+This then allows those SynthDefs to be used in Pbind as an \\instrument target, and for the properties of the Event to be passed through to the spawned Synths that use that definition.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+To make a new SynthDef and make sure it is ready for use with Pbind you use .store rather than .load or .send. this will save a SynthDef file on disk, read it into the SynthDescLib and send it to the active Server. \cf3    \cf0 \
+\
+(\
+\cf4 SynthDef\cf0 (\cf5 \\nickinstr\cf0 , \{ \cf4 arg\cf0  out=0, freq=440, amp=0.1, pan=0, gate=1;\
+			\cf4 var\cf0  z;\
+			z = \cf4 LPF\cf0 .ar(\
+				\cf4 Mix\cf0 .ar(\cf4 LFSaw\cf0 .ar(freq*[0.99,1,1.01],0.0,amp)),\
+				\cf4 XLine\cf0 .kr(5000, 1000, 1.5)) \
+			* \cf4 EnvGen\cf0 .kr(\cf4 Env\cf0 .new([0,1,0],[0.01,0.01],\cf5 \\lin\cf0 ,1), gate, doneAction:2); \
+			\cf4 Out\cf0 .ar(out, \cf4 Pan2\cf0 .ar(z, pan));\
+		\}).store; \
+)\
+\
+\
+You can supply the \\out and \\gate arguments for controlling the target audio bus and the release of the Synth after a given duration. Whether you use gate or not, you should use a doneAction to release the enclosing Synth at some point to prevent build up of Synths and eventual overload of the Server.\
+\
+(\
+\cf4 Pbind\cf0 (\
+	\cf5 \\dur\cf0 , 1.25,\
+	\cf5 \\midinote\cf0 , \cf4 Pseq\cf0 ([0,5,0,7,4,0,0]+60,\cf4 inf\cf0 ), \
+	\cf5 \\amp\cf0 , \cf4 Prand\cf0 ([0.125,0.2,0.25],\cf4 inf\cf0 ), \
+	\cf5 \\instrument\cf0 , \cf4 Pseq\cf0 ([\cf5 \\nickinstr\cf0 ,\cf5 \\default\cf0 ],\cf4 inf\cf0 ),\
+	\cf5 \\pan\cf0 , \cf4 Prand\cf0 ([-1,0,1],\cf4 inf\cf0 )\
+).play\
+)\
+\
+\
+\
+\
+\
+\
+}

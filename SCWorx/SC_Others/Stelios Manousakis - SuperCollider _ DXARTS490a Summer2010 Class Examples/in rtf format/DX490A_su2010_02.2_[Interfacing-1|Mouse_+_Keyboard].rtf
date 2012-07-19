@@ -1,0 +1,190 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 2.2:
+\b0 \
+
+\b 	Interfacing 1: Standard Computer Peripherals
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Mouse\
+				- in the server\
+				- in the language\
+			\'95 Keyboard\
+				- in the server\
+				- in the language\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ====== MOUSE ====== 
+\b0 \cf3 \
+\cf2 // A simple mouse has three different controls: X position, Y position, and a button. These are implemented in SuperCollider as control-rate UGens, therefore one can use them inside a SynthDef. \cf3 \
+\
+
+\b \cf2 // ------ Mouse in the server  ------
+\b0 \cf3 \
+\
+\cf2 // ------ MouseX ------\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \{ \cf4 SinOsc\cf3 .ar({\field{\*\fldinst{HYPERLINK "SC://MouseX"}}{\fldrslt \cf4 MouseX}}.kr(40, 10000, 1), 0, 0.1) \}.play; \cf2 // with exponential mapping\cf3 \
+\
+\
+\cf2 // ------ MouseY ------\cf3 \
+\
+\{ \cf4 SinOsc\cf3 .ar({\field{\*\fldinst{HYPERLINK "SC://MouseY"}}{\fldrslt \cf4 MouseY}}.kr(10000, 40, 1, 1), 0, 0.1) \}.play; \cf2 // with exponential mapping and lag\cf3 \
+\
+\
+\cf2 // ------ MouseButton ------\cf3 \
+\
+\{ \cf4 SinOsc\cf3 .ar({\field{\*\fldinst{HYPERLINK "SC://MouseButton"}}{\fldrslt \cf4 MouseButton}}.kr(400, 440, 0.1), 0, 0.1) \}.play;\
+\
+\
+\cf2 // ------ Examples ------\cf3 \
+\
+\cf2 /* 
+\i \cf2 Mouse-theremin
+\i0 \cf2  from here:\
+Document.open("examples/demonstrations/Theremin.scd")\
+*/\cf3 \
+(\
+play(\
+	\{\
+		\cf4 var\cf3  f;\
+		f = \cf4 MouseY\cf3 .kr(4000, 200, \cf5 'exponential'\cf3 , 0.8);\
+		\cf4 SinOsc\cf3 .ar(\
+			freq: f+ (f*\cf4 SinOsc\cf3 .ar(7,0,0.02)),\
+			mul: \cf4 MouseX\cf3 .kr(0, 0.9)\
+		)\
+	\}\
+)\
+)\
+\
+\
+\cf2 /*
+\i \cf2  Josh's record scratcher
+\i0 \cf2  from here:\
+Document.open("/Applications/SuperCollider/examples/pieces/Record Scratcher.scd")\
+// move mouse to scrub the record.\
+// press mouse button to 'stop the record', you can scrub while it is stopped.\
+*/\cf3 \
+(\
+s.boot;\
+\
+\cf4 SynthDef\cf3 (\cf5 \\scratch\cf3 , \{\cf4 arg\cf3  gate = 1, buffer;\
+	\cf4 var\cf3  buf, speed, env;\
+	env = \cf4 EnvGen\cf3 .kr(\
+		\cf4 Env\cf3 ([0,1,0], [0.1, 0.1], \cf5 \\sin\cf3 , 1),\
+		gate, doneAction: 20);\
+	speed = \cf4 MouseX\cf3 .kr(-10, 10);\
+	speed = speed - \cf4 DelayN\cf3 .kr(speed, 0.1, 0.1);\
+	speed = \cf4 MouseButton\cf3 .kr(1, 0, 0.3) + speed ;\
+	buf = \cf4 PlayBuf\cf3 .ar(1, buffer, speed * \cf4 BufRateScale\cf3 .kr(buffer), loop: 1);\
+	\cf4 Out\cf3 .ar(0, (buf * env).dup );\
+\}).load(s);\
+\
+a = \cf4 Buffer\cf3 .read(s, \cf6 "sounds/a11wlk01.wav"\cf3 );\
+b = \cf4 Synth\cf3 (\cf5 \\scratch\cf3 , [\cf5 \\buffer\cf3 , a]);\
+)\
+\
+b.set(\cf5 \\gate\cf3 , 0); a.free;\
+\
+\
+
+\b \cf2 // ------ Mouse in the language  ------
+\b0 \cf3 \
+\cf2 // To get mouse vaues in the language you'll need to use one of the Server-to-language tools mentioned in the Class2.1 example:\cf3 \
+\
+\{\cf4 SendReply\cf3 .kr(\cf4 Impulse\cf3 .kr(5), \cf5 \\mouse\cf3 , [\cf4 MouseX\cf3 .kr, \cf4 MouseY\cf3 .kr, \cf4 MouseButton\cf3 .kr.round], 2323)\}.play;\
+\
+r = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 'mouse'\cf3 , \{ \cf4 |t, r, msg|\cf3  \cf6 "mouse-stuff"\cf3 .postln; msg.postln \}).add;\
+\
+r.remove; \cf2 // don't forget to .remove!\cf3 \
+\
+\
+\cf2 // You could also use the GetMouse class ({\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Republic/GetMouseX.html"}}{\fldrslt \cf2 GetMouseX}} and {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Republic/GetMouseY.html"}}{\fldrslt \cf2 GetMouseY}}), which is part of the Republic quark. This is an sclang side version, so it doesn't need the server to be on.\cf3 \
+\cf2 // Install it if you don't have it:\cf3 \
+\cf4 Quarks\cf3 .install( \cf6 "Republic"\cf3 , checkoutIfNeeded: \cf4 false\cf3 )\
+\
+\
+\
+
+\b \cf2 // ====== KEYBOARD ====== 
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Keystrokes in the server ------
+\b0 \cf3 \
+\cf2 // In a similar manner as with the mouse, there is a control-rate UGen for keystrokes, {\field{\*\fldinst{HYPERLINK "SC://KeyState"}}{\fldrslt \cf2 \ul \ulc2 KeyState}}. It checks for keycode values\cf3 \
+\
+\{ \cf4 SinOsc\cf3 .ar(800, 0, \cf4 KeyState\cf3 .kr(38, 0, 0.1)) \}.play; \cf2 // press 'j' (ATT: does not prevent typing!)\cf3 \
+\
+\
+
+\b \cf2 // ------ Keystrokes in the language ------
+\b0 \cf3 \
+\cf2 // In the language, there is a method for in SCView (the abstract Class of all GUIs) and Document that does something similar, called .keyDownAction, and there is also a .keyUpAction\cf3 \
+\
+\cf2 // an example with a GUI window: this will only work if you the window is focused, which is useful, as it prevents typing:\cf3 \
+(\
+w = \cf4 SCWindow\cf3 .new(\cf6 "key-tester"\cf3 );\
+w.view.keyDownAction = \{ \cf4 arg\cf3  view, char, modifiers, unicode, keycode;\
+	[char, modifiers, unicode, keycode].postln;\
+\};\
+w.front\
+)\
+\
+\cf2 // And a cool example from Josh Parmenter with Document (no typing prevention):\cf3 \
+(\
+d = \cf4 Document\cf3 .current;\
+\
+d.keyDownAction_(\{\cf4 arg\cf3  ...args; \cf2 //"..." puts everything into an array\cf3 \
+	(args[1]==$c).if(\{\
+		args[0].background_(\cf4 Color\cf3 .rand);\
+	\});\
+args.postln;\
+\});\
+)\
+\cf2 // now, type 'c'\cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf4 Document\cf3 .current.keyDownAction=\cf4 nil\cf3  \cf2 // stop it\cf3 \
+d.background_(\cf4 Color\cf3 .white); \cf2 // back to the standard color\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\cf2 // You can have a look at this example too if you want: [{\field{\*\fldinst{HYPERLINK "SC://modifiers"}}{\fldrslt \cf2 \ul \ulc2 modifiers}}\cf2 \ul \ulc2 ]\cf3 \ulnone \
+\
+\cf2 // Here is a site where you can find a table with the keycode values of your keyboard\cf3 \
+\cf6 "open http://www.asciitable.com/"\cf3 .unixCmd\
+\
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p15 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #606060}
+p.p17 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+p.p18 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Helvetica; color: #000000; min-height: 17.0px}
+span.s1 {text-decoration: underline}
+span.s2 {color: #000000}
+span.s3 {text-decoration: underline ; color: #000000}
+span.s4 {text-decoration: underline ; color: #0000bf}
+span.s5 {font: 12.0px Helvetica}
+span.s6 {color: #0000bf}
+span.s7 {color: #bf0000}
+span.s8 {font: 10.0px Lucida Grande}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p5"><b>Class 1.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>SuperCollider: Architecture and Language</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• SuperCollider architecture</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• SuperCollider language</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Object Oriented Programming (links)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Smalltalk (links)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Objects</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Messages</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Classes</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Under the hood</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>=================== ABOUT THE SUPERCOLLIDER ARCHITECTURE ================</b></p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7">/*<span class="Apple-converted-space"> </span></p>
+<p class="p7">SuperCollider 3 is the combination of 3 or 4 programs:</p>
+<p class="p7"><span class="Apple-tab-span">	</span><b>scsynth</b>:<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>SuperCollider synthesis: a synthesis engine (server)</p>
+<p class="p7"><span class="Apple-tab-span">	</span><b>sclang</b>:<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>SuperCollider language: a language side client. sclang performs a double task: interpreting the SuperCollider programming language, and commnunicating with the server via Open Sound Control (OSC) . Other client programs can also be used (ex. PureData, Max/MSP, Python, Processing, Java, Open Frameworks - basically, any program that can send OSC). However, sclang, the language developed by James McCartney, is in many ways the most powerful for controlling the synthesis engine.</p>
+<p class="p7"><span class="Apple-tab-span">	</span><b>SCapp</b>:<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>the language text editor, including GUI; other editors may be used as well (ex: scel, emacs, svim, PsyCollider)</p>
+<p class="p7"><span class="Apple-tab-span">	</span>(<b>SwingOSC</b>:<span class="Apple-tab-span">	</span>an alternative GUI server)</p>
+<p class="p9"><br></p>
+<p class="p7">A detailed description (with figures) can be found here:</p>
+<p class="p1"><span class="s1"><a href="SC://ClientVsServer">Client Vs Server</a></span></p>
+<p class="p10"><br></p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>=================== ABOUT THE SUPERCOLLIDER LANGUAGE ================</b></p>
+<p class="p7">• SuperCollider is<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="Apple-tab-span">	</span>a high-level interpreted Object Oriented language</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>based on Smalltalk<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>but with C language family syntax, and also including Java and other language influences.</p>
+<p class="p7">*/</p>
+<p class="p7">// Having a look at these wikipedia references could help understand where SC is coming from:</p>
+<p class="p11">"open http://en.wikipedia.org/wiki/Object-oriented_programming"<span class="s2">.unixCmd</span></p>
+<p class="p11">"open http://en.wikipedia.org/wiki/Smalltalk"<span class="s2">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p7">// The links below are particularily useful, make sure you read both:</p>
+<p class="p11">"open http://en.wikipedia.org/wiki/Object-oriented_programming#Fundamental_concepts_and_features"<span class="s2">.unixCmd</span></p>
+<p class="p11">"open http://en.wikipedia.org/wiki/Smalltalk#Object-oriented_programming"<span class="s2">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== Objects ======</b></p>
+<p class="p7">// In SC EVERYTHING is an object, and multiple instances of an object can be created and be active simultaneously. An object has data that represent its state (<b>variables</b>), which one can sometimes <b>get</b> and/or <b>set</b>, and a set of operations it can perform (<b>methods</b>).<span class="Apple-converted-space"> </span></p>
+<p class="p7">//For a more detailed intro to Objects in SC read this:</p>
+<p class="p12"><span class="s1"><a href="SC://Intro-to-Objects">Intro<span class="s3">-to-</span><span class="s4">Objects</span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1"><b>// ====== Messages ======</b></p>
+<p class="p7">// In Supercollider, and other OOP languages, you send <b>messages</b> to an object to ask it to perform an operation.<span class="Apple-converted-space"> </span><span class="s5"> </span>A message consists of a message <b>selector</b> naming the type of operation, a <b>receiver</b> to which the message is sent and, possibly, a list of <b>arguments</b> further defining to the operation. A message always returns a result. The kind of result depends on the kind of message</p>
+<p class="p13"><span class="s1"><a href="SC://Method-Calls">Method<span class="s3">-</span><span class="s4">Calls</span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// There are four different but equivalent ways of calling a class method and sending it a message. This is a powerful, though at times confusing and largely debated feature; using one syntax over another is a matter of 'good practice' and it<span class="Apple-converted-space">  </span>depends on the object and method used.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p14"><span class="s6">Object</span>.method(argument) <span class="s7">// 1</span></p>
+<p class="p14">method(<span class="s6">Object</span>, argument) <span class="s7">// 2</span></p>
+<p class="p14"><span class="s6">Object</span> method: argument <span class="s7">// 3</span></p>
+<p class="p14">method (<span class="s6">Object</span>) {argument} <span class="s7">// 4</span></p>
+<p class="p8"><br></p>
+<p class="p1">// For example, one uses the first one for UGens:</p>
+<p class="p15">{<span class="s6">SinOsc</span>.ar(220)}.play</p>
+<p class="p1">// on the other hand, binary operations are commonly declared with both syntaxes 1 and 2:</p>
+<p class="p15">0.rrand(10)</p>
+<p class="p15">rrand(0,10)</p>
+<p class="p6"><br></p>
+<p class="p2">// for a (long) debate on these methods in SC you can go through this thread (June 2010):</p>
+<p class="p16">"open http://new-supercollider-mailing-lists-forums-use-these.2681727.n2.nabble.com/Supernova-Re-SC4-logo-Re-sc-users-SuperCollider-laptop-stickers-td5165964.html#a5165964"<span class="s2">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// It is possible to link messages. Using a fictional example<span class="Apple-converted-space">  </span><i>Turkey.debone.stuff.bake.cut</i>, would first <i>debone</i> the <i>Turkey</i> object, then <i>stuff</i> it, then <i>bake </i>it and finally <i>cut </i>it.<span class="Apple-converted-space"> </span></p>
+<p class="p1">/* Overall, code in SC is read by the compiler top-down, left to right, and in the case of nested code, from the inner parts to the outer ones:<span class="Apple-converted-space"> </span></p>
+<p class="p1">Here is how a<span class="Apple-converted-space">  </span>turducken recipy would look like in SC:</p>
+<p class="p1"><i>Turkey.debone.stuff(</i></p>
+<p class="p1"><i><span class="Apple-tab-span">	</span>Duck.debone.stuff(</i></p>
+<p class="p1"><i><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Chicken.debone.stuff))</i></p>
+<p class="p1"><i>.roast.cut)</i></p>
+<p class="p1">*/</p>
+<p class="p6"><br></p>
+<p class="p1">// Finally, note that different classes can respond to the same message in different ways. For more on the subject look here:</p>
+<p class="p12"><span class="s1"><a href="SC://Polymorphism">Polymorphism<span class="s4"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1"><b>// ====== Classes ======</b></p>
+<p class="p1">// In SC, all objects are members of a class. Class names begin with capital letters.</p>
+<p class="p1">// The <i>data</i> of an object is contained in its <b>instance variables</b>. These can only be accessed and changed from within a class' methods. They can be exposed to the 'outside world' by <b>getter</b> or <b>setter</b> messages; these are messages with the same name as the variable returning that variable's value or setting it to the value of an argument. Getter (&lt;) and setter (&gt;) methods have to be defined upon declaring the instance variable inside the class' definition; a variable may have both, only a getter or setter, or neither. Have a look at this class:</p>
+<p class="p1"><span class="s6">Point</span><span class="s2"> </span>// select and press Command-y;</p>
+<p class="p1">// now, set and get</p>
+<p class="p15">p = <span class="s6">Point</span>.new;</p>
+<p class="p1"><span class="s2">p.x_(5); </span>// set x to 5</p>
+<p class="p1"><span class="s2">p.x; </span>// get current state of x</p>
+<p class="p17"><br></p>
+<p class="p1">// Whereas instance variables are specific, <b>class variables</b>, are shared by all objects in the class. In a Class definition these are proceeded by the word classvar, and otherwise can be accesed and set in the same manner as instance variables.</p>
+<p class="p17"><br></p>
+<p class="p1">// Messages that can be sent to a class are defined as methods. There are <b>instance methods</b> and <b>class methods</b>. Class methods are defined with an asterisk (*) in the class definition; they are tied to a class, and commonly recipes for making objects (ex: *new). Instance methods are functions to which any created class instance (object) can respond. Helpfiles will also tell you which are class and instance methods a class has:<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="s1"><a href="SC://List">List<span class="s4"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// Looking inside a Class definition's methods, you can also see what is returned from calling that method; it is preceeded by the claret symbol '^'</p>
+<p class="p6"><br></p>
+<p class="p1">// Look here for a more detailed description of Classes:</p>
+<p class="p12"><span class="s1"><a href="SC://Classes">Classes<span class="s4"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">// ------ Hierarchies and class inheritance -----</p>
+<p class="p1">// In SC, classes are organized hierarchically in a tree structure; there are subclasses and superclasses. Every class is a subclass of</p>
+<p class="p1"><span class="s4"><a href="SC://Object">Object</a></span><span class="s2"> </span>//, the superclass (root class) of all classes and objects.</p>
+<p class="p1">// In SC, a class can only have one immediate superclass, but that superclass can itself have another superclass, etc. It can also have many subclasses, to which it passes on its methods (ie. subclasses inherit methods from their superclass). In order to find a specific method to which a class responds, you may have to go up the chain, closer to the root of the tree. Inheritance is shown at the top of a helpfile. For example, have a look at:<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="s1"><a href="SC://Array">Array<span class="s4"></span></a></span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p1"><b>// ====== Looking under the hood ======</b></p>
+<p class="p7">// As mentioned above, in SC each Class and UGen have a <b>class definition </b>in a <b>class file</b>. All these files are compiled each time you start SC or you recompile the library (by pressing Command-k). You can look at these files by pressing <i>Command-y</i>. Ex:</p>
+<p class="p13">SoundFile</p>
+<p class="p13">SinOsc</p>
+<p class="p7">// You can also look at the same Class or UGen information interactively in a GUI using the class browser:</p>
+<p class="p14"><span class="s6">SinOsc</span>.browse</p>
+<p class="p7">// or list all the methods of a class hierarchically; this shows you which methods are inherited from which SuperClass</p>
+<p class="p14"><span class="s6">SinOsc</span>.dumpFullInterface</p>
+<p class="p7">// or, you can list all methods hierarchically:</p>
+<p class="p14"><span class="s6">SinOsc</span>.dumpMethodList</p>
+<p class="p7">// this will post only the instance methods:</p>
+<p class="p14"><span class="s6">Array</span>.dumpInterface</p>
+<p class="p7">// and this only the class methods:</p>
+<p class="p14"><span class="s6">Meta_Array</span>.dumpInterface</p>
+<p class="p7">// Does the class have a helpfile?</p>
+<p class="p14"><span class="s6">TRand</span>.hasHelpFile</p>
+<p class="p7">// Open it then:</p>
+<p class="p14"><span class="s6">TRand</span>.openHelpFile</p>
+<p class="p8"><br></p>
+<p class="p7">// You can also look at the hierarchy of a class</p>
+<p class="p14"><span class="s6">Object</span>.dumpClassSubtree<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7">//This shows you the whole tree structure hierarchy of your SC install; as you'd expect, the further away from Object you get, the more specialized the classes get</p>
+<p class="p7"><span class="s6">Collection</span><span class="s2">.dumpClassSubtree<span class="Apple-tab-span">	</span></span>// see the branches stemming from Collection</p>
+<p class="p8"><br></p>
+<p class="p7">// you can also peek at the tree structure of your Help:</p>
+<p class="p14"><span class="s6">Help</span>.dumpTree</p>
+<p class="p8"><br></p>
+<p class="p7">// <i>Command-y</i> also works for checking the implementations of a method (ie. which classes support it);</p>
+<p class="p7">// // <i>Command-Shift-y </i>will show you references to a method (the classes where the method is called ):</p>
+<p class="p14">new</p>
+<p class="p14">kr</p>
+<p class="p14">series</p>
+<p class="p14">scramble</p>
+<p class="p7">// if you see Meta_SomeClass:, it means that this is a class method</p>
+<p class="p7">// if you see SomeClass:, it means this is an instance method</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// look here for even more snooping options:</p>
+<p class="p12"><span class="s1"><a href="SC://Internal-Snooping">Internal<span class="s3">-</span><span class="s4">Snooping</span></a></span><span class="s2"> </span><span class="s7">//<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p1"><b>// ====== More language topics ======</b></p>
+<p class="p7">// And some more very useful language-related topics:</p>
+<p class="p18"><br></p>
+<p class="p1"><span class="s4"><a href="SC://Syntax-Shortcuts">Syntax<span class="s3">-</span><span class="s1">Shortcuts</span></a></span><span class="s2"> </span>// Includes some very handy syntax alternatives to save up typing</p>
+<p class="p1"><span class="s4"><a href="SC://SymbolicNotations">SymbolicNotations</a></span><span class="s2"> </span>// A catalog of symbolic notation (using symbols instead of messages)</p>
+<p class="p1"><span class="s4"><a href="SC://Adverbs">Adverbs</a></span><span class="s2"> </span>// modify a two-member operation by further defining it with an adverb</p>
+<p class="p1"><span class="s4"><a href="SC://Partial-Application">Partial<span class="s3">-</span><span class="s1">Application</span></a></span><span class="s2"> </span>// only pass a few arguments to a method or function to get a result</p>
+<p class="p1"><span class="s4"><a href="SC://Literals">Literals</a></span><span class="s2"> </span>// values with a direct representation (ex: a 2 is a 2 is a 2) <span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p1"><b>// ====== Related reading ======</b></p>
+<p class="p7">// create a directory inside your SuperCollider application folder to put all the reading material</p>
+<p class="p16">"mkdir -p DX490a_su2010_Reading/"<span class="s2">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p7">// 1. James McCartney: SuperCollider: a new real-time synthesis language, ICMC 1996</p>
+<p class="p7">// download and open:</p>
+<p class="p16">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/490a/490/Materials/-Reading/SuperCollider-%20a%20new%20real%20time%20synthesis%20language%20-%20James%20McCartney%20-ICMC96.pdf -o DX490a_su2010_Reading/<span class="s8">SuperCollider-A_new_real_time_synthesis_language-James_McCartney-ICMC96</span>.pdf"<span class="s2">.unixCmd{</span>"open DX490a_su2010_Reading/<span class="s8">SuperCollider-A_new_real_time_synthesis_language-James_McCartney-ICMC96</span>.pdf"<span class="s2">.unixCmd};</span></p>
+<p class="p8"><br></p>
+<p class="p7">// 2. James McCartney: Rethinking the Computer Music Language: SuperCollider, CMJ2002</p>
+<p class="p7">// download and open</p>
+<p class="p16">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/490a/490/Materials/-Reading/Rethinking%20the%20Computer%20Music%20Language-%20SuperCollider%20%20-%20James%20McCartney%20-%20Computer%20Music%20Journal,%2026-4,%20pp.%2061-68,%20Winter%202002.pdf -o DX490a_su2010_Reading/<span class="s8">Rethinking_the_Computer_Music_Language-SuperCollider--James_McCartney--Computer_Music_Journal_2002.pdf</span>"<span class="s2">.unixCmd{</span>"open DX490a_su2010_Reading/<span class="s8">Rethinking_the_Computer_Music_Language-SuperCollider--James_McCartney--Computer_Music_Journal_2002.pdf</span>"<span class="s2">.unixCmd};</span></p>
+</body>
+</html>

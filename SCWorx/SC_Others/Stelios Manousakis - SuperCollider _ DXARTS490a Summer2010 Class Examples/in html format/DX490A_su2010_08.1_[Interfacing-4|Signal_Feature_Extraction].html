@@ -1,0 +1,451 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #007300}
+span.s5 {color: #000000}
+span.s6 {color: #bf0000}
+span.s7 {text-decoration: underline ; color: #0000bf}
+span.s8 {color: #606060}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 8.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 4: Feature extraction in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• About</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Feature extraction in SC</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Amplitude</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pitch</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Time-related</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- timbre</p>
+<p class="p6"><br></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= ABOUT =================</b></p>
+<p class="p1">/*<span class="Apple-converted-space"> </span></p>
+<p class="p1">• Psychological dimensions of sound:</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- loudness</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- pitch</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- duration</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- timbre</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p1">• Data you can get:</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- continuous: description of a particular characteristic in time.</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- switches/triggers: detection of specific behaviors, energy in specific areas, etc</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p1">• Analysis domains:</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- analysis of the psychological dimensions of sound (pshycoacoustic analysis / feature extraction)</p>
+<p class="p1"><span class="Apple-tab-span">	</span>- analysis of organizational qualities through gestalt-driven analysis (cognitive analysis / machine listening)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&gt; Our brains attempt to make sense of our noisy world, compressing the torrent of incoming sensual data by finding symmetry, order, simplicity and patterns. A set of laws has been postulated by Gestalt psychologists to explain different strategies our brain uses to group objects together:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>proximity, closure, similarity, continuity, symmetry, common fate</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>"open http://www.infovis-wiki.net/index.php?title=Gestalt_Laws".unixCmd</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><br></p>
+<p class="p1">*/</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= FEATURE EXTRACTION IN SUPERCOLLIDER =================</b></p>
+<p class="p8">// There are really a lot of UGens that analyze signals in SC. You would most commonly use those for audio, but they can be quite effective for any kind of incoming signal.</p>
+<p class="p9"><br></p>
+<p class="p8">/* These examples are very basic, but you can refer to:</p>
+<p class="p8"><span class="Apple-tab-span">	</span>- class example 2.1_[Server-language communication] for receiving analysis data in sclang, and<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span>- class example 6.2_[Mapping] about mapping strategies</p>
+<p class="p8">*/</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== AMPLITUDE ======</b></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Examples<span class="Apple-converted-space">  </span>--</b></p>
+<p class="p9"><br></p>
+<p class="p8">// The most fundamental UGen is <a href="SC://Amplitude"><span class="s2">Amplitude</span></a>:</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// • continuous:</b></p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\ampTest</span>, {<span class="s3">arg</span> inbus, attack, decay;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> amp, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">WhiteNoise</span>.ar(0.5);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp = <span class="s3">Amplitude</span>.ar(<span class="s3">In</span>.ar(inbus), attack, decay);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, src * amp);</p>
+<p class="p10">});</p>
+<p class="p10">)</p>
+<p class="p9"><br></p>
+<p class="p8">// try out a few different configuration of the analysis UGen</p>
+<p class="p10">b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.01).decay_(0.01).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p10">b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.1).decay_(1).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p10">b = a.new.inbus_(s.options.numInputBusChannels).attack_(1.0).decay_(1).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// • triggers:</b></p>
+<p class="p8">// You can get amplitude data into sclang, and do something with it.</p>
+<p class="p8">/* But:</p>
+<p class="p8"><span class="Apple-tab-span">	</span>- use Trig1 to limit the nr of data you get!</p>
+<p class="p8"><span class="Apple-tab-span">	</span>- allow yourself to set the trigger threshold and Trig1 'silent' duration from outside</p>
+<p class="p8">*/</p>
+<p class="p9"><br></p>
+<p class="p8">// This tracks incoming audio from your soundcard - beware of feedback<span class="Apple-converted-space"> </span></p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\ampTest</span>, {<span class="s3">arg</span> inbus, attack, decay, id, thresh, tdur;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> amp;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp = <span class="s3">Amplitude</span>.ar(<span class="s3">In</span>.ar(inbus), attack, decay);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.ar(<span class="s3">Trig1</span>.ar(amp &gt; thresh, tdur), id, amp);<span class="Apple-converted-space"> </span></p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p10">c = <span class="s3">CtkSynthDef</span>(<span class="s4">\sin</span>, {<span class="s3">arg</span> outbus = 0, freq = 220;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(440, 0, <span class="s3">XLine</span>.kr(0.1, 0.0001, 1, doneAction: 2)))</p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p10">o = <span class="s3">OSCresponderNode</span>(s.addr, <span class="s4">'/tr'</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, resp, msg].postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>c.new.play</p>
+<p class="p10"><span class="Apple-tab-span">	</span>}).add;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numInputBusChannels).attack_(0.01).decay_(0.01).id_(100).thresh_(0.15).tdur_(1).play;</p>
+<p class="p9"><br></p>
+<p class="p10">o.remove;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ A list of AMPLITUDE tracking UGens in SC --</b></p>
+<p class="p8">// &gt;&gt; Amplitude following</p>
+<p class="p8"><span class="s3">Amplitude</span><span class="s5"> </span>// amplitude follower</p>
+<p class="p8"><span class="s3">PeakFollower</span><span class="s5"> </span>// peak amp tracker</p>
+<p class="p8"><span class="s3">EnvDetect</span><span class="s5"> </span>// amplitude follower</p>
+<p class="p11">WAmp</p>
+<p class="p8">// &gt;&gt; Amplitude minimum/maximum<span class="Apple-converted-space"> </span></p>
+<p class="p11">Peak</p>
+<p class="p11">DetectSilence</p>
+<p class="p8">// &gt;&gt; Amplitude utilities</p>
+<p class="p8">// pshychoacoustic utilities</p>
+<p class="p11">AmpComp<span class="s5"> / </span>AmpCompA</p>
+<p class="p8"><span class="s3">Loudness</span><span class="s5"> </span>// get loudness in sones</p>
+<p class="p8">// &gt;&gt; Signal operations:</p>
+<p class="p11">Compander</p>
+<p class="p11">Limiter</p>
+<p class="p8"><span class="s3">Normalizer</span><span class="s5"> </span>// normalize to nominal level</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== PITCH ======</b></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Examples<span class="Apple-converted-space">  </span>--</b></p>
+<p class="p8">// These examples use the incoming audio from your soundcard - beware of feedback<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// • continuous:</b></p>
+<p class="p8">// Using the Pitch UGen: pretty good!</p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus, high = 1000, low = 60;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, freq, hasFreq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>#freq, hasFreq = <span class="s3">Pitch</span>.kr(in, high, low, high);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(freq * 4, 0, 0.1) * hasFreq)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// The Tartini UGen is a more expensive, but is also better</p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, freq, hasFreq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>#freq, hasFreq = <span class="s3">Tartini</span>.kr(in);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(freq * 4, 0, 0.1))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// • triggers:</b></p>
+<p class="p8">// Triggering is much trickier with pitch, as precise pitch is close to impossible, so better to look for a specific region/register.</p>
+<p class="p8">// This example will provide a trigger if the incoming audio is between 1500-1700Hz</p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus, low = 1500, high = 1700, id, tdur = 0.5;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, freq, hasFreq, trig1, trig2, trig;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>#freq, hasFreq = <span class="s3">Tartini</span>.kr(in);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>trig1 = freq &gt; low;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>trig2 = freq &lt; high;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>trig = <span class="s3">Trig1</span>.kr((trig1 + trig2 - 1).poll, tdur);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.kr(trig, id, freq);</p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).id_(100).play;</p>
+<p class="p9"><br></p>
+<p class="p10">z = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> freq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(freq, 0, <span class="s3">XLine</span>.kr(0.1, 0.0001, 1, doneAction: 2)))</p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10">o = <span class="s3">OSCresponderNode</span>(s.addr, <span class="s4">'/tr'</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, resp, msg].postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>z.new.freq_(msg[3] * 0.5).play;</p>
+<p class="p10">}).add;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p9"><br></p>
+<p class="p10">b.free;</p>
+<p class="p8"><span class="s5">o.remove; </span>// don't forget to remove the responder</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ A list of PITCH tracking UGens in SC --</b></p>
+<p class="p11">Pitch</p>
+<p class="p11">Tartini</p>
+<p class="p11">ZeroCrossing</p>
+<p class="p8">// &gt;&gt; more/advanced/experimental (ie: use at your own risk):</p>
+<p class="p11">KeyTrack</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== TIME-RELATED (ONSETS, ETC) ======</b></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Examples<span class="Apple-converted-space">  </span>--</b></p>
+<p class="p8">// There are a few different strategies for finding onsets. You can use some of the pre-cooked classes, or devise your own methods:</p>
+<p class="p8">// These examples use the incoming audio from your soundcard - beware of feedback<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p8">// comparing a signal with a delayed version of itself (an example by Josh Parmenter):</p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\ampTest</span>, {<span class="s3">arg</span> inbus, level = 0.5, attack, decay, id;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> amp, src, del, diff;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp = <span class="s3">Amplitude</span>.ar(src, attack, decay);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>del = <span class="s3">DelayN</span>.ar(amp, 0.01, 0.01);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>diff = (amp / del.max(0.001)).ampdb *<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>([0, 0, 1], [0.1, 0.1])).poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.ar(<span class="s3">Trig1</span>.ar(diff &gt; level, 1), id, diff);</p>
+<p class="p10">});</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="s5">z = </span>CtkSynthDef<span class="s5">(</span><span class="s4">\test</span><span class="s5">, {</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(440, 0, <span class="s3">XLine</span>.kr(0.1, 0.0001, 1, doneAction: 2)))</p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10">o = <span class="s3">OSCresponderNode</span>(s.addr, <span class="s4">'/tr'</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, resp, msg].postln;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// now - actually do something once the trigger happens</p>
+<p class="p10"><span class="Apple-tab-span">	</span>z.new.play;</p>
+<p class="p10">}).add;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).level_(36).attack_(0.01).decay_(0.01).id_(100).play;</p>
+<p class="p8"><span class="s5">b.level_(12); </span>// level is in db</p>
+<p class="p10">o.remove;<span class="Apple-converted-space"> </span></p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p8">// or use the Slope UGen instead:</p>
+<p class="p10">(</p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\ampTest</span>, {<span class="s3">arg</span> inbus, level = 0.5, attack, decay, id;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> amp, src, slope;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp = <span class="s3">Amplitude</span>.ar(src, attack, decay);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>slope = <span class="s3">Slope</span>.ar(amp);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.ar(<span class="s3">Trig1</span>.ar(slope &gt; level, 1), id, slope);</p>
+<p class="p10">});</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="s5">z = </span>CtkSynthDef<span class="s5">(</span><span class="s4">\test</span><span class="s5">, {</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(440, 0, <span class="s3">XLine</span>.kr(0.1, 0.0001, 1, doneAction: 2)))</p>
+<p class="p10">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10">o = <span class="s3">OSCresponderNode</span>(s.addr, <span class="s4">'/tr'</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, resp, msg].postln;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// now - actually do something once the trigger happens</p>
+<p class="p10"><span class="Apple-tab-span">	</span>z.new.play;</p>
+<p class="p10">}).add;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).level_(0.2).attack_(0.01).decay_(0.01).id_(100).play;</p>
+<p class="p10">b.level_(200); <span class="s6">// angle?</span></p>
+<p class="p10">o.remove;<span class="Apple-converted-space"> </span></p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ A list of TIME (onset, rhythm, etc) tracking UGens in SC --</b></p>
+<p class="p11">Onsets</p>
+<p class="p11">Coyote</p>
+<p class="p8">// &gt;&gt; more/advanced/experimental (ie: use at your own risk):</p>
+<p class="p11">BeatTrack</p>
+<p class="p11">BeatTrack2</p>
+<p class="p11">AutoTrack</p>
+<p class="p11">OnsetDS<span class="s5"> / </span>XiiOnsets<span class="s5"> </span><span class="s6">// no help file</span></p>
+<p class="p11">SLOnset</p>
+<p class="p11">Concat</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== TIMBRE ======</b></p>
+<p class="p8">// There is a big variety of UGens that you can use for tracking characteristics on the spectrum of a signal in SC.</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Examples --</b></p>
+<p class="p9"><br></p>
+<p class="p8">// For example, SpecFlatness tells you how noisy a signal is (noise = 1, sine = 0)</p>
+<p class="p10">(</p>
+<p class="p8"><span class="s5">f = </span><span class="s3">Buffer</span><span class="s5">.alloc(s,2048,1); </span>// a buffer for the FFT to use</p>
+<p class="p9"><br></p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, freq, chain, flat;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chain = <span class="s3">FFT</span>(f, in);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>flat = <span class="s3">SpecFlatness</span>.kr(chain).poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>flat = flat ** 3;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>flat.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">BPF</span>.ar(<span class="s3">WhiteNoise</span>.ar(0.5), 400, flat.max(0.0001)));</p>
+<p class="p10">});</p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// FFTPeak finds the bin with the strongest magnitude and outputs its frequency and magnitude:</p>
+<p class="p10">(</p>
+<p class="p8"><span class="s5">f = </span><span class="s3">Buffer</span><span class="s5">.alloc(s, 2048, 1); </span>// a buffer for the FFT to use</p>
+<p class="p9"><br></p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, chain, freq, mag;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chain = <span class="s3">FFT</span>(f, in);</p>
+<p class="p10"><span class="Apple-tab-span">	</span># freq, mag = <span class="s3">FFTPeak</span>.kr(chain).poll;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>//peak = flat ** 3;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>//flat.poll;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(freq, 0, mag * 0.001));</p>
+<p class="p10">});</p>
+<p class="p10">)</p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).play;</p>
+<p class="p10">b.free;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ A list of SPECTRAL FEATURE tracking UGens in SC --</b></p>
+<p class="p11">SpecCentroid</p>
+<p class="p11">SpecFlatness</p>
+<p class="p11">SpecPcile</p>
+<p class="p11">FFTCrest</p>
+<p class="p11">FFTComplexDev</p>
+<p class="p11">FFTFlux</p>
+<p class="p11">FFTPeak</p>
+<p class="p11">FFTRumble</p>
+<p class="p11">FFTSlope</p>
+<p class="p11">FFTSpread</p>
+<p class="p11">FFTSubbandFlatness<span class="s5"> / </span>FFTSubbandFlux<span class="s5"> / </span>FFTSubbandPower</p>
+<p class="p8"><span class="s3">Goertzel</span><span class="s5"> </span>// detect presence of a frequency</p>
+<p class="p8">// You can also use filters to divide a signal into different ranges, and then detect energy for example in it</p>
+<p class="p8">// &gt;&gt; more/advanced/experimental (ie: use at your own risk):</p>
+<p class="p11">PV_CommonMag</p>
+<p class="p11">MFCC</p>
+<p class="p11">FrameCompare</p>
+<p class="p11">Qitch</p>
+<p class="p11">CQ_Diff</p>
+<p class="p8">// These don't spit data, but re-synthesize for you:</p>
+<p class="p11">PV_NoiseSynthF</p>
+<p class="p11">PV_PartialSynthF</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== STATISTICAL UTILITIES ======</b></p>
+<p class="p8">// It can be very useful, after analyzing a signal, to make a statistical analysis and get a better idea about its behavior</p>
+<p class="p11">AverageOutput</p>
+<p class="p11">TrigAvg</p>
+<p class="p11">Max</p>
+<p class="p11">RunningMax</p>
+<p class="p11">RunningMin</p>
+<p class="p11">RunningSum</p>
+<p class="p11">Slope</p>
+<p class="p11">Crest</p>
+<p class="p8"><span class="s7"><a href="../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd">StatUGens</a></span><span class="s5"> </span>// PseudoUGens, built on RunningSum UGen; no help-file for the individual UGens</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>DynamicScaleUGen<span class="s5"><span class="Apple-converted-space"> </span></span></p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>FluctuationUGen</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>KurtosisUGen</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>MaxDynScaleUGen</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>MinDynScaleUGen</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>SkewUGen</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>StdDevUGen</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== COMBINING FEATURES ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// An example combining onset, amplitude and pitch analysis (by Josh P)</p>
+<p class="p8">// This examples use the incoming audio from your soundcard - beware of feedback<span class="Apple-converted-space"> </span></p>
+<p class="p8">// Sing or whistle on the mic:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> freq, amp;</p>
+<p class="p8">/* combining triggers - setting variable in the lang */</p>
+<p class="p9"><br></p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\pitch</span>, {<span class="s3">arg</span> inbus, attack, decay, id1, id2, id3,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>level = 6;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, amp, del, diff, freq, hasFreq, trig1, trig2, trig;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>amp = <span class="s3">Amplitude</span>.ar(in, attack, decay);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>del = <span class="s3">DelayN</span>.ar(amp, 0.01, 0.01);</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// delays the trigger itself</p>
+<p class="p10"><span class="Apple-tab-span">	</span>diff = <span class="s3">DelayN</span>.ar((amp / del.max(0.001)).ampdb *<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>([0, 0, 1], [0.1, 0.1])), 0.025, 0.025);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>trig = <span class="s3">Trig1</span>.ar(diff &gt; level, 1); <span class="s6">// for amplitude</span></p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span><span class="s3">SendTrig</span><span class="s5">.ar(trig, id1, </span><span class="s3">RunningSum</span><span class="s5">.kr(amp, 40)); </span>// output the peak amplitude of the analysis</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// send another trig with id2 for freq</p>
+<p class="p10"><span class="Apple-tab-span">	</span>#freq, hasFreq = <span class="s3">Pitch</span>.kr(in);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.ar(trig, id2, freq);</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// finally! send a last trigger with a slight delay, to ensure the<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span></span>// variables for the above two triggers have been set</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendTrig</span>.ar(<span class="s3">DelayN</span>.ar(trig, 0.01, 0.01), id3, freq);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p10">b = a.new.inbus_(s.options.numOutputBusChannels).level_(50)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.id1_(100).id2_(101).id3_(102).play;</p>
+<p class="p9"><br></p>
+<p class="p10">z = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> freq, amp;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(1, <span class="s3">SinOsc</span>.ar(freq, 0, amp * <span class="s3">XLine</span>.kr(0.1, 0.0001, 4, doneAction: 2)))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10">o = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/tr'</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>case<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{msg[2] == 100}</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{amp = msg[3]; (<span class="s8">"Amp is: "</span>++amp).postln;}</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{msg[2] == 101}</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{freq = msg[3]; (<span class="s8">"Freq is: "</span>++freq).postln;}</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{msg[2] == 102}</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s8">"Go!"</span>.postln;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// now - actually do something once the trigger happens</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>10.do({<span class="s3">arg</span> i;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z.new(0 + (i * 0.1.rand))</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.freq_(freq * ((i + 1 * 2))).amp_(amp * 0.1).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p10"><span class="Apple-tab-span">	</span>}).add;<span class="Apple-converted-space"> </span></p>
+<p class="p10">)</p>
+<p class="p10">b.level_(12);</p>
+<p class="p10">b.free;</p>
+<p class="p10">o.remove;</p>
+</body>
+</html>

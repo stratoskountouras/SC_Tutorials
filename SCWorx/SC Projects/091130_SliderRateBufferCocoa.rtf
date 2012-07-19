@@ -1,0 +1,102 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red193\green39\blue16;\red13\green30\blue192;\red96\green96\blue96;
+\red51\green116\blue18;\red0\green26\blue173;\red77\green77\blue77;\red40\green92\blue14;\red192\green39\blue16;
+}
+\deftab560
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs18 \cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 //Buffer \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+b = \cf3 Buffer\cf0 .read(s, \cf4 "./sounds/Ultrabeat.aif"\cf0 ); \cf2 // remember to free the buffer later.\
+\cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 //SynthDef\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+(\
+d = \cf3 SynthDef\cf0 (\cf5 \\ultrabeat\cf0 , \{ \cf3 | out = 0, bufnum = 0, loop = 1, rate = 1 |\cf0 	\cf3 \
+\cf0 	\cf3 Out\cf0 .ar(out, \
+		\cf3 PlayBuf\cf0 .ar(1, bufnum, \cf3 BufRateScale\cf0 .kr(bufnum) * rate, loop: loop, doneAction: 2)\
+	)\
+\});\
+)\
+\
+d.send(\cf3 Server\cf0 .default);		\cf2 //send Synthdef to default Server.\
+\cf0 \
+\
+f = \cf3 Synth\cf0 (\cf5 \\ultrabeat\cf0 , [\cf5 \\bufnum\cf0 , b]);	\cf5 \
+\cf0 \
+	\
+\pard\pardeftab560\ql\qnatural
+\cf2 /// =========================================================\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 //Cocoa GUI \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+(\
+w = \cf3 Window\cf0 .new( \cf4 "Ultrabeat Sample Slider"\cf0  ).front;				\cf2 // create a new window	\cf4 \
+\cf0 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf0 g = \cf6 EZPopUpMenu\cf0 .new(\cf6 w\cf0 , 250@22 ,\cf7 " Select : "\cf0 );\
+g.addItem(\cf8 \\ultrabeat\cf0 , \{\cf7 "this is ultrabeat"\cf0 . postln\});\
+g.addItem(\cf8 \\sample1\cf0 , \{\cf7 "this is Sample2"\cf0 . postln\});\
+g.addItem(\cf8 \\sample2\cf0 , \{\cf7 "this is Sample3"\cf0 . postln\});\
+g.setColors(\cf6 Color\cf0 .grey,\cf6 Color\cf0 .white);\
+g.value=0;\
+\pard\pardeftab560\ql\qnatural
+\cf2 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+n = \cf3 NumberBox\cf0 (w, \cf3 Rect\cf0 (20, 40, 150, 20));						\cf2 // create a numberbox \cf0 \
+a = \cf3 Slider\cf0 (w, \cf3 Rect\cf0 (20, 80, 150, 20))							\cf9 // create a slider\cf0 												\
+	.action_(\{\
+		\cf3 var\cf0  therealvalue;									\cf2 // declare the variable "therealvalue"\
+\cf0 		therealvalue =  a.value - 0.5 * 5;		\
+		n.value_(therealvalue);								\cf2 // Numberbox value \cf0 \
+		f.set(\cf5 \\rate\cf0 , therealvalue);\
+		\
+		\});\
+		\cf3 \
+\
+StaticText\cf0 (w, \cf3 Rect\cf0 (0,120,400,20))\
+	.background_(\cf3 Color\cf0 .rand)\
+	.string_(\cf4 "Use the slider to control the rate of synth"\cf0 )\cf4 \
+\cf0 	.align_(\cf8 \\center\cf0 );										\cf2 // Put some text to the window\cf0 \
+)\
+\
+	\
+\pard\pardeftab560\ql\qnatural
+\cf2 /// =========================================================\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // Classes - Mark up each one of the following classes and press cmd-d for help\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf3 Buffer\
+SynthDef\
+Out\
+PlayBuf\
+Server\
+Synth\
+Window\
+Numberbox\
+Slider\
+Rect\
+StaticText\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+\
+}

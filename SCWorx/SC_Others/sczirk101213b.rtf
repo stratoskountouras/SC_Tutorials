@@ -1,0 +1,111 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 \
+\
+\cf3 SynthDef\cf2 (\cf4 "test"\cf2 , \{ \cf3 | x = 1, y = 1, amp = 0.1 |\cf2 \
+	\cf3 var\cf2  speakers, xy;\
+	xy = x@y;\
+	speakers = 0@0 dup: 48;	\cf5 // 48 speakers located all at 0@0, just to see CPU usage\cf2 \
+	\cf3 Out\cf2 .ar(0, \cf3 SinOsc\cf2 .ar(400, 0, amp * speakers.collect(\{\cf3 |d|\cf2  dist(xy, d) \})));\
+\}).send(\cf3 Server\cf2 .default);\
+\
+\
+a = \cf3 Synth\cf2 (\cf4 "test"\cf2 );\
+\
+a.set(\cf6 \\x\cf2 , 0.0);\
+a.set(\cf6 \\y\cf2 , 0.0);\
+\
+\
+\
+\
+\cf5 // cpu usage of 48 channels of audio (sources) independently panned in 48 speakers\cf2 \
+\cf5 // For a 3.06 GHz Core 2 Duo iMac something under 30% peak CPU usage\cf2 \
+b = \{ \cf3 Synth\cf2 (\cf4 "test"\cf2 , [\cf6 \\amp\cf2 , 0.001]) \} ! 48;\
+\
+\
+\cf5 // ======================== 2010 12 14 \cf2 \
+\
+\cf5 // Quad panning for speakers placed in square 0@0, 0@1, 1@0, 1@1\cf2 \
+\
+\cf3 Server\cf2 .default.boot;\
+\
+(\
+\cf3 SynthDef\cf2 (\cf4 "quadtest"\cf2 , \{ \cf3 | x = 0, y = 0, amp = 0.1 |\cf2 \
+	\cf3 var\cf2  speakers, xy, source;\
+	speakers = [0@0, 0@1, 1@0, 1@1];\
+	xy = x@y;\
+	source = \cf3 PinkNoise\cf2 .ar(amp / (1 + speakers.collect(\{\cf3 |d|\cf2  dist(xy, d) \})));\
+	\cf3 Out\cf2 .ar(0, source);\
+\}).send(\cf3 Server\cf2 .default);\
+);\
+\
+a = \cf3 Synth\cf2 (\cf4 "quadtest"\cf2 );\
+\
+a.set(\cf6 \\y\cf2 , 0.5);\
+a.set(\cf6 \\x\cf2 , 0.5);\
+a.set(\cf6 \\x\cf2 , 1.5);\
+\
+\cf5 // Using an exponent to narrow the distribution of the signal amongst channels\cf2 \
+(\
+\cf3 SynthDef\cf2 (\cf4 "quadtest2"\cf2 , \{ \cf3 | x = 0, y = 0, amp = 0.1, exp = 1 |\cf2 \
+	\cf3 var\cf2  speakers, xy, source;\
+	speakers = [0@0, 0@1, 1@0, 1@1];\
+	xy = x@y;\
+	source = \cf3 PinkNoise\cf2 .ar(\
+		amp / \
+		((1 + speakers.collect(\{\cf3 |d|\cf2  dist(xy, d) \})) ** exp)\
+	);\
+	\cf3 Out\cf2 .ar(0, source);\
+\}).send(\cf3 Server\cf2 .default);\
+)\
+\
+a = \cf3 Synth\cf2 (\cf4 "quadtest2"\cf2 );\
+\
+a.set(\cf6 \\exp\cf2 , 2);\
+a.set(\cf6 \\y\cf2 , 0.5);\
+a.set(\cf6 \\x\cf2 , 0.5);\
+a.set(\cf6 \\x\cf2 , 1);\
+a.set(\cf6 \\y\cf2 , 1);\
+\
+(\
+r = \{ \
+	\cf3 inf\cf2  do: \{ \cf3 | x |\cf2 \
+		a.set(\cf6 \\x\cf2 , (x / 100) % 1, \cf6 \\y\cf2 , 0);\
+		((x / 100) % 1).postln;\
+		0.1.wait;\
+	\};\
+\}.fork\
+)\
+\
+r.pause;\
+\
+\cf5 // Finding out what happens to the sum of amplitudes as we pan: \cf2 \
+(\
+f = \{ | x, y, exp |\
+	var speakers, xy, amps;\
+	speakers = \cf0 [0@0, 0@1, 1@0, 1@1];\
+	xy = x@y;\
+	amps = 1 /  (1 + ((speakers.collect(\{ | s | dist(s, xy) \})) ** exp));\
+	amps.add(amps.sum);\cf2 \
+\};\
+)\
+\
+f.(0, 0, 1);\
+\cf0 f.(0, 1, 1);\
+\cf2 \
+\cf0 (\cf2 \
+r = \{ \
+	\cf3 inf\cf2  do: \{ \cf3 | x |\cf2 \
+		postf(\cf4 "x: x, amps+sum: "\cf2 , x);\
+		f.((x / 100) % 1, 0, 1).postln;\
+		0.1.wait;\
+	\};\
+\}.fork\
+\cf0 )\
+\cf2 \
+\
+}

@@ -1,0 +1,413 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue191;\red0\green115\blue0;\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 16.2:
+\b0 \
+
+\b 	Networking 3: SC and the Internet
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Networking computers through the Internet\
+				- Connecting\
+				- A simple example\
+				- Example with sound, and some feedback \
+			\'95 Sending audio through the internet\
+			\'95\'a0Capturing MP3 streams\
+				- Reading online streams\
+			\'95 Internet radio alarm clock\
+			\'95\'a0More internet related quarks\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ================= SUPERCOLLIDER AND THE INTERNET =================
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== NETWORKING COMPUTERS THROUGH THE INTERNET ======
+\b0 \cf3 \
+\
+\cf2 // Unfortunately, connecting to remote machines through the internet is not as simple as through LAN networks. You need a server hub to which all the machines will connect, and which will route the messages accordingly. Once you have the server set up, all you need to do is connect to it using its IP address or a named DSN server, and logging into a specific group that is the same for all machines, with a unique (per machine) id.\cf3 \
+\
+\cf2 // You also need a program to handle the communication with the server. Josh Parmenter has built a class that interfaces with Ross Bencina's  OscGroups UNIX application, available here:\cf3 \
+\cf4 "open http://www.audiomulch.com/~rossb/code/oscgroups/"\cf3 .unixCmd\
+\cf2 // This contains two applications OscGroupClient and OscGroupServer; you should add them both to SuperCollider's main directory.\cf3 \
+\cf2 // Then, get the Quark:\cf3 \
+\cf5 Quarks\cf3 .install( \cf4 "OscGroupClient"\cf3 , checkoutIfNeeded: \cf5 false\cf3 )\
+\cf2 // You will also need the ProcessTools quark to communicate with these UNIX applications from SC:\cf3 \
+\cf5 Quarks\cf3 .install( \cf4 "ProcessTools"\cf3 , checkoutIfNeeded: \cf5 false\cf3 )\
+\
+\cf2 // Luckily, JP has also setup a server for you to use, so this is actually possible to try out!\cf3 \
+\
+
+\b \cf2 // ------ Connecting --
+\b0 \cf3 \
+\cf2 // Once you've installed these UNIX applications, you can try the following\cf3 \
+\
+\
+\cf2 // \'95 Step 1: \cf3 \
+\cf2 // 	Create a 
+\b new OscGroupClient
+\b0  object\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // The info below is using that server to handle the communication:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf2 // server address \'a0 \'a0 \'a0 ,userid, \'a0 userpassword, groupid, grouppassword\cf3 \
+a = \cf5 OscGroupClient\cf3 (\cf4 "realizedsound.mooo.com"\cf3 , \cf4 "me"\cf3 , \cf4 "meword"\cf3 , \cf4 "490a"\cf3 , \cf4 "490aword"\cf3 )\
+\cf2 // Login using a different userid/pass with another machine; ex:\cf3 \
+\cf2 // a = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")\cf3 \
+\
+\cf2 // \'95 Step 2:  \cf3 \
+\cf2 // 	
+\b Join the Server
+\b0 \cf3 \
+a.join;\
+\'a0\
+\
+\cf2 // \'95 Step 3:  \cf3 \
+\cf2 // 	
+\b Add a responder
+\b0  for OTHER people on the server to send messages to you\cf3 \
+a.addResp(\cf6 \\test\cf3 , \{\cf5 arg\cf3  time, resp, msg;\
+	msg.postln;\
+	\});\
+\
+\cf2 // \'95 Step 4:\cf3 \
+\cf2 //	
+\b Send some messages  
+\b0 \cf3 \
+\cf2 // this sends a message to everyone else connected, and with the appropriately named responder activated. You don't see anything though on your end\cf3 \
+a.sendMsg(\cf6 \\test\cf3 )\
+\
+\cf2 // you can send more then just the trigger id, just comma separate the stuff you are sending!):\cf3 \
+a.sendMsg(\cf6 \\test\cf3 ,\'a0\cf4 "How much can I send?"\cf3 ,\'a01232,\'a0\cf6 \\etc\cf3 );\
+\
+\
+\cf2 // and remove your responder. This is an IdentityDictionary in the class, so you can have as \cf3 \
+\cf2 // many responders with unique ids that you want\cf3 \
+a.removeResp(\cf6 \\test\cf3 );\
+\
+\
+\cf2 // ATTENTION: after you're done, don't forget to close your connection to the server!\'a0\cf3 \
+a.close;\
+	\
+\
+\
+
+\b \cf2 // ------ A simple example --
+\b0 \cf3 \
+\
+\cf2 // In this simple example, we will create a GUI interface with two knobs, one to send data to a remote machine, and one to receive. The same code will work on the remote machine(s), only make sure you use a different <userid, \'a0 userpassword>!\cf3 \
+\
+\cf2 // 1. connecting:\cf3 \
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf2 // server address \'a0 \'a0 \'a0 ,userid, \'a0 userpassword, groupid, grouppassword\cf3 \
+~serverConnx = \cf5 OscGroupClient\cf3 (\cf4 "realizedsound.mooo.com"\cf3 , \cf4 "me"\cf3 , \cf4 "meword"\cf3 , \cf4 "490a"\cf3 , \cf4 "490aword"\cf3 ); \
+\cf2 // ATTN:   with another machine using a different userid/pass; ex:\cf3 \
+\cf2 // ~serverConnx = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")\cf3 \
+\
+\cf2 // join the Server\cf3 \
+~serverConnx.join;\
+\
+\cf2 // 2. making a responder for receiving\cf3 \
+~serverConnx.addResp(\cf6 \\test\cf3 , \{\cf5 arg\cf3  time, resp, msg;\
+	[time, msg].postln;\
+	\{~recKnob.value_(msg[1])\}.defer;\
+	\});\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // 3. Making a GUI window with a knob to send, and a knob to receive:\cf3 \
+(\
+\cf5 var\cf3  window = \cf5 Window\cf3 .new(\cf4 "Networking test"\cf3 ,\cf5 Rect\cf3 (318, 456, 400, 400)).front;\
+~recKnob = \cf5 Knob\cf3 .new(window,\cf5 Rect\cf3 (175, 205, 217, 189))\
+	.action_\{\cf5 |v|\cf3  \};\
+~sendKnob = \cf5 Knob\cf3 .new(window,\cf5 Rect\cf3 (8, 11, 216, 188))\
+	.action_\{\cf5 |v|\cf3  \
+		~serverConnx.sendMsg(\cf6 'test'\cf3 , v.value); \cf2 // << action: sending to remote machine\cf3 \
+		\};\
+\cf5 StaticText\cf3 .new(window,\cf5 Rect\cf3 (24, 333, 148, 50))\
+	.string_(\cf4 "Receive some data -->>"\cf3 )\
+	.action_\{\cf5 |v|\cf3  \};\
+\cf5 StaticText\cf3 .new(window,\cf5 Rect\cf3 (229, 15, 130, 47))\
+	.string_(\cf4 "<<-- Send some data"\cf3 )\
+	.action_\{\cf5 |v|\cf3  \};\
+)\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // Don't forget to close your connecton to the server once you're done!\cf3 \
+~serverConnx.close\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ------ Example with sound, and some feedback --
+\b0 \cf3 \
+\
+\cf2 // In this simple example, we will create the same GUI interface with two knobs, except this time the 'sending' knob will get data from analysis of the sound in the local machine, and will send the data to the remote machine to affect the synthesis there - and vice versa.\cf3 \
+\cf2 // The same code will work on the remote machine(s), only make sure you use a different <userid, \'a0 userpassword>!\cf3 \
+\
+\cf2 // \'95 Synthesis: a self-phase-modulated Sinewave, with analysis to show how noisy it is:\cf3 \
+\
+(\
+~mult = 4;\
+\cf2 // buffer for FFT \cf3 \
+~buf = \cf5 Buffer\cf3 .alloc(s,2048,1); \
+\cf2 // the synthdef\cf3 \
+~fdbFM = \cf5 CtkSynthDef\cf3 (\cf6 \\fdbSine\cf3 , \{\cf5 arg\cf3  freq, fdbAmt, amp, pollFreq = 2, gate = 1;\
+	\cf5 var\cf3  sine, mod, fdbIn, fdbOut, env, chain, flatness;\
+	fdbIn = \cf5 LocalIn\cf3 .ar(1);\
+	env = \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 .new([0.00001, 1, 1, 0.00001], [0.05, 0.9, 0.5], [\cf6 \\exp\cf3 , \cf6 \\sin\cf3 ], 1), gate,  doneAction: 2);\
+	mod = fdbIn * fdbAmt;\
+	sine = \cf5 SinOsc\cf3 .ar(freq, mod, amp); \cf2 // fdb phase modulation\cf3 \
+	chain = \cf5 FFT\cf3 (~buf, sine);\
+	flatness = \cf5 SpecFlatness\cf3 .kr(chain);\
+	\cf5 SendReply\cf3 .kr(\cf5 Impulse\cf3 .kr(pollFreq), \cf6 'flatness'\cf3 , flatness);\
+	\cf5 Out\cf3 .ar(0, sine * env);\
+	fdbOut = \cf5 LocalOut\cf3 .ar(sine);\
+\})\
+);\
+\
+\
+\cf2 // 1. connecting:\cf3 \
+\'a0\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0\cf2 // server address \'a0 \'a0 \'a0 ,userid, \'a0 userpassword, groupid, grouppassword\cf3 \
+~serverConnx = \cf5 OscGroupClient\cf3 (\cf4 "realizedsound.mooo.com"\cf3 , \cf4 "me"\cf3 , \cf4 "meword"\cf3 , \cf4 "490a"\cf3 , \cf4 "490aword"\cf3 ); \
+\cf2 // ATTN: Login  with another machine using a different userid/pass; ex:\cf3 \
+\cf2 // ~serverConnx = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")\cf3 \
+\
+\cf2 // join the Server\cf3 \
+~serverConnx.join;\
+\
+\cf2 // 2a. making a responder for receiving\cf3 \
+~serverConnx.addResp(\cf6 \\test\cf3 , \{\cf5 arg\cf3  time, resp, msg;\
+	[time, msg].postln;\
+	\{~recKnob.value_(msg[1])\}.defer; \cf2 // show what's coming in\cf3 \
+	~note.fdbAmt_(msg[1] * ~mult + 1)	\
+	\});\
+	\
+\cf2 // 2a. making a responder for receiving from the analysis data from the synthdef, and moving the knob\cf3 \
+~noisiness = \cf5 OSCresponder\cf3 (n, \cf6 'flatness'\cf3 , \{ \cf5 arg\cf3  time, resp, msg; \
+	msg[3].postln;\
+	\{~sendKnob.valueAction_(msg[3])\}.defer; \cf2 // naturally, it would be more efficient to send the message directly to the remote server, this is just for demonstration purposes...\cf3 \
+	\}).add;\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // 3. Making a GUI window with a knob to send, and a knob to receive:\cf3 \
+(\
+\cf5 var\cf3  window = \cf5 Window\cf3 .new(\cf4 "Networking test"\cf3 ,\cf5 Rect\cf3 (318, 456, 400, 400)).front;\
+~recKnob = \cf5 Knob\cf3 .new(window,\cf5 Rect\cf3 (175, 205, 217, 189))\
+	.action_\{\cf5 |v|\cf3  \};\
+~sendKnob = \cf5 Knob\cf3 .new(window,\cf5 Rect\cf3 (8, 11, 216, 188))\
+	.action_\{\cf5 |v|\cf3  \
+		~serverConnx.sendMsg(\cf6 'test'\cf3 , v.value); \cf2 // << action: sending to remote machine\cf3 \
+		\};\
+\cf5 StaticText\cf3 .new(window,\cf5 Rect\cf3 (24, 333, 148, 50))\
+	.string_(\cf4 "Receive some data -->>"\cf3 );\
+\cf5 StaticText\cf3 .new(window,\cf5 Rect\cf3 (229, 15, 130, 47))\
+	.string_(\cf4 "<<-- Send some data"\cf3 );\
+)\
+\
+\
+\
+~note = ~fdbFM.new().freq_(160).fdbAmt_(3.5).amp_(0.5).play\
+\cf2 // change some numbers\cf3 \
+~note.freq_(124)\
+~note.fdbAmt_(5.4)\
+~note.fdbAmt_(1244)\
+~mult = 4.6\
+~note.pollFreq_(2.6)\
+~note.release\
+\
+\
+\
+~noisiness.remove; \cf2 // remove the responder\cf3 \
+~serverConnx.close; \cf2 // close the server connection\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== SENDING AUDIO THROUGH THE INTERNET ======
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\cf2 // You can only send data with OscGroupClient. Audio would require massive amounts of bandwidth, not really possible in real-time with household connections - though possible at some universities.\cf3 \
+\cf2 // CCRMA has developed a fast protocol for sending multiple, high-quality audio channels, called JackTrip. Check it out:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3  {\field{\*\fldinst{HYPERLINK "https://ccrma.stanford.edu/groups/soundwire/"}}{\fldrslt \ul ccrma.stanford.edu\'97soundwire}}\
+ {\field{\*\fldinst{HYPERLINK "http://code.google.com/p/jacktrip/"}}{\fldrslt \ul code.google.com\'97jacktrip}}\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3  \
+\cf2 // A more bandwidth-affordable method would be using something like icecast or nicecast, for streaming audio as mp3. However, as these require an encoding/decoding process, there is also a lot of latency built in. \cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://www.icecast.org/"}}{\fldrslt \cf3 \ul \ulc3 www.icecast.org}}\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // Surprisingly enough, the best solution is using something like skype, and routing audio to/from it through Jack\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf3 \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ====== CAPTURING MP3 STREAMS ======
+\b0 \cf3 \
+\
+\
+\cf2 // MP3 is a class that acts as an SC intrface for the 
+\i curl
+\i0  (downloading utility) and 
+\i lame
+\i0  (mp3 encoder/decoder) command line tools, allowing you to playback .mp3 and .ogg files and stream audio within SC. It works on Max OS X and Linux.\cf3 \
+\
+\
+\cf2 // First, check if lame and curl are installed and where:\cf3 \
+\cf5 MP3\cf3 .lamepath;\
+\cf5 MP3\cf3 .curlpath;\
+\cf5 File\cf3 .exists(\cf5 MP3\cf3 .lamepath)\
+\cf5 File\cf3 .exists(\cf5 MP3\cf3 .curlpath)\
+\
+\cf2 // This class has 3 different modes: reading files locally (\\readfile), online (\\readurl), or writing files locally (\\writefile).\cf3 \
+\cf2 // If you want to stream audio online, you will need to use something like icecast:\cf3 \
+\cf4 "open http://en.flossmanuals.net/icecast"\cf3 .unixCmd\
+\
+\
+\
+s.boot\
+\
+\cf2 // Something you need to beware of: some streams are mono, others are stereo. Just make sure you use the appropriate synthdef and buffer for a stream:\cf3 \
+\cf2 // SynthDefs:\cf3 \
+(\
+~mp3Stereo = \cf5 CtkSynthDef\cf3 (\cf4 "mp3StreamSter"\cf3 , \{ \cf5 |outbus = 0, bufnum = 0, amp = 1|\cf3 \
+	\cf5 var\cf3  stream, chanAmt;\
+	chanAmt = 2;\
+	stream = \cf5 DiskIn\cf3 .ar(chanAmt, bufnum);\
+	\cf5 Out\cf3 .ar(0, \cf5 Pan2\cf3 .ar(stream, 0, amp));\
+\});\
+\
+~mp3Mono = \cf5 CtkSynthDef\cf3 (\cf4 "mp3StreamMon"\cf3 , \{ \cf5 |outbus = 0, bufnum = 0, amp = 1|\cf3 \
+	\cf5 var\cf3  stream, chanAmt;\
+	chanAmt = 1;\
+	stream = \cf5 DiskIn\cf3 .ar(chanAmt, bufnum);\
+	\cf5 Out\cf3 .ar(0, \cf5 Pan2\cf3 .ar(stream, 0, amp));\
+\});\
+)\
+\
+\
+
+\b \cf2 // ------ Reading online streams --
+\b0 \cf3 \
+\
+\cf2 // Choose a stream\cf3 \
+\cf2 // Seattle's KEXP:\cf3 \
+~stream = \cf5 MP3\cf3 (\cf4 "http://kexp-mp3-2.cac.washington.edu:8000/"\cf3 , \cf6 \\readurl\cf3 );\
+\cf2 // Free Underground Tekno\cf3 \
+~stream = \cf5 MP3\cf3 (\cf4 "http://ch1.freeundergroundtekno.org:8018/"\cf3 , \cf6 \\readurl\cf3 );\
+\cf2 // many more streams here:\cf3 \
+\cf4 "open http://www.streamfinder.com/"\cf3 .unixCmd\
+\
+\
+\cf2 // Some streames don't point you to the address of the stream, but use a playlist file instead (ex: .pls, .m3u). To get the address where these playlist files point at do:\cf3 \
+\cf4 "curl http://ch1.freeundergroundtekno.org:8018/listen.pls"\cf3 .unixCmdGetStdOut\
+	\
+\cf2 // start the stream:\cf3 \
+~stream.start;\
+\
+\cf2 // Allocate the correct buffer for DiskIn to use:\cf3 \
+~bufSter = \cf5 Buffer\cf3 .cueSoundFile(s, ~stream.fifo, 0, 2);\
+\cf2 // OR:\cf3 \
+\cf2 //~bufMon = Buffer.cueSoundFile(s, ~stream.fifo, 0, 2);\cf3 \
+\
+\cf2 // start the synth\cf3 \
+~mp3player = ~mp3Stereo.new().bufnum_(~bufMon).amp_(1).play;\
+\cf2 // OR:\cf3 \
+\cf2 //~mp3player = ~mp3Mono.new().bufnum_(~bufSter).amp_(1).play;\cf3 \
+\
+\
+\cf2 // ATTENTION: don't forget to clean up! MP3 creates a new instance of the Unix apps and if you don't turn them off from SC they 'll keep being active, and possibly freeze up your servers!\cf3 \
+~mp3player.free\
+~bufSter.close.free;\
+~bufMon.close.free;\
+~stream.finish\
+\
+\
+\
+\
+
+\b \cf2 // ====== INTERNET RADIO ALARM CLOCK ======
+\b0 \cf3 \
+\
+\cf2 // Here 's a fun application: use SC as an alarm clock to wake up to an internet radio station! \cf3 \
+\
+\cf2 // First download the {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/DayTimer/DayTimer.html"}}{\fldrslt \cf7 \ul \ulc7 DayTimer}} quark, a class that lets you do specific things in specific times of a year/month/day/hour/minute\cf3 \
+\cf5 Quarks\cf3 .install( \cf4 "DayTimer"\cf3 , checkoutIfNeeded: \cf5 false\cf3 )\
+\
+\cf2 // Alarm clock:\cf3 \
+~alarm = \cf5 DayTimer\cf3 (\cf6 \\alarmClock\cf3 );\
+~alarm.start;	\cf2 // start watching for dates\cf3 \
+\
+\cf2 // do once a day at a specific time [h, m, s]:\cf3 \
+(\
+~alarm.putDate(\cf6 \\wakeUpTime\cf3 , [22, 28, 10], \{\
+	~mp3player = ~mp3.new().bufnum_(~buf).amp_(1).play \} ); \cf2 // start the stream at that specific time\cf3 \
+)\
+\
+~alarm.stop;	\cf2 // stop watching for dates\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf3 \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+
+\b \cf2 // ====== MORE QUARKS ======
+\b0 \cf3 \
+\cf2 // You may also want to get the FreeSound quark, for automatically quering and downloading files from the FreeSound database:\cf3 \
+\cf5 Quarks\cf3 .install( \cf4 "FreeSound"\cf3 , checkoutIfNeeded: \cf5 false\cf3 )\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+}

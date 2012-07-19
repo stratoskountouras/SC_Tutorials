@@ -1,0 +1,363 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 LucidaGrande;
+}
+{\colortbl;\red255\green255\blue255;\red168\green34\blue14;\red0\green0\blue255;\red96\green96\blue96;
+\red0\green19\blue187;\red0\green24\blue232;\red0\green0\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs30 Class 1.1:
+\b0 \
+
+\b 	SuperCollider: Architecture and Language
+\b0 \
+
+\fs28 		Contents:\
+			\'95 SuperCollider architecture\
+			\'95 SuperCollider language\
+				- Object Oriented Programming (links)\
+				- Smalltalk (links)\
+				- Objects\
+				- Messages\
+				- Classes\
+				- Under the hood\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \
+\cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 /*\
+
+\b =================== ABOUT THE SUPERCOLLIDER ARCHITECTURE ================
+\b0 \
+*/\
+\cf0 \
+\cf2 /* \
+SuperCollider 3 is the combination of 3 or 4 programs:\
+	
+\b scsynth
+\b0 :		SuperCollider synthesis: a synthesis engine (server)\
+	
+\b sclang
+\b0 :		SuperCollider language: a language side client. sclang performs a double task: interpreting the SuperCollider programming language, and commnunicating with the server via Open Sound Control (OSC) . Other client programs can also be used (ex. PureData, Max/MSP, Python, Processing, Java, Open Frameworks - basically, any program that can send OSC). However, sclang, the language developed by James McCartney, is in many ways the most powerful for controlling the synthesis engine.\
+	
+\b SCapp
+\b0 :		the language text editor, including GUI; other editors may be used as well (ex: scel, emacs, svim, PsyCollider)\
+	(
+\b SwingOSC
+\b0 :	an alternative GUI server)\
+\
+A detailed description (with figures) can be found here:\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://ClientVsServer"}}{\fldrslt \cf3 \ul \ulc3 Client Vs Server}}\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 */\
+\cf0 \
+\cf2 /*\
+
+\b =================== ABOUT THE SUPERCOLLIDER LANGUAGE ================
+\b0 \
+\'95 SuperCollider is \
+	a high-level interpreted Object Oriented language\
+		based on Smalltalk \
+		but with C language family syntax, and also including Java and other language influences.\
+*/\
+// Having a look at these wikipedia references could help understand where SC is coming from:\
+\cf4 "open http://en.wikipedia.org/wiki/Object-oriented_programming"\cf0 .unixCmd\cf4 \
+"open http://en.wikipedia.org/wiki/Smalltalk"\cf0 .unixCmd\cf4 \
+\cf0 \
+\cf2 // The links below are particularily useful, make sure you read both:\
+\cf4 "open http://en.wikipedia.org/wiki/Object-oriented_programming#Fundamental_concepts_and_features"\cf0 .unixCmd\cf4 \
+"open http://en.wikipedia.org/wiki/Smalltalk#Object-oriented_programming"\cf0 .unixCmd\cf4 \
+\cf0 \
+\
+\
+
+\b \cf2 // ====== Objects ======
+\b0 \
+// In SC EVERYTHING is an object, and multiple instances of an object can be created and be active simultaneously. An object has data that represent its state (
+\b variables
+\b0 ), which one can sometimes 
+\b get
+\b0  and/or 
+\b set
+\b0 , and a set of operations it can perform (
+\b methods
+\b0 ). \
+//For a more detailed intro to Objects in SC read this:\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Intro-to-Objects"}}{\fldrslt \cf3 \ul \ulc3 Intro-to-Objects}}\cf5 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\
+\
+
+\b \cf2 // ====== Messages ======
+\b0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // In Supercollider, and other OOP languages, you send 
+\b messages
+\b0  to an object to ask it to perform an operation. 
+\f1\fs24  
+\f0\fs28 A message consists of a message 
+\b selector
+\b0  naming the type of operation, a 
+\b receiver
+\b0  to which the message is sent and, possibly, a list of 
+\b arguments
+\b0  further defining to the operation. A message always returns a result. The kind of result depends on the kind of message\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Method-Calls"}}{\fldrslt \cf3 \ul \ulc3 Method-Calls}}\cf5 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\cf2 // There are four different but equivalent ways of calling a class method and sending it a message. This is a powerful, though at times confusing and largely debated feature; using one syntax over another is a matter of 'good practice' and it  depends on the object and method used. \
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf5 Object\cf0 .method(argument) \cf2 // 1\cf0 \
+method(\cf5 Object\cf0 , argument) \cf2 // 2\cf0 \
+\cf5 Object\cf0  method: argument \cf2 // 3\cf0 \
+method (\cf5 Object\cf0 ) \{argument\} \cf2 // 4\cf0 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // For example, one uses the first one for UGens:\
+\cf0 \{\cf5 SinOsc\cf0 .ar(220)\}.play\
+\cf2 // on the other hand, binary operations are commonly declared with both syntaxes 1 and 2:\
+\cf0 0.rrand(10)\
+rrand(0,10)\
+\
+
+\fs24 \cf2 // for a (long) debate on these methods in SC you can go through this thread (June 2010):\
+\pard\pardeftab560\ql\qnatural
+\cf4 "open http://new-supercollider-mailing-lists-forums-use-these.2681727.n2.nabble.com/Supernova-Re-SC4-logo-Re-sc-users-SuperCollider-laptop-stickers-td5165964.html#a5165964"\cf0 .unixCmd\cf4 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\fs28 \cf0 \
+\
+\cf2 // It is possible to link messages. Using a fictional example  
+\i Turkey.debone.stuff.bake.cut
+\i0 , would first 
+\i debone
+\i0  the 
+\i Turkey
+\i0  object, then 
+\i stuff
+\i0  it, then 
+\i bake 
+\i0 it and finally 
+\i cut 
+\i0 it. \
+/* Overall, code in SC is read by the compiler top-down, left to right, and in the case of nested code, from the inner parts to the outer ones: \
+Here is how a  turducken recipy would look like in SC:\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\i \cf2 Turkey.debone.stuff(
+\i0 \
+
+\i 	Duck.debone.stuff(
+\i0 \
+
+\i 		Chicken.debone.stuff))
+\i0 \
+
+\i .roast.cut)
+\i0 \
+*/\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\cf2 // Finally, note that different classes can respond to the same message in different ways. For more on the subject look here:\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Polymorphism"}}{\fldrslt \cf3 \ul \ulc3 Polymorphism}}\cf5 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\
+\
+
+\b \cf2 // ====== Classes ======
+\b0 \
+// In SC, all objects are members of a class. Class names begin with capital letters.\
+// The 
+\i data
+\i0  of an object is contained in its 
+\b instance variables
+\b0 . These can only be accessed and changed from within a class' methods. They can be exposed to the 'outside world' by 
+\b getter
+\b0  or 
+\b setter
+\b0  messages; these are messages with the same name as the variable returning that variable's value or setting it to the value of an argument. Getter (<) and setter (>) methods have to be defined upon declaring the instance variable inside the class' definition; a variable may have both, only a getter or setter, or neither. Have a look at this class:\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf5 Point\cf0  \cf2 // select and press Command-y;\
+// now, set and get\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 p = \cf5 Point\cf0 .new;\
+p.x_(5); \cf2 // set x to 5\
+\cf0 p.x; \cf2 // get current state of x\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\fs28 \cf2 // Whereas instance variables are specific, 
+\b class variables
+\b0 , are shared by all objects in the class. In a Class definition these are proceeded by the word classvar, and otherwise can be accesed and set in the same manner as instance variables.\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\fs28 \cf2 // Messages that can be sent to a class are defined as methods. There are 
+\b instance methods
+\b0  and 
+\b class methods
+\b0 . Class methods are defined with an asterisk (*) in the class definition; they are tied to a class, and commonly recipes for making objects (ex: *new). Instance methods are functions to which any created class instance (object) can respond. Helpfiles will also tell you which are class and instance methods a class has: \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://List"}}{\fldrslt \cf6 \ul \ulc6 List}}\cf5 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\cf2 // Looking inside a Class definition's methods, you can also see what is returned from calling that method; it is preceeded by the claret symbol '^'\
+\cf0 \
+\cf2 // Look here for a more detailed description of Classes:\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Classes"}}{\fldrslt \cf3 \ul \ulc3 Classes}}\cf5 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // ------ Hierarchies and class inheritance -----\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // In SC, classes are organized hierarchically in a tree structure; there are subclasses and superclasses. Every class is a subclass of\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Object"}}{\fldrslt \cf6 \ul \ulc6 Object}}\cf0  \cf2 //, the superclass (root class) of all classes and objects.\
+// In SC, a class can only have one immediate superclass, but that superclass can itself have another superclass, etc. It can also have many subclasses, to which it passes on its methods (ie. subclasses inherit methods from their superclass). In order to find a specific method to which a class responds, you may have to go up the chain, closer to the root of the tree. Inheritance is shown at the top of a helpfile. For example, have a look at: \
+{\field{\*\fldinst{HYPERLINK "SC://Array"}}{\fldrslt \cf6 \ul \ulc6 Array}}\cf5 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\b \cf2 // ====== Looking under the hood ======
+\b0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // As mentioned above, in SC each Class and UGen have a 
+\b class definition 
+\b0 in a 
+\b class file
+\b0 . All these files are compiled each time you start SC or you recompile the library (by pressing Command-k). You can look at these files by pressing 
+\i Command-y
+\i0 . Ex:\
+\cf5 SoundFile\
+SinOsc\
+\cf2 // You can also look at the same Class or UGen information interactively in a GUI using the class browser:\
+\cf5 SinOsc\cf0 .browse\
+\cf2 // or list all the methods of a class hierarchically; this shows you which methods are inherited from which SuperClass\
+\cf5 SinOsc\cf0 .dumpFullInterface\
+\cf2 // or, you can list all methods hierarchically:\
+\cf5 SinOsc\cf0 .dumpMethodList\
+\cf2 // this will post only the instance methods:\
+\cf5 Array\cf0 .dumpInterface\
+\cf2 // and this only the class methods:\
+\cf5 Meta_Array\cf0 .dumpInterface\
+\cf2 // Does the class have a helpfile?\
+\cf5 TRand\cf0 .hasHelpFile\
+\cf2 // Open it then:\
+\cf5 TRand\cf0 .openHelpFile\
+\
+\cf2 // You can also look at the hierarchy of a class\
+\cf5 Object\cf0 .dumpClassSubtree		\
+\cf2 //This shows you the whole tree structure hierarchy of your SC install; as you'd expect, the further away from Object you get, the more specialized the classes get\
+\cf5 Collection\cf0 .dumpClassSubtree	\cf2 // see the branches stemming from Collection\
+\cf0 \
+\cf2 // you can also peek at the tree structure of your Help:\
+\cf5 Help\cf0 .dumpTree\
+\
+\cf2 // 
+\i Command-y
+\i0  also works for checking the implementations of a method (ie. which classes support it);\
+// // 
+\i Command-Shift-y 
+\i0 will show you references to a method (the classes where the method is called ):\
+\cf0 new\
+kr\
+series\
+scramble\
+\cf2 // if you see Meta_SomeClass:, it means that this is a class method\
+// if you see SomeClass:, it means this is an instance method\
+\cf0 \
+\
+\cf2 // look here for even more snooping options:\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Internal-Snooping"}}{\fldrslt \cf3 \ul \ulc3 Internal-Snooping}}\cf0  \cf2 // \cf5 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\b \cf2 // ====== More language topics ======
+\b0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // And some more very useful language-related topics:\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1 \cf0 \
+{\field{\*\fldinst{HYPERLINK "SC://Syntax-Shortcuts"}}{\fldrslt 
+\f0 \cf3 \ul \ulc3 Syntax-Shortcuts}}
+\f0  \cf2 // Includes some very handy syntax alternatives to save up typing\
+{\field{\*\fldinst{HYPERLINK "SC://SymbolicNotations"}}{\fldrslt \cf3 \ul \ulc3 SymbolicNotations}}\cf0  \cf2 // A catalog of symbolic notation (using symbols instead of messages)\
+{\field{\*\fldinst{HYPERLINK "SC://Adverbs"}}{\fldrslt \cf3 \ul \ulc3 Adverbs}}\cf0  \cf2 // modify a two-member operation by further defining it with an adverb\
+{\field{\*\fldinst{HYPERLINK "SC://Partial-Application"}}{\fldrslt \cf3 \ul \ulc3 Partial-Application}}\cf0  \cf2 // only pass a few arguments to a method or function to get a result\
+{\field{\*\fldinst{HYPERLINK "SC://Literals"}}{\fldrslt \cf3 \ul \ulc3 Literals}}\cf0  \cf2 // values with a direct representation (ex: a 2 is a 2 is a 2)  \
+\pard\pardeftab560\ql\qnatural
+\cf7 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\b \cf2 // ====== Related reading ======
+\b0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // create a directory inside your SuperCollider application folder to put all the reading material\
+
+\fs24 \cf4 "mkdir -p DX490a_su2010_Reading/"\cf0 .unixCmd\cf4 \
+
+\fs28 \cf0 \
+\cf2 // 1. James McCartney: SuperCollider: a new real-time synthesis language, ICMC 1996\
+// download and open:\
+
+\fs24 \cf4 "curl  http://www.dxarts.washington.edu/courses/490a/490/Materials/-Reading/SuperCollider-%20a%20new%20real%20time%20synthesis%20language%20-%20James%20McCartney%20-ICMC96.pdf -o DX490a_su2010_Reading/
+\f2\fs20 SuperCollider-A_new_real_time_synthesis_language-James_McCartney-ICMC96
+\f0\fs24 .pdf"\cf0 .unixCmd\{\cf4 "open DX490a_su2010_Reading/
+\f2\fs20 SuperCollider-A_new_real_time_synthesis_language-James_McCartney-ICMC96
+\f0\fs24 .pdf"\cf0 .unixCmd\};\cf4 \
+
+\fs28 \cf0 \
+\cf2 // 2. James McCartney: Rethinking the Computer Music Language: SuperCollider, CMJ2002\
+// download and open\
+
+\fs24 \cf4 "curl  http://www.dxarts.washington.edu/courses/490a/490/Materials/-Reading/Rethinking%20the%20Computer%20Music%20Language-%20SuperCollider%20%20-%20James%20McCartney%20-%20Computer%20Music%20Journal,%2026-4,%20pp.%2061-68,%20Winter%202002.pdf -o DX490a_su2010_Reading/
+\f2\fs20 Rethinking_the_Computer_Music_Language-SuperCollider--James_McCartney--Computer_Music_Journal_2002.pdf
+\f0\fs24 "\cf0 .unixCmd\{\cf4 "open DX490a_su2010_Reading/
+\f2\fs20 Rethinking_the_Computer_Music_Language-SuperCollider--James_McCartney--Computer_Music_Journal_2002.pdf
+\f0\fs24 "\cf0 .unixCmd\};\cf4 \
+}

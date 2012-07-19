@@ -1,0 +1,591 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red191\green0\blue0;
+\red96\green96\blue96;\red0\green255\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Scheduling in SuperCollider\cf0 \
+\
+some relevant help files:\
+\
+[\cf3 \ul \ulc3 SystemClock\cf0 \ulnone ]\
+[\cf3 \ul TempoClock\cf0 \ulnone ]\
+[\cf3 \ul AppClock\cf0 \ulnone ]\
+\
+s = \cf3 Server\cf0 .local; \
+s.boot;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //load me first - this sound is going to be used for the scheduling demoes\
+//it's important we now use SynthDef and Synth, and notice the doneAction!\cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 SynthDef\cf0 (\cf2 \\bleep\cf0 ,\{ \cf3 arg\cf0  out=0, note=60, amp=0.5, pan=0.0;\
+	\cf3 var\cf0  freq, env; \
+	freq = note.midicps;\
+	env = \cf3 EnvGen\cf0 .ar(\
+					\cf3 Env\cf0 ([0,1,1,0],[0.01, 0.1, 0.2]),\
+					levelScale:amp, \
+					doneAction:2\
+				);\
+	\cf3 Out\cf0 .ar(out,\
+		\cf3 Pan2\cf0 .ar(\cf3 Blip\cf0 .ar(freq) * env, pan)\
+	)\
+\}).load(s);\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // This SynthDef uses an envelope with a doneAction of 2 to force a synth made\cf0 \
+\cf4 // from the definition to deallocate (free) itself when the envelope finishes. \cf0 \
+\cf4 // This is vital, for else when we spawn events they'd hang around forever!\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+You can set up a repeating function over time very easily\
+There is one global SystemClock which schedules in seconds\
+The SystemClock is the most reliable clock\
+\
+\cf4 // start a process 0 seconds from now then repeat once per second\cf0 \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 SystemClock\cf0 .sched(0.0,\cf4 //start at 0.0 sec from now, i.e. immediately\cf0 \
+	\{\cf4 //a function which states what you wish to schedule\cf0 \
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 );\
+		1		\cf4 //repeat every second\cf0 \
+	\}\
+)\
+)\
+\
+(the last thing returned from the function is the time until that function is called again; you should either return a number, or nil; nil will stop the scheduling)\
+\
+Any scheduling will also stop when pressing CMD + period\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The same with more jerky attack times and passing arguments to each new Synth: \
+\
+(\
+\cf3 SystemClock\cf0 .sched(1.0,\cf4 //start in 1.0 sec\cf0 \
+	\{\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , \
+			[ \cf4 //passing in arguments to the Synth\cf0 \
+				\cf2 \\note\cf0 , (#[0,2,4,5,7,9] + 48).choose, \
+				\cf2 \\pan\cf0 , 1.0.rand2\
+			]\
+		);\
+	\cf4 // random choice of repeat time:\cf0 \
+	[0.25,0.3,0.7,0.1].choose		\
+	\
+\})\
+)\
+\
+#[0,2,4,5,7,9] makes a fixed (non-dynamic) Array and is therefore slightly cheaper\
+\
+\
+If you're happy to schedule everything in seconds, and work any rhythmic representations out for yourself, you're set to go. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+To get the current SystemClock time you can use this code:\
+\
+\cf3 Main\cf0 .elapsedTime; \cf4 //gives a time since the application started\cf0 \
+\
+And in scheduling schedAbs schedules with respect to an absolute time\
+\
+(\
+\cf3 SystemClock\cf0 .schedAbs(\cf3 Main\cf0 .elapsedTime+1.0,\cf4 //start at absolute system clock time now + 1 second\cf0 \
+	\{\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , \
+			[ \cf4 //passing in arguments to the Synth\cf0 \
+				\cf2 \\note\cf0 , (#[0,2,4,5,7,9] + 48).choose, \
+				\cf2 \\pan\cf0 , 1.0.rand2\
+			]\
+		);\
+	\cf4 // random choice of repeat time:\cf0 \
+	[0.25,0.3,0.7,0.1].choose		\
+	\
+\})\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+In many cases you'd prefer to work relative to some tempo, (for instance, if you want to schedule events in terms of beats and measures)\
+\
+SuperCollider measures tempi in beats per second (bps) rather than beats per minute, i.e\
+\
+1 bps = 60 bpm\
+\
+1.6666667 bps = 100 bpm\
+\
+2 bps = 120 bpm\
+\
+2.4 bps = 144 bpm\
+\
+3 bps = 180 bpm\
+\
+\
+\
+(multiply by 60 to go from bps to bpm, divide by 60 in the other direction)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+For beat-based scheduling we use TempoClock:\
+\
+(\
+\cf3 var\cf0  t;\
+\
+t = \cf3 TempoClock\cf0 (2); \cf4 // make a new tempoclock at tempo 120 bpm = 2 beats per second\cf0 \
+\
+t.schedAbs(0, \{ \cf3 arg\cf0  ... args;	\cf4 // start at absolute beat 0 immediately\cf0 \
+				args.postln;	\cf4 //  post the input arguments to our event function \cf0 \
+							\cf4 //  (will post logical time in beats, elapsed time \cf0 \
+							\cf4 //  in seconds of enclosing thread and this clock)\cf0 \
+\
+				\cf3 Synth\cf0 (\cf2 \\bleep\cf0 );\cf4 // make a bleep\cf0 \
+				1.0	\cf4 // reschedules every beat\cf0 \
+\})\
+\
+)\
+\
+TempoClock is set up to react appropriately to changes of tempo and timesig. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There is an automatically available TempoClock\
+\
+t= \cf3 TempoClock\cf0 .default;	\
+\
+\
+You can ask a tempoclock where it is; this default clock might have been running for a long time already\
+\
+\
+t.elapsedBeats; 		\cf4 //what exact logical beat time are we at\cf0 \
+\
+t.bar;						\cf4 //which bar are we in (default assumption is 4/4)\cf0 \
+\
+t.elapsedBeats.ceil; \cf4 //find next beat\cf0 \
+\
+t.elapsedBeats.floor; \cf4 //find last beat\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+(\
+\cf3 var\cf0  t;\
+\
+t = \cf3 TempoClock\cf0 .default;	\cf4 // the default TempoClock might have been running \cf0 \
+									\cf4 // for a very long time already, so you should start at the next beat.\cf0 \
+\
+t.schedAbs(t.elapsedBeats.ceil, \cf4 // start at next whole beat\cf0 \
+	\{\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , [36,40,43].choose, \cf2 \\pan\cf0 , 1.0.rand2]);\
+		[0.25,0.5,1.0, \cf3 nil\cf0 ].wchoose([0.5,0.4,0.05,0.05]); //weighted choice		\cf4 // repeat at some number of beats from the array- nil means stop\cf0 \
+	\})\
+)\
+\
+\
+[1,2,3,4].wchoose([0.8,0.1,0.07,0.03]); \cf4 //wchoose allows a weighted choice of values in one array with respect to the weights in a second array (which must add up to 1 and there must be as many weights as items to pick from)\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+If you ask for a beat that has already occured, the scheduler will try to catch up with the queue of events as quickly as possible:\
+\
+(\
+\cf3 var\cf0  u;\
+\
+u = \cf3 TempoClock\cf0 (1.2);	\cf4 // make our own Tempoclock at a tempo of 1.2 bps\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // should have started 5 beats ago!\cf0 \
+u.schedAbs(-5.0, \{ \cf3 Synth\cf0 (\cf2 \\bleep\cf0 );  0.5 \});\
+\cf4 // you'll get a loud burst of events as it catches up\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 SystemClock\cf0 .sched(5.0, \{u.clear\}); \cf4 // schedule a stop for 5 seconds from now.\cf0 \
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // If you change tempo at some point, the transition is fine:\cf0 \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  u;\
+\
+u = \cf3 TempoClock\cf0 (3.5);\
+\
+u.schedAbs(0.0, \{ \cf3 arg\cf0  beat, sec; \
+		[beat,sec].postln; \
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , rrand(60.0,67.0)]);   \
+		0.5\
+\});\
+\
+u.schedAbs(8.0, \{ u.tempo_(2); \cf3 nil\cf0  \}); \cf4 // just schedule tempo change\cf0 \
+\
+u.schedAbs(12.0, \{ u.tempo_(7); \cf3 nil\cf0  \}); \cf4 // just schedule tempo change\cf0 \
+\
+u.schedAbs(17.2, \{ u.tempo_(1); \cf3 nil\cf0  \}); \cf4 // just schedule tempo change\cf0 \
+\
+\cf3 SystemClock\cf0 .sched(7.0, \{ u.clear; \}); \cf4 // schedule a stop for 7 seconds from now.\cf0 \
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Run these lines one at a time:\
+\
+t=\cf3 TempoClock\cf0 (2);\
+\
+t.tempo; \cf4 //gets current tempo\cf0 \
+\
+t.tempo_(4); \cf4 //sets current tempo (only the underscore character is different)\cf0 \
+\
+t.tempo;\
+\
+t.tempo= 2.3; \cf4 //also assigns new tempo, same as last line\cf0 \
+\
+t.tempo;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // Changing Tempo via a UI control:\cf0 \
+\
+\cf4 // slider range is always 0.0-1.0, so mapped in the code\cf0 \
+(\
+	\cf3 var\cf0  w,u,slid, button;\
+\
+	w = \cf3 SCWindow\cf0 (\cf5 "tempo control test"\cf0 , \cf3 Rect\cf0 (100,100,200,40));\
+	slid = \cf3 SCSlider\cf0 (w, \cf3 Rect\cf0 (0,0,200,20));\
+\
+	button = \cf3 SCButton\cf0 (w, \cf3 Rect\cf0 (60,20,40,20)); \
+	button.states_([[\cf5 "kill"\cf0 ]]);\
+\
+	w.front;\
+\
+	slid.action_(\{u.tempo_(2*(slid.value)+1)\});\
+	button.action_(\{u.clear; w.close;\});\
+\
+	u = \cf3 TempoClock\cf0 (1);\
+	\
+	u.schedAbs(0.0, \{ \cf3 arg\cf0  beat,sec; \
+		[beat,sec].postln; \
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , rrand(60, 100)]); \
+		1.0\
+	\});\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf4 // You can do multiple Tempi by creating two clocks at once\cf0 \
+\cf4 // Here's a tempo ratio of 12:13  \cf0 \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  u,v;\
+\
+u = \cf3 TempoClock\cf0 (1.2);\
+v = \cf3 TempoClock\cf0 (1.3);\
+\
+u.schedAbs(0, \{ \cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , rrand(41.8,47.5), \cf2 \\pan\cf0 , -0.5]);  1.0 \});\
+v.schedAbs(0, \{ \cf3 Synth\cf0 (\cf2 \\bleep\cf0 ,[\cf2 \\pan\cf0 , 0.5]);  1.0 \});\
+\
+\cf3 SystemClock\cf0 .sched(10.9, \{ u.clear; v.clear; \}); \cf4 // schedule a stop for 10.9 seconds from now.\cf0 \
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf6 A note about GUIs and Clocks\cf0 \
+\
+\
+UIs can't be updated by direct call from the SystemClock - the operating system's AppClock must be used. Here is a quick programmatic demonstration of moving a window around:\
+\
+\cf4 // When running it always press cmd + period before attempting to close the window\cf0 \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w, i;\
+\
+	i = 0;\
+\
+	w = \cf3 SCWindow\cf0 (\cf5 "My Window"\cf0 , \cf3 Rect\cf0 (100, 0, 200, 50)); \
+	\cf4 // A 200 by 200 window appears at screen co-ordinates (100, 0)\cf0 \
+	w.front;\
+\
+	\cf4 //schedule moves and resizes for the window\cf0 \
+	\cf3 AppClock\cf0 .sched(0.0, \{ \
+		w.bounds_(\cf3 Rect\cf0 (100, (10 * i) % 500, rrand(200,400), 50)); \
+		i=i+1; \
+		0.125\
+	\});\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 // this would have failed:\cf0 \
+\cf4 // SystemClock.sched(0.0,\{w.bounds_(Rect(100, (10*i)%500, 200,200)); i=i+1; 0.125\});\cf0 \
+\
+\
+\
+\
+\
+\
+There is one helpful shortcut trick; if you are within a SystemClock, you can wrap any GUI calls in function brackets like so:\
+\
+\{\
+\cf4 //GUI code\cf0 \
+\}.defer \
+\
+In the background, this reassigns the command to the AppClock.\
+\
+\
+\cf4 // this will be OK, by using defer to pass the command to an AppClock:\cf0 \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w, i;\
+\
+	i = 0;\
+\
+	w = \cf3 SCWindow\cf0 (\cf5 "My Window"\cf0 , \cf3 Rect\cf0 (100, 0, 200, 200)); \
+	\cf4 // A 200 by 200 window appears at screen co-ordinates (100, 500)\cf0 \
+	w.front;\
+\
+	\cf3 SystemClock\cf0 .sched(0.0, \{\
+\
+		\{ w.bounds_(\cf3 Rect\cf0 (100, (10*i)%500, 200, 200)) \}.defer; \cf4 // defer acts as a bridge between SystemClock and AppClock\cf0 \
+		i=i+1; \
+		0.125\
+	\});\
+\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

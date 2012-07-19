@@ -1,0 +1,275 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset77 Geneva;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue191;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs36 \cf0 Mul and Add (and arguments to UGens)\
+\
+Two arguments recur in many UGens, and its worth describing them separately in this tutorial file. They're useful because they provide a way of keeping signals scaled appropriately to be used as inputs to other UGens- because the audio output of the system expects numbers in the range -1 to 1, a frequency might require numbers from 20 to 20000, and these different sorts of scale are dealt with through the mul and add arguments. \
+\
+\cf2 //we'll keep using the internal server for the scope facility\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 Server\cf0 .default=s=\cf3 Server\cf0 .internal;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+s.boot;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+If you check help files for UGens you'll often see mul and add as the final arguments: check the SinOsc help file now:\
+\
+[\cf3 SinOsc\cf0 ] \cf2 //cmd+d to bring up after double clicking anywhere on SinOsc, or on the brackets\cf0 \
+\
+Notice that mul is the third and add is the fourth- you can directly address those inputs to the oscillator (those 'arguments') by using the colon syntax:\
+\
+\{\cf3 SinOsc\cf0 .ar(mul:1)\}.scope\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+For audio outputs (which this ar rate SinOsc is, for it is the last thing going out to the soundcard) the values must be kept between -1 and 1 (with mul:0.1, the previous sound was kept between -0.1 and 0.1, safely within bounds). \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Here is an overloaded sound (be careful listening to this):\
+\
+\{\cf3 SinOsc\cf0 .ar(mul:2.0)\}.scope		\cf2 //loud! defaults are 440 Hz, amplitude multiplier 2.0\
+\cf0 \
+and here is a sound whose amplitude is at a more reasonable volume:\
+\
+\{\cf3 SinOsc\cf0 .ar(mul:0.1)\}.scope		\cf2 //loud! defaults are 440 Hz, amplitude multiplier 2.0\
+\cf0 \
+You can see that the mul: part of the code is setting up an amplitude multiplier, that is, it scales the signal on the y axis. \
+\
+\{\cf3 SinOsc\cf0 .ar(mul:\cf3 MouseY\cf0 .kr(1.0,0.1))\}.scope		\cf2 //demo of amplitude scaling\
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+\
+There is another standard thing you will see happening to signals, and that is offseting (translating) on the y axis. I use the add input of the UGen for this. \
+\
+\{\cf3 SinOsc\cf0 .ar(mul:0.1, add:\cf3 MouseY\cf0 .kr(0.9,-0.9))\}.scope		\cf2 //demo of offsetting\cf0 \
+\
+\
+The mul and add controls help when you need to set one signal as an input to another and need to scale the input signal appropriately to the expected input values required. \
+\
+\{\cf3 SinOsc\cf0 .ar(mul:MouseX.kr(0.1,1.0), add:\cf3 MouseY\cf0 .kr(0.9,-0.9))\}.scope		\cf2 //demo of amplitude scaling\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 There is a shortcut for the mul and add inputs given by using the * and + symbols. \
+\
+\{0.1*\cf3 SinOsc\cf0 .ar\}.scope\
+\
+is the same as \
+\
+\{\cf3 SinOsc\cf0 .ar(mul:0.1)\}.scope\
+\
+And\
+\
+\{0.1*\cf3 SinOsc\cf0 .ar+0.5\}.scope\
+\
+is the same as\
+\
+\{\cf3 SinOsc\cf0 .ar(mul:0.1,add:0.2)\}.scope\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+I have used the : syntax to put values into particular inputs of the SinOsc UGen. How do I know about these inputs, and are there other ways to utilise them? \
+\
+\
+The arguments to a SinOsc are freq, phase, mul, add.\
+How do I know that? Select SinOsc and do cmd+d for the help file \
+\
+\cf3 SinOsc\cf0  \cf2 //double click on SinOsc and press cmd+d for help\cf0 \
+\
+\cf3 SinOsc\cf0  \cf2 //or select SinOsc and do cmd+J for the source code definition of this UGen\cf0 \
+\
+\
+So if I make all the UGen's inputs explicit:\
+\
+\cf3 SinOsc\cf0 .ar(freq, phase, mul, add)\
+\
+Expected input values might be:\
+freq- 20 to 10000 (Hz)\
+phase- 0.0 to 1.0 through the cycle\
+mul: 0.0 to 1.0 from silence to full amplitude\
+add: 0.0 no offset\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+In using the SinOsc UGen in code I must substitute appropriate values into these inputs. These values could be fixed constants, or they could be other UGens, in which case they will probably be time varying values. If I don't specify a given input, a default value will be taken, and that is what you heard happening above.\
+\
+Explicit use of constants in all inputs:\
+\
+\{\cf3 SinOsc\cf0 .ar(440, 0.0, 0.1, 0.0)\}.scope\
+\
+Plugging a UGen, a MouseX control, into the frequency input:\
+\
+\{\cf3 SinOsc\cf0 .ar(\cf3 MouseX\cf0 .kr(440,880), 0.0, 0.1, 0.0)\}.scope\
+\
+Having the frequency argument as before (it is the first input, remember), using the colon to refer to a particular input, and accepting defaults for the rest:\
+\
+\{\cf3 SinOsc\cf0 .ar(\cf3 MouseX\cf0 .kr(440,880), mul:0.1)\}.scope\
+\
+ \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 \
+\
+There are often many ways of accomplishing something. For instance, to limit the volume of a single SinOsc, we might write:\
+\
+\{\cf3 SinOsc\cf0 .ar(440,0.0,0.1)\}.scope			\cf2 //provide freq and mul arguments directly\cf0 \
+\
+\{\cf3 SinOsc\cf0 .ar(mul:0.1)\}.scope			\cf2 //provide just the multiplier argument explicitly\cf0 \
+\
+\{0.1*\cf3 SinOsc\cf0 .ar\}.scope					\cf2 //multiply the SinOsc UGen by a constant\cf0 \
+\
+\{\cf3 SinOsc\cf0 .ar(440, mul: -20.dbamp)\}.scope   \cf2 //use dBs! The conversion calculation is done just once at the \cf0 \
+									    			     \cf2 //initialisation of the UGen\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+A note on modulation (you may prefer to read this in week 3):\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf0 mul and add are very useful in setting up modulators, sometimes via the * and + versions. The mul input in particular gets used for explicit modulation, that is, multiplying different signals together. \
+\
+Using one SinOsc to modulate the frequency of another:\
+\
+\{\cf3 SinOsc\cf0 .ar(\cf3 SinOsc\cf0 .ar(3,mul:40,add:440),0,0.1)\}.scope\
+\
+The inner SinOsc is the modulator. 3 times per second, it varies between +-40 (mul scaling). I add 440 to make this output value go between 400 and 480. This is a suitable input varying frequency control for the outer SinOsc. \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+\
+\
+\
+}

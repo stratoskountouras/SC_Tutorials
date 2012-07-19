@@ -1,0 +1,330 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green24\blue232;\red0\green115\blue0;\red0\green26\blue249;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 1.2:
+\b0 \
+
+\b 	scsynth
+\b0 \
+
+\fs28 		Contents:\
+			\'95 localhost and internal\
+			\'95 Server options\
+			\'95 UGens\
+			\'95 SynthDefs\
+				- components and format\
+				- creation methods\
+				- SynthDef browser\
+			\'95 Server architecture and order of execution\
+				- Node\
+				- Group\
+				- Audio Bus\
+				- Control Bus\
+				- InFeedback\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\b \cf2 // ================= SCSYNTH: THE SERVER =================
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ======  localhost and internal ====== 
+\b0 \cf3 \
+\cf2 // On OSX, two different server windows appear on startup, the localhost and internal server. The internal is part of the language and runs in the same memory space with it. This has many advantages, but also means that if you push the server to 100% of your CPU there won't be any juice left for the language, or - more likely - sclang will steal some resources from the server. The localhost is autonomous - external to the language - so it is unaffected by language crashes. In multicore computers, each server will automatically run on a different core. Other clients (sclang in other computers or other programs) can communicate with the localhost server. \cf3 \
+\cf2 // Note that servers do not share resources; for example, you need to load a buffer into a specific server to use it from a SynthDef loaded on it; it will not be recognized if it is loaded on another server.\cf3 \
+\
+\cf2 // Send some messages from sclang\cf3 \
+\cf4 Server\cf3 .local.boot				\cf2 // boot the local server\cf3 \
+\cf4 Server\cf3 .local.quit				\cf2 // quit the local server\cf3 \
+\cf4 Server\cf3 .local.window.close 		\cf2 // close local server window\cf3 \
+\cf4 Server\cf3 .local.makeWindow.boot	\cf2 // recreate local server window and boot the server\cf3 \
+\cf4 Server\cf3 .internal.window.close 	\cf2 // close internal server window\cf3 \
+\cf4 Server\cf3 .internal.makeWindow	\cf2 // recreate internal server window\cf3 \
+\
+\cf2 // It is also possible to create and run more than two servers.\cf3 \
+\cf4 Server\cf3 .new(\cf5 "exra-host"\cf3 ).makeWindow\
+\
+\
+\
+\
+
+\b \cf2 // ====== Server options ====== 
+\b0 \cf3 \
+\cf2 // A Server can be started with various options, such as sampleRate, number of inputs and outputs, etc. These options can be set by sending messages to the Server class (Server.options), or by using the {\field{\*\fldinst{HYPERLINK "SC://ServerOptions"}}{\fldrslt \cf2 \ul \ulc6 ServerOptions}} class; in any case, options have to be set before the Server is turned on in order to have effect. You can inspect a Server's options:\cf3 \
+\cf4 Server\cf3 .default.inspect;\
+\cf4 Server\cf3 .default.options.inspect;\
+\cf2 // and set it like this:\cf3 \
+\cf4 Server\cf3 .default.options.numOutputBusChannels = 3;\
+\cf2 // or like this:\cf3 \
+o = \cf4 ServerOptions\cf3 .new.numOutputBusChannels_(7); \cf2 // this allows you to share options between servers\cf3 \
+\cf4 Server\cf3 .default.options_(o);\
+\
+\
+\
+\
+
+\b \cf2 // ======  UGens ====== 
+\b0 \cf3 \
+\cf2 // The main function of the server is to run synthesis processes. These are described as a set of Unit Generators (
+\b UGens
+\b0 ) with a specific control flow or signal path (a UGen graph function). UGens are the basic building blocks of synthesis. In simplest terms, they generate values that can be interpreted in time as a signal. UGens will 
+\b NOT
+\b0  work in the language side of the program. The classes that describe them are meant only for the server to access the plug-in code. \cf3 \
+\
+\cf2 //As a general rule, any object that responds to the .ar, .kr, .tr, .ir methods will not be of any use in sclang, but belongs to the server, inside a SynthDef (synthesis definition). \cf3 \
+\
+\cf2 // In OSX, you can see all the UGens with all their methods, arguments, source code, implementations, references etc from a GUI browser:\cf3 \
+\cf4 UGen\cf3 .browse\
+\
+\
+\
+
+\b \cf2 // ======  SynthDefs ====== 
+\b0 \cf3 \
+\cf2 // A {\field{\*\fldinst{HYPERLINK "SC://SynthDef"}}{\fldrslt \cf2 \ul \ulc6 SynthDef}} (synthesis definition) is a fixed (static) UGen graph written and compiled in sclang and sent to the server. This graph function is evaluated 
+\i \cf2 only
+\i0 \cf2  once, when the SynthDef is created. Dynamic behaviors that work in the language do not work as such in the server, but have to be defined in different manners. For example, it is not possible to use 
+\i \cf2 if
+\i0 \cf2  statements in the same fashion as in sclang inside a SynthDef, and the same is true for randomness, as such control structures will only produce one static result. Instead, there are special UGens that allow one to incorporate this behavior in a way that makes sense to the server (ex. Rand).\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ SyntDef components and format ------
+\b0 \cf3 \
+\cf2 // The basic format of a SynthDef is:\cf3 \
+\cf4 SynthDef\cf3 (\cf7 \\name\cf3 , \{\cf4 arg\cf3  optional; \cf4 Out\cf3 .ar(bus_number, \cf4 UGen_graph\cf3 )\}); \
+\
+\
+\
+
+\b \cf2 // ------ SyntDef creation methods ------
+\b0 \cf3 \
+\cf2 // The SynthDef class encapsulates the client-side representation of a given def, and provides methods for creating new defs, writing them to disk, and streaming them to a server. The following methods are avaiable to write synthDefs:\cf3 \
+			writeDefFile: \cf2 // write the SynthDef to a file, it will not be playable until it is loaded by the server\cf3 \
+			writeOnce : \cf2 // write the SynthDef only if the name does not exist already.\cf3 \
+			load(\cf4 Server\cf3 ) : \cf2 // write the SynthDef file and load it in the Server. Now it's loaded every time you start the synthesis server from now on, and also sends it immediately so it's available right away\cf3 \
+			send(\cf4 Server\cf3 ): \cf2 // do not write a file, but send the data via OSC to the server. that might be sometimes faster, but it might not work for larger SynthDefs, because it does not fit into an OSC package\cf3 \
+			play(\cf4 Server\cf3 ): \cf2 // send the SynthDef and play it as soon as it is received.\cf3 \
+			store(\cf4 Server\cf3 ): \cf2 /* load the SynthDef, save it on disk (like .load) and add it to the SynthDescLib. The SynthDescLib is important for the use of Pbind and Patterns; in those cases, the instrument's default parameters are derived from the {\field{\*\fldinst{HYPERLINK "SC://SynthDesc"}}{\fldrslt \cf2 \ul \ulc6 SynthDesc}}.  If you want to add a specific server to the list where your SynthDefs are sent, add it to the global SynthDescLib:*/\cf3  \cf4 SynthDescLib\cf3 .global.addServer(...). \cf2 // The internal and localhost servers are in the list by default.\cf3 \
+			add \cf2 /* a replacement for the depreciated: */\cf3  memStore: \cf2 // similar to .store, except the SynthDef is save into memory, not on disk.\cf3 \
+			\
+\cf2 // A CtkSynthDef (from Josh Parmenter's must-have {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Ctk/Ctk%20Help/Ctk.htm"}}{\fldrslt \cf2 \ul \ulc6 Ctk}} library) is a very handy wrapper that handles all this for you, allowing you to use a SynthDef in Real-Time (RT), or in Non-Real-Time (NRT). Have a look here for more info: {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Ctk/Ctk%20Help/CtkNoteObject.htm"}}{\fldrslt \cf2 \ul \ulc6 CtkNoteObject}}\cf3 \
+\cf2 // If you don't have Ctk, get it, as many of the examples will be using Ctk objects:\cf3 \
+\cf4 Quarks\cf3 .install( \cf5 "Ctk"\cf3 , checkoutIfNeeded: \cf4 false\cf3 )\
+\
+\
+
+\b \cf2 // ------ SyntDef browser ------
+\b0 \cf3 \
+\cf2 // You can use the synthdef browser to inspect the SynthDefs that are already written to your disk:\cf3 \
+\cf4 SynthDescLib\cf3 .global.browse\
+\cf2 // this shows you the names of the defs, the UGens that they contain, their arguments with default values (Control), as well as their inputs and outputs. It also contains a handy test and a GUI player function!\cf3 \
+\
+\cf2 // For more on UGens and SynthDefs look here:\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://UGens-and-Synths"}}{\fldrslt \cf4 \ul \ulc6 UGens\cf3 -and-\cf4 Synths}}\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+
+\b \cf2 // ======  Server architecture and order of execution ====== 
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Node ------
+\b0 \cf3 \
+\cf2 // The server uses a tree structure of nodes, which can be Synths or Groups (Node is the superclass of both). The structure of this tree defines the order of execution of all Synths. This command will show you the current state of the tree:\cf3 \
+s.queryAllNodes; \cf2 // pressing 'n' when focusing on the Server window will also post the structure\cf3 \
+\
+\cf2 //By pressing 
+\i \cf2 Command-period
+\i0 \cf2  you reset the tree, deleting all nodes that have been created.\cf3 \
+\
+\cf2 //See: {\field{\*\fldinst{HYPERLINK "SC://Node"}}{\fldrslt \cf2 \ul \ulc6 Node}}\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ Group ------
+\b0 \cf3 \
+\cf2 // Instead of creating inflexible monster SynthDefs that try to do everything, it is a much better practice to strive for modularity, creating smaller, flexible units that can be used, re-used and patched together in multiple combinations. \cf3 \
+\cf2 // A Group is a collection of nodes that are bunded together in a specific order, with each node pointing to the next one. The order of execution can be very important, especially when you need synths to process the output of other synths. This order can be explicitly defined through the addAction argument of a Group, by adding new synths to its head (beginning), tail (end), as well as before, after or in the place of a specific node inside the group. \cf3 \
+\pard\pardeftab560\li1700\fi-1700\ql\qnatural
+
+\fs24 \cf3 		
+\b addAction
+\b0  - one of the following Symbols:		\
+			\cf7 \\addToHead\cf3  	\cf2 // - (the default) add at the head of the group specified by 
+\b target
+\b0 \cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 			\cf7 \\addToTail\cf3  	\cf2 // - add at the tail of the group specified by 
+\b target
+\b0 \cf3 \
+			\cf7 \\addAfter\cf3  		\cf2 // - add immediately after 
+\b target 
+\b0 in its server's node order\cf3 \
+			\cf7 \\addBefore\cf3  	\cf2 // - add immediately before 
+\b target 
+\b0 in its server's node order\cf3 \
+			\cf7 \\addReplace\cf3  	\cf2 // - replace 
+\b target
+\b0  and take its place in its server's node order\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\fs28 \cf3 \
+\cf2 // The localhost and internal servers each boot with two groups: the {\field{\*\fldinst{HYPERLINK "SC://RootNode"}}{\fldrslt \cf2 \ul \ulc6 RootNode}} (Group(0))  and the {\field{\*\fldinst{HYPERLINK "SC://default_group"}}{\fldrslt \cf2 \ul \ulc6 default_group}} (Group(1)). By default, each new synth will be added to the HEAD of the default_group, which is the opposite of what you would intuitively think; if you have synth1, synth2, synth3, then their order will be inverted in the order of execution to: synth3, synth2, synth1\cf3 \
+\cf2 // See: {\field{\*\fldinst{HYPERLINK "SC://Group"}}{\fldrslt \cf2 \ul \ulc6 Group}} and {\field{\*\fldinst{HYPERLINK "SC://11_Groups"}}{\fldrslt \cf2 \ul \ulc8 Groups}}\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ Audio Bus ------
+\b0 \cf3 \
+\cf2 // The way to send the output of one synth to that of another to process is by using Audio Buses. The concept here is very similar to that of a hardware mixing board. There is a global array of buses, which can be accessed by all synths on the server, making it possible for any synth to be an input to any other synth, giving you maximum flexibility. \cf3 \
+\
+\cf2 /* \
+- The lowest numbered buses are output to your 
+\i \cf2 audio hardware outputs
+\i0 \cf2 . \
+- After those are the input buses, reading from the 
+\i \cf2 audio hardware input
+\i0 \cf2 . \
+- After those follow the
+\i \cf2  internal output
+\i0 \cf2  \
+- and then the 
+\i \cf2 internal input buses
+\i0 \cf2 . \
+*/\cf3 \
+\cf2 // The number of all these buses can be defined through the ServerOptions:\cf3 \
+\cf4 Server\cf3 .local.options.numOutputBusChannels = 8;\
+\cf4 Server\cf3 .local.options.numInputBusChannels = 8;\
+\cf4 Server\cf3 .local.options.inspect;\
+\cf2 // You can do this before starting the server manually, or inside your startup file (more on that later). If you open the class definition of ServerOptions you can see the default values. \cf3 \
+\
+\cf2 // Let's look at a simple example:\cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf7 \\test\cf3 , \{\cf4 arg\cf3  outbus = 0, freq = 220;\
+	\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq, 0, 0.25));\
+\}).send(s)\
+)\
+\
+a = \cf4 Synth\cf3 (\cf7 \\test\cf3 , [\cf7 \\outbus\cf3 , 0]) \cf2 // left speaker\cf3 \
+b = \cf4 Synth\cf3 (\cf7 \\test\cf3 , [\cf7 \\outbus\cf3 , 1, \cf7 \\freq\cf3 , 240]) \cf2 // right speaker\cf3 \
+c = \cf4 Synth\cf3 (\cf7 \\test\cf3 , [\cf7 \\outbus\cf3 , 2, \cf7 \\freq\cf3 , 230]) \cf2 // outbus 3: no sound in stereo setups!\cf3 \
+a.free; b.free;\
+\
+(\
+\cf4 SynthDef\cf3 (\cf7 \\test_in\cf3 , \{\cf4 arg\cf3  inbus = 2, outbus = 0;\
+	\cf4 Out\cf3 .ar(outbus, \cf4 In\cf3 .ar(inbus, 1));\
+\}).send(s)\
+)\
+d = \cf4 Synth\cf3 (\cf7 \\test_in\cf3 , [\cf7 \\inbus\cf3 , 2, \cf7 \\outbus\cf3 , 0]); \cf2 // no sound! This was added to the head!\cf3 \
+d.free; \
+d = \cf4 Synth\cf3 (\cf7 \\test_in\cf3 , [\cf7 \\inbus\cf3 , 2, \cf7 \\outbus\cf3 , 0], addAction: \cf7 \\addToTail\cf3 ); \cf2 // now you're talking!\cf3 \
+c.free; d.free;\
+\
+\cf2 // See {\field{\*\fldinst{HYPERLINK "SC://Bus"}}{\fldrslt \cf2 \ul \ulc6 Bus}} and {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Ctk/Ctk%20Help/CtkAudio.htm"}}{\fldrslt \cf2 \ul \ulc8 CtkAudio}}\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ Control Bus ------
+\b0 \cf3 \
+\cf2 // Besides audio, synths can also send and receive control signals.\cf3 \
+\
+\cf2 // Let's look at a simple example using the same synths as above\cf3 \
+\
+a = \cf4 Synth\cf3 (\cf7 \\test\cf3 , [\cf7 \\outbus\cf3 , 0]) \cf2 // make some sound\cf3 \
+\
+\cf2 // create  the control bus\cf3 \
+b = \cf4 Bus\cf3 .control(s, 1); \cf2 // create a control bus\cf3 \
+b.value = 200; \cf2 // add a value to it\cf3 \
+a.map(\cf7 \\freq\cf3 , b.index); \cf2 // map the bus value to the freq argument of the synth\cf3 \
+b.value = 300; \
+\
+\cf2 // let's try to set the bus dynamically (you should let the previous synth run); \cf3 \
+\cf2 // notice that this has to be a .kr synth! \cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf7 \\test_FM\cf3 , \{\cf4 arg\cf3  outbus = 0, freq = 220, mul = 0.25, add = 0;\
+	\cf4 Out\cf3 .kr(outbus, \cf4 SinOsc\cf3 .kr(freq, 0, mul, add));\
+\}).send(s)\
+) \
+\
+e = \cf4 Synth\cf3 (\cf7 \\test_FM\cf3 , [\cf7 \\outbus\cf3 , b.index, \cf7 \\freq\cf3 , 150, \cf7 \\mul\cf3 , 100, \cf7 \\add\cf3 , 200]) \cf2 // \cf3 \
+e.free;\
+a.free; b.free;\
+\
+\cf2 // See {\field{\*\fldinst{HYPERLINK "SC://Bus"}}{\fldrslt \cf2 \ul \ulc6 Bus}} and {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Ctk/Ctk%20Help/CtkControl.htm"}}{\fldrslt \cf2 \ul \ulc8 CtkControl}}. Also, {\field{\*\fldinst{HYPERLINK "SC://Control"}}{\fldrslt \cf2 \ul \ulc6 Control}} and {\field{\*\fldinst{HYPERLINK "SC://NamedControl"}}{\fldrslt \cf2 \ul \ulc6 NamedControl}}\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ InFeedback ------
+\b0 \cf3 \
+\cf2 // It is possible that we may want to use the audio from a later node inside an earlier node, despite the order of execution in the node tree. {\field{\*\fldinst{HYPERLINK "SC://InFeedback"}}{\fldrslt \cf2 \ul \ulc6 InFeedback}} lets you do that by taking the values from the bus from the previous calculation cycle (therefore adding a delay that is equal to your Server's blockSize).\cf3 \
+\
+\cf2 // Here is a simple example of cross-coupled feedback FM synthesis:\cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf7 \\test_FdbFM\cf3 , \{\cf4 arg\cf3  outbus = 0, inbus = 2, freq = 220, mul = 1, add = 0;\
+	\cf4 var\cf3  in;\
+	in = (\cf4 InFeedback\cf3 .ar(inbus, 1) * mul) + add;\
+		\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq + in, 0, 0.25));\
+\}).send(s)\
+)\
+\
+a = \cf4 Synth\cf3 (\cf7 \\test_FdbFM\cf3 , [\cf7 \\outbus\cf3 , 0, \cf7 \\inbus\cf3 , 1, \cf7 \\mul\cf3 , 300*11, \cf7 \\add\cf3 , 200], addAction: \cf7 \\addToHead\cf3 ) \cf2 // left speaker.\cf3 \
+b = \cf4 Synth\cf3 (\cf7 \\test_FdbFM\cf3 , [\cf7 \\outbus\cf3 , 1, \cf7 \\inbus\cf3 , 0, \cf7 \\mul\cf3 , 300*9, \cf7 \\add\cf3 , 100], addAction: \cf7 \\addToTail\cf3 ) \cf2 // right speaker.\cf3 \
+s.queryAllNodes;\
+a.free;\
+b.free;\
+\
+\
+\cf2 // for more, see: {\field{\*\fldinst{HYPERLINK "SC://Server-Architecture"}}{\fldrslt \cf2 \ul \ulc8 Server-Architecture}} and {\field{\*\fldinst{HYPERLINK "SC://Order-of-execution"}}{\fldrslt \cf2 \ul \ulc8 Order-of-execution}}\cf3 \
+\
+\cf2 // also, for 
+\b Ctk-specific examples
+\b0  of signal routing, do this (these are Summer 2010 links from the DXARTS 462 class of 2010, the content may change later): \cf3 \
+\
+\cf2 // make a folder to put them in first, this will be located inside the class examples folder inside your SuperCollider application:\cf3 \
+\cf5 "mkdir -p DX490a_su2010_ClassExamples/DX462Examples"\cf3 .unixCmd \
+\cf2 // example 1\cf3 \
+\cf5 "curl  http://www.dxarts.washington.edu/courses/461-3/462/Code%20Examples/Example06.html -o DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example06.html"\cf3 .unixCmd\{\cf5 "open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example06.html"\cf3 .unixCmd\};\
+\cf2 // example 2\cf3 \
+\cf5 "curl  http://www.dxarts.washington.edu/courses/461-3/462/Code%20Examples/Example17.html -o DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example17.html"\cf3 .unixCmd\{\cf5 "open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example17.html"\cf3 .unixCmd\};\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+	\
+}

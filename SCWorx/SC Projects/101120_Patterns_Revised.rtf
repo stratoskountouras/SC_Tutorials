@@ -1,0 +1,36 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green33\blue167;\red0\green26\blue173;\red40\green92\blue14;}
+\deftab560
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs18 \cf2 // 101120 Patterns Revised\cf3 \
+\
+\
+\cf4 SynthDef\cf3 (\cf5 "Cypat"\cf3 , \{ \
+	var env, d;\
+	\cf0 env = \cf6 EnvGen\cf0 .kr(\cf6 Env\cf0 .perc(0.03, 0.1), 1, doneAction:2);\
+\cf3 	\cf0 5.do \{ \cf6 var\cf0  d; d = exprand(0.01, 1)\};\cf3 \
+	\cf4 Out\cf3 .ar(0, \cf4 LFSaw\cf3 .ar(800.rand) * env );\
+	\} ).store;\
+\
+\
+\cf4 Synth\cf3 (\cf5 "Cypat"\cf3 );\
+\
+\cf0 (\
+\cf7 Pdefn\cf0 (\cf8 \\deg\cf0 , \cf7 Pseq\cf0 ([0, 3, 2],\cf7 inf\cf0 ));\
+\
+\cf7 Pset\cf0 (\cf8 \\instrument\cf0 , \cf8 \\Cypat\cf0 , \cf8 \
+\cf0 	\cf7 Ppar\cf0 ([\cf7 \
+\cf0 		\cf7 Pbind\cf0 (\cf8 \\degree\cf0 , \cf7 Pdefn\cf0 (\cf8 \\deg\cf0 ), \\pan, -0.8),\
+		\cf7 Pbind\cf0 (\cf8 \\degree\cf0 , \cf7 Pdefn\cf0 (\cf8 \\deg\cf0 ), \cf8 \\dur\cf0 , 1/3, \\pan, 0.8)\
+])\
+).play;\
+)\
+\
+\
+\cf7 Pdefn\cf0 (\cf8 \\deg\cf0 , \cf7 Prand\cf0 ([0, 3, [1s, 4]],\cf7 inf\cf0 ));\
+\
+\cf7 Pdefn\cf0 (\cf8 \\deg\cf0 , \cf7 Pn\cf0 (\cf7 Pshuf\cf0 ([0, 3, 2, 7, 6],2),\cf7 inf\cf0 ));\
+}

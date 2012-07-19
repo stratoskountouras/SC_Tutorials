@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #bf0000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Geneva; color: #000000; min-height: 16.0px}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p16 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000}
+p.p17 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #606060}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #000000}
+span.s5 {color: #007300}
+span.s6 {color: #606060}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 10.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Networking 1: Within a computer (SC with itself and other programs)</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• General</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• OSC within SuperCollider</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Messages to the default server by IP and port</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Messages to other servers by IP and port</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• SuperCollider and other programs</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- PureData</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Max/MSP/Jitter</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Processing</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Python</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= NETWORKING 1: OSC MESSAGING WITHIN A COMPUTER =================</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== GENERAL ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// As we've seen before (classes 1&amp;2 in these examples), SC3 uses a client/server model, with its two components, sclang and scserver, connected in a network and communicating via OSC messaging. This makes it very easy to send messages to both sclang or scserver from another application within your computer, or even through a network from another computer.</p>
+<p class="p8">// You can send messages to both the server and the language if you know their IP address and which port they are listening to. By default, the server listens internally (within your computer) in the loopback IP address "127.0.0.1" and port 57110. This is setable, so you can change it. The language listens by default in the loopback IP address "127.0.0.1" and port 57120 - also configurable. If you want to access sclang or scserver with a remote device, you need to first connect to the computer that runs them via Local-Area-Network, using that computer's IP. Connecting to a machine through the internet is also possible, but a bit more complicated - we'll see how to do that in a later example.</p>
+<p class="p7"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== OSC WITHIN SUPERCOLLIDER ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// To see how this works, let's send some messages to the local server by addressing it via its IP and port. The object to use is <a href="SC://NetAddr"><span class="s2">NetAddr</span></a></p>
+<p class="p7"><br></p>
+<p class="p8">// We can check what port sclang listens to, as well as what its IP address is:</p>
+<p class="p10"><span class="s3">NetAddr</span><span class="s4">.langPort; </span>// retrieve the current port SC is listening to</p>
+<p class="p10"><span class="s3">NetAddr</span><span class="s4">.localAddr; </span>// retrieve the current IP and port</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Messages to the default server by IP and port --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// send a synth to the default server</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">SynthDef</span>(<span class="s5">\test2</span>, {<span class="s3">arg</span> outbus = 0, freq = 220;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">SinOsc</span>.ar(freq, 0, 0.25));</p>
+<p class="p11">}).send(s)</p>
+<p class="p11">)</p>
+<p class="p7"><br></p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">var</span> n, id;</p>
+<p class="p8">//use the loopback address and the default port</p>
+<p class="p11">a = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 57110);<span class="Apple-converted-space"> </span></p>
+<p class="p11">id = s.nextNodeID;</p>
+<p class="p11">id.postln;</p>
+<p class="p8"><span class="s4">a.sendMsg(</span><span class="s6">"/s_new"</span><span class="s4">, </span><span class="s5">\test2</span><span class="s4">, id, 0, 1); <span class="Apple-converted-space">  </span></span>//sendMsg works out the correct OSC message for you</p>
+<p class="p11"><span class="s3">SystemClock</span>.sched(1.0, {a.sendMsg(<span class="s6">"/n_free"</span>, id)});</p>
+<p class="p11">s.queryAllNodes;</p>
+<p class="p11">)</p>
+<p class="p11">s.queryAllNodes</p>
+<p class="p12"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Messages to other servers by IP and port --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// We could also create a new server and send it messages, instead of using the ones that are already open:</p>
+<p class="p7"><br></p>
+<p class="p8">// make a new server, and assign it the loopback IP address (as we're working locally on one machine) and a new port</p>
+<p class="p11">a = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 58110);<span class="Apple-converted-space"> </span></p>
+<p class="p11">d = <span class="s3">Server</span>.new(<span class="s6">"DX490a"</span>, a);</p>
+<p class="p8"><span class="s4"><span class="Apple-converted-space"> </span></span>// make the gui window for the server</p>
+<p class="p11">d.makeWindow;</p>
+<p class="p8">// boot it</p>
+<p class="p11">d.boot;</p>
+<p class="p8">// play something to try it out:</p>
+<p class="p11">{<span class="s3">PinkNoise</span>.ar(0.5)}.play(d);</p>
+<p class="p8">// stop the server</p>
+<p class="p11">d.quit;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Now, just for kicks, let's create a few servers and have them make a clarinet-like sound, each playing a single harmonic. This will go on for 5 seconds, then all servers will be turned of:</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">var</span> serverArray, harms, amps;</p>
+<p class="p11">harms = [1, 2, 3, 5, 7, 9];</p>
+<p class="p11">amps = [1, 0.2, 0.5, 0.4, 0.1, 0.05] * 0.2;</p>
+<p class="p11">serverArray = <span class="s3">Array</span>.newClear(6);</p>
+<p class="p11">6.do{<span class="s3">|i|</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>serverArray[i] = <span class="s3">Server</span>.new(<span class="s6">"TestServer"</span>++i, <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 60010 + (i*1000)));</p>
+<p class="p11"><span class="Apple-tab-span">	</span>serverArray[i].makeWindow;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>serverArray[i].window.bounds = <span class="s3">Rect</span>(290, i * 120, 290, 100);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>serverArray[i].boot;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>serverArray[i].waitForBoot({</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="s3">SinOsc</span>.ar([220, 221] * (harms[i]), 0, amps[i])}.play(serverArray[i]);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SystemClock</span>.sched(5.0, {serverArray[i].quit})</p>
+<p class="p11"><span class="Apple-tab-span">	</span>})</p>
+<p class="p11">}</p>
+<p class="p11">)</p>
+<p class="p7"><br></p>
+<p class="p8">// There is also a potentially handy Quark by Julian Rorhuber you may want to check out: <a href="SC://BroadcastServer"><span class="s2">BroadcastServer</span></a>; it allows you to send messages to remote servers, from a specific server's perspective, using a list of NetAddrs (this makes more sense for servers in remote machines)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p8"><b>// ====== SUPERCOLLIDER AND OTHER PROGRAMS ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// SuperCollider can talk to any software that has an OSC implementation in it, either locally within a machine, or remotely. Here is a non-comprehensive list of some software that can talk to SC via OSC</p>
+<p class="p13">"open http://swiki.hfbk-hamburg.de/MusicTechnology/659"<span class="s4">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// This code chunk below can be very handy for posting any incoming messages, even if there are no responders set to catch them:</p>
+<p class="p8">// post all incoming traffic except the server status messages</p>
+<p class="p11">(</p>
+<p class="p14">thisProcess<span class="s4">.recvOSCfunc = { </span>|time, addr, msg|<span class="s4"><span class="Apple-converted-space"> </span></span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>if(msg[0] != <span class="s5">'status.reply'</span>) {</p>
+<p class="p13"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"time: % sender: %\nmessage: %\n"<span class="s4">.postf(time, addr, msg)};</span></p>
+<p class="p11">}</p>
+<p class="p11">);</p>
+<p class="p8">// stop posting.</p>
+<p class="p11"><span class="s3">thisProcess</span>.recvOSCfunc = <span class="s3">nil</span>;</p>
+<p class="p15"><br></p>
+<p class="p7"><br></p>
+<p class="p1">// Here are a few examples:</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p8"><b>// ------ Pure Data --</b></p>
+<p class="p8">//Load the PD_&amp;_SC_via-OSC.pd patch into PureData</p>
+<p class="p7"><br></p>
+<p class="p8">//• PureData to SuperCollider</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test the connection:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponder</span>(<span class="s3">nil</span>, <span class="s5">'/to_SC'</span>, {<span class="s3">arg</span> time, responder, msg, addr;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[time, responder, msg, addr].postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o.remove;</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// make a synth</p>
+<p class="p11"><span class="Apple-tab-span">	</span>x = <span class="s3">SynthDef</span>(<span class="s5">\sine</span>, {<span class="s3">arg</span> freq=440;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, (<span class="s3">SinOsc</span>.ar([freq, freq * 1.015], 0, 0.1)))})</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.play;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// make the responder</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponder</span>(<span class="s3">nil</span>, <span class="s5">'/to_SC'</span>, {<span class="s3">arg</span> time, responder, msg, addr;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>msg.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.set(<span class="s5">\freq</span>,msg[1]);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o.remove;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">//• SuperCollider to PureData<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// Use loopback IP and the same port as the pd patch to communicate</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~pdOut = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 47110);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test it with one message:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~pdOut.sendMsg(<span class="s6">"/from_SC"</span>, 500);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// send some random frequencies</p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p11"><span class="Apple-tab-span">	</span>{</p>
+<p class="p11"><span class="Apple-tab-span">	</span>14.do{<span class="s3">arg</span> i;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~pdOut.sendMsg(<span class="s6">"/from_SC"</span>, rrand(200, ((i * 100) + 100))); <span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.1.wait;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>}.fork</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Max/MSP/Jittter --</b></p>
+<p class="p8">//Load the Max_&amp;_SC_via-OSC.maxpat patch into Max/MSP</p>
+<p class="p7"><br></p>
+<p class="p8">//• Max/MSP to SuperCollider</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test the connection:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponder</span>(<span class="s3">nil</span>, <span class="s5">'/from_Max'</span>, {<span class="s3">arg</span> time, responder, msg, addr;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>msg.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o.remove;</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// make a synth</p>
+<p class="p11"><span class="Apple-tab-span">	</span>x = <span class="s3">SynthDef</span>(<span class="s5">\sine</span>, {<span class="s3">arg</span> freq=440;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, (<span class="s3">SinOsc</span>.ar([freq, freq * 1.015], 0, 0.1)))})</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.play;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// make the responder</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponder</span>(<span class="s3">nil</span>, <span class="s5">'/from_Max'</span>, {<span class="s3">arg</span> time, responder, msg, addr;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>msg.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.set(<span class="s5">\freq</span>,msg[1].midicps);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o.remove;</p>
+<p class="p7"><br></p>
+<p class="p8">//• SuperCollider to Max/MSP<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// Use loopback IP and the same port as the Max patch to communicate</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~maxOut = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 48110);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test it with one message:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~maxOut.sendMsg(<span class="s6">"/from_SC"</span>, 500);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// send some random frequencies</p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p11"><span class="Apple-tab-span">	</span>{</p>
+<p class="p11"><span class="Apple-tab-span">	</span>14.do{<span class="s3">arg</span> i;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~maxOut.sendMsg(<span class="s6">"/from_SC"</span>, rrand(200, ((i * 100) + 100))); <span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.1.wait;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>}.fork</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><b>// ------ Processing --</b></p>
+<p class="p8">// To get Processing to send and receive OSC messages you will need to download the OSC library oscP5.<span class="Apple-converted-space">  </span>in Mac OSX you'll need to put it ino ~/Documents/Processing (for Windows installation info, look at the library readme). You can download the library here:</p>
+<p class="p13">"open http://processing.org/discourse/yabb2/YaBB.pl?num=1133669730/0#0"<span class="s4">.unixCmd</span></p>
+<p class="p7"><br></p>
+<p class="p8">//• Processing to SuperCollider</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test the connection:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponder</span>(<span class="s3">nil</span>, <span class="s5">'/Processing_to-SC'</span>, {<span class="s3">arg</span> time, responder, msg, addr;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>msg.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>o.remove;</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">//• SuperCollider to Processing<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// Use loopback IP and the same port as the pd patch to communicate</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~processingOut = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, 49110);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// test it with one message:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~processingOut.sendMsg(<span class="s6">"/from_SC"</span>, 500);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// send some random frequencies</p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p11"><span class="Apple-tab-span">	</span>{</p>
+<p class="p11"><span class="Apple-tab-span">	</span>14.do{<span class="s3">arg</span> i;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~processingOut.sendMsg(<span class="s6">"/from_SC"</span>, rrand(200, ((i * 100) + 100))); <span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.1.wait;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>}.fork</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Python --</b></p>
+<p class="p8">// You 'll need to install the pyOSC library in Python to get it to send/receive OSC:</p>
+<p class="p13">"open https://trac.v2.nl/wiki/pyOSC"<span class="s4">.unixCmd</span></p>
+<p class="p7"><br></p>
+<p class="p8">// • Python-to-SC</p>
+<p class="p8">// You need to load the basic_send.py Python example to your Python environment (ex. IDLE) to use this example. Then, create the responders in SC, and finally run the Python code.</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// create a NetAddr with the loopback IP if within the same computer. However, Python sends data through a semi-randomized port nr for some reason, so use nil as the port!</p>
+<p class="p11"><span class="Apple-tab-span">	</span>a = <span class="s3">NetAddr</span>(<span class="s6">"127.0.0.1"</span>, <span class="s3">nil</span>);<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>o = <span class="s3">OSCresponderNode</span>(a, <span class="s5">'/chat'</span>, { <span class="s3">|time, resp, msg|</span> (<span class="s6">"time:"</span> + time).postln; msg.postln }).add;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>o.remove; </span>// remove the OSCresponderNode when you are done</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">//• SC-to-Python</p>
+<p class="p8">// You need to load the basic_receive.py Python example to your Python environment (ex. IDLE) to use this example</p>
+<p class="p7"><br></p>
+<p class="p10"><span class="s4"><span class="Apple-tab-span">	</span></span>// create a NetAddr with the loopback IP if within the same computer and the same port set in the Python code</p>
+<p class="p16"><span class="Apple-tab-span">	</span>a = <span class="s3">NetAddr</span>.new(<span class="s6">"127.0.0.1"</span>, 9000);<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="s4"><span class="Apple-tab-span">	</span></span>// send the application the message "chatback" with the parameter "What up, Monty?"</p>
+<p class="p17"><span class="s4"><span class="Apple-tab-span">	</span>a.sendMsg(</span>"/chatback"<span class="s4">, </span>"What up, Monty?"<span class="s4">);</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><br></p>
+</body>
+</html>

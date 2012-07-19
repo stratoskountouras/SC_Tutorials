@@ -1,0 +1,235 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset77 Geneva;\f2\fswiss\fcharset77 Helvetica;
+\f3\fswiss\fcharset77 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red0\green255\blue0;
+\red191\green0\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Messaging Style and Abstractions\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf3 Server\cf0 .default=s=\cf3 Server\cf0 .internal;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ul \ulc0 SC3 philosophy\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \ulnone \
+With SuperCollider 3, the SuperCollider language which specifies when and which sound events occur is separated from the thing that does the synthesising of sound, the Server. Under the hood, there is a constant stream of messages from the language (SCLang appplication) to the Server (scsynth application).\
+\
+There can in fact be lots of these Servers, scattered anywhere on a computer network. You communicate with them using the network audio protocol OSC (Open Sound Control). \
+\
+There is some slight latency in communication between the Language application and the 'localhost' or remote Server, but if one crashes, the other is free to continue. \
+\
+There is an internal Server embedded in the SCLang, with immediate message passing, but this would not support network music, and the 'localhost' or local Server is the usual choice. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f1 \cf4 Running SC3 by passing commands to the Server- Messaging Style\
+
+\f0 \cf0 \
+This is not the easiest way to make a sound in SC3, but you should see it at least once to understand what is going on below the surface. I'm going to pass some messages from the language application to the Server in a pretty explicit manner. \
+\
+\
+s=\cf3 Server\cf0 .local; if(not(s.serverRunning), \{s.boot\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //interpreter variable s is always being set to the localhost Server for convenience\cf0 \
+\
+\
+In order to synthesise, we have to pass SynthDefs (Synth Definitions) to the Server. These are instructions for building UGen Graphs. SCLang will run the code below but then compile it into a form that the Server understands. \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 SynthDef\cf0 (\cf6 "sine"\cf0 , \{\cf3 arg\cf0  freq=440;\
+	\cf3 var\cf0  osc;\
+	osc = \cf3 SinOsc\cf0 .ar(freq, 0, 0.1); \cf5 //sine oscillator\cf0 \
+	\cf3 Out\cf0 .ar(0, osc); \cf5 // send output to audio bus zero.\cf0 \
+\}).writeDefFile;   \cf5 //place this SynthDef on disk in compiled form in the 								'synthdefs' folder \cf0 \
+\
+\
+Don't imagine that you can leave in expressions in a SynthDef that will run later on, you are making a fixed combination of UGens. The only way you will communicate with instances of your SynthDef later is if there are arguments, which act like input connections to your module. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Now we send some messages to the Server to get things going: (these code constructs are commands to send single OSC messages, see 10.1) \
+\
+s.sendMsg(\cf6 "/d_load"\cf0 ,\cf6 "synthdefs/sine.scsyndef"\cf0 );   \cf5 //server loads the SynthDef\cf0 \
+\
+s.sendMsg(\cf6 "/s_new"\cf0 , \cf6 "sine"\cf0 , 1000, 1, 0); \cf5 //start a Synth instance using the SynthDef-
+\f2 \cf0  
+\f0 \cf5 it is created as a Synth Node at the tail of the RootNode Group\cf0 \
+\
+s.sendMsg(\cf6 "/s_new"\cf0 , \cf6 "sine"\cf0 , 1001, 3, 1000, \cf2 \\freq\cf0 , 450); \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //start a separate Synth instance using the same SynthDef, passing in an initial argument- it is created just after the Node 1000\cf0 \
+\
+\cf5 //we can only access the inputs of the SynthDef, so I can change the frequency of the sound:\cf0 \
+s.sendMsg(\cf6 "/n_set"\cf0 , 1001, "freq", 900);\
+\
+s.sendMsg(\cf6 "/n_free"\cf0 , 1000);		   \cf5 //stop Node 1000\cf0 \
+\
+s.sendMsg(\cf6 "/n_free"\cf0 , 1001);		   \cf5 //stop Node 1001\cf0 \
+\
+This should give you an idea of the spirit of the thing, but don't worry too much about the specific details of the messages! \
+\
+You can find out about the OSC messages the Server responds to in the help file:\
+\
+[
+\f3\b \ul Server-Command-Reference
+\f0\b0 \ulnone ]\
+\
+There are messages for controlling buffers, nodes, buses... \
+\
+This tutorial works at this level of message passing- [
+\f3\b \ul Tutorial
+\f0\b0 \ulnone ]\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf4 Using Classes that encapsulate those commands\
+
+\f0 \cf0 \
+There are various ways to hide the complexities of message passing from view. We'll aim to progressively avoid any explicit OSC messaging. But under the surface, the message passing is going on; we're just using useful helper classes to conceal the fine detail. \
+\
+\
+s=\cf3 Server\cf0 .local; if(not(s.serverRunning), \{s.boot\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //interpreter variable s is always being set to the localhost Server for convenience\cf0 \
+\
+\
+Let's make another SynthDef, but use the SynthDef class to load it straight to the Server\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+SynthDef\cf0 (\cf6 "LFPar"\cf0 , \{\cf3 arg\cf0  freq=440, pan=0.0;\
+	\cf3 var\cf0  osc;\
+	osc = \cf3 LFPar\cf0 .ar(\cf3 LFPar\cf0 .kr(\cf3 ExpRand\cf0 .new(1,80),0,freq*0.02,freq), 0, 0.1); \
+	\cf3 Out\cf0 .ar(0, \cf3 Pan2\cf0 .ar(osc,pan));\
+\}).load(s);\
+\
+Look at the SynthDef count on the localhost Server to see how its gone up by one\
+\
+a= \cf3 Synth\cf0 (\cf6 "LFPar"\cf0 ); \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //make a Synth, let some hidden code worry about Node numbers...\cf0 \
+\
+b=\cf3 Synth\cf0 (\cf6 "LFPar"\cf0 , [\cf2 \\freq\cf0 , rrand(200,700), \cf2 \\pan\cf0 , 1.0.rand2]); \
+\cf5 //make another Synth, pass some values to the arguments\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 RootNode\cf0 .freeAll;		\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //stop all Synths from the top level Group, or press cmd+period\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1 \cf4 \{\}.play\
+
+\f0 \cf0 \
+There is a code construction we've seen that hides explicit messages and also SynthDefs from you: so it seems like everything is happening in the language application (it is also provided for backwards compatability with SC2). \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 //the way this works is to use code that makes a SynthDef wrapper for the function,\cf0  \cf5 sends it to the Server to play as soon as possible\cf0 \
+\{\cf3 SinOsc\cf0 .ar([\cf3 MouseX\cf0 .kr(440,880), \cf3 MouseY\cf0 .kr(330,660)],0,0.1)\}.play\
+\
+\cf5 //now start this one too! \cf0 \
+\{\cf3 SinOsc\cf0 .ar([\cf3 MouseX\cf0 .kr(220,770), \cf3 MouseY\cf0 .kr(110,550)],0,0.1)\}.play\
+\
+\cf5 //the code above actually returns the synth instance if you need to do things \
+//with it,\cf0  \cf5 and you can choose where the new Synth appears in the Server's Node graph \cf0 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  synth;\
+\
+synth= \{\cf3 LPF\cf0 .ar(\cf3 Pan2\cf0 .ar(\cf3 CombN\cf0 .ar(\cf3 Impulse\cf0 .ar(9, 0.5, 0.1),0.2,0.2, 30), \cf3 MouseX\cf0 .kr(-1.0,1.0)), \cf3 MouseY\cf0 .kr(500,10000))\}.play(\cf3 RootNode\cf0 .new);\
+\
+\cf3 SystemClock\cf0 .sched(5,\{synth.free; \cf3 nil\cf0 \});\
+)\
+\
+\
+What is dangerous about \{\}.play is that it generates a new SynthDef every time you use it. Never use it within a Routine: your Server's SynthDef count may spiral out of control! Even if you avoid the explicit messaging style, the Synth() construct is recommended so that SynthDefs are properly controlled. \
+\
+\
+\
+\
+}

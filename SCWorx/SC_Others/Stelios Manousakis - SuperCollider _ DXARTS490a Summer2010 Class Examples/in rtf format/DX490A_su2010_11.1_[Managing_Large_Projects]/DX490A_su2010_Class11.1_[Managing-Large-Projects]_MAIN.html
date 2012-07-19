@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 1.0px 0.0px; font: 11.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 1.0px 0.0px; font: 11.0px Optima; color: #bf0000; min-height: 13.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p14 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #000000}
+span.s4 {color: #0000bf}
+span.s5 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 11.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Managing large projects</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Managing large projects</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- General</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- A simple example</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- A more complex example (the instrument from 7.2)</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p7"><br></p>
+<p class="p8">/* NOTE: This example uses 4 supplemental files, which should be located in the same directory as this file:</p>
+<p class="p9"><br></p>
+<p class="p8">DX490A_su2010_Class11.1_[Managing-Large-Projects_Simple-example].rtf"</p>
+<p class="p8">// and:</p>
+<p class="p8">DX490A_su2010_Class11.1_[Managing-Large-Projects_synths].rtf"</p>
+<p class="p8">DX490A_su2010_Class11.1_[Managing-Large-Projects_procmods].rtf"</p>
+<p class="p8">DX490A_su2010_Class11.1_[Managing-Large-Projects_Mapping-SpaceNavigator].rtf"]</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p10"><b>// ================= MANAGING LARGE PROJECTS =================</b></p>
+<p class="p11"><br></p>
+<p class="p10"><b>// ====== GENERAL ======</b></p>
+<p class="p11"><br></p>
+<p class="p10">// There comes a time when the code of a project becomes too large, making navigation within a single file far from easy. If you constantly spend more than a few seconds trying to locate your synthdefs or functions, or if you have a thousand lines of code in a single text file, it's maybe time to do something about it: sensibly splitting your code into several files (and a more advanced idea: create classes and/or standalone applications - but that will come in a later class).</p>
+<p class="p11"><span class="Apple-converted-space"> </span></p>
+<p class="p11"><br></p>
+<p class="p10">// A good strategy is to use a separate file for your synthdefs, and possibly another file for your functions, guis, real-time controls or score etc. The goal here would be that you can change elements in each of these components <i>without</i> breaking anything on your piece. So, tweaking a SynthDef, but still having it work; changing mapping curves, but still being able to control your synths. Using a different controller altogether for the same system, without running into the danger of breaking code.</p>
+<p class="p11"><br></p>
+<p class="p10">// Having something like this in mind, you could setup a routine to load one component after another, so that you only need to evaluate one block in your main code, while making sure that the different components are loading in the right sequence, and with the appropriate delay times (if that is necessary) in between them. You may also need to establish interdependencies between files, having for example a file that loads your buffers give the OK to your synths to load using an action method and setting a condition in your routine, and then your synths setting another condition for your functions, etc. (for more on interdependent processes, see the code from Class4.1 of these examples).</p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p10"><b>// ====== A SIMPLE EXAMPLE ======</b></p>
+<p class="p10">// The basic class we need to use is <a href="SC://Document"><span class="s2">Document</span></a>.<span class="Apple-converted-space"> </span></p>
+<p class="p10">// Let's see a very simple example:</p>
+<p class="p12">s.boot;</p>
+<p class="p11"><br></p>
+<p class="p10"><b>// Step 1: </b>Create a simple file containing a Synth (we'll use a pre-baked one for now)</p>
+<p class="p11"><br></p>
+<p class="p10"><b>// Step 2: </b>Save it in the same directory as this file (i.e. your main workspace file).</p>
+<p class="p11"><br></p>
+<p class="p10"><b>// Step 3:</b></p>
+<p class="p10"><span class="s3"><b><span class="Apple-tab-span">	</span></b></span><b>// (a):</b> Get the path the current document (this file) is located:</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~thisPath = <span class="s4">Document</span>.current.dir.postln;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span><b>// (b):</b> Create a string concatanating the name of the file you want to load with the directory you are in:</p>
+<p class="p13"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~synths = ~thisPath ++ </span>"/DX490A_su2010_Class11.1_[Managing-Large-Projects_Simple-example].rtf"<span class="s3"> </span><span class="s5">// don't forget the extra '/' before the name!</span></p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>/<b>/ (c): </b>Now, just .load the file!</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~synths.load</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span><b>// (d): </b>If you want to edit the file, just .open it:</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">Document</span>.open(~synths)</p>
+<p class="p11"><br></p>
+<p class="p10">// If you make sure you always have these files in the same directory, this will always work!</p>
+<p class="p11"><br></p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// Note: Instead of .load in step 3(c), you could also use this:</p>
+<p class="p12"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">thisProcess</span>.interpreter.executeFile(~synths)</p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p10"><b>// ====== A MORE COMPLEX EXAMPLE ======</b></p>
+<p class="p11"><br></p>
+<p class="p10">// We are going to use this example: Class7.2_[Example_ProcMod_w.HID].html</p>
+<p class="p10">// The control interface for this example is the <i>3DConnexxion SpaceNavigator</i>, but one need only change the interface/mapping file to get this instrument working with another interface</p>
+<p class="p11"><br></p>
+<p class="p10">// First, check which devices are connected to the computer and where, to see where our <i>SpaceNavigator</i> is located<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p14">(</p>
+<p class="p1">// Make a list of the devices:</p>
+<p class="p12"><span class="s4">GeneralHID</span>.buildDeviceList;</p>
+<p class="p12"><span class="s4">GeneralHID</span>.postDevices;</p>
+<p class="p12">d = <span class="s4">GeneralHID</span>.deviceList;</p>
+<p class="p12">)</p>
+<p class="p10">// And set the one you want to use as this variable:</p>
+<p class="p12">~device = d[2];</p>
+<p class="p7"><br></p>
+<p class="p12">s.boot;</p>
+<p class="p11"><br></p>
+<p class="p12">(</p>
+<p class="p12">~loadMyPiece = <span class="s4">Routine</span> {</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// Get the path the current document (this file) is located:</p>
+<p class="p12"><span class="Apple-tab-span">	</span>~basePath = <span class="s4">Document</span>.current.dir.postln;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// • first, load the synthdefs</p>
+<p class="p13"><span class="s3"><span class="Apple-tab-span">	</span>~synths = ~basePath ++ </span>"/DX490A_su2010_Class11.1_[Managing-Large-Projects_synths].rtf"<span class="s3">;</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span>~synths.load;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// wait a bit for good measure (not necessary)</p>
+<p class="p12"><span class="Apple-tab-span">	</span>0.2.wait;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// • then, load the procmods</p>
+<p class="p13"><span class="s3"><span class="Apple-tab-span">	</span>~procmods = ~basePath ++ </span>"/DX490A_su2010_Class11.1_[Managing-Large-Projects_procmods].rtf"<span class="s3">;</span></p>
+<p class="p12"><span class="Apple-tab-span">	</span>~procmods.load;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// wait a bit for good measure (not necessary)</p>
+<p class="p12"><span class="Apple-tab-span">	</span>0.2.wait;</p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// • finally, load the interfacing and mapping.<span class="Apple-converted-space"> </span></p>
+<p class="p13"><span class="s3"><span class="Apple-tab-span">	</span>~interface = ~basePath ++ </span>"/DX490A_su2010_Class11.1_[Managing-Large-Projects_Mapping-SpaceNavigator].rtf"<span class="s3">;</span></p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>// NOTE: This is actually a function, as we need to pass it the port we want to connect</p>
+<p class="p12"><span class="Apple-tab-span">	</span>~interface.load.value(~device);</p>
+<p class="p12">}</p>
+<p class="p12">)</p>
+<p class="p11"><br></p>
+<p class="p10">// Now, load everything, and you're ready to play!</p>
+<p class="p12">~loadMyPiece.play(<span class="s4">AppClock</span>);</p>
+<p class="p11"><span class="Apple-tab-span">	</span></p>
+<p class="p10">// Open the separate files to edit:</p>
+<p class="p12"><span class="s4">Document</span>.open(~synths);</p>
+<p class="p12"><span class="s4">Document</span>.open(~procmods);</p>
+<p class="p12"><span class="s4">Document</span>.open(~interface);</p>
+</body>
+</html>

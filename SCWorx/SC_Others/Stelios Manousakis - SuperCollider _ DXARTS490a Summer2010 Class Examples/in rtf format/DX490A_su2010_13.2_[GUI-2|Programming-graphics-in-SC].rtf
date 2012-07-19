@@ -1,0 +1,442 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 13.2:
+\b0 \
+
+\b 	SuperCollider as a visual programming environment
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Drawing and animation\
+				- Pen\
+				- SCDraw / SCDrawServer\
+			\'95 Working with Images\
+				- SCImage\
+				- SCImageFilter\
+			\'95 Quartz Composer in SC\
+				- SCQuartzComposerView\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= SUPERCOLLIDER AS A VISUAL PROGRAMMING ENVIRONMENT =================
+\b0 \cf3 \
+\
+\cf2 // Probably the last thing that comes to mind when thinking about SuperCollider are its graphics capabilities, but the truth is that it can be quite powerful in this aspect. SC draws in a similar manner as Processing does, but has a far superior algorithmic backbone. Of course, it is not optimized for graphics, so it can be slow, but one can integrate Quartz Composer  (in Mac OS X), opening .qtz patches within SC and without having to bother with OSC communication. \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs20 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ====== DRAWING AND ANIMATION ======			
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Pen --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://Pen"}}{\fldrslt \cf2 \ul \ulc2 Pen}} is a class that allows you to algorithmically draw inside an Window (SCPen and SCWindow for CocoaGUI). \cf3 \
+\cf2 // To draw, you need to call the drawHook function or the drawFunc function (when drawing inside an UserView/SCUserView), and then refresh the window to view the results of your actions.\cf3 \
+\
+\cf2 // Here is an example by James McCartney:\cf3 \
+(\
+\cf2 // By James McCartney\cf3 \
+\cf4 var\cf3  w, h = 700, v = 700, seed, run = \cf4 true\cf3 , phase = 0;\
+w = \cf4 Window\cf3 (\cf5 "wedge"\cf3 , \cf4 Rect\cf3 (40, 40, h, v), \cf4 false\cf3 );\
+w.view.background = \cf4 Color\cf3 .rand(0,0.3);\
+w.onClose = \{ run = \cf4 false\cf3  \}; \cf2 // stop the thread on close\cf3 \
+w.front;\
+\cf2 // store an initial seed value for the random generator\cf3 \
+seed = \cf4 Date\cf3 .seed;\
+w.drawHook = \{\
+	\cf4 Pen\cf3 .width = 2;\
+	\cf4 Pen\cf3 .use \{\
+		\cf2 // reset this thread's seed for a moment\cf3 \
+		\cf4 thisThread\cf3 .randSeed = \cf4 Date\cf3 .seed;\
+		\cf2 // now a slight chance of a new seed or background color\cf3 \
+		if (0.006.coin) \{ seed = \cf4 Date\cf3 .seed; \};\
+		if (0.02.coin) \{ w.view.background = \cf4 Color\cf3 .rand(0,0.3); \};\
+		\cf2 // either revert to the stored seed or set the new one\cf3 \
+		\cf4 thisThread\cf3 .randSeed = seed;\
+		\cf2 // the random values below will be the same each time if the seed has not changed\cf3 \
+		\cf2 // only the phase value has advanced\cf3 \
+		\cf4 Pen\cf3 .translate(h/2, v/2);\
+		\cf2 // rotate the whole image\cf3 \
+		\cf2 // negative random values rotate one direction, positive the other\cf3 \
+		\cf4 Pen\cf3 .rotate(phase * 1.0.rand2);\
+		\cf2 // scale the rotated y axis in a sine pattern\cf3 \
+		\cf4 Pen\cf3 .scale(1, 0.3 * sin(phase * 1.0.rand2 + 2pi.rand) + 0.5 );\
+		\cf2 // create a random number of annular wedges\cf3 \
+		rrand(6,24).do \{\
+			\cf4 Pen\cf3 .color = \cf4 Color\cf3 .rand(0.0,1.0).alpha_(rrand(0.1,0.7));\
+			\cf4 Pen\cf3 .beginPath;\
+			\cf4 Pen\cf3 .addAnnularWedge(\cf4 Point\cf3 (0,0), a = rrand(60,300), a + 50.rand2, 2pi.rand\'a0\
+				+ (phase * 2.0.rand2), 2pi.rand);\
+			if (0.5.coin) \{\cf4 Pen\cf3 .stroke\}\{\cf4 Pen\cf3 .fill\};\
+		\};\
+	\};\
+\};\
+\
+\cf2 // fork a thread to update 20 times a second, and advance the phase each time\cf3 \
+\{ while \{ run \} \{ w.refresh; 0.05.wait; phase = phase + 0.01pi;\} \}.fork(\cf4 AppClock\cf3 )\
+\
+)\
+\
+\
+\cf2 // For a couple more demos look at these files:\cf3 \
+\cf4 Document\cf3 .open(\cf5 "examples/GUI examples/rotary hommage duchamp.scd"\cf3 )\
+\cf4 Document\cf3 .open(\cf5 "examples/GUI examples/Nick's LetterGimmick.scd"\cf3 )\
+\
+\
+\cf2 // You should also check out Frederik Olofsson's blog, where he has a tutorial and several very nice examples of AudioVisuals with SC:\cf3 \
+\cf5 "open http://www.fredrikolofsson.com/f0blog/?q=node/316"\cf3 .unixCmd\
+and:\
+\cf5 "open http://www.fredrikolofsson.com/f0blog/files/audiovisuals_with_sc-examples.zip"\cf3 .unixCmd\
+\
+\cf2 // You may also want to get these extensions to the Pen class:\cf3 \
+\cf5 "open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/743"\cf3 .unixCmd\
+\
+\
+
+\b \cf2 // ------ SCDraw / SCDrawServer --
+\b0 \cf3 \
+\cf2 // These two classes are in the SCAnimation quark by Don Craig, and are intended for realtime (SCDrawServer) and non-realtime (SCDraw) procedural animation. These classes use Pen, so they can do everything Pen can, plus some extra things. Have a look at the help-files for more information and some examples.\cf3 \
+\cf4 Quarks\cf3 .install( \cf5 "SCAnimation"\cf3 , checkoutIfNeeded: \cf4 false\cf3 )\
+\
+\
+\
+
+\b \cf2 // ====== WORKING WITH IMAGES ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ SCImage --
+\b0 \cf3 \
+\cf2 // You can load, create and save images within SC using the {\field{\*\fldinst{HYPERLINK "SC://SCImage"}}{\fldrslt \cf2 \ul \ulc2 SCImage}} class.\cf3 \
+\
+\cf2 // Load an image from your computer\cf3 \
+i = \cf4 SCImage\cf3 .new(\cf5 "/Library/Desktop Pictures/Ripples Blue.jpg"\cf3 );\
+[i.width, i.height].postln;\
+i.plot;\
+i.free;\
+	\
+\cf2 // Or, load an image from the web: URL string - http:// or ftp:// - blocks until image is downloaded\cf3 \
+i = \cf4 SCImage\cf3 .new(\cf5 "http://www.washington.edu/dxarts/images/logo.gif"\cf3 );\
+i.plot;\
+i.url;\
+i.free;\
+\
+\cf2 // Let's do some simple operations to an image:\cf3 \
+\cf2 // add an image to a window\cf3 \
+w = \cf4 SCWindow\cf3 .new.front;\
+w.view.background = \cf4 Color\cf3 (0.6,0.2,0.2);\
+i = \cf4 SCImage\cf3 .new(\cf5 "http://www.washington.edu/dxarts/images/logo.gif"\cf3 );\
+w.view.backgroundImage_(i, 1, 0.6); \cf2 // (image, tileMode, alpha);\cf3 \
+\
+\cf2 // grab the image:\cf3 \
+g = \cf4 SCImage\cf3 .fromWindow(w, \cf4 Rect\cf3 (0, 0, 85, 95));\
+g.plot(freeOnClose:\cf4 true\cf3 );\
+w.close;\
+\
+\cf2 // create another window;\cf3 \
+w = \cf4 SCWindow\cf3 .new.front;\
+w.view.background = \cf4 Color\cf3 (0.2,0.6,0.6);\
+w.view.backgroundImage_(g, 4, 0.6); \cf2 // (image, tileMode, alpha)\cf3 \
+g.free;\
+\
+\cf2 // grab the new image, and create another window\cf3 \
+j = \cf4 SCImage\cf3 .fromWindow(w, \cf4 Rect\cf3 (0, 0, 190, 190));\
+j.plot(freeOnClose:\cf4 true\cf3 );\
+j.write(\cf5 "~/Desktop/my_drawing.png"\cf3 ); \cf2 // write the image\cf3 \
+w.close;\
+j.free\
+\
+\cf2 // Now, create a 2D slider with that image as a background\cf3 \
+(\
+a = \cf4 SCImage\cf3 .new(\cf5 "~/Desktop/my_drawing.png"\cf3 );\
+w = \cf4 SCWindow\cf3 .new(\cf5 "SCImage background"\cf3 );\
+l = \cf4 SC2DSlider\cf3 .new(w, \cf4 Rect\cf3 (10,10,190,190)).backgroundImage_(a, 4, 1);\
+w.front;\
+a.free; \cf2 // safe\cf3 \
+)\
+\
+l.knobColor = \cf4 Color\cf3 (1, 0, 0, 0.4)		\
+\
+\
+\cf2 // For more information, see the {\field{\*\fldinst{HYPERLINK "SC://SCImage"}}{\fldrslt \cf2 \ul \ulc2 SCImage}} helpfile\cf3 \
+\
+\
+\
+\
+\
+
+\b \cf2 // ------ SCImageFilter --
+\b0 \cf3 \
+\cf2 // You can apply CoreImage Filters to an SCImage, using the {\field{\*\fldinst{HYPERLINK "SC://SCImageFilter"}}{\fldrslt 
+\b \cf2 SCImageFilter}} - and there are dozens of filters available!!!!\cf3 \
+\cf2 // You can find a list and more info about these filters here:\cf3 \
+\cf2 // \ul http://developer.apple.com/documentation/GraphicsImaging/Reference/CoreImageFilterReference/Reference/reference.html\cf3 \ulnone \
+\
+\
+\
+(\
+\cf2 // the image to use; scaled-down for faster computation\cf3 \
+a = \cf4 SCImage\cf3 .new(\cf5 "/Library/Desktop Pictures/Plants/Peony.jpg"\cf3 ).scalesWhenResized_(\cf4 true\cf3 ).setSize(500, 400);\
+a.plot; \
+)\
+\
+(\cf2 // posterize \cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIColorPosterize\cf3 );\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+(\cf2 // Roy Lichtenstein\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIComicEffect\cf3 );\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+(\cf2 // a glass blur\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIGlassLozenge\cf3 );\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+\
+(\cf2 // Kaleidoscope\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIKaleidoscope\cf3 );\
+h.count_(6); \cf2 // h\cf3 \
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+\
+(\cf2 // image adjustments\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIColorControls\cf3 );\
+h.saturation_(0.5).brightness_(0.2).contrast_(0.7);\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+(\cf2 // Add glow\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIBloom\cf3 );\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+\
+(\cf2 // Invert colors\cf3 \
+h = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIColorInvert\cf3 );\
+a.addFilter(h); \cf2 // first call needed\cf3 \
+a.plot; \cf2 // there should have it\cf3 \
+)\
+\
+\cf2 // Image masking and sequences of filters:\cf3 \
+(\
+f = \cf4 SCImageFilter\cf3 .new(\cf6 \\CIColorMonochrome\cf3 ); \cf2 // create a GrayScale image\cf3 \
+g = \cf4 SCImageFilter\cf3 .new(\cf6 \\CISourceInCompositing\cf3 ); \cf2 // compositing we will use\cf3 \
+f.color_(\cf4 Color\cf3 .black);\
+f.intensity_(1.0);\
+b = \cf4 SCImage\cf3 .new(\cf5 "~/Desktop/my_drawing.png"\cf3 ); \cf2 // use the first image we created in this file, and saved onto the destop\cf3 \
+\cf2 // apply a sequence of filters:\cf3 \
+a.applyFilters(\
+	[f, \cf4 SCImageFilter\cf3 (\cf6 \\CIColorInvert\cf3 ), \
+	\cf4 SCImageFilter\cf3 (\cf6 \\CIMaskToAlpha\cf3 )]\
+	); \cf2 // grayscale + invert + maskToAlpha = create a mask\cf3 \
+g.backgroundImage_(a); \cf2 // set up background image\cf3 \
+b.applyFilters(g); \cf2 // create masked image\cf3 \
+a.free;\
+w = b.plot(freeOnClose:\cf4 true\cf3 , background:\cf4 Color\cf3 .clear); \cf2 // set to clear color to see plainly the image\cf3 \
+)\
+\
+\cf2 // You can also load Non-built In Plugins (add them in /Library/Graphics/Image Units/).\cf3 \
+\cf2 // Get some free plug-ins here:\cf3 \
+\cf5 "open http://www.noiseindustries.com/products"\cf3 .unixCmd\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs20 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+\cf2 // For more information, see the {\field{\*\fldinst{HYPERLINK "SC://SCImageFilter"}}{\fldrslt \cf2 \ul \ulc2 SCImageFilter}} helpfile\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== QUARTZ COMPOSER IN SC ======		
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ SCQuartzComposerView --
+\b0 \cf3 \
+\cf2 // Quartz Composer is a Apple's visual programming environment using objects and patchcords (similar idea as with Max/MSP, PureData and many other environments) for processing and rendering graphics in Mac OS X. It comes free with the Apple Developer Tools and is extremely efficient, as it is highly optimized for OS X and Apple comptuer hardware.\cf3 \
+\
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://SCQuartzComposerView"}}{\fldrslt \cf2 \ul \ulc2 SCQuartzComposerView}} is a class that let's you integrate QC compositions within SuperCollider, allowing you to merge the best of the two worlds: QC optimized graphics and SC's algorithmic capabilities (QC really lacks on that aspect).\cf3 \
+\cf2 // When making a composition/patch in QC, you can choose to publich inputs and outputs; the names that you give these inputs and outputs are kept in a dictionary, and can be accessed from within SC using the methods 
+\b setInputValue
+\b0 , 
+\b getInputValue
+\b0  and 
+\b getOutputValue
+\b0 \cf3 \
+\
+\
+\cf2 // \'95 Here is a simple example, only loading a QC composition, playing and stopping it:\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 (\
+\cf2 // make a window for the viewer\cf3 \
+w = \cf4 SCWindow\cf3 (\cf5 "Simple QC Test"\cf3 ).front;\
+\cf2 // create a button to load patches\cf3 \
+b = \cf4 SCButton\cf3 (w, \cf4 Rect\cf3 (0, 0, 150, 20))\
+	.states_([[\cf5 "pick another QC file"\cf3 ]])\
+	.action_(\{ \cf4 File\cf3 .openDialog(\cf5 ""\cf3 , \{ \cf4 |path|\cf3  m.path_(path) \}) \});\
+\cf2 // create the QC viewer\cf3 \
+m = \cf4 SCQuartzComposerView\cf3 (w, \cf4 Rect\cf3 (0,20,400, 260));\
+\cf2 // add the path of the patch to use\cf3 \
+m.path = \cf5 "/Applications/SuperCollider/Help/GUI/Cocoa-GUI/SCQuartzComposerView"\cf3  ++ \cf5 "/Cells.qtz"\cf3 ;\
+)\
+m.start; \cf2 // start it\cf3 \
+m.stop; \cf2 // stop it\cf3 \
+\
+\
+ \
+\cf2 // \'95 Now, a more involved example, using QC's inputs for controlling a composition from SC.\cf3 \
+(\
+~qcWin = \cf4 SCWindow\cf3 (\cf5 "Kandinsky"\cf3 , \cf4 Rect\cf3 (0,0,720,576), border: \cf4 false\cf3 ).front;\
+b = \cf4 SCButton\cf3 (~qcWin, \cf4 Rect\cf3 (0, 0, 150, 20))\
+	.states_([[\cf5 "Close Me"\cf3 ]])\
+	.action_(\{~qcWin.close\});\
+q = \cf4 SCQuartzComposerView\cf3 (~qcWin, \cf4 Rect\cf3 (0,20,720,576));\
+\cf2 // put the "QuartzComposer_patch_support" folder and all its contents together with this file for it to work\cf3 \
+q.path = \cf4 Document\cf3 .current.path.dirname ++ \cf5 "/QuartzComposer_patch_support/Simple-QC_Kandinsky.qtz"\cf3 ;\
+q.resize = 5;\
+q.start;\
+)\
+\
+\cf2 // get the names of input and output keys\cf3 \
+q.inputKeys;\
+q.outputKeys;\
+\cf2 // you can see the published inputs and outputs in the composition inside Quartz Composer if you want\cf3 \
+q.openInQC;\
+\
+\
+\cf2 // Now, to control this composition directly from within SC.\cf3 \
+\cf2 // mapping envelopes to use in the function, one env for each input\cf3 \
+~xEnv = \cf4 Env\cf3 ([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);\
+~yEnv = \cf4 Env\cf3 ([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);\
+\
+(\
+\cf2 // a function that includes a task to control each input in real time, and a task per parameter for recreating the envelopes in real-time\cf3 \
+~imgMove = \{\cf4 arg\cf3  xmul, ymul, speed, jit;\
+	\cf4 var\cf3  task, envSpeed;\
+	envSpeed = speed * 1500;\
+	envSpeed.postln;\
+	t = \cf4 Task\cf3 \{\
+		\cf4 inf\cf3 .do(\{\cf4 |i|\cf3 \
+			q.x_pos_((jit[0] * -1).rrand(jit[0]) + xmul * ~xEnv[((i % 1000) * 0.001)]);\
+			speed[0].wait(speed[1]);\
+		\})\
+	\};\
+	p = \cf4 Task\cf3 \{\
+		\cf4 inf\cf3 .do(\{\cf4 |i|\cf3 \
+			q.y_pos_((jit[1] * -1).rrand(jit[1]) + ymul * ~yEnv[((i % 1000) * 0.001)]);\
+			speed[0].wait(speed[1]);\
+		\})\
+	\};\
+	e = \cf4 Task\cf3 \{\
+		\cf4 inf\cf3 .do(\{\cf4 |i|\cf3 \
+			~xEnv = \cf4 Env\cf3 ([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);\
+			envSpeed[0].wait(envSpeed[1]);\
+		\})\
+	\};\
+	f = \cf4 Task\cf3 \{\
+		\cf4 inf\cf3 .do(\{\cf4 |i|\cf3 \
+			~yEnv = \cf4 Env\cf3 ([0, 1, 0.2, 0.4, 0.8].scramble, [1, 1.5, 3, 0.5].scramble.normalizeSum, [-2, 5, 4, 8].scramble);\
+			envSpeed[0].wait(envSpeed[1]);\
+		\})\
+	\};\
+	t.play(\cf4 AppClock\cf3 );\
+	p.play(\cf4 AppClock\cf3 );\
+	e.play(\cf4 AppClock\cf3 );\
+	f.play(\cf4 AppClock\cf3 );\
+\};\
+)\
+\
+\cf2 // start the function\cf3 \
+~imgMove.value(1, 1, [0.05, 0.25], [0.5, 0.005])\
+\cf2 // fullscreen mode if you like\cf3 \
+~qcWin.fullScreen\
+\cf2 // individual control over each task\cf3 \
+p.stop;\
+t.stop; \
+e.stop;\
+f.stop;\
+p.start; \
+t.start;\
+e.start;\
+f.start;\
+\
+\
+\
+\cf2 // \'95\'a0You can also use QC to create GUIs as controls for your synths:\cf3 \
+\cf2 // Here is an example from the {\field{\*\fldinst{HYPERLINK "SC://SCQuartzComposerView"}}{\fldrslt \cf2 \ul \ulc2 SCQuartzComposerView}} help file (there are more there)\cf3 \
+\
+\cf2 ////////// Control some audio: Stupid Pan Example\cf3 \
+\
+(\
+w = \cf4 SCWindow\cf3 (\cf5 "Stupid Pan Example"\cf3 , \cf4 Rect\cf3 (0,20,600, 150)).front;\
+m = \cf4 SCQuartzComposerView\cf3 (w, \cf4 Rect\cf3 (0,20,600, 100));\
+m.path = \cf4 Document\cf3 .current.path.dirname ++ \cf5 "/Stupid Pan.qtz"\cf3 ;\
+m.resize = 5;\
+m.start;\
+)\
+\
+s.boot;\
+\cf2 // use mouse to set pan position\cf3 \
+(\
+\{\
+loop(\{\
+\{ \cf4 Pan2\cf3 .ar(\cf4 Saw\cf3 .ar(mul: 0.1) * \cf4 EnvGen\cf3 .ar(\cf4 Env\cf3 .perc, timeScale: 4, doneAction: 2), m.x_pos) \}.play;\
+1.wait;\
+\});\
+\}.fork(\cf4 AppClock\cf3 );\
+)\
+\
+\
+\
+\cf2 // Here is an online repository of QC patches:\cf3 \
+\cf5 "open http://kineme.net/"\cf3 .unixCmd\
+}

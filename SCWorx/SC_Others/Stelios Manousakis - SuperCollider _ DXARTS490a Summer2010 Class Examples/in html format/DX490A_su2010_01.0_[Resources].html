@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #606060}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Optima; color: #606060}
+span.s1 {font: 14.0px Optima}
+span.s2 {color: #000000}
+span.s3 {text-decoration: underline}
+span.s4 {color: #0000bf}
+span.s5 {color: #606060}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p5"><b>Class 1.0:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Resources</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Class website</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Downloading SuperCollider</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Online resources</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Forum</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• UNIX commands reference (OSX)</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>//================= CLASS WEBSITE =================</b></p>
+<p class="p7">//- Here's the address for the class website. All code and materials will be posted here:</p>
+<p class="p8">"open http://www.dxarts.washington.edu/courses/490a/"<span class="s2">.unixCmd</span></p>
+<p class="p9">//(NOTE: these .unixCmd method will work on all UNIX-based systems, but for Windows has to be formatted as a DOS command. It is a method of the Class <a href="SC://String"><span class="s3">String</span></a>)</p>
+<p class="p10"><br></p>
+<p class="p7">//- and don't forget: the 461/2/3 series code will always be around, with slight changes every year:</p>
+<p class="p8">"open http://www.dxarts.washington.edu/courses/461-3/"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p7"><b>//================= DOWNLOADING SUPERCOLLIDER =================</b></p>
+<p class="p7">//This is the "downloads" link for OSX and Windows:</p>
+<p class="p8">"open http://sourceforge.net/projects/supercollider/files/"<span class="s2">.unixCmd</span></p>
+<p class="p7">//and here it is for Linux</p>
+<p class="p8">"open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/478"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p7">//If you feel adventurous enough to want to cook your own SC some info can be found here:</p>
+<p class="p8">"open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/422"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p7">// Which SC version are you running now?</p>
+<p class="p11"><span class="s4">Main</span>.version</p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p7"><b>//================= ONLINE RESOURCES =================</b></p>
+<p class="p7">//- For info on downloading and installing/compiling SuperCollider, as well as a few examples and resources go here:</p>
+<p class="p8">"open http://supercollider.sourceforge.net"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p7">//- There is also a SuperCollider swiki here:</p>
+<p class="p8">"open http://swiki.hfbk-hamburg.de/MusicTechnology/6"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p7">//- You can download a searchable PDF file containing all helpfiles (as of January 2007) if you want, compiled by Andrea Valle. This will save it to your desktop.<span class="Apple-converted-space"> </span></p>
+<p class="p8">"curl http://www.fonurgia.unito.it/andrea/sw/sc/theSuperColliderHelpBook.pdf -o ~/Desktop/theSuperColliderHelpBook.pdf"<span class="s2">.unixCmd{</span>"open ~/Desktop/theSuperColliderHelpBook.pdf"<span class="s2">.unixCmd};</span></p>
+<p class="p7">//(Note that downlading may take a few seconds, as this is a 4.8MB file. The pdf will open automatically once it's downloaded)</p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p7"><b>//================= FORUM =================</b></p>
+<p class="p7">//- The best resource is the sc-users mailing list. You can search it from here:</p>
+<p class="p8">"open http://www.listarc.bham.ac.uk/lists/sc-users/search/"<span class="s2">.unixCmd</span></p>
+<p class="p7">//and here:</p>
+<p class="p8">"open http://new-supercollider-mailing-lists-forums-use-these.2681727.n2.nabble.com/SuperCollider-Users-New-Use-this-f2676391.html"<span class="s2">.unixCmd</span></p>
+<p class="p7">//But it's a good idea to actually subscribe to the list as it's an excellent source for learning (though your inbox will be inundated with messages on a daily basis)</p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p7"><b>//================= UNIX COMMAND REFERENCE (OSX) =================</b></p>
+<p class="p7">// Very useful for commanding your Operating System from within SC</p>
+<p class="p8">"open http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/index.html"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p11">(</p>
+<p class="p11"><span class="s4">Speech</span>.setSpeechVoice(0, 7).setSpeechRate(0, 128); <span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="s4">Speech</span>.init;<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="s4">Speech</span>.channels[0].pitchMod_(110).speak(<span class="s5">"Now... are you ready to rumble?"</span>);<span class="Apple-converted-space"> </span></p>
+<p class="p11">)</p>
+<p class="p10"><br></p>
+<p class="p7">// create a directory inside your SuperCollider application folder to put all the class examples</p>
+<p class="p12">"mkdir -p DX490a_su2010_ClassExamples/"<span class="s2">.unixCmd</span></p>
+<p class="p10"><br></p>
+<p class="p7">// directly download and save to that folder the html file example for today, then open them within SC</p>
+<p class="p7">// Class 1.1</p>
+<p class="p13">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/490a/490/Class%20Examples/DX490A_su2010_Class1.1_%5BSC-Architecture_+_language%5D.html -o DX490a_su2010_ClassExamples/DX490A_su2010_Class1.1_[SC-Architecture_+_language].html"<span class="s2">.unixCmd{</span>"open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX490A_su2010_Class1.1_[SC-Architecture_+_language].html"<span class="s2">.unixCmd};</span></p>
+<p class="p7">// Class 1.2</p>
+<p class="p13">"curl http://www.dxarts.washington.edu/courses/490a/490/Class%20Examples/DX4z90A_su2010_Class1.2_%5Bscsynth%5D.html -o DX490a_su2010_ClassExamples/DX490A_su2010_Class1.2_[scsynth].html"<span class="s2">.unixCmd{</span>"open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX490A_su2010_Class1.2_[scsynth].html"<span class="s2">.unixCmd};</span></p>
+<p class="p7">// Class 1.0 (to put a copy of this file together with the rest)</p>
+<p class="p13">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/490a/490/Class%20Examples/DX490A_su2010_Class1.0_%5BResources%5D.html -o DX490a_su2010_ClassExamples/DX490A_su2010_Class1.0_[Resources].html"<span class="s2">.unixCmd{</span>"open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX490A_su2010_Class1.0_[Resources].html"<span class="s2">.unixCmd};</span></p>
+</body>
+</html>

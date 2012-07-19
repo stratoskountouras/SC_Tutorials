@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 16.0px Helvetica}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Helvetica}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #0018e8; min-height: 17.0px}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #0018e8}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica}
+span.s1 {color: #a8220e}
+span.s2 {color: #0013bb}
+span.s3 {text-decoration: underline ; color: #0018e8}
+ul.ul1 {list-style-type: disc}
+ul.ul2 {list-style-type: circle}
+</style>
+</head>
+<body>
+<p class="p1"><b>Quick reference</b></p>
+<p class="p2"><b><i>(collected from James Harkins' tutorial)</i></b></p>
+<p class="p3"><br></p>
+<p class="p4"><b>Primary Patterns</b></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pseq(list, repeats, offset):</b> Play through the entire list 'repeats' times. Like list.do.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Prand(list, repeats):</b> Choose items from the list randomly (same as list.choose).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pxrand(list, repeats):</b> Choose randomly, but never repeat the same item twice.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pshuf(list, repeats):</b> Shuffle the list in random order, and use the same random order 'repeats' times. Like list.scramble.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pwrand(list, weights, repeats):</b> Choose randomly by weighted probabilities (like list.wchoose(weights)).</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pseries(start, step, length):</b> Arithmetic series (addition).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pgeom(start, grow, length):</b> Geometric series (multiplication).</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pwhite(lo, hi, length):</b> Random numbers, equal distribution ("white noise"). Like rrand(lo, hi).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pexprand(lo, hi, length):</b> Random numbers, exponential distribution. Like exprand(lo, hi).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pbrown(lo, hi, step, length):</b> Brownian motion, arithmetic scale (addition).</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pfunc(nextFunc, resetFunc):</b> Get the stream values from a user-supplied function.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Pfuncn(func, repeats):</b> Get values from the function, but stop after 'repeats' items.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><span class="s1"><b>* </b></span><b>Proutine(routineFunc):</b> Use the function like a routine. The function should return values using .yield or .embedInStream.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p4"><b>Additional List Patterns</b></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pser(list, repeats, offset):</b> Play through the list as many times as needed, but output only 'repeats' items.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pslide(list, repeats, len, step, start, wrapAtEnd):</b> Play overlapping segments from the list.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pwalk(list, stepPattern, directionPattern, startPos):</b> Random walk over the list.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Place(list, repeats, offset):</b> Interlace any arrays found in the main list.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ppatlace(list, repeats, offset):</b> Interlace any patterns found in the main list.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ptuple(list, repeats):</b> Collect the list items into an array as the return value.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p4"><b>Additional Random Number Generators</b></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgbrown(lo, hi, step, length):</b> Brownian motion, geometric scale (multiplication).</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pbeta(lo, hi, prob1, prob2, length):</b> Beta distribution, where prob1 = α (alpha) and prob2 = β (beta).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pcauchy(mean, spread, length):</b> Cauchy distribution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgauss(mean, dev, length):</b> Guassian (normal) distribution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Phprand(lo, hi, length):</b> Returns the greater of two equal-distribution random numbers.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Plprand(lo, hi, length):</b> Returns the lesser of two equal-distribution random numbers.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pmeanrand(lo, hi, length):</b> Returns the average of two equal-distribution random numbers, i.e., (x +<span class="Apple-converted-space">  </span>y) / 2.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ppoisson(mean, length):</b> Poisson distribution.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pprob(distribution, lo, hi, length, tableSize):</b> Arbitrary distribution, based on a probability table.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p4"><b>Random numbers and probability distributions</b></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pwhite(lo, hi, length):</b> Produces 'length' random numbers with equal distribution ('white' refers to white noise).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pexprand(lo, hi, length):</b> Same, but the random numbers have an exponential distribution, favoring lower numbers. This is good for frequencies, and also durations (because you need more notes with a shorter duration to balance the weight of longer notes).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pbrown(lo, hi, step, length):</b> Brownian motion. Each value adds a random step to the previous value, where the step has an equal distribution between -step and +step.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgbrown(lo, hi, step, length):</b> Brownian motion on a geometric scale. Each value multiplies a random step factor to the previous value.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pbeta(lo, hi, prob1, prob2, length):</b> Beta distribution, where prob1 = α (alpha) and prob2 = β (beta).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pcauchy(mean, spread, length):</b> Cauchy distribution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgauss(mean, dev, length):</b> Guassian (normal) distribution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Phprand(lo, hi, length):</b> Returns the greater of two equal-distribution random numbers.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Plprand(lo, hi, length):</b> Returns the lesser of two equal-distribution random numbers.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pmeanrand(lo, hi, length):</b> Returns the average of two equal-distribution random numbers, i.e., (x + y) / 2.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ppoisson(mean, length):</b> Poisson distribution.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pprob(distribution, lo, hi, length, tableSize):</b> Given an array of relative probabilities across the desired range (a histogram) representing an arbitrary distribution, generates random numbers corresponding to that distribution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #0018e8; min-height: 17.0px"><b></b><br></li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Helvetica; color: #0018e8"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06a_Repetition_Contraint_Patterns.html"><b>Repetition and Constraint patterns</b></a></li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pclutch(pattern, connected):</b> If the 'connected' pattern is true, Pclutch returns the next value from 'pattern'. If 'connected' is false, the previous pattern value is repeated. It's like a clutch in a car: when engaged, the pattern moves forward; when disconnected, it stays where it is.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pn(pattern, repeats):</b> Embeds the source pattern 'repeats' times: simple repetition. This also works on single values: Pn(1, 5) outputs the number 1 5 times.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pstutter(n, pattern):</b> 'n' and 'pattern' are both patterns. Each value from 'pattern' is repeated 'n' times. If 'n' is a pattern, each value can be repeated a different number of times.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>PdurStutter(n, pattern):</b> Like Pstutter, except the pattern value is divided by the number of repeats (so that the total time for the repeat cycle is the duration value from the source pattern).</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pfin(count, pattern): </b>Returns exactly 'count' values from the source pattern, then stops.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pconst(sum, pattern, tolerance):</b> Output numbers until the sum reaches a predefined limit. The last output value is adjusted so that the sum matches the limit exactly.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pfindur(dur, pattern, tolerance):</b> Like Pconst, but applying the "constrain" behavior to the event's rhythmic values. The source pattern runs up to the specified duration, then stops. This is very useful if you know how long a musical behavior should go on, but the number of events to fill up that time is not known.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Psync(pattern, quant, maxdur, tolerance):</b> Like Pfindur, but does not have a fixed duration limit. Instead, it plays until either it reaches maxdur (in which case it behaves like Pfindur, adjusting the last event so the total duration matches maxdur), or the pattern stops early and the last event is rounded up to the next integer multiple of quant.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06b_Time_Based_Patterns.html"><b>Time-based patterns</b></a></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ptime(repeats):</b> Returns the amount of time elapsed since embedding.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pstep(levels, durs, repeats):</b> Repeat a 'level' value for its corresponding duration, then move to the next.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pseg(levels, durs, curves, repeats):</b> Similar to Pstep, but interpolates to the next value instead of stepping abruptly at the end of the duration. Interpolation is linear by default, but any envelope segment curve can be used. Levels, durs and curves should be patterns.</li>
+<ul class="ul2">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica">Related: Use of <a href="../../../../../../Applications/SuperCollider/Help/Control/Env.html"><span class="s2">Env</span></a> as a pattern.</li>
+</ul>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06c_Composition_of_Patterns.html"><b>Adding values into event patterns</b></a></p>
+<p class="p4"><b>(Or, "Pattern Composition")</b></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pbindf(pattern, pairs):</b> Adds new key-value pairs onto a pre-existing Pbind-style pattern.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pchain(patterns):</b> Chains separate Pbind-style patterns together, so that all their key-value pairs go into the same event.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06d_Parallel_Patterns.html"><b>Parallelizing event patterns</b></a></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ppar(list, repeats):</b> Start each of the event patterns in the 'list' at the same time. When the last one finishes, the Ppar also stops. If repeats &gt; 1, all the subpatterns start over again from the beginning.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ptpar(list, repeats):</b> Here, the list consists of [timeOffset0, pattern0, timeOffset1, pattern1...]. Each pattern starts after the number of beats given as its time offset. The patterns can start at different times relative to each other.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgpar(list, repeats):</b> Like Ppar, but it creates a separate group for each subpattern.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgtpar(list, repeats):</b> This is supposed to be like Ptpar with separate groups for the sub patterns, but the class is currently broken.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pspawner(routineFunc):</b> The function is used to make a routine. A Spawner object gets passed into this routine, and this object is used to add or remove streams to/from the parallel stream. New patterns can be added in sequence or in parallel.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pspawn(pattern, spawnProtoEvent):</b> Supports most of the features of Pspawner, but uses a pattern to control the Spawner object instead of a routine function.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06e_Language_Control.html"><b>Language control methods</b></a></p>
+<p class="p3"><br></p>
+<p class="p4">Some patterns mimic language-style control methods: conditionals (Pif), loops (Pwhile) and error cleanup (Pprotect).</p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pif(condition, iftrue, iffalse, default):</b> Evaluates a pattern 'condition' that returns true or false. Then, one value is taken from the true or false branch before going back to evaluate the condition again. The 'default' value or pattern comes into play when the true or false branch stops producing values (returns nil). If the default is not given, Pif returns control to the parent upon nil from either branch.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pseed(randSeed, pattern):</b> Random number generators depend on seed values; setting a specific seed produces a repeatable stream of pseudorandom numbers. Pseed sets the random seed before embedding 'pattern', effectively restarting the random number generator at the start of the pattern.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pprotect(pattern, func):</b> Like the 'protect' error handling method, if an error occurs while getting the next value from the pattern, the function will be evaluated before the error interrupts execution.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Ptrace(pattern, key, printStream, prefix):</b> For debugging, Ptrace prints every return value. Is your pattern really doing what you think? This will tell you. A Ptrace is created automatically by the 'trace' message: aPattern.trace(key, printStream, prefix) --&gt; Ptrace(aPattern, key, printStream, prefix).</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pwhile(func, pattern):</b> Like <a href="../../../../../../Applications/SuperCollider/Help/Language/Control-Structures.html"><span class="s3">while</span></a>: as long as the function evaluates to true, the pattern is embedded. The function is checked once at the beginning and thereafter when the pattern comes to an end. If it's applied to an infinite pattern, there's no looping because the pattern never gives control back.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06f_Server_Control.html"><b>Server control methods</b></a></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pbus(pattern, dur, fadeTime, numChannels, rate):</b> Creates a private group and bus for the synths played by the pattern. The group and bus are released when the pattern stops. Useful for isolating signals from different patterns.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pgroup(pattern):</b> Creates a private group (without private bus) for the pattern's synths.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pfx(pattern, fxname, pairs)</b></li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pfxb(pattern, fxname, pairs):</b> Both of these patterns play an effect synth at the tail of the target group. This synth should read from the bus identified by the 'out' argument, and write the processed signal onto the same bus using either ReplaceOut or XOut. Pfx uses whatever bus and group are specified in the incoming event. Pfxb allocates a separate bus and group for the effect and the pattern.</li>
+</ul>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pproto(makeFunction, pattern, cleanupFunc):</b> Allocate resources on the server and add references to them into the event prototype used to play 'pattern'. When the pattern stops (or is stopped), the resources can be removed automatically.</li>
+</ul>
+<p class="p3"><br></p>
+<p class="p3"><br></p>
+<p class="p6"><a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_06g_Data_Sharing.html"><b>Data sharing</b></a></p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pkey(key):</b> Read the 'key' in the input event, making previously-calculated values available for other streams.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Penvir(envir, pattern, independent):</b> Run the pattern inside a given environment.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pfset(func, pattern):</b> Assign default values into the input event before getting each result event out of the given pattern.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Plambda(pattern, scope):</b> Creates a "function scope" into which values are assigned using Plet, and from which values are retrieved with Pget. Pget is somewhat like Pkey, except that its scope is strictly internal, hidden from the caller. With Pkey, the source values remain present in the event returned to the caller.</li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px"><br></li>
+</ul>
+<p class="p7"><b></b><br></p>
+<p class="p7"><b></b><br></p>
+<p class="p8"><b>Pset and cousins</b></p>
+<p class="p3"><br></p>
+<p class="p4">A group of pattern classes allow single event keys to be overwritten, or one addition or multiplication to be performed. Pkey, in combination with the Pchain or Pbindf "pattern composition" classes, can do everything the following classes can do (though this alternate notation may be more convenient in certain cases).</p>
+<p class="p3"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pset(name, value, pattern):</b> Get one event from 'pattern', and then put the next value from the 'value' pattern into the 'name' key. If the source pattern specifies a value for the same name, the value from the source will be replaced with the new one.</li>
+</ul>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Padd(name, value, pattern):</b> After getting the next event, replace the 'name' value with its existing value + the next number from 'value'.</li>
+</ul>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica"><b>Pmul(name, value, pattern):</b> After getting the next event, replace the 'name' value with its existing value * the next number from 'value'.</li>
+</ul>
+</body>
+</html>

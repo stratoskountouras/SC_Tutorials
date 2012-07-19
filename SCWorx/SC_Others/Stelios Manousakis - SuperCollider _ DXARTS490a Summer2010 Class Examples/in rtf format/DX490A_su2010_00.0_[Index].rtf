@@ -1,0 +1,320 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red168\green34\blue14;\red0\green19\blue187;\red96\green96\blue96;
+}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid0\'02\'05.;}{\levelnumbers\'01;}}{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs30 Indices of class examples 
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Index A (per lesson, sequential)\
+			\'95 Index B (per subject)\
+
+\b\fs24 ==========================================================
+\b0\fs28 		
+\fs24 \
+
+\b\fs28 */
+\b0 \
+\cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 //================= ABOUT THESE EXAMPLES =================
+\b0 \
+\cf0 \
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trwWidth14000\trftsWidth3 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth13920\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt40 \clpadl40 \clpadb40 \clpadr40 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab560\sa240\ql\qnatural
+
+\fs26 \cf2 /*\
+These files were written for the course DXARTS 490a, "Real-time & Interactive Computer Music and Algorithmic Media with the SuperCollider Programming Language", taught at the University of Washington's Center for Digital Arts and Experimental Media (DXARTS) in Summer 2010.\
+The course was an intensive, one-month long course, meant as a continuation of the DXARTS 461/2/3 Digital Sound series ("Digital Sound Synthesis," "Digital Sound Processing," and "Advanced Digital Sound Processing and Synthesis."), taught by Josh Parmenter (461/2) and Juan Pampin (463) and TA'ed by Stelios Manouakis.  This year-long series focused on the fundamentals of sound synthesis, Non-Real-Time composition and audio-based research, therefore these subjects are not addressed as thoroughly in these example files.  However, the example files from the year-long series can be found here: http://www.dxarts.washington.edu/courses/461-3/\
+The focus of DX490a was on real-time and interactive applications, involving sound but also other modalities, as well to provide a more in-depth knowledge of the SuperCollider programming language; this is what the examples below are about.\
+
+\itap2\trowd \taflags0 \trgaph108\trleft-108 \trwWidth14000\trftsWidth3 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth13920\clftsWidth3 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt40 \clpadl40 \clpadb40 \clpadr40 \gaph\cellx8640
+\pard\intbl\itap2\pardeftab560\sa240\ql\qnatural
+\cf2 When creating these examples I made an effort to also compile together files from the documentation relative to each subject, and make an easier to navigate map of what already is there for future reference (I frequently turn back to those myself). I also added many comments in an effort to make these files as meaningful and understandable as possible without the accompanying lecture when they were taught.\nestcell \lastrow\nestrow
+\pard\intbl\itap1\pardeftab560\sa240\ql\qnatural
+\cf2 I have used to methods to index these files: 
+\b Index A
+\b0  follows the sequence of how the class was taught, and should make good sense if one wants to follow everything from the beginning. 
+\b Index B
+\b0  is a per-subject categorization, better as a reference guide.\
+\
+\pard\intbl\itap1\pardeftab560\sa240\ql\qnatural
+
+\fs24 \cf2 NOTE: These examples were only tested on Mac OSX, and therefore there are bound to be incompatibilities with Linux and, many more, with Windows. Maybe someone can contribute to fix this at some point...\
+\pard\intbl\itap1\pardeftab560\sa240\ql\qnatural
+
+\fs26 \cf2 \
+\pard\intbl\itap1\pardeftab560\sa240\ql\qnatural
+
+\fs22 \cf2 ACKNOWLEDGMENTS: A big thanks to the people whose tutorials I consulted many times, and some of whose examples you will find credited in here: Josh Parmenter (DX490 class from 2007), Nic Collins (Computer Music workshop), Thor Magnusson (ixi SC tutorial), James Harkins (Patterns tutorial), and of course the most valuable sc-users list, Josh - once again - for actually teaching me how to use SC and the developers community for working hard to make SC the amazing tool it is.  Hopefully, these examples will help more people to find that out :-)\
+\pard\intbl\itap1\tx220\tx720\pardeftab560\li720\fi-720\sa240\ql\qnatural
+\ls1\ilvl0
+\fs26 \cf2 {\listtext	\'95	}*/\cell \lastrow\row
+\pard\pardeftab560\ql\qnatural
+
+\fs28 \cf0 \
+
+\b \cf2 //================= INDEX A (PER LESSON) =================
+\b0 \
+\cf0 \
+\cf2 // Evaluate this first, to grab the path of the current folder, this will be used to open all the example files. Make sure you keep them all in the same folder with this file:\
+\
+
+\b // EVALUATE THIS FIRST:
+\b0 \
+\cf0 	~dx490_path = \cf3 Document\cf0 .current.path.dirname;
+\b  
+\b0 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs26 \cf0 \
+\cf2 // \'95 DX490A_su2010_01.0_[Resources].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.0_[Resources].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.1_[SC-Architecture_+_language].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.1_[SC-Architecture_+_language].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.2_[scsynth].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/ DX490A_su2010_01.2_[scsynth].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.3_[Startup].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.3_[Startup].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.1_[Server-language_communication].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.1_[Server-language_communication].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.3_[Quarks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.3_[Quarks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.4_[Trackpad-Multitouch].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "DX490A_su2010_02.4_[Trackpad-Multitouch].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_03.1_[Timing|Clocks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_03.1_[Timing|Clocks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_06.1_[Interfacing-2|MIDI].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_06.1_[Interfacing-2|MIDI].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_06.2_[Mapping].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_06.2_[Mapping].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_07.1_[Interfacing-3|HID].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_07.1_[Interfacing-3|HID].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_07.2_[Example_ProcMod_w.HID].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_07.1_[Interfacing-3|HID].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_09.1_[Interfacing-5|Arduino].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_09.1_[Interfacing-5|Arduino].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_09.2_[Interfacing-6|Wii].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_09.2_[Interfacing-6|Wii].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_10.2_[Networking-1|Within_one_computer].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_10.2_[Networking-1|Within_one_computer].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_11.1_[Managing_Large_Projects].zip\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/ DX490A_su2010_11.1_[Managing_Large_Projects].zip"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_13.1_[GUI-1|Basics].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_13.1_[GUI-1|Basics].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_14.1_[Patterns].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_14.1_[Patterns].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/X490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_16.1_[Networking-2|LAN_(local)].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_16.1_[Networking-2|LAN_(local)].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_17.1_[Standalones].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_17.1_[Standalones].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_17.2_[AudioUnit_Plug-ins].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_17.2_[AudioUnit_Plug-ins].html"\cf0 );\cf4 \
+\cf0 \
+\
+\
+\
+\
+\
+
+\b \cf2 //================= INDEX B (PER SUBJECT) =================
+\b0 \
+\cf0 \
+
+\b \cf2 // ====== FUNDAMENTALS, EXTENSIONS, ETC ====== 
+\b0 \
+// \'95 DX490A_su2010_01.0_[Resources].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.0_[Resources].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.1_[SC-Architecture_+_language].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.1_[SC-Architecture_+_language].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.2_[scsynth].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/ DX490A_su2010_01.2_[scsynth].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_01.3_[Startup].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_01.3_[Startup].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.1_[Server-language_communication].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.1_[Server-language_communication].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.3_[Quarks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.3_[Quarks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_05.1_[Sets|Dictionaries_+_Environments].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_11.1_[Managing_Large_Projects].zip\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/ DX490A_su2010_11.1_[Managing_Large_Projects].zip"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/X490A_su2010_15.1_[Writing_Classes_+_UGens_by-JoshP].zip"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_17.1_[Standalones].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_17.1_[Standalones].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_17.2_[AudioUnit_Plug-ins].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_17.2_[AudioUnit_Plug-ins].html"\cf0 );\cf4 \
+\cf0 \
+\
+\
+
+\b \cf2 // ====== INTERFACING ====== 
+\b0 \
+// \'95 DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_02.2_[Interfacing-1|Mouse_+_Keyboard].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_02.4_[Trackpad-Multitouch].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "DX490A_su2010_02.4_[Trackpad-Multitouch].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_06.1_[Interfacing-2|MIDI].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_06.1_[Interfacing-2|MIDI].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_06.2_[Mapping].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_06.2_[Mapping].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_07.1_[Interfacing-3|HID].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_07.1_[Interfacing-3|HID].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_07.2_[Example_ProcMod_w.HID].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_07.1_[Interfacing-3|HID].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_08.1_[Interfacing-4|Signal_Feature_Extraction].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_09.1_[Interfacing-5|Arduino].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_09.1_[Interfacing-5|Arduino].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_09.2_[Interfacing-6|Wii].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_09.2_[Interfacing-6|Wii].html"\cf0 );\cf4 \
+\cf0 \
+\
+\
+\
+
+\b \cf2 // ====== SCHEDULING ====== 
+\b0 \
+// \'95 DX490A_su2010_03.1_[Timing|Clocks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_03.1_[Timing|Clocks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_03.2_[Scheduling-1|Streams-Routines_+_Tasks].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_04.1_[Buffers_+_Interdependent_Processes].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_05.2_[Scheduling-1b|Process_Modules].html"\cf0 );\cf4 \
+\cf0 \
+	\cf2 // \'95 DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_10.1_[Scheduling-2|Control-Signals_+_Demand-UGens].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_14.1_[Patterns].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_14.1_[Patterns].html"\cf0 );\cf4 \
+\cf0 \
+\
+\
+\
+
+\b \cf2 // ====== NETWORKING ====== 
+\b0 \
+// \'95 DX490A_su2010_10.2_[Networking-1|Within_one_computer].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_10.2_[Networking-1|Within_one_computer].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_16.1_[Networking-2|LAN_(local)].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_16.1_[Networking-2|LAN_(local)].html"\cf0 );\cf4 \
+\cf0 \
+\cf2 // \'95 DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_16.2_[Networking-3|SC_and_the_Internet].html"\cf0 );\cf4 \
+\cf0 \
+\
+\
+\
+\
+
+\b \cf2 // ====== GUI & GRAPHICS ====== 
+\b0 \
+// \'95 DX490A_su2010_13.1_[GUI-1|Basics].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_13.1_[GUI-1|Basics].html"\cf0 );\cf4 \
+\cf0 	\
+\cf2 // \'95 DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html\
+\cf0 	\cf3 Document\cf0 .open( ~dx490_path ++ \cf4 "/DX490A_su2010_13.2_[GUI-2|Programming-graphics-in-SC].html"\cf0 );\cf4 \
+
+\f1\fs24 \cf0 \
+\
+}

@@ -1,0 +1,238 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue255;\red0\green0\blue191;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 17.2:
+\b0 \
+
+\b 	SuperCollider Audio Unit plug-ins
+\b0 \
+
+\b 	
+\b0\fs28 	Contents:\
+			\'95 About Audio Unit (AU) plug-ins\
+			\'95 scsynth as an Audio Unit (AU) plug-in\
+				- Installation\
+				- Using scsynth as an AU\
+			\'95 Compiling 'standalone' Audio Unit (AU) plug-ins from within SC\
+				- Example: creating an SC Audio Unit plugin			\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ================= CREATING AUDIO UNIT PLUG-INS WITH SC =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== ABOUT AUDIO UNIT PLUG-INS ======
+\b0 \cf3 \
+\
+\cf2 // Here is the wikipedia explanation: \cf3 \
+\cf2 //
+\i  "Audio Units (AU) are a system-level plug-in architecture provided by Core Audio in Mac OS X developed by Apple Computer. Audio Units are a set of application programming interface services provided by the operating system to generate, process, receive, or otherwise manipulate streams of audio in near-real-time with minimal latency. It may be thought of as Apple's architectural equivalent to the other popular plug-in format, Steinberg's VST."
+\i0 \cf3 \
+\
+\cf2 // You can read more about Core Audio and AU Units in Apple's Core Audio page:\cf3 \
+\cf4 "open http://developer.apple.com/iphone/library/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003577-CH1-SW1"\cf3 .unixCmd\
+\
+\
+\cf2 // There are two ways in which you can use SC code as an AU plugin from any host program in Mac OSX that supports Audio Units.\cf3 \
+\cf2 //	1. Using SuperCollider servers from within the host.  \cf3 \
+\cf2 //	2. Compiling an AU plugin from SC using the {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/AudioUnitBuilder/AudioUnitBuilder.html"}}{\fldrslt \cf5 \ul \ulc5 AudioUnitBuilder}} quark. \cf3 \
+\
+\
+\cf2 // This will create an autonomous plug-in for you that you can use and share without having to open SC, but having all its parameters being accesible and setable from your host.\cf3 \
+\
+\cf2 // Both these methods use the "SuperColliderAU.component" which comes together with SC and can be found in the application's main directory. \cf3 \
+\
+\
+\cf2 // Here is a list of some (not all) programs supporting AUs:\cf3 \
+\cf4 "open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/823"\cf3 .unixCmd\
+\
+\
+\
+
+\b \cf2 // ====== SCSYNTH AS AN AUDIO UNIT PLUGIN ======
+\b0 \cf3 \
+\
+\cf2 // This method loads an scsynth server inside the host; each embedded scsynth (you can have many) is assigned a specific port in the loopback IP "127.0.0.1", through which you can talk to it as you would with a server inside your SC, or in a remote machine. By default this plugin does nothing. You need to write your own code in sclang and send messages to the specific scsynth instance, and make things happen inside your host application. This requires working in both your host and SC at the same time.\cf3 \
+\
+\
+
+\b \cf2 // ------ Installation --
+\b0 \cf3 \
+\cf2 // The first thing you need to do is copy the "SuperColliderAU.component" file into one of these paths:\cf3 \
+\cf2 // 	Library/Audio/Plug-ins/Components  \cf3 \
+\cf2 //	~/Library/Audio/Plug-ins/Components\cf3 \
+\
+\
+
+\b \cf2 // ------ Using scsynth as an AU --
+\b0 \cf3 \
+\cf2 // \'95 1: In your host application, make a new track and load an instance of the plug-in to it. If the host supportst this plugin (unfortunately, not all do - ex. Reaper v.3.11 doesn't yet), you will see in the plug-ins interface a 'Port nr' indication. This is the OSC port through which you can communicate between the host and SC. Every new instance of the SuperColliderAU that you make will give you a new port, so you can have multiple isntances open.\cf3 \
+\cf2 // \'95 2: In SC you have to:\cf3 \
+\cf2 //	a: 	Connect to the particular scsynth instance:\cf3 \
+	~auServer1 = \cf6 Server\cf3 (\cf7 \\scau1\cf3 , \cf6 NetAddr\cf3 (\cf4 "127.0.0.1"\cf3 , 9992)); \cf2 // Change the port from 9992 to the one seen in the plug-ins interface inside your host\cf3 \
+	~auServer1.serverRunning = \cf6 true\cf3 ; \cf2 // turn it on\cf3 \
+	~auServer1.ping(10); \cf2 // confirms that communication is working\cf3 \
+\
+\cf2 // >> SC as a Filter/Effect\cf3 \
+	\cf2 // Now let's create a quick ring-modulator effect:\cf3 \
+	z = \{ \cf6 AudioIn\cf3 .ar([1,2]) * \cf6 SinOsc\cf3 .ar(\cf6 MouseX\cf3 .kr(100, 1000)) \}.play(~auServer1);\
+	\cf2 // You can activate many synths inside the same plug-in. \cf3 \
+	\cf2 // Here's a randomized Comb delay filter\cf3 \
+	x = \{ \cf6 AudioIn\cf3 .ar([1,2]) + (\cf6 CombC\cf3 .ar(\cf6 AudioIn\cf3 .ar([1,2]), 1, \cf6 LFDNoise3\cf3 .ar(\cf6 MouseX\cf3 .kr(0.0001, 100)).range(0.1, 0.9), 0.5))\}.play(~auServer1);\
+	z.free; \cf2 // free it, like you would normally do\cf3 \
+	x.free; \cf2 // free it, like you would normally do\cf3 \
+\
+\cf2 // >> SC as a Generator	\cf3 \
+	\cf2 // Create a generator within your host. \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\fs24 \cf3 	\cf2 // Note something strange (tested in Logic): there needs to be a soundfile loaded for the code below to work! Maybe the SuperColliderAU assumes it is a filter, so it only gets activated when there is something to process, regardless of whether it actually uses audio input or not?...\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\fs28 \cf3 	g = \{ \cf6 RosslerL\cf3 .ar(\cf6 MouseX\cf3 .kr(20, \cf6 SampleRate\cf3 .ir), 0.36, 0.35, 4.5) * 0.3 \}.play(~auServer1);\
+	g.free; \cf2 // free it, like you would normally do\cf3 \
+\cf2 // >> Multiple instances\cf3 \
+	\cf2 // create a second instance of the SuperColliderAU plugin, and put it on the same channel\cf3 \
+	~auServer2 = \cf6 Server\cf3 (\cf7 \\scau2\cf3 , \cf6 NetAddr\cf3 (\cf4 "127.0.0.1"\cf3 , 9996)); \cf2 // Change the port from 9992 to the one seen in the plug-ins interface inside your host\cf3 \
+	~auServer2.serverRunning = \cf6 true\cf3 ; \cf2 // turn it on\cf3 \
+	~auServer2.ping(10); \cf2 // confirms that communication is working\cf3 \
+	\cf2 // Now, turn on the filter to process the generator's output, within the host's channel!\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\b \cf3 	
+\b0 x = \{ \cf6 AudioIn\cf3 .ar([1,2]) + (\cf6 CombC\cf3 .ar(\cf6 AudioIn\cf3 .ar([1,2]), 1, \cf6 LFDNoise3\cf3 .ar(\cf6 MouseX\cf3 .kr(0.0001, 100)).range(0.1, 0.9), 0.5))\}.play(~auServer2);\
+\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== COMPILING 'STANDALONE' AUDIO UNIT PLUGINS WITHIN SC ======
+\b0 \cf3 \
+\
+\cf2 // You can also create autonomous plug-ins. These compile an instance of scsynth that can be controlled through a standard interface from within the host, without requiring sclang or any other program to control them through OSC. Plugins made in this manner can be opened and used in the same manner as any commercial AU plug-in.\cf3 \
+\
+\cf2 // \'95 First, get the AudioUnitBuilder quark:\cf3 \
+\cf6 Quarks\cf3 .install( \cf4 "AudioUnitBuilder"\cf3 , checkoutIfNeeded: \cf6 false\cf3 )\
+\cf2 // This is a utility class, allowing you to author AU plug-ins from inside sclang!\cf3 \
+\cf2 // \'95\'a0You need to have Apple Developer Tools installed, as this class needs Rez for compiling. This would be located together with the Developer package, for example here: "/Developer/usr/bin/Rez"\cf3 \
+\
+\cf6 CombC\cf3 .ar(\cf6 AudioIn\cf3 .ar([1,2]), 1, \cf6 LFDNoise3\cf3 .ar(\cf6 MouseX\cf3 .kr(0.0001, 100)).range(0.1, 0.9), 0.5))\}.play(~auServer2);\
+\
+\
+
+\b \cf2 // ------ Example: creating an SC Audio Unit plugin --
+\b0 \cf3 \
+\cf2 // Here is an example, have a look at the AudioUnitBuilder help file for more information\cf3 \
+(\
+\cf6 var\cf3  name, func, specs, componentType, componentSubtype, builder;\
+\
+name = \cf4 "dx490a_XComb"\cf3 ; \cf2 // name of the plugin\cf3 \
+func =  \{ \
+	\cf2 // arguments that are going to be setable from the AU plug-in's interface\cf3 \
+	| gain, dry_wet,\
+ 	del1TimeMin, del1TimeMax, del1Freq, del1Feedback, inAmount1, crossFdbAmount1,\
+ 	del2TimeMin, del2TimeMax, del2Freq, del2Feedback, inAmount2, crossFdbAmount2|\
+ 	\
+ 	\cf2 // internal variables\cf3 \
+ 	\cf6 var\cf3  comb1, comb2;\
+	\cf6 var\cf3  local, in, amp, feedBackMix, out;\
+	\cf6 var\cf3  maxDelay = 3;\
+	\
+	\cf2 //Input from AU  host\cf3 \
+	in = \cf6 Mix\cf3 .new(\cf6 AudioIn\cf3 .ar([1,2])); \
+	\cf2 // Input from the comb filters\cf3 \
+	local = \cf6 LocalIn\cf3 .ar(2); \
+   	\
+   	\cf2 /* comb filters with: \
+   		- input from outside as well as from the other comb filter, with adjustable input gains\
+   		- randomized delay time, with adjustable min/max times and frequency \
+   		- adjustable feedback\
+   		- amplitude and DC protection\
+   	*/\cf3 \
+   	comb1 = \cf6 Limiter\cf3 .ar(\cf6 LeakDC\cf3 .ar(\cf6 CombC\cf3 .ar((in * inAmount1) + (local[1] * crossFdbAmount1), maxDelay, \cf6 LFDNoise3\cf3 .ar(del1Freq).range(del1TimeMin, del1TimeMax), del1Feedback)), 0.985);\
+   	comb2 = \cf6 Limiter\cf3 .ar(\cf6 LeakDC\cf3 .ar(\cf6 CombC\cf3 .ar((in * inAmount2) + (local[0] * crossFdbAmount2), maxDelay, \cf6 LFDNoise3\cf3 .ar(del2Freq).range(del2TimeMin, del2TimeMax), del2Feedback)), 0.985);\
+   	\
+   	\cf2 // dry_wet is a cross-fader: 0 = only dry, 1 = only wet\cf3 \
+	out = (in * (1-dry_wet)) + ([comb1, comb2] * dry_wet);\
+   	\
+   	\cf2 // Feedback output of the comb filters\cf3 \
+   	\cf6 LocalOut\cf3 .ar([comb1, comb2]);\
+\
+	\cf2 //Output to AU host (mono)\cf3 \
+	\cf6 Out\cf3 .ar(0, gain * \cf6 Mix\cf3 .new(out)); \
+\};\
+\
+\cf2 // These specs are not SC-related, but AU related. See the AudioUnitBuilder helpfile for more on that:\cf3 \
+\cf2 // Each entry in the specs array should be an array like this: \cf3 \
+\cf2 //	[min, max, display style, default value, unit]\cf3 \
+specs =  #[ \
+	[0, 1 , \cf7 \\Linear\cf3 , 0.75, \cf7 \\LinearGain\cf3 ] , \cf2 // gain (overall)\cf3 \
+	[0, 1 , \cf7 \\Linear\cf3 , 0.5, \cf7 \\LinearGain\cf3 ] , \cf2 // dry_wet\cf3 \
+	[0, 2 , \cf7 \\Linear\cf3 , 0.0001,\cf7 \\Seconds\cf3  ] , \cf2 // del1TimeMin\cf3 \
+	[0, 2 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\Seconds\cf3  ] , \cf2 // del1TimeMax\cf3 \
+	[0.01, 200, \cf7 \\Logarithmic\cf3 , 1, \cf7 \\Hertz\cf3 ], \cf2 //del1Freq\cf3 \
+	[-0.9, 0.9 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // del1Feedback\cf3 \
+	[0, 1 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // inAmount1\cf3 \
+	[-0.9, 0.9 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // crossFdbAmount1\cf3 \
+	[0, 2 , \cf7 \\Linear\cf3 , 0.0001,\cf7 \\Seconds\cf3  ] , \cf2 // del2TimeMin\cf3 \
+	[0, 2 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\Seconds\cf3  ] , \cf2 // del2TimeMax\cf3 \
+	[0.01, 200, \cf7 \\Logarithmic\cf3 , 1, \cf7 \\Hertz\cf3 ], \cf2 //del2Freq\cf3 \
+	[-0.9, 0.9 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // del2Feedback\cf3 \
+	[0, 1 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // inAmount2\cf3 \
+	[-0.9, 0.9 , \cf7 \\Linear\cf3 , 0.1,\cf7 \\LinearGain\cf3  ] , \cf2 // crossFdbAmount2		\cf3 \
+\
+];	\
+	\
+\cf2 // Below is the bookkeeping stuff for compiling the AU plug-in:\cf3 \
+\
+\cf2 // this must be a four chars code. Either \\aufx (effect) or \\aumf (music effect).\cf3 \
+\cf2 // music effects may receive MIDI but some applications won't recognize them\cf3 \
+\cf2 // default is \\aumf	\cf3 \
+componentType = \cf7 \\aufx\cf3 ;\
+		\
+\cf2 // this must be a four chars code. It sould be unique in your system within all SuperColliderAU plugins.	\cf3 \
+componentSubtype = \cf7 \\d490\cf3 ; \
+\
+builder = \cf6 AudioUnitBuilder\cf3 .new(name, componentSubtype,func, specs, componentType);\
+\
+\cf2 //build and install into ~/Library/Audio/Plug-Ins/Components. You SuperColliderAU.component should be located in the same place\cf3 \
+builder.makeInstall; \
+)\
+\
+\cf2 // Now, you can go to your host of choice (try first one of the list above, to make sure it is one that fully supports the SuperColliderAU.component, and try your plug-in out!\cf3 \
+\
+\cf2 // Remember: Any plug-ins you write, need to be open-source, and comply with SuperCollider's GPL license\cf3 \
+}

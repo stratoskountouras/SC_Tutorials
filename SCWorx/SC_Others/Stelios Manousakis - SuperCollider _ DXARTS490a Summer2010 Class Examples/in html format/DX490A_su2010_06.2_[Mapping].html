@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {color: #606060}
+span.s5 {text-decoration: underline}
+span.s6 {color: #007300}
+span.s7 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 6.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Mapping Strategies</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Simple mapping</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>A few different treatments</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using math</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using SimpleNumber methods</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using ControlSpec</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using Envelopes</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• More complex mapping strategies</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Pseudo-cognitive mapping</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Mapping data to parameters</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Mapping in layers</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Direct vs 'modulation' mapping</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= MAPPING STRATEGIES =================</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== SIMPLE MAPPING ======</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ A few different treatments, using simple math --</b></p>
+<p class="p8"><br></p>
+<p class="p7">// A Routine to simulate incoming data:<span class="Apple-converted-space"> </span></p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// what comes in, goes out:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value</p>
+<p class="p9">r.stop</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">//•<span class="Apple-converted-space">  </span><b>shift</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> shift;</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// shifted/transposed data</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(i + shift).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(1000)</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>invert</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// inverted data</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>((i * -1) + 100).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(1000)</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>compress/expand</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> mult;</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// compressed/expanded data</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(i * mult).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(0.10)</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>limit</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> limits;</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// limit/clip the data</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.clip(limits[0], limits[1]).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value([20, 50])</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>quantize</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> roundTo;</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// quantize the data</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.round(roundTo).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(10)</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>segment</b> the data</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// segment the data: split into different parameters</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c = case</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{i &lt; 25} {<span class="s4">"send to param 1: "</span>.post; i.postln}</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{i &gt; 25 and: {i &lt; 50}} {<span class="s4">"send to param 2: "</span>.post; i.postln}</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{i &gt; 51 and: {i &lt; 101}} {<span class="s4">"send to param 3: "</span>.post; i.postln};</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Using SimpleNumber methods --</b></p>
+<p class="p7">// There are also a lot of methods you can call on a SimpleNumber that can be very useful for mapping. There are many Unary and several Binary operators (open up the <a href="SC://SimpleNumber"><span class="s5">SimpleNumber</span></a> help, or press Cmd-y on the class<span class="Apple-converted-space">  </span>to view them):</p>
+<p class="p7">// For example, here are some Unary methods:</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// try out a few different methods:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.exp.postln;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// i.sin.postln;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// i.cos.postln;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//i.reciprocal.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p7">// you could even call 'audio-processing' methods (like distortion) if you like:</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// first scale down range, say from 0-5</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * 0.05;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// try out different methods</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//i.distort.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.softclip.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// There are quite a few useful binary operators, as well:</p>
+<p class="p7">// For example:</p>
+<p class="p7">/*<span class="Apple-tab-span">	</span>linlin(inMin, inMax, outMin, outMax) : linear to linear mapping</p>
+<p class="p7"><span class="Apple-tab-span">	</span>linexp(inMin, inMax, outMin, outMax): linear to exponential mapping</p>
+<p class="p7"><span class="Apple-tab-span">	</span>explin(inMin, inMax, outMin, outMax): exponential to linear mapping</p>
+<p class="p7"><span class="Apple-tab-span">	</span>expexp(inMin, inMax, outMin, outMax): exponential to exponential mapping</p>
+<p class="p7"><span class="Apple-tab-span">	</span>lincurve(inMin = 0, inMax = 1, outMin = 0, outMax = 1, curve = -4, clip = \minmax)</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> inMin, inMax, outMin, outMax;</p>
+<p class="p10"><span class="s2">r = </span>Routine<span class="s2"> {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// try a few different ones; note that values above or below the specified 'in' range will be clipped with these methods:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.linlin(inMin, inMax, outMin, outMax).postln;</p>
+<p class="p7">//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.linexp(inMin, inMax, outMin, outMax).postln;</p>
+<p class="p7">//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.explin(inMin, inMax, outMin, outMax).postln;</p>
+<p class="p7">//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.expexp(inMin, inMax, outMin, outMax).postln;</p>
+<p class="p7">//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(i*0.01).lcurve(1, 0, 1).postln;</p>
+<p class="p7">//<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.gaussCurve(1, 0, 10).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(0.000001, 100, 300, 1000)</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Using ControlSpec --</b></p>
+<p class="p7">// <a href="SC://ControlSpec"><span class="s5">ControlSpec</span></a>, a type of Spec (i.e. 'input data specification') is a class most commonly used to map values coming from GUI sliders and knobs, so that their range (which is always 0-1) can be converted to another range and with a specific curve, and then used for a specific type of parameter, such as frequency, amplitude, phase, etc.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p7">// A ControlSpec (for mapping values coming from a GUI) is created like this:</p>
+<p class="p9"><span class="s3">ControlSpec</span>.new(minval, maxval, warp, step, default, units)</p>
+<p class="p7">// but you can use it for numbers like this:</p>
+<p class="p9"><span class="s3">ControlSpec</span>.new(minval, maxval, warp, step)</p>
+<p class="p7">// a nice thing about it, is that it contains the min/max values to map to, a curve function (warp: this is the same as we 've seen in Env; you can look at <a href="SC://Warp"><span class="s5">Warp</span></a>), as well as a<span class="Apple-converted-space">  </span>rounding function (step)</p>
+<p class="p7">// You can also use a shortcut:</p>
+<p class="p9">[minVal, maxVal, warp, default, units].asSpec;<span class="Apple-converted-space"> </span></p>
+<p class="p7">// or, for non-GUI use:</p>
+<p class="p9">[minVal, maxVal, warp].asSpec;</p>
+<p class="p8"><br></p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {<span class="s3">arg</span> minval, maxval, warp, step;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make the spec:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>c = <span class="s3">ControlSpec</span>(minval, maxval, warp, step);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider just to see better what happens:<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(label: <span class="s4">" test "</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// first map to 0-1 range:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * 0.01;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then use the controlspec:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = c.map(i).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z.value_(i);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play(<span class="s3">AppClock</span>)</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value(0.000001, 1, <span class="s6">\exp</span>, 0.0000000005);</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// As this class is commonly used for controlling synthesis, Spec (and its subclass, ControlSpec) contains a Dictionary of specifications, so you can just call the name of the mapping you want to use. Some names include \freq, \lofreq, \midfreq, \phase, \rq, \midinote, \db, \amp, \pan, \rate, \delay, etc. You can see a full list in the <a href="SC://Spec"><span class="s5">Spec</span></a> helpfile.</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make the spec:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>d = <span class="s6">\rq</span>.asSpec;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider to see better:<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(label: <span class="s4">" test "</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// first map to 0-1 range:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * 0.01;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then use the controlspec:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = d.map(i).postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z.value_(i);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play(<span class="s3">AppClock</span>)</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value;</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Using Envelopes --</b></p>
+<p class="p7">// This is all very good, but you may want something more customizable. One of my favorite methods is to use envelopes, as this allows for more complex mappings, multiple curves and practically makes any kind of response possible:</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider to see better:<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(label: <span class="s4">" test "</span>);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make an envelope:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>e = <span class="s3">Env</span>([0, 0.5, 0.85, 1], [1, 3, 1].normalizeSum, [2, -6, 3]).plot;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// first map to 0-1 range:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * 0.01;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then use the envelope:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = e[i].postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z.value_(i);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play(<span class="s3">AppClock</span>)</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value;</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== MORE COMPLEX MAPPING STRATEGIES ======</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Apart from the above types of mapping, it may be useful to manipute incoming data in more radical manners.</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>Non-linear </b>transformations can be very useful, and are easy to implement using envelopes.</p>
+<p class="p9">(</p>
+<p class="p9">~dataMap = {</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider to see better:<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(label: <span class="s4">" test "</span>);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make an envelope:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>e = <span class="s3">Env</span>([0, 0.5, 0.3, 0.9, 0.05, 1], [1, 3, 2, 4, 1].normalizeSum, [2, -6, 3, 12, -4]).plot;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// first map to 0-1 range:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * 0.01;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then use the envelope:</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = e[i].postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>z.value_(i);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play(<span class="s3">AppClock</span>)</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataMap.value;</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • You may want to add some <b>delay</b> to the response</p>
+<p class="p9">(</p>
+<p class="p7">// a delay function:</p>
+<p class="p10"><span class="s2">~delay = {</span>|in, delay|</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s3">var</span> routine;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>routine = <span class="s3">Routine</span>{</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>delay.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{z.value_(in)}.defer; <span class="s7">// just for viewing</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>}.play</p>
+<p class="p9">};</p>
+<p class="p8"><br></p>
+<p class="p7">// let's simulate some input</p>
+<p class="p9">~data = {<span class="s3">arg</span> dataSpeed, delay;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider to see better:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>w = <span class="s3">Window</span>.new.front;<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>w.view.decorator = <span class="s3">FlowLayout</span>( w.view.bounds, 10@10, 20@5 );</p>
+<p class="p9"><span class="Apple-tab-span">	</span>y = <span class="s3">EZSlider</span>(w, 350@30, label: <span class="s4">" test "</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(w, 350@30, label: <span class="s4">" delayed "</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// create a random value and send it to the interpolator function</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = 0.0.rrand(1);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{y.value_(x)}.defer; <span class="s7">// just for viewing</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~delay.value(x, delay);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>dataSpeed.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p8"><br></p>
+<p class="p9">~data.value(0.5, 0.25);</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">//<b> • </b>You may want to <b>reduce or expand data</b> (decimation/interpolation).<span class="Apple-converted-space"> </span></p>
+<p class="p7">// You can do linear interpolation, but I suggest using '<a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/interpolate.html"><span class="s5">interpolate</span></a>', a very nice extension from the wslib quark</p>
+<p class="p8"><br></p>
+<p class="p7">// Here is a function that will automatically interpolate between a new value and the last interpolated value</p>
+<p class="p9">(</p>
+<p class="p10"><span class="s2">~interpolator = {</span>|in, steps = 100, interpTime = 1, interpol = \spline|</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s3">var</span> memory = [0, 0];</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s3">var</span> wait = interpTime / steps;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>q.stop; </span>// stop any previous instances</p>
+<p class="p9"><span class="Apple-tab-span">	</span>memory.put(0, b);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>memory.put(1, in); </span>// this now contains the previous and the current value</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// now, interpolate between the previous and the current value</p>
+<p class="p10"><span class="s2"><span class="Apple-tab-span">	</span>q = </span>Routine<span class="s2">{</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>steps.do{<span class="s3">|inc|</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = memory.intAt(inc/steps);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{z.value_(b)}.defer; <span class="s7">// just for viewing<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(wait).wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}.play;</p>
+<p class="p9">};</p>
+<p class="p7">// let's simulate some input</p>
+<p class="p9">~data = {<span class="s3">arg</span> dataSpeed, interpolSpeed;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make GUI sliders to see better:<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>w = <span class="s3">Window</span>.new.front;<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>w.view.decorator = <span class="s3">FlowLayout</span>( w.view.bounds, 10@10, 20@5 );</p>
+<p class="p9"><span class="Apple-tab-span">	</span>y = <span class="s3">EZSlider</span>(w, 350@30, label: <span class="s4">" test"</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>z = <span class="s3">EZSlider</span>(w, 350@30, label: <span class="s4">" interp"</span>);</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>b = 0.5; </span>// initialization value</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>100.do{ <span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// create a random value and send it to the interpolator function</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = 0.0.rrand(1);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{y.value_(x)}.defer; <span class="s7">// just for viewing</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~interpolator.value(x, 100, interpolSpeed, <span class="s6">\spline</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>dataSpeed.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p7"><span class="s2">~data.value(1, 0.25); </span>// this will reach to the input values, as the interpolation time is short</p>
+<p class="p9">r.stop;</p>
+<p class="p7"><span class="s2">~data.value(1,<span class="Apple-converted-space">  </span>2); </span>// this will not reach to the input values, as the interpolation time is longer than the step time</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p7">// • Instead of getting the absolute values, it may make more sense to get the <b>rate of change</b>, or <b>acceleration</b> of incoming values:</p>
+<p class="p7">// Here is a much more expressive than the previously viewed mouse-theremin example, using acceleration to convert movement energy to amplitude</p>
+<p class="p9">s.boot;</p>
+<p class="p9">(</p>
+<p class="p9">play(</p>
+<p class="p9"><span class="Apple-tab-span">	</span>{</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> f;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>f = <span class="s3">MouseY</span>.kr(4000, 200, <span class="s6">'exponential'</span>, 0.8);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq: f+ (f*<span class="s3">SinOsc</span>.ar(7,0,0.02)),</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>mul: <span class="s3">Lag</span>.kr(<span class="s3">Slope</span>.kr(<span class="s3">MouseX</span>.kr(0, 0.1)))</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// try uncommenting the original version and commenting the one above</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//mul: MouseX.kr(0, 0.9)<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">)</p>
+<p class="p9">)</p>
+<p class="p7">// now move your mouse around!</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • Another thing you may want to do - especially with raw sensor data - is to <b>smooth out / filter</b> your input, so that you eliminate noise and weird spikes. A low-pass filter will do the trick. This is what Lag does above; try without it:</p>
+<p class="p9">(</p>
+<p class="p9">play(</p>
+<p class="p9"><span class="Apple-tab-span">	</span>{</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> f;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>f = <span class="s3">MouseY</span>.kr(4000, 200, <span class="s6">'exponential'</span>, 0.8);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq: f+ (f*<span class="s3">SinOsc</span>.ar(7,0,0.02)),</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>mul: <span class="s3">Slope</span>.kr(<span class="s3">MouseX</span>.kr(0, 0.1))</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//mul: Lag.kr(Slope.kr(MouseX.kr(0, 0.1)))</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// try uncommenting the original version and commenting the one above</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//mul: MouseX.kr(0, 0.9)<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">)</p>
+<p class="p9">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== PSEUDO-COGNITIVE MAPPING ======</b></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • Perform <b>statistical analysis </b>on an input to deduce its character. There are two quarks containing some very useful statistic methods that you should download:</p>
+<p class="p7">// MathLib quark: <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MathLib/help/extStatistics.html"><span class="s5">extStatistics</span></a>, contains some additional methods for Collection and Sequencable Collection for stats</p>
+<p class="p7">// SenseWorld quark: contains the <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/SensorData.help.scd"><span class="s5">SensorData</span></a> class with several statistics methods, as well as <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd"><span class="s5">StatUGens</span></a>, a set of pseudo-UGens to perform statistical operations on the server, which can be very useful with audio signals</p>
+<p class="p8"><br></p>
+<p class="p9">(</p>
+<p class="p7"><span class="s2">a = </span><span class="s3">SensorData</span><span class="s2">.new; </span>// some of the methods below are specific to this class</p>
+<p class="p7">// others need an array: let's use a circular one; with every incoming number we'll rotate it to the left, and the write incoming data to its end;</p>
+<p class="p7"><span class="s2">m = 0!200; </span>// how big should the circular array/window be?</p>
+<p class="p7"><span class="s2">a.ltlen_(200); </span>// use the same window length for both methods</p>
+<p class="p9">~dataStats = {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s3">var</span> vals, stDev, mean, fluct, peak;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make a GUI slider to see better:<span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// make an envelope:</p>
+<p class="p9"><span class="Apple-tab-span">	</span>r = <span class="s3">Routine</span> {</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>loop {<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// create some random values, with a low-pass distribution</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>t = <span class="s3">Tendency</span>(0, 1.0, <span class="s6">\lpRand</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>v = t[v];</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// now, add this to the SensorData class, and get some stats</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.addValue(v);</p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"standard deviation is: "<span class="s2">.post;<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.longStdDev.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">"mean is: "</span>.post;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.longMean.postln;</p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"fluctuation is: "<span class="s2">.post;<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.fluctuation.postln;</p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"current peak is: "<span class="s2">.post;<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.lastPeak.postln;<span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// add it to the circular array, and get some stats<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>m = m.shift(-1);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>m.putLast(v);<span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"kurtosis is: "<span class="s2">.post;<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>m.kurtosis.postln;<span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"skew is: "<span class="s2">.post;</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>m.skew.postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.5.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}</p>
+<p class="p9">};</p>
+<p class="p9">r.play</p>
+<p class="p9">};</p>
+<p class="p9">)</p>
+<p class="p9">~dataStats.value;</p>
+<p class="p9">r.stop;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>Pattern recognition: </b>You can scan an incoming stream for a specific pattern and do something once you detect that pattern.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// Type while the Window is in focus and match a word</p>
+<p class="p7">// The version below does not account for elapsed time, but you could implement that if you wanted to...</p>
+<p class="p9">~pattern = <span class="s4">"match"</span>.ascii; <span class="s7">// word to match</span></p>
+<p class="p9">(</p>
+<p class="p7"><span class="s3">var</span><span class="s2"> memory = </span><span class="s3">Array</span><span class="s2">.newClear(~pattern.size); </span>// create an array to store incoming data in. This will work as a circular memory space, where all the incoming data will be written, and which is going to be checked agains the pattern for similarity</p>
+<p class="p11"><span class="s2">w = </span><span class="s3">Window</span><span class="s2">.new(</span>"key-tester"<span class="s2">);</span></p>
+<p class="p9">w.view.keyDownAction = { <span class="s3">arg</span> view, char, modifiers, unicode, keycode;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>memory = memory.shift(-1); </span>//rotate array to discard the oldest item and make space for the newest one</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>memory.putLast(unicode); </span>//add the newest input as the last item of our circular memory array</p>
+<p class="p9"><span class="Apple-tab-span">	</span>if (~pattern == memory, {w.background_(<span class="s3">Color</span>.rand)});</p>
+<p class="p9">};</p>
+<p class="p9">w.front</p>
+<p class="p9">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== MAPPING DATA TO PARAMETERS ======</b></p>
+<p class="p7">// No examples for these yet, but you can easily get the idea:</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>one-to-one</b>:<b> </b>one control parameter mapped directly to a synthesis parameter. This is a very typical - and often not powerful enough<span class="Apple-converted-space">  </span>- mapping in electronic music.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p7">// The next two mappings are much more 'physical-like'; instrumental parameters are always more complex with a lot of cross-talk</p>
+<p class="p7">// • <b>one-to-many</b>: one control parameter mapped to multiple synthesis parameters</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>many-to-one</b>: many control parameters influencing together a synthesis parameter</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== MAPPING IN LAYERS ======</b></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>single-layer</b>: control synthesis directly</p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>n-layers:</b> Go from the control parameters to the synthesis parameters through any number of intermediate parameters. For example: control a cognitive parameter, which is mapped to a set of perceptual parameters, which are mapped to synthesis parameters, with networks of mapping existing in-between each layer.</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== DIRECT vs 'MODULATION' MAPPING ======</b></p>
+<p class="p7">// A control could be mapped directly to a parameter, in which case if there is no incoming data there will be no change, or it could be mapped to control and sculpt an algorithmic process that runs autonomously on its own.</p>
+<p class="p8"><br></p>
+</body>
+</html>

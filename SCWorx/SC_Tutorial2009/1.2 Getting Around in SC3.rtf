@@ -1,0 +1,200 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf480
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica-Bold;\f2\fswiss\fcharset77 Helvetica;
+}
+{\colortbl;\red255\green255\blue255;\red255\green0\blue0;\red0\green0\blue191;\red191\green0\blue0;
+\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 'Getting around in SC3'\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs44 \cf0 Getting help 
+\fs34 \
+\
+cmd+d \
+\
+If you just press help this brings up the main help menu. If you have selected some text you may be able to get help on that specific thing, but the help pages only exist for certain items. These are usually things with capital letters in front, like:\
+\
+\cf3 SinOsc\cf0  	\cf4 //try double clicking on SinOsc then pressing cmd+d \cf0 \
+\
+There are further hints on obtaining help available from the help page itself, or double click on the underlined text here:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\tx7280\tx7840\ql\qnatural
+
+\f1\b\fs24 \cf0 [\ul More-On-Getting-Help\ulnone ]
+\f0\b0\fs34 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs40 \cf0 Searching for stuff
+\fs34 \
+\
+Use your system text file search tools. \
+\
+(OS X) using Find in the OS X Finder- use cmd+F to bring up the search\
+\
+\
+\
+unix Commands can also be used within SC3 using the unixCmd method for String\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 "ls -l"\cf0 .unixCmd	\cf4 //run by pressing enter\cf0 \
+\
+\cf5 "grep -r 'TempoClock.default' SCClassLibrary/*"\cf0 .unixCmd\
+\
+\
+(OS X) Use a Terminal window to do this from the command line. You find the Terminal under Utilities in the Applications folder on your OS X drive.  \
+\
+\
+-----------------------------------------------------------------------\
+Advanced- getting the result of unix commands back to SuperCollider:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 //var p, l,\cf0 \
+d = \cf5 ""\cf0 ;\
+p = \cf3 Pipe\cf0 .new(\cf5 "ls -l"\cf0 , \cf5 "r"\cf0 );\
+l = p.getLine;\
+while(\{l.notNil\}, \{d = d ++ l ++ \cf5 "\\n"\cf0 ; l = p.getLine; \});	\
+p.close;		\
+\
+\cf4 				\cf0 \
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Post\cf0  << d << nl;	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+d[0..20]\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs34 \cf0 -----------------------------------------------------------------------\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs40 \cf0 Looking at source code
+\fs34 \
+\
+to see class definitions\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\cf3 Object\cf0  \cf4 //highlight Object and then press cmd+J\cf0 \
+\
+to see which classes respond to a particular method\
+\
+series \cf4 //highlight 'series' and then press cmd+Y\cf0 \
+\
+to find cases in the class library where that method is called\
+\
+series \cf4 //highlight 'series' and press shift+cmd+Y\cf0 \
+\
+to find out class hierarchies- what derives from this? \
+\
+\cf3 Clock\cf0 .dumpClassSubtree	\cf4 //run this by pressing enter with cursor on the line \cf0 \
+\
+to see the interface (methods of a class)\
+\
+\cf3 Array\cf0 .dumpInterface		//see instance methods\
+\
+\cf3 Meta_Array\cf0 .dumpInterface	//see class methods\
+\
+does it have a help file or not? \
+\
+\cf3 Array\cf0 .hasHelpFile\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs40 \cf0 Getting out of trouble
+\fs34 \
+\
+If you accidentally close a Server window\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 Server\cf0 .local.makeWindow; \cf4 //see Main.startup\cf0 \
+\cf3 Server\cf0 .internal.makeWindow; \cf4 //see Main.startup\cf0 \
+\
+\
+If things can't be stopped! \
+\
+first- Cmd+period (.) \
+\
+second- quit the Server\
+\
+third- Recompile the library cmd+K\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+Occasionally a Server/Lang crash might force you to kill the applications from the system. On the command line you use\
+\
+ps -aux\
+\
+or\
+\
+top\
+\
+To see what processes are running and their numerical IDs then \
+\
+kill (processnumber) \
+\
+To stop them. If on boot SC3 can't set up OSC, there may be an old Server instance running which you have to go in an kill explicitly via the command line.\
+\
+(OS X) You can do the same kill operations from the graphical ProcessViewer program, or via the Force Quit option from the Dock. There is also a K button (for kill all server instances) on the standard server window. \
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs40 \cf0 Managing SC
+\fs34 \
+\
+To purge your synthdef files:\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 \
+"rm synthdefs/*.scsyndef"\cf0 .unixCmd;\
+\
+But it may be best to just go in via the Finder to browse selectively...\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

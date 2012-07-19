@@ -1,0 +1,554 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fswiss\fcharset77 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green191\blue0;\red191\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green0\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 SC Programming Hints\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+SuperCollider is a full programming language, and its helpful to see how to code some standard programming operations\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs46 \cf0 Syntax for SuperCollider as a Programming Language\
+
+\fs36 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 SuperCollider is an object-oriented language based on Smalltalk. It has standard facilities of computer languages which I will outline for you here. \
+\
+Comments\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //this is a comment\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 /* this is also a comment */\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Brackets\
+\
+We usually group related bits of code together, and try to keep things neat and tidy. Your whole patch of code will typically be put within curly brackets\
+\
+(\
+\cf3 //my patch goes in here\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 )\
+\
+but we also use brackets for other reasons-\
+\
+(  )  \cf3 //for grouping expressions together or passing arguments to methods, ie SinOsc.ar(440)\
+\cf0 \
+\{  \}  \cf3 //function					ie 		\{arg a; a*a\}\
+\cf0 \
+[  ]  \cf3 //array (list of data)			ie 		[1,2,3,4]\
+\cf0 \
+\
+SuperCollider code gets full of nested expressions- you look at the selections within brackets to check on the scope (level of nesting) of code fragments.\
+\
+If you don't keep an eye on the tidiness of your code you'll get quickly confused about what goes with what. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Try double clicking around any of the brackets in the following code:\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //first block of code\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+	(\
+		\cf3 //first nested block starts \
+\cf0 \
+		(\
+			\cf3 //second nested block\
+\cf0 		)\
+\
+	)\
+\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Variables and Assignment\
+\
+In programming, we need to store our data somewhere, even if it's just data telling us the initial conditions for our calculations. For making music, because our programs run over time, we need to store information to keep track of the current state of affairs. \
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  a,b,c;			\cf3 //variables always get defined first in a block of code\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+a=1;				\cf3 //assign some values to our variables\
+\cf0 b=a;\
+c= b*5;\
+\
+[a,b,c].postln;\
+\
+\
+a=4;				\cf3 //assign some new values to our variables\
+\cf0 b=a+9;\
+c= c*5;			\cf3 //this is OK because c has a value already by now\
+\cf0 \
+[a,b,c].postln;\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+This is fine:\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  dave;\
+\
+dave= 5;\
+\
+dave.postln;\
+)\
+\
+This is wrong and SuperCollider will complain:\
+\
+(\
+dave=5;\
+dave.postln;\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Encapsulation\
+\
+Another standard facility of programming languages is the ability to define your own functions, a \
+process called encapsulation. \
+\
+Witness:\
+\
+(\
+\cf4 var\cf0  myfunction;\
+\
+myfunction= \{\cf4 arg\cf0  a; a*a\};			\cf3 //define my own squaring function\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+myfunction.value(8).postln; 		\cf3 //run my function with an input of 8 and post the result\
+\cf0 )\
+\
+\
+\
+This is useful because it stops us repeating similar code all over the place! \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Spot the difference in tidiness of code (don't worry about the fine detail of Array construction for now)\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  scale, current; 		\cf3 //code for making a random scale\cf0 \
+\
+current=60; \
+scale= \cf4 Array\cf0 .fill(8, \{\cf4 var\cf0  old; old=current; current=current+rrand(1,3);  old\}); \cf3 //construct for making an Array to a recipe- explained more in the next part\cf0 \
+scale.postln;\
+\
+current=60; \
+scale= \cf4 Array\cf0 .fill(8, \{\cf4 var\cf0  old; old=current; current=current+rrand(1,3);  old\});\
+scale.postln;\
+\
+current=60; \
+scale= \cf4 Array\cf0 .fill(8, \{\cf4 var\cf0  old; old=current; current=current+rrand(1,3);  old\});\
+scale.postln;\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+(\
+var makescale;\
+\
+makescale= \{var current; \
+current=60; \
+\cf4 Array\cf0 .fill(8, \{var old; old=current; current=current+rrand(1,3);  old;\});\
+\};\
+\
+3.do(\{makescale.value.postln;\});\
+)\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf0 [Functions]	//select the text within brackets then press cmd+H to explore some more about control flow
+\fs36 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Looping\
+\
+The good thing about computers is that they follow instructions in a way that would be very monotonous for a human! They can do tasks very rapidly over and over because they are capable of looping. \
+\
+(\
+20.do(\{\cf5 "over and over"\cf0 .postln;\})  \cf3 //the function here is the thing to call each time round the loop\cf0 \
+)\
+\
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  n;\
+\
+n=0;\
+\
+while(\{n<5\}, \{n=n+1; \cf5 "keep going"\cf0 .postln;\})\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+(\
+for(1, 5, \{\cf4 arg\cf0  i;  i.postln; \});	\cf3 //start at 1, step by 1 each time until you reach 5\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 )\
+\
+(\
+forBy(1, 5, 2, \{\cf4 arg\cf0  i;  i.postln; \});	\cf3 //start at 1, step by 2 each time until you reach 5\
+\cf0 )\
+\
+You have to be careful that you don't set the computer to looping forever, which will crash your computer. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Conditional Execution\
+\
+the control flow in SuperCollider is straight down the page:\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf5 "me first!"\cf0 .postln;\
+\cf5 "now me!"\cf0 .postln;\
+\cf5 "don't forget me!"\cf0 .postln;\
+)\
+\
+Sometimes we want things to happen based upon whether something else has occured. To allow this,\
+programming languages have conditional execution- if some logical condition is met,do something. \
+\
+\
+(\
+\cf5 "me first!"\cf0 .postln;\
+\cf5 "now me!"\cf0 .postln;\
+if(0.5.coin, \{\cf5 "don't forget me!"\cf0 .postln;\},\{\cf5 "you forgot me!"\cf0 .postln\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 //roll a dice- heads we do one thing, tails the second \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 )\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+an if statement is used like this-\
+\
+if (logical test which returns true or false,  do this if true,  do this if false) \
+\
+Run these lines one at a time:\
+\
+if(\cf4 true\cf0 , \cf5 "true!"\cf0 , \cf5 "false!"\cf0 ).postln;\
+\
+if(\cf4 false\cf0 , \cf5 "true!"\cf0 , \cf5 "false!"\cf0 ).postln;\
+\
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf0  a,b;\
+\
+a=5;\
+\
+b= if(a==6, 11, 7);\
+\
+b.postln;\
+)\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf0 [{\field{\*\fldinst{HYPERLINK "SC://Control-Structures"}}{\fldrslt \cf6 Control-Structures}}]
+\f0\fs20 		//select the text within brackets then press cmd+d to explore some more about control flow
+\fs36 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Classes\
+\
+Finally, in SuperCollider you have the possibility of writing your own functions as classes within the language- this means they are always available to you in your code. Such writing of classes is really helpful once you get to the stage of otherwise having very big long confusing files. You can break up your code over many files using classes. \
+\
+Classes are also a good conceptual tool for encapsulating functions and the data that function works with. This is part of good object oriented programming.\
+\
+We'll return to this later in the course, but I'll point out that you've seen and used many classes already:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 SinOsc\cf0 \
+\cf4 SCWindow\
+MouseX\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+A note on object oriented programming in SuperCollider (you may want to come back to this later)\
+\
+\
+Text beginning with a capital letter is a class name\
+\
+a dot then a function is a method of the object\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 LFSaw\cf0 .ar	\cf3 //ar is the method\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+select the method and hit Cmd+Y to see any classes which respond to that method\
+\
+\
+\
+You can see derived classes of a superclass by using the .dumpClassSubtree method\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 UGen\cf0 .dumpClassSubtree\
+\
+Everything derives from the Object class, so do Object.dumpClassSubtree to see the whole hierachy\
+\
+\
+You can add your own extensions to SuperCollider by writing your own classes.\
+\
+When you want to add new classes, you add them as code in .sc files to the SCClassLibrary folder (we'll do this much later in the course)\
+\
+Then you recompile the class library using Cmd+K :  if there are syntax errors in your code, the library won't compile, but hopefully you'll see error messages that will help you identify the problem. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

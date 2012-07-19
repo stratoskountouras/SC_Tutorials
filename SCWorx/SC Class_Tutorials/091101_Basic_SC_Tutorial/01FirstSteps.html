@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; min-height: 16.0px}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #bf0000; min-height: 16.0px}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #0000bf}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #007300}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Monaco; color: #606060}
+span.s1 {color: #000000}
+span.s2 {color: #0000bf}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><br></p>
+<p class="p2">// AVARTS 2009 - Computer Music Course</p>
+<p class="p2">// Programming in Supercollider. A series of step by step tutorials in Supercollider</p>
+<p class="p2">// by IZSK.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p2">/* Tutorials are based on Supercollider Help files and on the book "Programming in Supecollider by IZ. Aim is to convey programming skills without presupposing any previous knowledge of programming languages and compiler technology. */</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">//INTRODUCTION</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">// 1. To Begin</p>
+<p class="p1"><br></p>
+<p class="p2">/* Open SC. An untitled document with appears in the top left of the screen. <span class="Apple-converted-space"> </span></p>
+<p class="p2">The document functions as a "Post Window," so-called because SuperCollider uses it to "post" notifications.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><br></p>
+<p class="p2">When SuperCollider starts, it posts messages regarding the status of the system and the compilation of its library. These look like this:<span class="Apple-converted-space"> </span></p>
+<p class="p2">*/</p>
+<p class="p1"><br></p>
+<p class="p4">init_OSC</p>
+<p class="p4">compiling class library..</p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>NumPrimitives<span class="s1"> = 548</span></p>
+<p class="p6"><span class="s1"><span class="Apple-tab-span">	</span>compiling dir: </span>'/Applications/SuperCollider3/SCClassLibrary'</p>
+<p class="p4"><span class="Apple-tab-span">	</span>pass 1 done</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="s2">Method</span> <span class="s2">Table</span> <span class="s2">Size</span> 3091264 bytes</p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>Number<span class="s1"> of </span>Method<span class="s1"> </span>Selectors<span class="s1"> 2880</span></p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>Number<span class="s1"> of </span>Classes<span class="s1"> 1744</span></p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>Number<span class="s1"> of </span>Symbols<span class="s1"> 6926</span></p>
+<p class="p5"><span class="s1"><span class="Apple-tab-span">	</span></span>Byte<span class="s1"> </span>Code<span class="s1"> </span>Size<span class="s1"> 129989</span></p>
+<p class="p4"><span class="Apple-tab-span">	</span>compiled 299 files in 1.61 seconds<span class="Apple-converted-space"> </span></p>
+<p class="p4">compile done</p>
+<p class="p4">prGetHostByName hostname 127.0.0.1 addr 2130706433</p>
+<p class="p4"><span class="s2">RESULT</span> = 256</p>
+<p class="p4"><span class="s2">Class</span> tree inited in 0.09 seconds</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">// 2. Two More Windows</p>
+<p class="p1"><br></p>
+<p class="p2">/* On the bottom of the screen are two more windows. One is called "localhost server" and the other is "internal server." Click on the "boot" button on the localhost server. The words "localhost" in the black box of the button turn red and the word "Boot" on the button changes to "Quit." More text, such as</p>
+<p class="p3"><br></p>
+<p class="p2">booting 57110</p>
+<p class="p2">SC_AudioDriver: numSamples=512, sampleRate=44100.000000</p>
+<p class="p2">start <span class="Apple-converted-space">  </span>UseSeparateIO?: 0</p>
+<p class="p2">PublishPortToRendezvous 0 57110</p>
+<p class="p2">SuperCollider 3 server ready..</p>
+<p class="p2">notification is on</p>
+<p class="p3"><br></p>
+<p class="p2">will print to the post window. The localhost server is now ready to be used. Activate the internal server, if you wish, in the same way. */</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">// 3. Workspace Windows</p>
+<p class="p1"><br></p>
+<p class="p2">/* Open existing SC documents with File-&gt;Open... or cmd-o. Use File-&gt;New or cmd-n to create new documents.</p>
+<p class="p3"><br></p>
+<p class="p2">SuperCollider can open, edit and save documents in plain text, rtf, rtfd, or html format.<span class="Apple-converted-space"> </span></p>
+<p class="p2">The ending .sc is reserved for documents that contain Class definitions. These documents reside in folder SCClassLibrary or in folder Extensions in the home directory of Application Support. More about this in a later chapter.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><br></p>
+<p class="p2">*/</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">// 4. Evaluating code</p>
+<p class="p1"><br></p>
+<p class="p2">// To run (evaluate) one line of code, for example:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p2"><span class="s2">Server</span><span class="s1">.default.boot; </span>// Boot the default server.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p2">/* To evaluate the above line, place the text cursor anywhere on that line and press the &lt;enter&gt; key. If you don't have an enter key, then you can use ctrl-Return, Ctrl-c, fn-Return( on Some Macs), or Shift-Return. */<span class="s1"> <span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><br></p>
+<p class="p2">/* After booting the default server above, run the following line to start making a sound: */</p>
+<p class="p1"><br></p>
+<p class="p4">{ <span class="s2">SinOsc</span>.ar([400, 401], 0, 0.1) * <span class="s2">Saw</span>.ar([11, 33], 1) * <span class="s2">EnvGen</span>.kr(<span class="s2">Env</span>.sine(10)) }.play</p>
+<p class="p1"><br></p>
+<p class="p2">/* In addition to playing a sound, SuperCollider posts the following message in the post window: */</p>
+<p class="p1"><br></p>
+<p class="p7"><span class="s2">Synth</span><span class="s1">(</span>"-613784702"<span class="s1"> : 1000)</span></p>
+<p class="p1"><br></p>
+<p class="p2">/* Press command-period (cmd-.) to stop synthesis.*/</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">/* To run more than one line of code, select all the lines and press &lt;enter&gt;.</p>
+<p class="p3"><br></p>
+<p class="p2">To help with the selection process, examples with more than one line often are placed in enclosing parentheses. In such cases, select the text by clicking immediately to the right of the top parenthesis or to the left of the bottom parenthesis. Or, with the cursor to the right of the top parenthesis or the left of the bottom one, press cmd-shift-b.</p>
+<p class="p3"><br></p>
+<p class="p2">*/</p>
+<p class="p1"><br></p>
+<p class="p4">(</p>
+<p class="p4">{</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="s2">RLPF</span>.ar(</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>in: <span class="s2">Saw</span>.ar([100, 102], 0.15),</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq: <span class="s2">Lag</span>.kr(<span class="s2">LFNoise0</span>.kr(4, 700, 1100), 0.1),</p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>rq: 0.05</p>
+<p class="p4"><span class="Apple-tab-span">	</span>)</p>
+<p class="p4">}.play</p>
+<p class="p4">)</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+<p class="p1"><br></p>
+<p class="p2">// 5. Recording sound</p>
+<p class="p1"><br></p>
+<p class="p2">/* The localhost and the internal server windows have buttons, on the far right, to activate recording. To record, choose the a default server. The button on the default server of your choice intially will say "prepare rec." Press it once and it will say record &gt;. Press it again to start recording. */</p>
+<p class="p1"><br></p>
+<p class="p2">////////////////////////////////////////////////////////////////////////////////////////////////////</p>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #a8220e}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #a8220e}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #a8220e}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #a8220e}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #a8220e}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #a8220e}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p11 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #a8220e}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #a8220e}
+span.s4 {font: 14.0px Optima}
+span.s5 {color: #0013bb}
+span.s6 {color: #606060}
+span.s7 {text-decoration: underline}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 2.4:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 2: Multitouch trackpad</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• MultiTouchPad (MacBook/MacBookPro only)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Lab exercise</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= MULTITOUCHPAD =================</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Now, let's try our hands at a quite involved installation procedure of a very fun Quark: MultiTouchPad is a class created by Batuhan Bozkurt that acts as a wrapper of the <i>tongsengmod </i>application inside SuperCollider, allowing you to get multitouch data from your MacBook's touchpad! This will only work on newer MacBook family computers, and according to the developer it has been tested only on Leopard only so far. If your MacBook doesn't support 3-finger gestures, it is not multitouch-enabled, so this unfortunately won't work. Have a look at this thread to find out more on that:</p>
+<p class="p9">"open http://new-supercollider-mailing-lists-forums-use-these.2681727.n2.nabble.com/New-Quark-MultiTouchPad-td3967869.html#a3968135"<span class="s2">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p1">// The protocol used behind the scenes by <i>tongsengmod </i>is TUIO (a protocol specifically designed for table-top tangible user interfaces).<span class="Apple-converted-space"> </span></p>
+<p class="p1">// More info here:</p>
+<p class="p9">"open http://tuio.lfsaw.de/index.shtml"<span class="s2">.unixCmd;</span></p>
+<p class="p9">"open http://www.tuio.org/?specification"<span class="s2">.unixCmd;</span></p>
+<p class="p6"><br></p>
+<p class="p1">// There are a few steps involved to get this going.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s2"><span class="Apple-tab-span">	</span></span>// You can do 1a. (easy 2-step install) OR 1b. (3-step process) to install the <i>tongsengmod</i> application to your machine.</p>
+<p class="p1"><span class="s2"><span class="Apple-tab-span">	</span></span>// Then do 2. to get the MultiTouchPad quark.</p>
+<p class="p6"><br></p>
+<p class="p1">/* <b>1a</b>.======</p>
+<p class="p1">Download and install a pre-compiled version of <i>tongsengmod</i>:</p>
+<p class="p1">==========</p>
+<p class="p1">*/</p>
+<p class="p1">// <b>A:</b> download the precompiled tongsengmod binary</p>
+<p class="p9">"open http://github.com/downloads/batuhan/tongsengmod/tongsengmod.zip"<span class="s2">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p1">// <b>B:</b></p>
+<p class="p7">//* Open Terminal application:</p>
+<p class="p10"><span class="s2"><span class="Apple-tab-span">	</span></span>"open /Applications/Utilities/Terminal.app"<span class="s2">.unixCmd</span></p>
+<p class="p7">/*<span class="Apple-tab-span">	</span>Then, write the following inside Terminal (without the $ symbol, this just means it's a new command, after the previous one has come through):</p>
+<p class="p7"><span class="Apple-tab-span">	</span>$ cd &lt;drag-drop the tongsengmod binary here and this will give you the path&gt;</p>
+<p class="p1"><span class="Apple-tab-span">	</span>$ sudo mv &lt;same path as above&gt;</p>
+<p class="p1"><span class="Apple-tab-span">	</span>$ enter your password</p>
+<p class="p1">// Now the application is installed, and SC should be able to access it - provided your computer is multitouch capable. Now go to 2.</p>
+<p class="p1">*/</p>
+<p class="p6"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3"><b>// OR:</b></span></p>
+<p class="p1">/* <b>1b.</b> ======</p>
+<p class="p1">Downloading and compiling <i>tongsengmod</i> (From the MultiTouchPad helpfile):</p>
+<p class="p1">==========</p>
+<p class="p1">*/</p>
+<p class="p7">/* <b>A:</b><span class="Apple-converted-space"> </span></p>
+<p class="p7">Make sure you have Apple Developer Tools installed.</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7">/*<b> B</b>:</p>
+<p class="p7">Download tongsengmod source from: http://github.com/batuhan/tongsengmod (or download via git://github.com/batuhan/tongsengmod.git ).</p>
+<p class="p7">"open http://github.com/batuhan/tongsengmod/zipball/0.4".unixCmd<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span></span>// you could also have a look here and see if there is a newer version</p>
+<p class="p12"><span class="Apple-tab-span">	</span>"open http://github.com/batuhan/tongsengmod/downloads".unixCmd</p>
+<p class="p7">*/</p>
+<p class="p7">/* <b>C:</b></p>
+<p class="p7">Extract the source archive (for example, to the desktop; if you put it elsewhere, you 'll need to replace cd ~/Desktop with the folder and path where you downloaded tongsengmod).</p>
+<p class="p7">*/</p>
+<p class="p7">// Open Terminal application:</p>
+<p class="p10"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"open /Applications/Utilities/Terminal.app"<span class="s2">.unixCmd</span></p>
+<p class="p7">/*<span class="Apple-tab-span">	</span>Then, write the following inside Terminal (without the $ symbol, this just means it's a new command, after the previous one has come through)</p>
+<p class="p7"><span class="Apple-tab-span">	</span>$ cd ~/Desktop<span class="Apple-converted-space"> <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p7"><span class="Apple-tab-span">	</span>$ cd &lt;extracted folder name&gt;</p>
+<p class="p7"><span class="Apple-tab-span">	</span>$ make</p>
+<p class="p7"><span class="Apple-tab-span">	</span>$ sudo make install</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*<b> 2.<span class="Apple-converted-space">  </span></b>======</p>
+<p class="p7">• Download the MultiTouchPad Quark:</p>
+<p class="p7">==========</p>
+<p class="p7">*/</p>
+<p class="p13"><span class="s5">Quarks</span>.install( <span class="s6">"MultiTouchPad"</span>, checkoutIfNeeded: <span class="s5">false</span>)</p>
+<p class="p8"><br></p>
+<p class="p7">//• Open up the helpfile, and enjoy!</p>
+<p class="p14"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MultiTouchPad/Help/MultiTouchPad.html">MultiTouchPad</a></span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>// ================= LAB EXERCISE =================</b></p>
+<p class="p7">&gt;&gt;&gt;&gt; Lab exercise / homework:</p>
+<p class="p7"><span class="Apple-tab-span">	</span>Make an instrument incorporating multitouch<span class="Apple-converted-space"> </span></p>
+<p class="p7">*/</p>
+</body>
+</html>

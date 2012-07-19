@@ -1,0 +1,45 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red0\green0\blue0;\red22\green58\blue161;
+\red96\green96\blue96;\red0\green0\blue191;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 Server\cf3 .default.recChannels is = 2\
+\cf2 Server\cf3 .default.recChannels\
+\
+\cf2 thisProcess\cf3 .platform.recordingsDir\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf0 (\
+w = \cf4 SCWindow\cf0 .new;\
+b = \cf4 SCButton\cf0 (w, \cf4 Rect\cf0 (20,20,80,26))\
+		.states_([[\cf5 "play"\cf0 ,\cf5  \cf4 Color\cf0 .white, \cf4 Color\cf0 .clear]])\
+		.mouseUpAction_(\{\
+			a = 	\{ \cf6 PanAz\cf0 .ar(2, \cf6 SinOsc\cf0 .ar(\cf6 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf6 LFSaw\cf0 .kr(0.1)) +  \cf6 SinOsc\cf0 .ar(100, \cf6 SinOsc\cf0 .ar(\cf6 XLine\cf0 .kr(1, 20000, 90), 0, 190pi), 0.25) \}.play;	\
+		\})\
+		.action_(\{ arg butt;\
+			a.free;\
+		\});\
+c = \cf4 SCButton\cf0 (w, \cf4 Rect\cf0 (20,80,80,26))\
+		.states_([[\cf5 "hold"\cf0 ,\cf5  \cf4 Color\cf0 .white, \cf4 Color\cf0 .clear]])\
+		.mouseDownAction_(\{\
+			b = 	\{ \cf6 PanAz\cf0 .ar(2, \cf6 SinOsc\cf0 .ar(\cf6 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf6 LFSaw\cf0 .kr(0.1)) +  \cf6 SinOsc\cf0 .ar(100, \cf6 SinOsc\cf0 .ar(\cf6 XLine\cf0 .kr(1, 400, 90), 0, 700pi), 0.25) \}.play;	\
+		\})\
+		.action_(\{ arg butt;\
+			b.free;\
+		\});\
+		\
+d = \cf4 SCButton\cf0 (w, \cf4 Rect\cf0 (200,20,80,26))\
+		.states_([[\cf5 "stop"\cf0 ,\cf5  \cf4 Color\cf0 .black, \cf4 Color\cf0 .red]])\
+		.mouseUpAction_(\{a.free;	\
+				\
+		\})\
+		.action_(\{ arg butt;\
+			d.free;\
+		\});\
+\
+w.front;\
+)}

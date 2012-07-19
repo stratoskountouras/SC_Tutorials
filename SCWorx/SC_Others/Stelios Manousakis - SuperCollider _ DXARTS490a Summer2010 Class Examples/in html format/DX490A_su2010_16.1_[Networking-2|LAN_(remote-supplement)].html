@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p10 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #bf0000}
+span.s1 {font: 13.0px Optima}
+span.s2 {font: 15.0px Optima}
+span.s3 {color: #000000}
+span.s4 {color: #0000bf}
+span.s5 {color: #606060}
+span.s6 {color: #007300}
+span.s7 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 16.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Networking 2: Communication within a Local-Area-Network (LAN): SUPPLEMENT</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• A simple example (remote computer)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• An example with sound (remote computer)</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= REMOTE MACHINE </b><span class="s2"><b>SUPPLEMENT</b></span><b> =================</b></p>
+<p class="p8">// This file is for use within the remote computer</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== A SIMPLE EXAMPLE: REMOTE COMPUTER ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// In this simple example, we will create a GUI interface with two knobs, one to send data to a remote machine, and one to receive.</p>
+<p class="p7"><br></p>
+<p class="p8">// 1. connecting:</p>
+<p class="p8"><span class="s3">~remoteComp = </span><span class="s4">NetAddr</span><span class="s3">(</span><span class="s5">"stm.local"</span><span class="s3">, 57120); </span>// replace the IP ("Tesla.local") with the IP or name of the machine you want to connect to</p>
+<p class="p7"><br></p>
+<p class="p8">// 2. making a responder for receiving</p>
+<p class="p9">r = <span class="s4">OSCresponder</span>(~remoteComp, <span class="s6">'dxlab8'</span>, { <span class="s4">arg</span> time, resp, msg;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>[time, msg[1]].postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>{~recKnob.value_(msg[1])}.defer;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p7"><br></p>
+<p class="p10"><br></p>
+<p class="p8">// 3. Making a GUI window with a knob to send, and a knob to receive:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> window = <span class="s4">Window</span>.new(<span class="s5">"Networking test"</span>,<span class="s4">Rect</span>(318, 456, 400, 400)).front;</p>
+<p class="p9">~recKnob = <span class="s4">Knob</span>.new(window,<span class="s4">Rect</span>(175, 205, 217, 189))</p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span> };</p>
+<p class="p9">~sendKnob = <span class="s4">Knob</span>.new(window,<span class="s4">Rect</span>(8, 11, 216, 188))</p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span><span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~remoteComp.sendMsg(</span><span class="s6">'stmIncoming'</span><span class="s3">, v.value); </span>// &lt;&lt; action: sending to remote machine</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p9"><span class="s4">StaticText</span>.new(window,<span class="s4">Rect</span>(24, 333, 148, 50))</p>
+<p class="p11"><span class="s3"><span class="Apple-tab-span">	</span>.string_(</span>"Receive some data --&gt;&gt;"<span class="s3">)</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span> };</p>
+<p class="p9"><span class="s4">StaticText</span>.new(window,<span class="s4">Rect</span>(229, 15, 130, 47))</p>
+<p class="p11"><span class="s3"><span class="Apple-tab-span">	</span>.string_(</span>"&lt;&lt;-- Send some data"<span class="s3">)</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span> };</p>
+<p class="p9">)</p>
+<p class="p10"><br></p>
+<p class="p12">/* Now, do the same in the remote machine, replacing in:</p>
+<p class="p12">1. the IP of the receiving machine to the IP of this one</p>
+<p class="p12">2. the cmdName of the OSCresponder to the name you're using in (3)</p>
+<p class="p12">3. Replace the name you're using in (3) with the name you use in (2)</p>
+<p class="p12">*/</p>
+<p class="p10"><br></p>
+<p class="p8">// Don't forget to remove your responder once you're done!</p>
+<p class="p9">r.remove</p>
+<p class="p7"><br></p>
+<p class="p10"><span class="Apple-tab-span">	</span></p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p8"><b>// ====== AN EXAMPLE WITH SOUND: REMOTE ======</b></p>
+<p class="p8">// In this simple example, we will create the same GUI interface with two knobs, except this time the 'sending' knob will get data from analysis of the sound in the local machine, and will send the data to the remote machine to affect the synthesis there - and vice versa.</p>
+<p class="p7"><br></p>
+<p class="p8">// • Synthesis: a self-phase-modulated Sinewave, with analysis to show how noisy it is:</p>
+<p class="p7"><br></p>
+<p class="p9">s.boot;</p>
+<p class="p7"><br></p>
+<p class="p9">(</p>
+<p class="p9">~mult = 4;</p>
+<p class="p8">// buffer for FFT<span class="Apple-converted-space"> </span></p>
+<p class="p9">~buf = <span class="s4">Buffer</span>.alloc(s,2048,1);<span class="Apple-converted-space"> </span></p>
+<p class="p8">// the synthdef</p>
+<p class="p9">~fdbFM = <span class="s4">CtkSynthDef</span>(<span class="s6">\fdbSine</span>, {<span class="s4">arg</span> freq, fdbAmt, amp, pollFreq = 2, gate = 1;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">var</span> sine, mod, fdbIn, fdbOut, env, chain, flatness;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>fdbIn = <span class="s4">LocalIn</span>.ar(1);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>env = <span class="s4">EnvGen</span>.kr(<span class="s4">Env</span>.new([0.00001, 1, 1, 0.00001], [0.05, 0.9, 0.5], [<span class="s6">\exp</span>, <span class="s6">\sin</span>], 1), gate,<span class="Apple-converted-space">  </span>doneAction: 2);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>mod = fdbIn * fdbAmt;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>sine = <span class="s4">SinOsc</span>.ar(freq, mod, amp); <span class="s7">// fdb phase modulation</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>chain = <span class="s4">FFT</span>(~buf, sine);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>flatness = <span class="s4">SpecFlatness</span>.kr(chain);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">SendReply</span>.kr(<span class="s4">Impulse</span>.kr(pollFreq), <span class="s6">'flatness'</span>, flatness);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">Out</span>.ar(0, sine * env);</p>
+<p class="p9"><span class="Apple-tab-span">	</span>fdbOut = <span class="s4">LocalOut</span>.ar(sine);</p>
+<p class="p9">})</p>
+<p class="p9">);</p>
+<p class="p7"><br></p>
+<p class="p8">// 1. connecting:</p>
+<p class="p8"><span class="s3">~remoteComp = </span><span class="s4">NetAddr</span><span class="s3">(</span><span class="s5">"stm.local"</span><span class="s3">, 57120); </span>// replace the IP ("Tesla.local") with the IP or name of the machine you want to connect to</p>
+<p class="p7"><br></p>
+<p class="p8">// 2. making a responder for receiving</p>
+<p class="p9">r = <span class="s4">OSCresponder</span>(~remoteComp, <span class="s6">'dxlab8'</span>, { <span class="s4">arg</span> time, resp, msg;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>[time, msg[1]].postln;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>{~recKnob.value_(msg[1])}.defer;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~note.fdbAmt_(msg[1] * ~mult + 1)<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// 2a. making a responder for receiving from the analysis data from the synthdef, and moving the knob</p>
+<p class="p9">~noisiness = <span class="s4">OSCresponder</span>(n, <span class="s6">'flatness'</span>, { <span class="s4">arg</span> time, resp, msg;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>msg[3].postln;</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>{~sendKnob.valueAction_(msg[3])}.defer; </span>// naturally, it would be more efficient to send the message directly to the remote server, this is just for demonstration purposes...</p>
+<p class="p9"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p7"><br></p>
+<p class="p10"><br></p>
+<p class="p8">// 3. Making a GUI window with a knob to send, and a knob to receive:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> window = <span class="s4">Window</span>.new(<span class="s5">"Networking test"</span>,<span class="s4">Rect</span>(318, 456, 400, 400)).front;</p>
+<p class="p9">~recKnob = <span class="s4">Knob</span>.new(window,<span class="s4">Rect</span>(175, 205, 217, 189))</p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span> };</p>
+<p class="p9">~sendKnob = <span class="s4">Knob</span>.new(window,<span class="s4">Rect</span>(8, 11, 216, 188))</p>
+<p class="p9"><span class="Apple-tab-span">	</span>.action_{<span class="s4">|v|</span><span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~remoteComp.sendMsg(</span><span class="s6">'stmIncoming'</span><span class="s3">, v.value); </span>// &lt;&lt; action: sending to remote machine</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p9"><span class="s4">StaticText</span>.new(window,<span class="s4">Rect</span>(24, 333, 148, 50))</p>
+<p class="p11"><span class="s3"><span class="Apple-tab-span">	</span>.string_(</span>"Receive some data --&gt;&gt;"<span class="s3">);</span></p>
+<p class="p9"><span class="s4">StaticText</span>.new(window,<span class="s4">Rect</span>(229, 15, 130, 47))</p>
+<p class="p11"><span class="s3"><span class="Apple-tab-span">	</span>.string_(</span>"&lt;&lt;-- Send some data"<span class="s3">);</span></p>
+<p class="p9">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p9">~note = ~fdbFM.new().freq_(160).fdbAmt_(3.5).amp_(0.5).play</p>
+<p class="p8">// change some numbers</p>
+<p class="p9">~note.freq_(124)</p>
+<p class="p9">~note.fdbAmt_(5.4)</p>
+<p class="p9">~note.fdbAmt_(1244)</p>
+<p class="p9">~mult = 4.6</p>
+<p class="p9">~note.pollFreq_(2.6)</p>
+<p class="p9">~note.release</p>
+<p class="p7"><br></p>
+<p class="p8">// remove the responders</p>
+<p class="p9">r.remove;</p>
+<p class="p9">~noisiness.remove;<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p10"><br></p>
+</body>
+</html>

@@ -1,0 +1,123 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green191\blue0;\red191\green0\blue0;\red0\green0\blue0;
+\red0\green0\blue191;\red191\green0\blue0;\red96\green96\blue96;\red0\green115\blue0;\red0\green255\blue0;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Fat Chorus\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 I'll use what we've looked at to create a chorusing effect. We make an array of oscillators slightly detuned from one another, mixed to keep them in mono.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\cf4 \{\cf5 Mix\cf4 (\cf5 Saw\cf4 .ar([440,443,437],0.1))\}.scope \cf6 //chorusing\cf4 \
+\cf0 \
+\cf4 \
+\cf6 //more complicated sound combining AM, FM, chorusing and envelopes\cf4 \
+(\
+\{\
+\cf5 Mix\cf4 (\
+	\cf5 Resonz\cf4 .ar(			\cf6 //The Resonz filter has arguments input, freq, rq=bandwidth/centre frequency  \cf4 \
+		\cf5 Saw\cf4 .ar([440,443,437] + \cf5 SinOsc\cf4 .ar(100,0,5*200)), \cf6 //frequency modulated sawtooth wave with chorusing\cf4 \
+		\cf5 XLine\cf4 .kr(10000,10, 10, doneAction:2), \cf6 //vary filter bandwidth over time\cf4 \
+		\cf5 Line\cf4 .kr(1,0.05, 10), \cf6 //vary filter rq over time\cf4 \
+		mul: \cf5 LFSaw\cf4 .kr(\cf5 Line\cf4 .kr(13,17,3),0.5,0.5)*\cf5 Line\cf4 .kr(1,0,10)  \cf6 //AM\cf4 \
+	)\
+)\
+\}.scope\
+)\
+\
+\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Sample playback rate modulation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+modulation of sample playback by an oscillator.\
+\
+Soundfiles will be explained properly in a future week, though see the PlayBuf and Buffer help files if you want to look ahead. \
+\cf4 \
+\cf6 //run me first to load the soundfiles\cf4 \
+(\
+b=\cf5 Buffer\cf4 .read(s,\cf7 "sounds/a11wlk01.wav"\cf4 );\
+)\
+\
+\
+\cf6 //now me!\cf4 \
+(\
+\
+\{\
+\cf5 var\cf4  modf, ind, modulator;\
+\cf5 var\cf4  b1; \
+\
+b1= b.bufnum;\
+\
+modf= \cf5 MouseX\cf4 .kr(1,4400, \cf8 'exponential'\cf4 );\
+ind=\cf5 MouseY\cf4 .kr(0.0,1.0, \cf8 'linear'\cf4 );\
+\
+modulator= \cf5 SinOsc\cf4 .kr(modf,0,10*modf*ind, 440); \
+\
+\cf5 PlayBuf\cf4 .ar(1,b1, \cf5 BufRateScale\cf4 .kr(b1)* (modulator/440), 1, 0, 1)\
+\
+\}.scope;\
+) \
+ \
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1 \cf0 \
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf9 Return to the bell\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+We are now in a position to return to the additive bell sound and add some modulation effects to make it a richer, more vibrant sound\
+\
+I won't explain everything here right now, but it's the sort of thing that should become much clearer and decipherable as you gain SC experience. \
+\
+\
+\cf6 //richer bell patch\cf4 \
+(\
+\cf5 var\cf4  numpartials, spectrum, amplitudes, modfreqs1, modfreqs2, decaytimes;  \
+\
+spectrum = [0.5,1,1.19,1.56,2,2.51,2.66,3.01,4.1];\
+\
+amplitudes= [0.25,1,0.8,0.5,0.9,0.4,0.3,0.6,0.1];\
+\
+numpartials = spectrum.size;\
+\
+modfreqs1 = \cf5 Array\cf4 .rand(numpartials, 1, 5.0); \cf6 //vibrato rates from 1 to 5 Hz \cf4 \
+\
+modfreqs2 = \cf5 Array\cf4 .rand(numpartials, 0.1, 3.0); \cf6 //tremolo rates from 0.1 to 3 Hz \cf4 \
+\
+decaytimes = \cf5 Array\cf4 .rand(numpartials, 2.5,7.5); \cf6 //decay from 2.5 to 7.5 seconds\cf4 \
+\
+\{\
+\cf5 Mix\cf4 .fill(spectrum.size, \{\cf5 arg\cf4  i;  \
+\cf5 var\cf4  amp, freq; \
+\
+freq= (spectrum[i]+(\cf5 SinOsc\cf4 .kr(modfreqs1[i],0,0.005)))*500; \
+amp= 0.1* \cf5 Line\cf4 .kr(1,0,decaytimes[i])*(\cf5 SinOsc\cf4 .ar(modfreqs2[i],0,0.1,0.9)* amplitudes[i]);\
+\
+\cf5 Pan2\cf4 .ar(\cf5 SinOsc\cf4 .ar(freq, 0, amp),1.0.rand2)\});\
+\}.scope\
+\
+)\
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

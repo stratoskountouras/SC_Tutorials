@@ -1,0 +1,116 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 17.1:
+\b0 \
+
+\b 	Creating Standalone SuperCollider applications
+\b0 \
+
+\fs28 		Contents:\
+			\'95 About\
+			\'95 Standalones in different OS Platforms\
+			\'95 Making a standalone in Mac OSX\
+				- Step-by-step process\
+				- Additional customization\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ================= CREATING STANDALONE APPS =================
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== ABOUT ======
+\b0 \cf3 \
+\cf2 // Creating Standalones is a great way for sharing applications with the world or with specific users without having to worry about installing and running SuperCollider - or even without having to know that SC is involved at all. It also allows you to freeze a particular piece of finished code (ex. an instrument, a composition, an installation) into a package that works as-is, without having to worry about SC version compatibilities, re-installing quarks, plug-ins, extensions etc; you can add everything your application needs in the package, and it will always be there. In the same way, you can also remove everything you don't need from the package, meaning that your application can be as lightweight as you want/can make it.\cf3 \
+\cf2 // Note that an SC application must be open-source and comply with SC's GPL.\cf3 \
+\
+\
+
+\b \cf2 // ====== STANDALONES IN DIFFERENT OS PLATFORMS ======
+\b0 \cf3 \
+\
+\cf2 // The description below is only for Mac OS X, the platform where it is the easiest to create standalones in. In Windows this takes considerably more work and there aren't any specific instructions as far as I know, but several forum posts can be found in the list archives. In Linux it is easier, but you still need some customization; some info can be found in the list as well, and there has been some recent activity which may lead to a more specific set of instructions.\cf3 \
+\cf2 // If you want to create a cross-platform application, you will, of course, need to compile the standalones for each platform, but a first step is to ensure that your SC code is actually cross-platform compatible. This file explains in detail what you need to take care of: {\field{\*\fldinst{HYPERLINK "SC://Crossplatform"}}{\fldrslt \cf2 \ul \ulc2 Crossplatform}}\cf3 \
+\
+\
+
+\b \cf2 // ====== MAKING A STANDALONE IN MAC OSX ======
+\b0 \cf3 \
+\cf2 // You can create your own Standalone, or modify an existing Standalone template - if one exists for the particular version of SC you're running and you're not concerned about having a bleeding edge, self-compiled SuperCollider version. If you're running one of the official builds, there should be one, if not yet, ask the sc-users list and Josh will probably whip one up for you in no time. Modifying the Standalone does not require you having Apple Developer Tools. However, if you do you can also easily customize a few more things, like SCs menu items (explained below).\cf3 \
+\
+\cf2 // You can download the latest (July 2010) standalone template for SC 3.4 (Mac OS X) here:\cf3 \
+\cf4 "open http://sourceforge.net/projects/supercollider/files/Mac%20OS%20X/3.4RC/Standalone%20Template.app.zip/download"\cf3 .unixCmd\
+\cf2 // Or, look around here for an older or newer version - a new one for the official 3.4 release should be up a few days:\cf3 \
+\cf4 "open http://sourceforge.net/projects/supercollider/files/"\cf3 .unixCmd\
+\
+\
+
+\b \cf2 // ------ Step-by-step process --
+\b0 \cf3 \
+\cf2 // The helpfiles that come with the distribution are very clear, so I suggest going through the {\field{\*\fldinst{HYPERLINK "SC://Modifying_Standalones"}}{\fldrslt \cf5 \ul \ulc5 Modifying_Standalones}} file, and after that, {\field{\*\fldinst{HYPERLINK "SC://Creating-Standalone-Applications"}}{\fldrslt \cf5 \ul \ulc5 Creating-Standalone-Applications}} - which describes how you can specify behaviors to happen upon loading the application with modifying the startup file. \cf3 \
+\
+\
+\
+
+\b \cf2 // ------ Additional Customizability  --
+\b0 \cf3 \
+\cf2 // Here are just a couple of things not mentioned in these files, for further customizability, that you can do after you're done with what these files describe:\cf3 \
+\
+\cf2 // \'95 Making it 
+\b lightweight
+\b0 :\cf3 \
+\cf2 // 	Step 4 in Modifying Standalones explains how to add files; you can also remove classes, plugins, extensions that you don't use, to loose some weight - just make sure you test afterwards to make sure things do still work, as there is a high probability that many things you think you don't use are used inside other classes.\cf3 \
+\
+\cf2 // \'95 You can 
+\b create your own icon 
+\b0 for your app:\cf3 \
+\cf2 //	- First, you will need an application that converts any image format to .icns. I 've been using 
+\i FastIcns
+\i0 , and it works pretty nice (and it's free): \cf3 \
+	\cf4 "open http://www.versiontracker.com/dyn/moreinfo/macosx/31205"\cf3 .unixCmd\
+\cf2 //	- Once you have the .icns file, all you need to do is swap the existing SCcube.icns inside 
+\i Standalone Template/ Contents / Resources 
+\i0 with your own icon! The easiest way to do that, is to just name your icon 'SCcube.icns'; if you want to use your own name you should change the reference to SCcube.icns to a reference to your file's name into the .plist files, and possibly elswhere.\cf3 \
+\
+\cf2 // \'95 You can 
+\b modify the main menu 
+\b0 of your app:\cf3 \
+\cf2 //	- If all you want to do is add some more menu items to the main menu of your standalon application, you can do that within SC, using the {\field{\*\fldinst{HYPERLINK "SC://CocoaMenuItem"}}{\fldrslt \cf2 \ul \ulc2 CocoaMenuItem}} and it's subclasses: {\field{\*\fldinst{HYPERLINK "SC://SCMenuItem"}}{\fldrslt \cf5 \ul \ulc5 SCMenuItem}}, {\field{\*\fldinst{HYPERLINK "SC://SCMenuGroup"}}{\fldrslt \cf5 \ul \ulc5 SCMenuGroup}}, {\field{\*\fldinst{HYPERLINK "SC://SCMenuSeparator"}}{\fldrslt \cf5 \ul \ulc5 SCMenuSeparator}}. Look at the helpfiles for some simple examples.\cf3 \
+\cf2 // Note that you would most likely want to add this behavior in the startup file of your application.\cf3 \
+\cf2 //	- If you want to remove any of SCs standard menu items, or create more complex nesting, you 'll need Apple Developer Tools. You can open the MainMenu.nib file located in "Standalone Template.app/Contents/Resources/English.lproj/MainMenu.nib" with InterfaceBuilder.app, from where you can edit, remove and add items, assign keyboard shortcuts to them, as well as specific actions to be performed by SC when selecting those items.\cf3 \
+\
+\
+}

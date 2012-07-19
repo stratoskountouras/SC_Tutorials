@@ -1,0 +1,255 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green0\blue255;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 6.1:
+\b0 \
+
+\b 	Interfacing 2: MIDI in SuperCollider
+\b0 \
+
+\fs28 		Contents: \
+			\'95 Connecting\
+			\'95 Receiving Data\
+				- MIDIIn\
+				- Responders\
+			\'95 Sending data\
+			\'95 MIDI clock\
+				- Sending MIDI Clock data\
+				- Receiving MIDI Clock data\
+			\'95 MIDI files\
+			\'95 Utilities\
+			\'95 Third Party Implementations\
+				- dewdrop library\
+				- wslib\
+				- JITMIDIKtl\
+				- rd_ctl\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= MIDI IN SUPECOLLIDER =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== CONNECTING ======
+\b0 \cf3 \
+\cf2 // MIDI support in SuperCollider quite extensive, and any device that your system recognizes SC can talk to. The MIDI-related classes are little more than hardware abstractions.\cf3 \
+\cf2 // In SC, MIDI is implemented as a service. As such, there is a single MIDI input function that handles all messages - although you can choose to only use a specific subset of those messages within SC. \cf3 \
+\cf2 // In order to use MIDI, you have to instantiate the service: you do that by initializing the 
+\i MIDIClient
+\i0 , which is the class that communicates with the CoreMIDI of your machine. This looks at the connected devices (
+\i MIDIEndPoint
+\i0 ), and assigns a unique ID to each device, that you can later access by connecting a MIDIIn port. \cf3 \
+\
+\cf2 // here is how to connect a device:\cf3 \
+\cf2 // \'95\'a0Step 1: Initialize the client\cf3 \
+	\cf4 MIDIClient\cf3 .init; \
+\cf2 // \'95 Step 2: Start the responder. Ex:\cf3 \
+	\cf4 MIDIIn\cf3 .connect	\
+\cf2 // \'95 Step 3: Define what midi method you want to use, and create a function to do something with the data. Ex:\cf3 \
+	\cf4 MIDIIn\cf3 .control = \{ \cf4 arg\cf3  src, chan, num, val; \
+		if (num == 23, \{p.play\});\
+		if (num ==33, \{p.release\});\
+		[chan,num,val].postln; \};\
+\
+\
+\cf2 // For more general information, look here: {\field{\*\fldinst{HYPERLINK "SC://UsingMIDI"}}{\fldrslt \cf2 \ul \ulc2 UsingMIDI}}\cf3 \
+\
+\
+
+\b \cf2 // ====== RECEIVING DATA ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ MIDIIn --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://MIDIIn"}}{\fldrslt \cf2 \ul \ulc2 MIDIIn}}	receives incoming data from a port, and has a number of methods for receiving different kinds of data. These are:\cf3 \
+	noteOff, noteOn, polytouch, control, program, touch, bend, sysex, sysrt, smpte\
+\cf2 // Evaluate the following chunk to post any incoming data from any port:\cf3 \
+\
+(\
+	\cf4 MIDIIn\cf3 .connect(0, \cf4 MIDIClient\cf3 .sources.at(0)); \cf2 // connect to port 0, you can change this to the port your device is connected\cf3 \
+	\cf2 // register functions:	\cf3 \
+	\cf4 MIDIIn\cf3 .noteOff = \{ \cf4 arg\cf3  src, chan, num, vel; 		[chan,num,vel / 127].postln; \};\
+	\cf4 MIDIIn\cf3 .noteOn = \{ \cf4 arg\cf3  src, chan, num, vel; 		[chan,num,vel / 127].postln; \};\
+	\cf4 MIDIIn\cf3 .polytouch = \{ \cf4 arg\cf3  src, chan, num, vel; 	[chan,num,vel / 127].postln; \};\
+	\cf4 MIDIIn\cf3 .control = \{ \cf4 arg\cf3  src, chan, num, val; 		[chan,num,val].postln; \};\
+	\cf4 MIDIIn\cf3 .program = \{ \cf4 arg\cf3  src, chan, prog; 			[chan,prog].postln; \};\
+	\cf4 MIDIIn\cf3 .touch = \{ \cf4 arg\cf3  src, chan, pressure; 			[chan,pressure].postln; \};\
+	\cf4 MIDIIn\cf3 .bend = \{ \cf4 arg\cf3  src, chan, bend; 			[chan,bend - 8192].postln; \};\
+	\cf4 MIDIIn\cf3 .sysex = \{ \cf4 arg\cf3  src, sysex; 					sysex.postln; \};\
+	\cf4 MIDIIn\cf3 .sysrt = \{ \cf4 arg\cf3  src, chan, val; 				[chan,val].postln; \};\
+	\cf4 MIDIIn\cf3 .smpte = \{ \cf4 arg\cf3  src, chan, val; 				[chan,val].postln; \};\
+)\
+\
+\cf2 // Have a look at the MIDIIn file for more information\cf3 \
+\cf2 // NOTE:  You can only have one MIDIIn instance active at a time!\cf3 \
+\
+
+\b \cf2 // ------ Responders --
+\b0 \cf3 \
+\cf2 // Many interfaces only send a specific kind of data, so you don't have to be receiving everything; instead, you can use one of the {\field{\*\fldinst{HYPERLINK "SC://MIDIResponder"}}{\fldrslt \cf2 \ul \ulc2 MIDIResponder}} subclasses. These also allow you to have any number of responders active simultaneously. There are 6 different responders, and all function similarly, inheriting many characteristics from their common superclass:\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\b \cf3 	{\field{\*\fldinst{HYPERLINK "SC://NoteOnResponder"}}{\fldrslt 
+\b0 \cf4 \ul \ulc4 NoteOnResponder}}
+\b0 \
+	\cf4 NoteOffResponder\cf3 \
+	{\field{\*\fldinst{HYPERLINK "SC://CCResponder"}}{\fldrslt \cf4 \ul \ulc4 CCResponder}}\
+	\cf4 BendResponder\cf3 \
+	\cf4 TouchResponder\cf3 \
+	\cf4 ProgramChangeResponder\cf3 \
+	\
+	\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== SENDING DATA ======
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://MIDIOut"}}{\fldrslt \cf2 \ul \ulc2 MIDIOut}} is the class that allows you to control MIDI devices from within SuperCollider.  Unlike with MIDIIn, you can create multiple MIDIOut instances, but you have to provide the port number (index of the MIDIEndPoint in the MIDIClient.destinations array) and - optionally - the unique ID (uid). You can also define the device to use by name with the .newByName method, which can be handy if your ports change - which is likely if you're using several devices. \cf3 \
+\cf2 // You can get the available ports like this\cf3 \
+\cf4 MIDIClient\cf3 .destinations\
+\cf2 // You can send any type of data that you can receive: noteOff, noteOn, polytouch, control, program, touch, bend, sysex, sysrt, smpte\cf3 \
+\
+\cf2 // Besides sending to external devices, you can also send MIDI data to other software. Naturally, OSC messages are prefferable, but not all software is OSC-enabled, so you may have to use MIDI. You can find information on how to do that in different Operating Systems in the MIDIOut helpfile\cf3 \
+\
+\
+
+\b \cf2 // ====== MIDI CLOCK ======
+\b0 \cf3 \
+\cf2 // MIDI provides you with the ability to synchronize devices by sending ticks - although as this is the MIDI world, don't expect anything spectacularly robust or with great resolution. More information can be found in the {\field{\*\fldinst{HYPERLINK "SC://UsingMIDI"}}{\fldrslt \cf2 \ul \ulc2 UsingMIDI}} file.\cf3 \
+\
+
+\b \cf2 // ------ Sending MIDI clock data --
+\b0 \cf3 \
+\cf2 // You can send clock data with {\field{\*\fldinst{HYPERLINK "SC://MIDIOut"}}{\fldrslt \cf2 \ul \ulc2 MIDIOut}}. There is also {\field{\*\fldinst{HYPERLINK "SC://MIDIClockOut"}}{\fldrslt \cf2 \ul \ulc2 MIDIClockOut}} (part of crucial_lib, which is included in the SC distribution), a more convenient specialized class sending clock data out that is controllable by a TempoClock\cf3 \
+\
+\
+
+\b \cf2 // ------ Receiving MIDI clock data --
+\b0 \cf3 \
+\cf2 // You can synchronize SC to an external MIDI clock with sysrt or with smpte. sysrt uses 24 ticks per quarter note. The MIDIIn class has has methods for both ({\field{\*\fldinst{HYPERLINK "SC://MIDIIn"}}{\fldrslt \cf2 \ul \ulc2 MIDIIn}}.sysrt and MIDIn.smpte. There is also {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDISyncClock.html"}}{\fldrslt \cf5 \ul \ulc5 MIDISyncClock}} from the dewdrop library (a quark), which implements this functionaity\cf3 \
+\
+\
+
+\b \cf2 // ====== MIDI FILES ======
+\b0 \cf3 \
+\cf2 // You can use the \ul [{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/SimpleMIDIFile.html"}}{\fldrslt \cf5 \ulc5 SimpleMIDIFile}}\cf5 \ulc5 ]\cf2 \ulnone  Class from the wslib quark to read or write MIDI files in and from SC. Here is an example from Wouter Snoei (the wslib creator):\cf3 \
+\
+\cf2 // download a fugue\cf3 \
+\cf6 "curl http://www.bachcentral.com/BachCentral/AOF/dou1.mid -o ~/Desktop/dou1.mid"\cf3 .unixCmd;\
+\cf2 // read it\cf3 \
+m = \cf4 SimpleMIDIFile\cf3 .read( \cf6 "~/Desktop/dou1.mid"\cf3  );\
+\cf2 // plot it:\cf3 \
+m.plot;\
+\cf2 // play it (an undocumented 'experimental' method), only plays one voice\cf3 \
+m.p.play;\
+\
+\
+
+\b \cf2 // ====== UTILITIES ======
+\b0 \cf3 \
+\cf2 // A couple of handy utilities for handling note-related information, either incoming or outgoing are:\cf3 \
+.{\field{\*\fldinst{HYPERLINK "SC://cpsmidi"}}{\fldrslt \ul cpsmidi}} \cf2 // convert frequency to MIDI\cf3 \
+.{\field{\*\fldinst{HYPERLINK "SC://midicps"}}{\fldrslt \ul midicps}} \cf2 // convert MIDI to frequency\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== THIRD PARTY IMPLEMENTATIONS ======
+\b0 \cf3 \
+\cf2 // There are a few libraries out there implementing MIDI functionality more extensively than what is there in the original distribution. These are all {\field{\*\fldinst{HYPERLINK "SC://Quarks"}}{\fldrslt \cf2 \ul \ulc2 Quarks}} that you can download. \cf3 \
+\cf2 // The dewdrop library is the quark with the most midi implementations, and it's well worth checking out. wslib conains some useful utilities and nice GUI, and JITMIDIKtl has some classes that are created to receive data from specific devices.\cf3 \
+\
+\
+\cf2 /* \
+
+\b // ------ from dewdrop lib (quark) --
+\b0 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/Voicer.html"}}{\fldrslt \cf5 \ul \ulc5 Voicer}} // (voice stealing implementation)\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/BasicMIDISocket.html"}}{\fldrslt \cf5 \ul \ulc5 BasicMIDISocket}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/VoicerMIDISocket.html"}}{\fldrslt \cf5 \ul \ulc5 VoicerMIDISocket}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/LinkedVoicerSequencer.html"}}{\fldrslt \cf5 \ul \ulc5 LinkedVoicerSequencer}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/BasicMIDIControl.html"}}{\fldrslt \cf5 \ul \ulc5 BasicMIDIControl}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/CCAllocator.html"}}{\fldrslt \cf5 \ul \ulc5 CCAllocator}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/CControl.html"}}{\fldrslt \cf5 \ul \ulc5 CControl}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDIBufManager.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIBufManager}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwChucklib/Help/MBM.html"}}{\fldrslt \cf5 \ul \ulc5 MBM}} (MIDIBufManager)\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwMIDI/Help/MIDIRecBuf.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIRecBuf}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwTimeline/timeline-overview.html"}}{\fldrslt \cf5 \ul \ulc5 timeline-overview}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/ddwVoicer/Help/miditest.html"}}{\fldrslt \cf5 \ul \ulc5 miditest}}\
+*/\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 /*\
+
+\b // ------ from wslib (quark) --
+\b0 \
+== \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/SimpleMIDIFile.html"}}{\fldrslt \cf5 \ul \ulc5 SimpleMIDIFile}} //(MIDI file read-write)\
+// GUIs\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/MIDIWindow.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIWindow}}  // a graphic interface for connecting to different ports\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/MIDIBendWindow.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIBendWindow}} // a graphic interface for midi pitchbend data.\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ixiViews/help/MIDIKeyboard.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIKeyboard}} // a keyboard GUI widget\
+// utilities\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/midiname.html"}}{\fldrslt \cf5 \ul \ulc5 midiname}} //notenumber to notename and backwards conversion\
+*/\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 /*\
+
+\b // ------ JITMIDIKtl (quark) --
+\b0 \
+// useful for hooking up specific devices\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/MIDIKtl.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIKtl}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/MIDIKtl_howTo.html"}}{\fldrslt \cf5 \ul \ulc5 MIDIKtl_howTo}}\
+// currently (June 2010) supports:\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/PFKtl.html"}}{\fldrslt \cf5 \ul \ulc5 PFKtl}}, {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/PDKtl.html"}}{\fldrslt \cf5 \ul \ulc5 PDKtl}}, {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/NanoKtl.html"}}{\fldrslt \cf5 \ul \ulc5 NanoKtl}}, {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/BCRKtl.html"}}{\fldrslt \cf5 \ul \ulc5 BCRKtl}}, {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/FFLV2Ktl.html"}}{\fldrslt \cf5 \ul \ulc5 FFLV2Ktl}},  {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/JITMIDIKtl/UC33Ktl.html"}}{\fldrslt \cf5 \ul \ulc5 UC33Ktl}}\
+*/\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 /*\
+
+\b // ------ rd_ctl (quark) --
+\b0 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/rd_ctl/help/Controller.help.scd"}}{\fldrslt \cf5 \ul \ulc5 Controller}} // create a control GUI interface, easily mapable to MIDI, and with some curve mapping functions\
+*/\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 //-----------------------------------------------\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // reading: Chapter 12: 'Real-time performance of computer music', from 'Computer Music', by Charles Dodge is a good reference for using MIDI devices in electronic music performance\cf3 \
+}

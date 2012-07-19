@@ -1,0 +1,244 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf480
+{\fonttbl\f0\fswiss\fcharset77 ArialMS;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green255\blue0;\red96\green96\blue96;\red191\green0\blue0;
+\red0\green0\blue191;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs48 \cf2 Extending SuperCollider\
+
+\f1\fs36 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+As well as rich libraries of classes and UGens which come with SuperCollider, there are many third party extensions (examples, classes and UGens) which you can download from various places:\
+\
+the swiki site\
+\ul http://swiki.hfbk-hamburg.de:8888/MusicTechnology/6\
+\ulnone \
+the sc-plugins SourceForge project:\
+\ul http://sourceforge.net/projects/sc3-plugins/\ulnone \
+\
+\
+the Quarks repository (see [\ul Quarks\ulnone ])\
+\
+Various third party websites\
+\
+Off the sc-users mailing list (archive via Google if you search with sc-users in the search line, or via the swiki site or Nabble archives)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The easiest way to install such packages is to put all help files, .sc class files and plugin files (like .scx, .sco and similar) into the platform specific Extensions directory.\
+\
+\
+on my Mac this is :\
+\
+/Library/Application Support/SuperCollider/Extensions/\
+\
+\
+Then startup SuperCollider or recompile SuperCollider if it is already open (cmd+K on a Mac). Now open any main help file for the library in SC, boot the server and try the examples. \
+\
+(otherwise you will need to put classes in SCClassLibrary, plugin files in the plugins directory and the help files in Help, within the main SuperCollider directory folder)\
+\
+Most extensions should come with a readme file with instructions.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
+\f0\fs48 \cf2 Customising SuperCollider\
+
+\f1\fs36 \cf0 \
+You may also wish to change the default options in SuperCollider. \
+\
+You might do this by modifying these classes:\
+\
+ServerOptions \
+Main\
+\
+But it is much more straight forward to modify a platform specific startup file. \
+\
+On a Mac, this is located at:\
+
+\fs52 \
+
+\fs36 \cf3 "/Library/Application Support/SuperCollider/
+\fs34 startup.rtf"
+\fs36 \cf0 \
+\
+(i.e. parallel to the Extensions directory)\
+\
+\
+\
+\
+\
+\
+\
+\
+To give an example of the sort of thing that can go in there, here is an extract from mine:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf0        \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 "Nick's Startup File"\cf0 .postln;    \
+     \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //avoid Rendezvous, ServerOptions\cf0 \
+\cf5 Server\cf0 .local.options.zeroConf = \cf5 false\cf0 ;     \
+\cf5 Server\cf0 .internal.options.zeroConf = \cf5 false\cf0 ;   \
+     \
+\cf5 Server\cf0 .local.options.numOutputBusChannels = 8;\
+\cf5 Server\cf0 .local.options.numInputBusChannels = 8;\
+\cf5 Server\cf0 .internal.options.numOutputBusChannels = 8;\
+\cf5 Server\cf0 .internal.options.numInputBusChannels = 8;\
+\cf5 Server\cf0 .local.options.memSize = 10*8192;  \cf4 //so lots of memory for delay lines in Comb UGens etc\cf0 \
+\cf5 Server\cf0 .internal.options.memSize = 10*8192;\
+	\
+\cf5 Server\cf0 .local.latency=0.045; \cf4 //low latency is helpful for optimal performance for some machine listening processes\cf0 \
+\cf5 Server\cf0 .internal.latency= 0.025;\
+\
+\cf4 //"SC_PLUGIN_PATH".setenv("/Volumes/data/sc3code/plugins/".standardizePath); // all defs in this directory will be loaded at startup\cf0 \
+\cf4 //"echo \\"Loading Plugins From '$SC_PLUGIN_PATH'\\"".unixCmd;\cf0 \
+\
+\cf4 //~/scwork/synthdefs/\cf0 \
+\cf5 SynthDef\cf0 .synthDefDir_(\cf3 "/Volumes/data/sc3code/synthdefs/"\cf0 .standardizePath);\
+\
+\cf4 //load on startup of server\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 "SC_SYNTHDEF_PATH"\cf0 .setenv(\cf3 "/Volumes/data/sc3code/synthdefs/"\cf0 .standardizePath); \cf4 // all defs in this directory will be loaded at startup\cf0 \
+\cf3 "echo \\"\cf5 Loading\cf0  \cf5 SynthDefs\cf0  \cf5 From\cf0  \cf6 '$SC_SYNTHDEF_PATH'\cf0 \\\cf3 ""\cf0 .unixCmd;\
+	\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //Server.local.recSampleFormat_("int16");	//I sometimes might use this for standard wav file out as deafult, but currently accepting the float default\cf0 \
+\cf4 //Server.internal.recSampleFormat_("int16");	\cf0 \
+\cf5 Server\cf0 .local.recHeaderFormat_(\cf3 "wav"\cf0 );	\
+\cf5 Server\cf0 .internal.recHeaderFormat_(\cf3 "wav"\cf0 );	\
+\
+\cf4 //Server.local.options.device = "Test";\cf0 \
+\cf4 //Server.internal.options.device = "Test";\cf0 \
+	\
+\cf4 //for general use I also use symbolic links (ln -s path) from /Library/Application Support/SuperCollider/Extensions to my own class folder and help folder directories	\cf0 \
+\cf4 //	Document.initAction_(\{\cf0 \
+\cf4 //arg doc;\cf0 \
+\cf4 //\cf0 \
+\cf4 //doc.background_(Color.black);\cf0 \
+\cf4 //doc.stringColor_(Color.white);\cf0 \
+\cf4 //\cf0 \
+\cf4 //\});\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs36 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+It is also possible to overwrite existing methods of classes or add extra methods to classes, without modifying original source files- this is really helpful if you are frequently updating SuperCollider and don't want to have to change anything in a new download.\
+\
+\
+To hack my own Server window GUIs I made a class file of the form\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf0 + \cf5 Server\cf0  \{\
+	makeWindow \{ \cf5 arg\cf0  w;\
+	\
+	...\
+	\
+	\}\
+	\
+	\}
+\fs36 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+The + Server part means that this class file is adding extra methods to the Server class (which can be instance or class methods). If a method exists already, it can be overwritten- hence my suppressal of the standard Server GUI.\
+\
+ \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Because SC3 is open source, it is even possible to compile SuperCollider yourself after modifying the server or language code. This, however, is not recommended for the faint hearted (see the Writing Primitives help file and sc-dev mailing list archives). The furthest you might go in normal practise is writing new plug-ins for the server (new UGens) which is carried out with C programming. \
+\
+There is one new fun trick on Mac post version 3.3. This is the CocoaMenuItem class, which allows you to add your own items to the menu bar! \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+}

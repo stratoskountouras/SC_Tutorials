@@ -1,0 +1,61 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red22\green58\blue161;\red96\green96\blue96;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 Server\cf0 .default.recChannels is = 2\
+\cf2 Server\cf0 .default.recChannels\
+\
+\cf2 thisProcess\cf0 .platform.recordingsDir\
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf0 (\
+var sound1, sound2;\
+var soundAction1, soundAction2;\
+\
+soundAction1 = \{\
+	sound1 = \
+	\cf2 PanAz\cf0 .ar(2, \cf2 SinOsc\cf0 .ar(\cf2 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf2 LFSaw\cf0 .kr(0.1)) + \
+		\cf2 SinOsc\cf0 .ar(100, \cf2 SinOsc\cf0 .ar(\cf2 XLine\cf0 .kr(1, 20000, 90), 0, 190pi), 0.25) \
+\};\
+\
+soundAction2 = \{\
+	sound2 = \
+	\cf2 PanAz\cf0 .ar(2, \cf2 SinOsc\cf0 .ar(\cf2 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf2 LFSaw\cf0 .kr(0.1)) + \
+		\cf2 SinOsc\cf0 .ar(100, \cf2 SinOsc\cf0 .ar(\cf2 XLine\cf0 .kr(1, 400, 90), 0, 190pi), 0.25) \
+\};\
+\
+w = \cf3 SCWindow\cf0 .new;\
+b = \cf3 SCButton\cf0 (w, \cf3 Rect\cf0 (20,20,80,26))\
+		.states_([[\cf4 "play"\cf0 ,\cf4  \cf3 Color\cf0 .white, \cf3 Color\cf0 .clear], [[])\
+		\
+		.mouseUpAction_(\{\
+			a = 	\{ \cf2 PanAz\cf0 .ar(2, \cf2 SinOsc\cf0 .ar(\cf2 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf2 LFSaw\cf0 .kr(0.1)) +  \cf2 SinOsc\cf0 .ar(100, \cf2 SinOsc\cf0 .ar(\cf2 XLine\cf0 .kr(1, 20000, 90), 0, 190pi), 0.25) \}.play;	\
+		\})\
+		.action_(\{ arg butt;\
+			a.free;\
+		\});\
+c = \cf3 SCButton\cf0 (w, \cf3 Rect\cf0 (20,80,80,26))\
+		.states_([[\cf4 "hold"\cf0 ,\cf4  \cf3 Color\cf0 .white, \cf3 Color\cf0 .clear]])\
+		.mouseDownAction_(\{\
+			b = 	\{ \cf2 PanAz\cf0 .ar(2, \cf2 SinOsc\cf0 .ar(\cf2 SinOsc\cf0 .ar(8, 0, 40, 200), 3, 0.1), \cf2 LFSaw\cf0 .kr(0.1)) +  \cf2 SinOsc\cf0 .ar(100, \cf2 SinOsc\cf0 .ar(\cf2 XLine\cf0 .kr(1, 400, 90), 0, 700pi), 0.25) \}.play;	\
+		\})\
+		.action_(\{ arg butt;\
+			b.free;\
+		\});\
+		\
+d = \cf3 SCButton\cf0 (w, \cf3 Rect\cf0 (200,20,80,26))\
+		.states_([[\cf4 "stop"\cf0 ,\cf4  \cf3 Color\cf0 .black, \cf3 Color\cf0 .red]])\
+		.mouseUpAction_(\{a.free;	\
+				\
+		\})\
+		.action_(\{ arg butt;\
+			d.free;\
+		\});\
+\
+w.front;\
+)}

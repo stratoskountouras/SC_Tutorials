@@ -1,0 +1,78 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf110
+{\fonttbl\f0\fnil\fcharset0 Monaco;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab720
+\pard\pardeftab720\ql\qnatural
+
+\f0\fs18 \cf2 // First boot the server\cf3 \
+(\
+s = \cf4 Server\cf3 .local;\
+s.boot;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+(\
+\cf2 // CyNoise\cf3 \
+\{\
+	\cf4 var\cf3  cyDepth, cyRate, cyFreq, cyFilter, cyFilter2;\
+\
+	cyDepth = \cf4 MouseY\cf3 .kr(100, 10000, 1);\
+	cyRate = \cf4 MouseX\cf3 .kr(4, 60, 1);\
+	cyFreq = \cf4 LFSaw\cf3 .kr(cyRate, 5, cyDepth, cyDepth * 1.5);\
+	cyFilter = \cf4 RLPF\cf3 .ar(\cf4 WhiteNoise\cf3 .ar([0.5,0.5]), cyFreq, 0.1);\
+	\cf4 CombN\cf3 .ar(cyFilter, 0.5, 0.5, 2, 1, cyFilter);\
+	\
+\
+	\
+\}.play\
+)\
+\
+\
+\cf2 //tuio/2Dcur set s x y X Y m\cf3 \
+\
+r = \cf4 OSCresponder\cf3 (\cf4 nil\cf3 , \cf5 '/tuio/2Dcur'\cf3 , \
+\
+	\{ \cf4 | time, resp, msg |\cf3 \
+	\
+	\
+	\
+\cf2 //		msg[s].postln;\cf3 \
+\cf2 //		"this is s the sessionID element".postln;\cf3 \
+\cf2 //		\cf3 \
+\cf2 //		msg[x].postln;\cf3 \
+\cf2 //		"this is the x position element".postln;\cf3 \
+\cf2 //			\cf3 \
+\cf2 //		msg[y].postln;\cf3 \
+\cf2 //		"this is the y position element".postln;\cf3 \
+\cf2 //		\cf3 \
+\cf2 //		msg[X].postln;\cf3 \
+\cf2 //		"this is the X movement vector element".postln;\cf3 \
+\cf2 //		\cf3 \
+\cf2 //		msg[Y].postln;\cf3 \
+\cf2 //		"this is the Y movement vector element".postln;\cf3 \
+		\
+		msg[m].postln;\
+		\cf6 "this is the motion acceleration element"\cf3 .postln;\
+		\
+				\
+	\}\
+	\
+);\
+\
+\
+r.add;\
+r.remove;\
+\
+\cf4 thisProcess\cf3 .recvOSCfunc = \{ \cf4 | ... args |\cf3  args.postln; \}\
+\
+\cf4 thisProcess\cf3 .recvOSCfunc = \cf4 nil\cf3 \
+\
+\
+\
+\
+\pard\pardeftab720\ql\qnatural
+
+\f1\fs24 \cf3 \
+}

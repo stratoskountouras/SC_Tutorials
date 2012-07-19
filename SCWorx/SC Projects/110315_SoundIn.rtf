@@ -1,0 +1,71 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red0\green0\blue191;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 // 110313_Testing SoundIn\cf3 \
+\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\playSound\cf3 , \{\
+   \cf4 Out\cf3 .ar([0,1], \cf4 SoundIn\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(1000)));\
+\}).add;\
+)\
+\
+a = \cf4 Synth\cf3 (\cf5 \\playSound\cf3 );\
+\
+\cf2 // ===============================\cf3 \
+(\
+\cf4 SynthDef\cf3 (\cf5 \\playSound2\cf3 , \{\
+   \cf4 Out\cf3 .ar([0,1], \cf4 SoundIn\cf3 .ar(0, \cf4 Blip\cf3 .ar(\cf4 LFNoise0\cf3 .kr(5, 30 ,40), \cf4 Line\cf3 .kr(30, 40, 6), 0.8)));\
+\}).add;\
+)\
+\
+\
+b = \cf4 Synth\cf3 (\cf5 \\playSound2\cf3 );\
+\
+\
+\cf2 // ===============================\cf3 \
+\
+\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\playSound3\cf3 , \{\
+   \cf4 Out\cf3 .ar([0,1], \cf4 SoundIn\cf3 .ar(0,  \cf4 FreeVerb\cf3 .ar(\cf4 Blip\cf3 .ar(\cf4 LFNoise0\cf3 .kr(8, 300 ,40), \cf4 Line\cf3 .kr(30, 1000 ,100), 8))));\
+\}).add;\
+)\
+\
+\
+c = \cf4 Synth\cf3 (\cf5 \\playSound4\cf3 );\
+\
+\
+\cf2 // ===============================\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 (\
+\cf4 SynthDef\cf3 (\cf5 \\playSound5\cf3 , \{\
+   \cf4 Out\cf3 .ar([0,1], \cf4 SoundIn\cf3 .ar(0,  \cf4 FreeVerb\cf3 .ar(\cf4 LFSaw\cf3 .ar(\cf4 TRand\cf3 .kr(10, 50, \cf4 Dust\cf3 .kr(3))) * 3.5)));\
+\}).add;\
+)\
+\
+\
+d = \cf4 Synth\cf3 (\cf5 \\playSound5\cf3 );\
+\
+\cf2 // ===============================\cf3 \
+\
+\cf0 (\
+\cf6 SynthDef\cf0 (\cf7 \\playSound6\cf0 , \{ |\cf6  in = 2, freq = 80, dur = 0.2 \cf0 |\
+   \cf6 Out\cf0 .ar([0,1], \cf6 SoundIn\cf0 .ar(0,  \cf6 FreeVerb\cf0 .ar(\cf6 FMGrain\cf0 .ar(\cf6 Pulse\cf0 .ar(in), dur, 40, freq, \
+\pard\pardeftab560\ql\qnatural
+\cf0 			\cf6 LFNoise0\cf0 .kr([10, 150]).range(10, 200),\
+			\cf6 EnvGen\cf0 .kr(\
+				\cf6 Env\cf0 ([0, 0.1, 0], [1, 1], \cf7 \\sine\cf0 , 1), gate: 1, levelScale: 1, doneAction: 2)\
+			), room: (0.7), damp: (0.9)\
+		)));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \}).add;\
+)\
+\
+e = \cf6 Synth\cf0 (\cf7 \\playSound6\cf0 );\
+}

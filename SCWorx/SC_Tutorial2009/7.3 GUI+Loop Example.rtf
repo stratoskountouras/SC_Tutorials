@@ -1,0 +1,46 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs18 \cf2 //In this example code, a sound file can be made to loop at any selection in the graphical display\
+\
+\
+//load soundfile onto Server\cf0 \
+b = \cf3 Buffer\cf0 .read(s,\cf4 "sounds/a11wlk01.wav"\cf0 );\
+\
+\
+\cf2 //SynthDef (making Synth straight away) which has arguments for the loop points \cf0 \
+c= \cf3 SynthDef\cf0 (\cf5 \\loopbuffer\cf0 , \{\cf3 arg\cf0  start=0, end=10000; \cf3 Out\cf0 .ar(0,\cf3 Pan2\cf0 .ar(\cf3 BufRd\cf0 .ar(1, 0, \cf3 Phasor\cf0 .ar(0, \cf3 BufRateScale\cf0 .kr(b.bufnum), start, end),0.0)))\}).play(s);\
+\cf2 //*BufFrames.ir(b.bufnum) //this wasn't needed since the GUI gives us positions directly in samples\cf0 \
+\
+\
+\
+(		\cf2 // make a simple SCSoundFileView\cf0 \
+w = \cf3 SCWindow\cf0 .new(\cf4 "soundfiles looper"\cf0 , \cf3 Rect\cf0 (10, 700, 750, 100));\
+w.front;\
+a = \cf3 SCSoundFileView\cf0 .new(w, \cf3 Rect\cf0 (20,20, 700, 60));\
+\
+f = \cf3 SoundFile\cf0 .new;\
+f.openRead(\cf4 "sounds/a11wlk01.wav"\cf0 );\
+\
+a.soundfile = f;			\cf2 // set soundfile\cf0 \
+a.read(0, f.numFrames);		\cf2 // read in the entire file.\cf0 \
+a.refresh;				\cf2 // refresh to display the file.\cf0 \
+\
+\cf2 //set a function which is called when the mouse is let go, i.e. just after dragging out a selection in the window\cf0 \
+a.mouseUpAction_(\{\cf3 arg\cf0  view; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  where;\
+\
+where= (view.selections[0]); \cf2 //get the latest selection (assuming no other selections going on)\cf0 \
+\
+where.postln; \cf2 //post where - start sample and length in samples of selection\cf0 \
+\
+c.set(\cf5 \\start\cf0 ,where[0], \cf5 \\end\cf0 , where[0]+where[1]); \cf2 //convert to start and end samples for loop area\cf0 \
+\});\
+)\
+\
+\
+}

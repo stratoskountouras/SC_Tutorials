@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+p.p15 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #000000}
+span.s5 {color: #606060}
+span.s6 {color: #bf0000}
+span.s7 {color: #007300}
+span.s8 {text-decoration: underline ; color: #000000}
+span.s9 {text-decoration: underline ; color: #0000bf}
+span.s10 {text-decoration: underline ; color: #0000ff}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 12.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Graphic User Interfaces (GUI) in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• General</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• GUI Kits</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Basics</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Window</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- decorators</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Resizing</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Performing actions</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Controlling a synth</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Scheduling</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Controlled by a synth</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• More references</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Useful Quarks for GUI</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Architecture: Model-View-Controller<span class="Apple-tab-span">	</span></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= GRAPHIC USER INTERFACES IN SUPERCOLLIDER =================</b></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== GENERAL ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// SuperCollider is probably least famous for its GUI capabilities, but in all truth, it can be very powerful, allowing you to take advantage of its algorithmic functionality and language power to create some very good looking GUIs. Truth be told, it can take some lines of code to write GUIs... but the syntax is simple enough.</p>
+<p class="p9"><br></p>
+<p class="p8">// In Mac OS X, you can press shift+cmd+N to see what the available GUI widgets are. Just drag anything in the window, toggle edit, and try it out.In this way, you can actually drag and drop and then position GUI widgets as you like in a window, and then get an automatically generated code!</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== GUI Kits ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// You may remember from class 1 that there are different types of gui servers that one can use in SC: the standard <b>CocoaGUI</b> for Mac OS X, and <b>SwingGUI</b> (in Java; it is installed by default in Windows, but can also be used on Linux and OS X, although you will have to install it yourself); Swing OSC acts like a server, sending/receiving messages to/from sclang. There are specific subclasses for each GUI kit: the CocoaGUI kit uses the SC prefix (ex. SCWindow), and the Swing kit uses the JSC or J prefix (ex. JSCWindow, or JStethoscope). Luckily, you can write platform independent GUIs by using the classes without their prefix (ex. Window), which makes them work in any platform. For a table of all gui classes and their kit-dependent equivalents, see <a href="SC://GUI-Classes"><span class="s2">GUI-Classes</span></a>.</p>
+<p class="p10"><br></p>
+<p class="p10"><br></p>
+<p class="p8">// <a href="SC://GUI"><span class="s2">GUI</span></a> is a class providing the means for writing platform-independent code, doing all the necessary translation from one scheme to the other.<span class="Apple-converted-space"> </span></p>
+<p class="p8">// You can ask the class what schemes are available in your machine:</p>
+<p class="p11"><span class="s3">GUI</span>.schemes;</p>
+<p class="p9"><br></p>
+<p class="p8">// Check which one you 're using at the moment:</p>
+<p class="p11"><span class="s3">GUI</span>.current</p>
+<p class="p9"><br></p>
+<p class="p8">// You can switch the GUI kit by calling the appropriate clas method:</p>
+<p class="p8"><span class="s3">GUI</span><span class="s4">.cocoa;<span class="Apple-tab-span">	</span></span>// use cocoa in subsequent GUI creation procedures</p>
+<p class="p8"><span class="s3">GUI</span><span class="s4">.swing;<span class="Apple-tab-span">	</span></span>// use swing in subsequent GUI creation procedures NOTE: If you do not have SwingOSC installed, you get a warning only, and do not switch; so you cannot accidentally disable your (mac) gui system.</p>
+<p class="p9"><br></p>
+<p class="p8">// For more on gui kits, see the <a href="SC://GUI"><span class="s2">GUI</span></a> helpfile</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== BASICS ======</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Window --</b></p>
+<p class="p11">(</p>
+<p class="p8">//make a 300x100 window at 400x50 screen co-ordinates.<span class="Apple-converted-space"> </span></p>
+<p class="p8">/* Coordinates are and instance of Rect, calculated as:</p>
+<p class="p8"><span class="Apple-tab-span">	</span>origin from left of screen</p>
+<p class="p8"><span class="Apple-tab-span">	</span>origin from bottom of screen</p>
+<p class="p8"><span class="Apple-tab-span">	</span>size in x (width)</p>
+<p class="p8"><span class="Apple-tab-span">	</span>size in y (height)</p>
+<p class="p8"><span class="Apple-tab-span">	</span>*/</p>
+<p class="p8"><span class="s4">w = </span><span class="s3">Window</span><span class="s4">(</span><span class="s5">"Test window"</span><span class="s4">, </span><span class="s3">Rect</span><span class="s4">(400, 50, 300, 100)); </span>// use Window for cross-platform compatibility</p>
+<p class="p8"><span class="s4">w.front; </span>//this line is need to make the window actually appear</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p11">(</p>
+<p class="p8">// you could also use screenbounds to position something according to the size of the screen</p>
+<p class="p11">w = <span class="s3">Window</span>(<span class="s5">"Test window"</span>, <span class="s3">Rect</span>(<span class="s3">Window</span>.screenBounds.width-300, <span class="s3">Window</span>.screenBounds.height-500, 300, 100)); <span class="s6">// use Window for cross-kit compatibility</span></p>
+<p class="p8"><span class="s4">w.front; </span>//this line is need to make the window actually appear</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// You can add any GUI element to the window:</p>
+<p class="p11">(</p>
+<p class="p11">w = <span class="s3">Window</span>(<span class="s5">"Test window"</span>, <span class="s3">Rect</span>(100, 500, 300, 300));<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="s3">Slider</span>(w, <span class="s3">Rect</span>(20, 60, 250, 20));</p>
+<p class="p11"><span class="s3">Button</span>(w, <span class="s3">Rect</span>(20, 120, 150, 20))</p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span>.states_([[</span>"a button"<span class="s4">], [</span>"yes, still a button"<span class="s4">], [</span>"3rd state"<span class="s4">]]);</span></p>
+<p class="p11">w.front;<span class="Apple-converted-space"> </span></p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ decorators --</b></p>
+<p class="p8">// Instead of manually defining where UI elements should be positioned inside a window, you could also use <a href="SC://FlowLayout"><span class="s2">FlowLayout</span></a> to position things for you:</p>
+<p class="p9"><br></p>
+<p class="p11">(</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// Window returns the window class for the current kit</p>
+<p class="p11"><span class="Apple-tab-span">	</span>w = <span class="s3">Window</span>( <span class="s5">"my name is..."</span>, <span class="s3">Rect</span>( 128, 64, 340, 360 ));</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>w.view.decorator = <span class="s3">FlowLayout</span>( w.view.bounds ); <span class="s6">// comment this out for no decorator</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// w.addFlowLayout // you can use this instead of the above line for brevity.</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>w.view.background = <span class="s3">Color</span>( 0.6, 0.8, 0.8 );</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>32.do({ <span class="s3">arg</span> i;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Here Button returns the button class for the current kit</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b = <span class="s3">Button</span>( w, <span class="s3">Rect</span>( rrand( 20, 300 ), rrand( 20, 300 ), 75, 24 ));</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.states = [[ <span class="s5">"Start "</span> ++ i, <span class="s3">Color</span>.black, <span class="s3">Color</span>.rand ],</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[ <span class="s5">"Stop "</span> ++ i, <span class="s3">Color</span>.white, <span class="s3">Color</span>.red ]];</p>
+<p class="p11"><span class="Apple-tab-span">	</span>});</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>w.front;</p>
+<p class="p11">)</p>
+<p class="p8">// Try uncommenting the FlowLayout line - what a mess!</p>
+<p class="p9"><br></p>
+<p class="p8">// Nevertheless, doing this algorithmically will always be more precise and versatile</p>
+<p class="p9"><br></p>
+<p class="p11">(</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">var</span> window, size, offset, btnAmt, mod;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>size = 75;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>offset = 5;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>btnAmt = 32;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>mod = 4;</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>window = <span class="s3">Window</span>( <span class="s5">"Algorithmically created"</span>, <span class="s3">Rect</span>( 128, 64, (size * mod) + offset, (size * btnAmt) / mod + offset ));</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>window.view.background = <span class="s3">Color</span>( 0, 0.3, 0.2 );</p>
+<p class="p9"><br></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>// use an array to be able to access the elements afterwards</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~btnArray = <span class="s3">Array</span>.fill(btnAmt, {<span class="s3">arg</span> i;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Here Button returns the button class for the current kit</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Button</span>( window, <span class="s3">Rect</span>((i%mod) * size + offset, i.div(mod) * size + offset, size - 5, size - 5))</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.states = [[ <span class="s5">"Start "</span> ++ i, <span class="s3">Color</span>.black, <span class="s3">Color</span>.rand ],</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[ <span class="s5">"Stop "</span> ++ i, <span class="s3">Color</span>.white, <span class="s3">Color</span>.red ]];</p>
+<p class="p11"><span class="Apple-tab-span">	</span>});</p>
+<p class="p11"><span class="Apple-tab-span">	</span>window.front;</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8">// Change font on 0-15 buttons (you will need to refocus on the Window to see the effect):</p>
+<p class="p11">(</p>
+<p class="p11">16.do({ <span class="s3">|i|</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>~btnArray[i].font_(<span class="s3">Font</span>(<span class="s5">"Monaco"</span>, 12))</p>
+<p class="p11"><span class="Apple-tab-span">	</span>})</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ resizing --</b></p>
+<p class="p8">// For resizing GUIs when resizing their window, look at <a href="SC://resize"><span class="s2">resize</span></a></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== PERFORMING ACTIONS ======</b></p>
+<p class="p8">// All GUIs have an action method that may contain a function to be evaluated when a user interacts with the GUI</p>
+<p class="p9"><br></p>
+<p class="p11">(</p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span>w = </span><span class="s3">Window</span><span class="s4"> (</span>"A Slider"<span class="s4">);</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>a = <span class="s3">Slider</span> (w, <span class="s3">Rect</span>(40, 10, 300, 30));</p>
+<p class="p11"><span class="Apple-tab-span">	</span>a.action={ <span class="s3">arg</span> sl; sl.value.postln }; <span class="s6">// set the action of the slider</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>w.front</p>
+<p class="p11">);</p>
+<p class="p8">// add and remove actions on the fly</p>
+<p class="p11"><span class="Apple-tab-span">	</span>f = ({ <span class="s3">|sl|</span> w.view.background = <span class="s3">Color</span>.green(sl.value) });</p>
+<p class="p11"><span class="Apple-tab-span">	</span>a.addAction(f);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>a.removeAction(f);</p>
+<p class="p8">// you can remove all actions simultaneously</p>
+<p class="p11"><span class="Apple-tab-span">	</span>a.action = <span class="s3">nil</span>;</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Controlling a synth --</b></p>
+<p class="p9"><br></p>
+<p class="p11">s.boot;</p>
+<p class="p8">// The synth</p>
+<p class="p11">(</p>
+<p class="p11">g = <span class="s3">CtkSynthDef</span>(<span class="s7">\gray</span>, {<span class="s3">arg</span> outBus = 0, freq = 400, amp = 1, gate = 1;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, src, fdbin, fdbout;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>([0, 1, 0], [0.05, 0.95], <span class="s7">\sin</span>, 1), gate, levelScale: amp, doneAction: 2);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>src = <span class="s3">LPF</span>.ar(<span class="s3">GrayNoise</span>.ar(amp), freq, env);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outBus, <span class="s3">Pan2</span>.ar(src, <span class="s3">Rand</span>.new(-0.7, 0.7)));</p>
+<p class="p11">});</p>
+<p class="p11">)</p>
+<p class="p11">h = g.new().play</p>
+<p class="p11">h.release</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// The GUI</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">var</span> spec;</p>
+<p class="p11">w = <span class="s3">Window</span> (<span class="s5">"GrayNoise"</span>, <span class="s3">Rect</span>( 128, 64, 310, 80 ));</p>
+<p class="p11">w.view.background_(<span class="s3">Color</span>.red(0.4));</p>
+<p class="p11">w.view.decorator = <span class="s3">FlowLayout</span>( w.view.bounds );</p>
+<p class="p11">b = <span class="s3">Button</span>( w, <span class="s3">Rect</span>( 10, 10, 125, 24 ))</p>
+<p class="p11"><span class="Apple-tab-span">	</span>.states_([[ <span class="s5">"Start "</span>, <span class="s3">Color</span>.red, <span class="s3">Color</span>.black ],</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[ <span class="s5">"Stop "</span>, <span class="s3">Color</span>.white, <span class="s3">Color</span>.red ]])</p>
+<p class="p11"><span class="Apple-tab-span">	</span>.mouseDownAction_({ <span class="s3">|val|</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>val.value.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c = case</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val.value == 0}<span class="Apple-tab-span">	</span>{h = g.new.play}</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{val.value == 1}<span class="Apple-tab-span">	</span>{h.release}</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p11">c = <span class="s3">Slider</span> (w, <span class="s3">Rect</span>(40, 10, 300, 30));</p>
+<p class="p11"><span class="Apple-tab-span">	</span>c.background_(<span class="s3">Gradient</span>(<span class="s3">Color</span>.red(0.1), <span class="s3">Color</span>.red(0.8)));</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>spec = </span><span class="s3">ControlSpec</span><span class="s4">(20, 20000, </span><span class="s7">'exp'</span><span class="s4">, 10);<span class="Apple-converted-space">  </span></span>// args: min, max, curve, stepsize</p>
+<p class="p11"><span class="Apple-tab-span">	</span>c.action_({<span class="s3">|sl|</span><span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>h.freq_(spec.map(sl.value));</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}); </span>// set the action of the slider</p>
+<p class="p11">w.front</p>
+<p class="p11">);</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== SCHEDULING ======</b></p>
+<p class="p8">// You may remember from the class on timing (3.1) that GUI runs on a lower priority thread in SC to save up resources for more important processes. Therefore, if you want to control a GUI with a timed process you need to use the AppClock or .defer the function.</p>
+<p class="p9"><br></p>
+<p class="p8">// don't try this if you 're epileptic!</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">var</span> w, r;</p>
+<p class="p11">w = <span class="s3">Window</span>.new(<span class="s5">"trem"</span>, <span class="s3">Rect</span>(0, 0, <span class="s3">Window</span>.screenBounds.width, <span class="s3">Window</span>.screenBounds.height));</p>
+<p class="p11">w.front;</p>
+<p class="p11">r = <span class="s3">Routine</span>({ <span class="s3">arg</span> time;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>200.do({ <span class="s3">arg</span> i;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.yield;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{</span>// must enclose this in a defered loop!</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.view.background_(<span class="s3">Color</span>.rand);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}.defer; </span>// Notice the .defer here - otherwise it won't work!</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1.yield;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>w.close;</p>
+<p class="p11">});</p>
+<p class="p13">SystemClock<span class="s4">.play(r);</span></p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Controlled by a synth --</b></p>
+<p class="p9"><br></p>
+<p class="p8">// You can use a function to poll values, like a Routine, or an OSCResponder to get data back from the server. In either case, you need to defer the routine or responder, as they will be driving a GUI</p>
+<p class="p9"><br></p>
+<p class="p11">(</p>
+<p class="p11">w = <span class="s3">Window</span>(<span class="s5">"Frequency Monitor"</span>, <span class="s3">Rect</span>(200, <span class="s3">Window</span>.screenBounds.height-200,300,150)).front;</p>
+<p class="p11">w.view.background_(<span class="s3">Color</span>.grey(0.9));</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11">a = <span class="s3">StaticText</span>(w, <span class="s3">Rect</span>(45, 10, 200, 20)).background_(<span class="s3">Color</span>.rand);</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p12"><span class="s4">a.string = </span>"Current Frequency"<span class="s4">;</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="s3">Button</span>.new(w, <span class="s3">Rect</span>(45, 70, 200, 20)).states_([[<span class="s5">"close"</span>,<span class="s3">Color</span>.black,<span class="s3">Color</span>.rand]]).action_({w.close});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11">s.waitForBoot({</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>b = </span><span class="s3">Bus</span><span class="s4">.new(</span><span class="s7">\control</span><span class="s4">,0,1); </span>// a bus, used to write values in it from scsynth and then get them back to sclang</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>q = <span class="s3">SynthDef</span>(<span class="s7">\Docs_FreqMonitor</span>, {<span class="s3">var</span> freq,snd;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq=<span class="s3">LFNoise0</span>.ar(2, 400, 650);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>snd=<span class="s3">SinOsc</span>.ar(freq,0,0.2);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0,snd);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s3">Out</span><span class="s4">.kr(b.index,freq); </span>// output the frequency to a control bus</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}).play;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p13"><span class="s4">r= </span>Routine<span class="s4">{</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>{<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Set the value of the StaticText to the value in the control bus.</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Setting GUI values is asynchronous, so you must use .defer in the system clock.</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Also you must check if the window is still open, since Routine will continue for at least<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>// one step after you close the window.</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>b.get( {<span class="s3">arg</span> v; {w.isClosed.not.if{ a.string= <span class="s5">" Current Frequency: "</span>++v.round(0.01)}; }.defer} );</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// b.get sends query to the server, and waits for a response before it sets the StaticText.<span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.01.wait;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}.loop</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>}.play</p>
+<p class="p11">});</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="s3">CmdPeriod</span>.doOnce({w.close});</p>
+<p class="p11">w.onClose={r.stop; q.free; b.free }; <span class="s6">//clean up if the window closes</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p11">)</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== MORE REFERENCES ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// For more, have a look at the following files:</p>
+<p class="p13"><span class="s2"><a href="SC://GUI-Overview">GUI<span class="s8">-</span><span class="s9">Overview</span></a></span></p>
+<p class="p14"><span class="s2"><a href="SC://GUI-Classes">GUI-Classes<span class="s10"></span></a></span></p>
+<p class="p12"><span class="s3">Document</span><span class="s4">.open(</span>"examples/GUI examples/GUI_examples1.scd"<span class="s4">)</span></p>
+<p class="p12"><span class="s3">Document</span><span class="s4">.open(</span>"examples/GUI examples/GUI_examples2.scd"<span class="s4">)</span></p>
+<p class="p8">// Also, if you want to write your own GUI widget classes, look here:</p>
+<p class="p13"><span class="s2"><a href="SC://SCUserView-Subclassing">SCUserView<span class="s4">-</span><span class="s9">Subclassing</span></a></span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== USEFUL QUARKS FOR GUI ======</b></p>
+<p class="p8">// Here is a list with some useful GUI quarks that you may want to get:</p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Automation/Help/Automation.scd">Automation<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ClockFace/ClockFace.html">ClockFace<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/FileListView/FileListView.help.rtf">FileListView<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ixiViews/help/ixiViews.html">ixiViews<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/PopUpTreeMenu/PopUpTreeMenu.html">PopUpTreeMenu<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/TabbedView/TabbedView.html">TabbedView<span class="s10"></span></a></span></p>
+<p class="p15"><span class="s2"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/VuView/VuView.html">VuView<span class="s10"></span></a></span></p>
+<p class="p1"><span class="s10"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/wslib.html">wslib</a></span><span class="s4"> </span>// a quark library with many - and the best looking - GUIs</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== ARCHITECTURE: MODEL-VIEW-CONTROLLER ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// Similarily to the architectural ideas presented in Class11.1 for dealing with large projects, it is much wiser to aim for a modular structure with your programs when dealing with GUIs, so that you can change elements of the GUI, the actual control and mapping, or the synthesis engine you're using, without breaking things. Also, the GUI should only be there to help you control things, and not trusted with delicate timing, as it runs on a lower priority thread.</p>
+<p class="p9"><br></p>
+<p class="p8">// Having said that, a good design software architecture paradigm is the <b>Model-View-Controller (MVC)</b>. For example, in a musical instrument/system, the Model is the sound synthesis part, the Controller is the functions, procmods, mapping, etc - anything that can receive input, interpret it and send the appropriate commands to the Model, and the View is your GUI, sending user commands to the Controller, but also potentially receiving commands from it for state updates. If you<span class="Apple-converted-space">  </span>use both a hardware interface and a GUI, then the hardware should be directly linked to your Controller, not the GUI.</p>
+<p class="p9"><br></p>
+<p class="p8">// You can find more info on MVC here:</p>
+<p class="p12">"open http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller"<span class="s4">.unixCmd</span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+</body>
+</html>

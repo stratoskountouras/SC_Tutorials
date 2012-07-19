@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>accessDate</key>
+		<date>2011-04-06T16:00:49Z</date>
+		<key>actualSize</key>
+		<integer>4253</integer>
+		<key>attributeModDate</key>
+		<date>2011-04-06T15:52:15Z</date>
+		<key>createDate</key>
+		<date>2010-03-18T14:26:12Z</date>
+		<key>creationDate</key>
+		<date>2011-05-03T09:44:33Z</date>
+		<key>encrypted</key>
+		<false/>
+		<key>id</key>
+		<string>298740AB-6681-4E77-A77D-75E80B44254D</string>
+		<key>lastModifiedDate</key>
+		<date>2010-03-18T14:26:12Z</date>
+		<key>originalPath</key>
+		<string>/Users/Cymac/Desktop/IoNio/SC_Backup/SuperCollider/Extensions/GesTUIO/Backup Files/100318_GesTUIO.zip</string>
+		<key>originalSize</key>
+		<integer>4253</integer>
+		<key>versionMetadataList</key>
+		<array>
+			<dict>
+				<key>POSIXPermissions</key>
+				<integer>-32348</integer>
+				<key>creatorCode</key>
+				<integer>0</integer>
+				<key>fileType</key>
+				<integer>0</integer>
+				<key>id</key>
+				<string>A67E4F72-ED89-4D9A-A642-7D49AE479E5E</string>
+				<key>macAttributes</key>
+				<integer>0</integer>
+				<key>ownerGID</key>
+				<integer>20</integer>
+				<key>ownerUID</key>
+				<integer>501</integer>
+			</dict>
+		</array>
+		<key>versionType</key>
+		<integer>0</integer>
+	</dict>
+</array>
+</plist>

@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #a8220e}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #a8220e}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #a8220e}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #a8220e}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #a8220e}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #a8220e}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima}
+p.p9 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0018e8}
+p.p10 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Optima}
+p.p11 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 12.0px Optima; color: #a8220e}
+p.p12 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 12.0px Optima; color: #a8220e}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #001af9}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p15 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; min-height: 17.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #0013bb}
+span.s3 {color: #000000}
+span.s4 {color: #606060}
+span.s5 {text-decoration: underline ; color: #0018e8}
+span.s6 {color: #316f11}
+span.s7 {text-decoration: underline}
+span.s8 {text-decoration: underline ; color: #001af9}
+span.s9 {color: #a8220e}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 1.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>scsynth</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• localhost and internal</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Server options</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• UGens</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• SynthDefs</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- components and format</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- creation methods</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SynthDef browser</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Server architecture and order of execution</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Node</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Group</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Audio Bus</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Control Bus</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- InFeedback</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1"><b>// ================= SCSYNTH: THE SERVER =================</b></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ======<span class="Apple-converted-space">  </span>localhost and internal ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// On OSX, two different server windows appear on startup, the localhost and internal server. The internal is part of the language and runs in the same memory space with it. This has many advantages, but also means that if you push the server to 100% of your CPU there won't be any juice left for the language, or - more likely - sclang will steal some resources from the server. The localhost is autonomous - external to the language - so it is unaffected by language crashes. In multicore computers, each server will automatically run on a different core. Other clients (sclang in other computers or other programs) can communicate with the localhost server.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// Note that servers do not share resources; for example, you need to load a buffer into a specific server to use it from a SynthDef loaded on it; it will not be recognized if it is loaded on another server.</p>
+<p class="p6"><br></p>
+<p class="p7">// Send some messages from sclang</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.local.boot<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// boot the local server</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.local.quit<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// quit the local server</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.local.window.close <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// close local server window</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.local.makeWindow.boot<span class="Apple-tab-span">	</span></span>// recreate local server window and boot the server</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.internal.window.close <span class="Apple-tab-span">	</span></span>// close internal server window</p>
+<p class="p7"><span class="s2">Server</span><span class="s3">.internal.makeWindow<span class="Apple-tab-span">	</span></span>// recreate internal server window</p>
+<p class="p6"><br></p>
+<p class="p7">// It is also possible to create and run more than two servers.</p>
+<p class="p8"><span class="s2">Server</span>.new(<span class="s4">"exra-host"</span>).makeWindow</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== Server options ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// A Server can be started with various options, such as sampleRate, number of inputs and outputs, etc. These options can be set by sending messages to the Server class (Server.options), or by using the <a href="SC://ServerOptions"><span class="s5">ServerOptions</span></a> class; in any case, options have to be set before the Server is turned on in order to have effect. You can inspect a Server's options:</p>
+<p class="p8"><span class="s2">Server</span>.default.inspect;</p>
+<p class="p8"><span class="s2">Server</span>.default.options.inspect;</p>
+<p class="p7">// and set it like this:</p>
+<p class="p8"><span class="s2">Server</span>.default.options.numOutputBusChannels = 3;</p>
+<p class="p7">// or like this:</p>
+<p class="p7"><span class="s3">o = </span><span class="s2">ServerOptions</span><span class="s3">.new.numOutputBusChannels_(7); </span>// this allows you to share options between servers</p>
+<p class="p8"><span class="s2">Server</span>.default.options_(o);</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ======<span class="Apple-converted-space">  </span>UGens ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// The main function of the server is to run synthesis processes. These are described as a set of Unit Generators (<b>UGens</b>) with a specific control flow or signal path (a UGen graph function). UGens are the basic building blocks of synthesis. In simplest terms, they generate values that can be interpreted in time as a signal. UGens will <b>NOT</b> work in the language side of the program. The classes that describe them are meant only for the server to access the plug-in code.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">//As a general rule, any object that responds to the .ar, .kr, .tr, .ir methods will not be of any use in sclang, but belongs to the server, inside a SynthDef (synthesis definition).<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">// In OSX, you can see all the UGens with all their methods, arguments, source code, implementations, references etc from a GUI browser:</p>
+<p class="p8"><span class="s2">UGen</span>.browse</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ======<span class="Apple-converted-space">  </span>SynthDefs ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// A <a href="SC://SynthDef"><span class="s5">SynthDef</span></a> (synthesis definition) is a fixed (static) UGen graph written and compiled in sclang and sent to the server. This graph function is evaluated <i>only</i> once, when the SynthDef is created. Dynamic behaviors that work in the language do not work as such in the server, but have to be defined in different manners. For example, it is not possible to use <i>if</i> statements in the same fashion as in sclang inside a SynthDef, and the same is true for randomness, as such control structures will only produce one static result. Instead, there are special UGens that allow one to incorporate this behavior in a way that makes sense to the server (ex. Rand).</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ SyntDef components and format ------</b></p>
+<p class="p7">// The basic format of a SynthDef is:</p>
+<p class="p8"><span class="s2">SynthDef</span>(<span class="s6">\name</span>, {<span class="s2">arg</span> optional; <span class="s2">Out</span>.ar(bus_number, <span class="s2">UGen_graph</span>)});<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ SyntDef creation methods ------</b></p>
+<p class="p7">// The SynthDef class encapsulates the client-side representation of a given def, and provides methods for creating new defs, writing them to disk, and streaming them to a server. The following methods are avaiable to write synthDefs:</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>writeDefFile: </span>// write the SynthDef to a file, it will not be playable until it is loaded by the server</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>writeOnce : </span>// write the SynthDef only if the name does not exist already.</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>load(</span><span class="s2">Server</span><span class="s3">) : </span>// write the SynthDef file and load it in the Server. Now it's loaded every time you start the synthesis server from now on, and also sends it immediately so it's available right away</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>send(</span><span class="s2">Server</span><span class="s3">): </span>// do not write a file, but send the data via OSC to the server. that might be sometimes faster, but it might not work for larger SynthDefs, because it does not fit into an OSC package</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>play(</span><span class="s2">Server</span><span class="s3">): </span>// send the SynthDef and play it as soon as it is received.</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>store(</span><span class="s2">Server</span><span class="s3">): </span>/* load the SynthDef, save it on disk (like .load) and add it to the SynthDescLib. The SynthDescLib is important for the use of Pbind and Patterns; in those cases, the instrument's default parameters are derived from the <a href="SC://SynthDesc"><span class="s5">SynthDesc</span></a>.<span class="Apple-converted-space">  </span>If you want to add a specific server to the list where your SynthDefs are sent, add it to the global SynthDescLib:*/<span class="s3"> </span><span class="s2">SynthDescLib</span><span class="s3">.global.addServer(...). </span>// The internal and localhost servers are in the list by default.</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>add </span>/* a replacement for the depreciated: */<span class="s3"> memStore: </span>// similar to .store, except the SynthDef is save into memory, not on disk.</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7">// A CtkSynthDef (from Josh Parmenter's must-have <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Ctk/Ctk Help/Ctk.htm"><span class="s5">Ctk</span></a> library) is a very handy wrapper that handles all this for you, allowing you to use a SynthDef in Real-Time (RT), or in Non-Real-Time (NRT). Have a look here for more info: <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Ctk/Ctk Help/CtkNoteObject.htm"><span class="s5">CtkNoteObject</span></a></p>
+<p class="p7">// If you don't have Ctk, get it, as many of the examples will be using Ctk objects:</p>
+<p class="p8"><span class="s2">Quarks</span>.install( <span class="s4">"Ctk"</span>, checkoutIfNeeded: <span class="s2">false</span>)</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ SyntDef browser ------</b></p>
+<p class="p7">// You can use the synthdef browser to inspect the SynthDefs that are already written to your disk:</p>
+<p class="p8"><span class="s2">SynthDescLib</span>.global.browse</p>
+<p class="p7">// this shows you the names of the defs, the UGens that they contain, their arguments with default values (Control), as well as their inputs and outputs. It also contains a handy test and a GUI player function!</p>
+<p class="p6"><br></p>
+<p class="p7">// For more on UGens and SynthDefs look here:</p>
+<p class="p9"><span class="s7"><a href="SC://UGens-and-Synths">UGens-and-Synths</a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ======<span class="Apple-converted-space">  </span>Server architecture and order of execution ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Node ------</b></p>
+<p class="p7">// The server uses a tree structure of nodes, which can be Synths or Groups (Node is the superclass of both). The structure of this tree defines the order of execution of all Synths. This command will show you the current state of the tree:</p>
+<p class="p7"><span class="s3">s.queryAllNodes; </span>// pressing 'n' when focusing on the Server window will also post the structure</p>
+<p class="p6"><br></p>
+<p class="p7">//By pressing <i>Command-period</i> you reset the tree, deleting all nodes that have been created.</p>
+<p class="p6"><br></p>
+<p class="p7">//See: <a href="SC://Node"><span class="s5">Node</span></a></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Group ------</b></p>
+<p class="p7">// Instead of creating inflexible monster SynthDefs that try to do everything, it is a much better practice to strive for modularity, creating smaller, flexible units that can be used, re-used and patched together in multiple combinations.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// A Group is a collection of nodes that are bunded together in a specific order, with each node pointing to the next one. The order of execution can be very important, especially when you need synths to process the output of other synths. This order can be explicitly defined through the addAction argument of a Group, by adding new synths to its head (beginning), tail (end), as well as before, after or in the place of a specific node inside the group.<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><b>addAction</b> - one of the following Symbols:<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s6">\addToHead</span><span class="s3"> <span class="Apple-tab-span">	</span></span>// - (the default) add at the head of the group specified by <b>target</b></p>
+<p class="p12"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s6">\addToTail</span><span class="s3"> <span class="Apple-tab-span">	</span></span>// - add at the tail of the group specified by <b>target</b></p>
+<p class="p12"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s6">\addAfter</span><span class="s3"> <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// - add immediately after <b>target </b>in its server's node order</p>
+<p class="p12"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s6">\addBefore</span><span class="s3"> <span class="Apple-tab-span">	</span></span>// - add immediately before <b>target </b>in its server's node order</p>
+<p class="p12"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s6">\addReplace</span><span class="s3"> <span class="Apple-tab-span">	</span></span>// - replace <b>target</b> and take its place in its server's node order</p>
+<p class="p6"><br></p>
+<p class="p7">// The localhost and internal servers each boot with two groups: the <a href="SC://RootNode"><span class="s5">RootNode</span></a> (Group(0))<span class="Apple-converted-space">  </span>and the <a href="SC://default_group"><span class="s5">default_group</span></a> (Group(1)). By default, each new synth will be added to the HEAD of the default_group, which is the opposite of what you would intuitively think; if you have synth1, synth2, synth3, then their order will be inverted in the order of execution to: synth3, synth2, synth1</p>
+<p class="p7">// See: <a href="SC://Group"><span class="s5">Group</span></a> and <a href="SC://11_Groups"><span class="s8">Groups</span></a></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Audio Bus ------</b></p>
+<p class="p7">// The way to send the output of one synth to that of another to process is by using Audio Buses. The concept here is very similar to that of a hardware mixing board. There is a global array of buses, which can be accessed by all synths on the server, making it possible for any synth to be an input to any other synth, giving you maximum flexibility.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">/*<span class="Apple-converted-space"> </span></p>
+<p class="p7">- The lowest numbered buses are output to your <i>audio hardware outputs</i>.<span class="Apple-converted-space"> </span></p>
+<p class="p7">- After those are the input buses, reading from the <i>audio hardware input</i>.<span class="Apple-converted-space"> </span></p>
+<p class="p7">- After those follow the<i> internal output</i><span class="Apple-converted-space"> </span></p>
+<p class="p7">- and then the <i>internal input buses</i>.<span class="Apple-converted-space"> </span></p>
+<p class="p7">*/</p>
+<p class="p7">// The number of all these buses can be defined through the ServerOptions:</p>
+<p class="p8"><span class="s2">Server</span>.local.options.numOutputBusChannels = 8;</p>
+<p class="p8"><span class="s2">Server</span>.local.options.numInputBusChannels = 8;</p>
+<p class="p8"><span class="s2">Server</span>.local.options.inspect;</p>
+<p class="p7">// You can do this before starting the server manually, or inside your startup file (more on that later). If you open the class definition of ServerOptions you can see the default values.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">// Let's look at a simple example:</p>
+<p class="p8">(</p>
+<p class="p8"><span class="s2">SynthDef</span>(<span class="s6">\test</span>, {<span class="s2">arg</span> outbus = 0, freq = 220;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(outbus, <span class="s2">SinOsc</span>.ar(freq, 0, 0.25));</p>
+<p class="p8">}).send(s)</p>
+<p class="p8">)</p>
+<p class="p6"><br></p>
+<p class="p7"><span class="s3">a = </span><span class="s2">Synth</span><span class="s3">(</span><span class="s6">\test</span><span class="s3">, [</span><span class="s6">\outbus</span><span class="s3">, 0]) </span>// left speaker</p>
+<p class="p8">b = <span class="s2">Synth</span>(<span class="s6">\test</span>, [<span class="s6">\outbus</span>, 1, <span class="s6">\freq</span>, 240]) <span class="s9">// right speaker</span></p>
+<p class="p7"><span class="s3">c = </span><span class="s2">Synth</span><span class="s3">(</span><span class="s6">\test</span><span class="s3">, [</span><span class="s6">\outbus</span><span class="s3">, 2, </span><span class="s6">\freq</span><span class="s3">, 230]) </span>// outbus 3: no sound in stereo setups!</p>
+<p class="p8">a.free; b.free;</p>
+<p class="p6"><br></p>
+<p class="p8">(</p>
+<p class="p8"><span class="s2">SynthDef</span>(<span class="s6">\test_in</span>, {<span class="s2">arg</span> inbus = 2, outbus = 0;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(outbus, <span class="s2">In</span>.ar(inbus, 1));</p>
+<p class="p8">}).send(s)</p>
+<p class="p8">)</p>
+<p class="p7"><span class="s3">d = </span><span class="s2">Synth</span><span class="s3">(</span><span class="s6">\test_in</span><span class="s3">, [</span><span class="s6">\inbus</span><span class="s3">, 2, </span><span class="s6">\outbus</span><span class="s3">, 0]); </span>// no sound! This was added to the head!</p>
+<p class="p8">d.free;<span class="Apple-converted-space"> </span></p>
+<p class="p8">d = <span class="s2">Synth</span>(<span class="s6">\test_in</span>, [<span class="s6">\inbus</span>, 2, <span class="s6">\outbus</span>, 0], addAction: <span class="s6">\addToTail</span>); <span class="s9">// now you're talking!</span></p>
+<p class="p8">c.free; d.free;</p>
+<p class="p6"><br></p>
+<p class="p7">// See <a href="SC://Bus"><span class="s5">Bus</span></a> and <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Ctk/Ctk Help/CtkAudio.htm"><span class="s8">CtkAudio</span></a></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Control Bus ------</b></p>
+<p class="p7">// Besides audio, synths can also send and receive control signals.</p>
+<p class="p6"><br></p>
+<p class="p7">// Let's look at a simple example using the same synths as above</p>
+<p class="p6"><br></p>
+<p class="p7"><span class="s3">a = </span><span class="s2">Synth</span><span class="s3">(</span><span class="s6">\test</span><span class="s3">, [</span><span class="s6">\outbus</span><span class="s3">, 0]) </span>// make some sound</p>
+<p class="p6"><br></p>
+<p class="p7">// create<span class="Apple-converted-space">  </span>the control bus</p>
+<p class="p7"><span class="s3">b = </span><span class="s2">Bus</span><span class="s3">.control(s, 1); </span>// create a control bus</p>
+<p class="p7"><span class="s3">b.value = 200; </span>// add a value to it</p>
+<p class="p7"><span class="s3">a.map(</span><span class="s6">\freq</span><span class="s3">, b.index); </span>// map the bus value to the freq argument of the synth</p>
+<p class="p8">b.value = 300;<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">// let's try to set the bus dynamically (you should let the previous synth run);<span class="Apple-converted-space"> </span></p>
+<p class="p7">// notice that this has to be a .kr synth!<span class="Apple-converted-space"> </span></p>
+<p class="p8">(</p>
+<p class="p8"><span class="s2">SynthDef</span>(<span class="s6">\test_FM</span>, {<span class="s2">arg</span> outbus = 0, freq = 220, mul = 0.25, add = 0;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.kr(outbus, <span class="s2">SinOsc</span>.kr(freq, 0, mul, add));</p>
+<p class="p8">}).send(s)</p>
+<p class="p8">)<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p8">e = <span class="s2">Synth</span>(<span class="s6">\test_FM</span>, [<span class="s6">\outbus</span>, b.index, <span class="s6">\freq</span>, 150, <span class="s6">\mul</span>, 100, <span class="s6">\add</span>, 200]) <span class="s9">//<span class="Apple-converted-space"> </span></span></p>
+<p class="p8">e.free;</p>
+<p class="p8">a.free; b.free;</p>
+<p class="p6"><br></p>
+<p class="p7">// See <a href="SC://Bus"><span class="s5">Bus</span></a> and <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Ctk/Ctk Help/CtkControl.htm"><span class="s8">CtkControl</span></a>. Also, <a href="SC://Control"><span class="s5">Control</span></a> and <a href="SC://NamedControl"><span class="s5">NamedControl</span></a></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ InFeedback ------</b></p>
+<p class="p7">// It is possible that we may want to use the audio from a later node inside an earlier node, despite the order of execution in the node tree. <a href="SC://InFeedback"><span class="s5">InFeedback</span></a> lets you do that by taking the values from the bus from the previous calculation cycle (therefore adding a delay that is equal to your Server's blockSize).</p>
+<p class="p6"><br></p>
+<p class="p7">// Here is a simple example of cross-coupled feedback FM synthesis:</p>
+<p class="p8">(</p>
+<p class="p8"><span class="s2">SynthDef</span>(<span class="s6">\test_FdbFM</span>, {<span class="s2">arg</span> outbus = 0, inbus = 2, freq = 220, mul = 1, add = 0;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="s2">var</span> in;</p>
+<p class="p8"><span class="Apple-tab-span">	</span>in = (<span class="s2">InFeedback</span>.ar(inbus, 1) * mul) + add;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(outbus, <span class="s2">SinOsc</span>.ar(freq + in, 0, 0.25));</p>
+<p class="p8">}).send(s)</p>
+<p class="p8">)</p>
+<p class="p6"><br></p>
+<p class="p8">a = <span class="s2">Synth</span>(<span class="s6">\test_FdbFM</span>, [<span class="s6">\outbus</span>, 0, <span class="s6">\inbus</span>, 1, <span class="s6">\mul</span>, 300*11, <span class="s6">\add</span>, 200], addAction: <span class="s6">\addToHead</span>) <span class="s9">// left speaker.</span></p>
+<p class="p8">b = <span class="s2">Synth</span>(<span class="s6">\test_FdbFM</span>, [<span class="s6">\outbus</span>, 1, <span class="s6">\inbus</span>, 0, <span class="s6">\mul</span>, 300*9, <span class="s6">\add</span>, 100], addAction: <span class="s6">\addToTail</span>) <span class="s9">// right speaker.</span></p>
+<p class="p8">s.queryAllNodes;</p>
+<p class="p8">a.free;</p>
+<p class="p8">b.free;</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p13"><span class="s9">// for more, see: <a href="SC://Server-Architecture"><span class="s8">Server-Architecture</span></a> and <a href="SC://Order-of-execution"><span class="s8">Order-of-execution</span></a></span></p>
+<p class="p6"><br></p>
+<p class="p7">// also, for <b>Ctk-specific examples</b> of signal routing, do this (these are Summer 2010 links from the DXARTS 462 class of 2010, the content may change later):<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">// make a folder to put them in first, this will be located inside the class examples folder inside your SuperCollider application:</p>
+<p class="p14">"mkdir -p DX490a_su2010_ClassExamples/DX462Examples"<span class="s3">.unixCmd<span class="Apple-converted-space"> </span></span></p>
+<p class="p7">// example 1</p>
+<p class="p14">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/461-3/462/Code%20Examples/Example06.html -o DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example06.html"<span class="s3">.unixCmd{</span>"open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example06.html"<span class="s3">.unixCmd};</span></p>
+<p class="p7">// example 2</p>
+<p class="p14">"curl<span class="Apple-converted-space">  </span>http://www.dxarts.washington.edu/courses/461-3/462/Code%20Examples/Example17.html -o DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example17.html"<span class="s3">.unixCmd{</span>"open -a /Applications/SuperCollider/SuperCollider.app DX490a_su2010_ClassExamples/DX462Examples/DX462_Sp2010_Example17.html"<span class="s3">.unixCmd};</span></p>
+<p class="p15"><br></p>
+<p class="p15"><span class="Apple-tab-span">	</span></p>
+</body>
+</html>

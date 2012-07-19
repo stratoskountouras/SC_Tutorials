@@ -1,0 +1,74 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf440
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red96\green96\blue96;\red191\green0\blue0;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs48 \cf0 Dealing with large projects\
+
+\fs36 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+There comes a point with SuperCollider when your code begins to grow and grow\
+\
+\
+If you find yourself writing one huge file for your piece, you must start to consider spreading work over multiple files.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+You can bring in further files within the current one:\
+\
+Create a file called extrafile.rtf by making a new window and copying in the following code\
+\
+\{\cf2 SinOsc\cf0 .ar(440,0,0.1)\}.play\
+\
+then save the file in your SuperCollider application directory under that name. \
+\
+Now run\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 "extrafile.rtf"\cf0 .loadPath; \cf4 //after creating extrafile.rtf\cf0 \
+\
+which runs the interpreter on that file:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\cf4 //put in appropriate pathname\cf0 \
+\cf2 thisProcess\cf0 .interpreter.executeFile(\cf3 "extrafile.rtf"\cf0 );\
+	\
+This is often useful in particular for loading large datasets. There are also specific file reading and writing capabilities (ie File, see the main help page).\
+				\
+	\
+In terms of breaking up complex programs, a better approach is to use classes. You should always aim to encapsulate and modularise re-usable code. See the tutorial chapters on writing classes, and read up on object-oriented design.  \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+\
+\
+}

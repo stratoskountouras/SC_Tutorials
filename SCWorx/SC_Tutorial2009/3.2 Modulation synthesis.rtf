@@ -1,0 +1,473 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf330
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red191\green0\blue0;\red0\green255\blue0;
+\red0\green115\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs46 \cf0 Sound Synthesis in SuperCollider (wk 3, modulation synthesis)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs36 \cf0 \
+\
+\cf2 Server\cf0 .default=s=\cf2 Server\cf0 .internal;\
+s.boot;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 //This uses Lance Putnam's Frequency Scope. I shall keep this running in the background for spectral plotting of the sounds we explore. \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 FreqScope\cf0 .new\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 //to use this yourself you will have to download it- but the tutorials still work without it. \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0 \cf0 \
+\
+In modulation synthesis one wave, the carrier, is influenced (modulated) by a second, the modulator.\
+\
+Depending on how the carrier and modulator are plugged together there are a variety of methods in common use.\
+\
+Modulation synthesis is easy to implement, providing computationally efficient shortcuts to complex dynamic spectra. The methods have their own unique sounds too, which can be musically useful. \
+\
+In this tutorial I will use some small GUIs to give controls for the parameters of the synthesis. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 Ring Modulation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+A straight multiplication of two signals. \
+\
+carrier * modulator\
+\
+\
+(\
+\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  carrier, modulator, carrfreq, modfreq;\
+\
+carrfreq= \cf2 MouseX\cf0 .kr(440,5000,\cf5 'exponential'\cf0 );\
+modfreq= \cf2 MouseY\cf0 .kr(1,5000,\cf5 'exponential'\cf0 );\
+\
+carrier= \cf2 SinOsc\cf0 .ar(carrfreq,0,0.5);\
+modulator= \cf2 SinOsc\cf0 .ar(modfreq,0,0.5);\
+\
+carrier*modulator;\
+\}.scope\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+For simple sine waves, the spectrum ends up with two frequencies (two sidebands), at C+M and C-M, where C is the carrier frequency and M is the modulator frequency.\
+\
+For more complex waves than sines, we get many more components to the spectrum of the multiplied signals. \
+\
+But if C and M are harmonic, the sidebands are also harmonic. \
+\
+For those who want to see some proof, it all follows from the mathematical relation\
+\
+cos(C)*cos(M) = 0.5*(cos(C-M) + cos(C+M))\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 Amplitude Modulation (AM)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+We've seen AM already- using amplitude envelopes, or having a tremolo, are forms of AM\
+\
+AM is like ring modulation but with a subtle difference: the modulator is unipolar, that is, always positive. \
+\
+\
+\{\cf2 SinOsc\cf0 .ar(440,0,0.5)\}.scope \cf3 //bipolar, -0.5 to 0.5\cf0 \
+\
+\{\cf2 SinOsc\cf0 .ar(440,0,0.5,0.5)\}.scope \cf3 //unipolar, 0 to 1 (0.5 plus or minus 0.5)\cf0 \
+\
+\
+\
+(\
+\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  carrier, modulator, carrfreq, modfreq;\
+\
+carrfreq= \cf2 MouseX\cf0 .kr(440,5000,\cf5 'exponential'\cf0 );\
+modfreq= \cf2 MouseY\cf0 .kr(1,5000,\cf5 'exponential'\cf0 );\
+\
+carrier= \cf2 SinOsc\cf0 .ar(carrfreq,0,0.5);\
+modulator= \cf2 SinOsc\cf0 .ar(modfreq,0,0.25, 0.25);\
+\
+carrier*modulator;\
+\}.scope\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The spectrum ends up with the sum and difference frequencies we saw in ring modulation, at C+M and C-M, as well as the original carrier frequency C.  \
+\
+The maths is now: \
+\
+cos(C)*(1+cos(M)) = cos(C)+ 0.5*(cos(C-M) + cos(C+M))\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 Frequency Modulation (FM)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+FM was applied to sound synthesis by John Chowning in 1967, though he published his results in 1973. Yamaha licensed the patents and in 1983 released the Yamaha DX7 synthesiser, which went on to sell 300,000 units, the most commercially successful synthesiser of all time. \
+\
+You might know the 'slow version' of FM already: a vibrato. \
+\
+Rather than plugging the modulator into the amplitude of the carrier, we're going to plug the modulator into the carrier frequency. There will be three parameters, the carrier frequency C, the modulation frequency M, and the modulation depth or frequency deviation D.  \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Because there are three variables I'm going to use a GUI rather than the 2-dimensional mouse. I'll explain GUIs properly at a later stage of this course. \
+\
+[This is Mac GUI code- if you desparately want to try it on Windows, add a J in front of everything\
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  w, carrfreqslider, modfreqslider, moddepthslider, synth;\
+\
+w=\cf2 SCWindow\cf0 (\cf6 "frequency modulation"\cf0 , \cf2 Rect\cf0 (100, 400, 400, 300));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator = \cf2 FlowLayout\cf0 (w.view.bounds);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+synth= \{\cf2 arg\cf0  carrfreq=440, modfreq=1, moddepth=0.01; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SinOsc\cf0 .ar(carrfreq + (moddepth*\cf2 SinOsc\cf0 .ar(modfreq)),0,0.25)\
+\}.scope;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 carrfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "carrfreq"\cf0 , \cf2 ControlSpec\cf0 (20, 5000, \cf5 'exponential'\cf0 , 10, 440), \{\cf2 |ez|\cf0   synth.set(\cf5 \\carrfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modfreq"\cf0 , \cf2 ControlSpec\cf0 (1, 5000, \cf5 'exponential'\cf0 , 1, 1), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 moddepthslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "moddepth"\cf0 , \cf2 ControlSpec\cf0 (0.01, 5000, \cf5 'exponential'\cf0 , 0.01, 0.01), \{\cf2 |ez|\cf0   synth.set(\cf5 \\moddepth\cf0 , ez.value)\});\
+\
+w.front;\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+In the spectrum now, there are an infinite number of sidebands, but of varying strength. Based on the values we choose for the parameters C, M and D we can make very thick spectrums, or only a light modulation effect. The sidebands turn up at \
+\
+C + kM where k is any integer, ie. C. C+M, C-M, C+2M, C-2M, ...\
+\
+By changing the modulation frequency and depth, you can see how the energy in the sidebands is redistributed; the actual formulas for this use Bessel functions and are outside the scope of this lecture- but see the Roads Computer Music Tutorial if you're curious. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There is a much more musically effective way to control FM, through the modulation index I, defined as:\
+\
+I= D/M\
+\
+The ratio of frequency deviation to modulation frequency. If I is small there is little audible FM effect. The higher I is, the stronger the energy in the sidebands. \
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  w, carrfreqslider, modfreqslider, modindexslider, synth;\
+\
+w=\cf2 SCWindow\cf0 (\cf6 "frequency modulation via modulation index"\cf0 , \cf2 Rect\cf0 (100, 400, 400, 300));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator = \cf2 FlowLayout\cf0 (w.view.bounds);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+synth= \{\cf2 arg\cf0  carrfreq=440, modfreq=1, modindex=0; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SinOsc\cf0 .ar(carrfreq + (modindex*modfreq*\cf2 SinOsc\cf0 .ar(modfreq)),0,0.25)\
+\}.scope;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 carrfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "carrfreq"\cf0 , \cf2 ControlSpec\cf0 (20, 5000, \cf5 'exponential'\cf0 , 10, 440), \{\cf2 |ez|\cf0   synth.set(\cf5 \\carrfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modfreq"\cf0 , \cf2 ControlSpec\cf0 (1, 5000, \cf5 'exponential'\cf0 , 1, 1), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modindexslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modindex"\cf0 , \cf2 ControlSpec\cf0 (0.0, 10, \cf5 'linear'\cf0 , 0.01, 0.0), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modindex\cf0 , ez.value)\});\
+\
+w.front;\
+)\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 //or via mouse control\cf0 \
+(\
+\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  modf, ind;\
+\
+modf= \cf2 MouseX\cf0 .kr(1,440, \cf5 'exponential'\cf0 );\
+ind=\cf2 MouseY\cf0 .kr(0.0,10.0);\
+\
+\cf2 SinOsc\cf0 .ar(\cf2 SinOsc\cf0 .ar(modf,0,modf*ind, 440),0,0.25)\
+\}.scope\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 Phase Modulation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+If you have a input for a phase control you could modulate phase too. \
+\
+(recall the arguments for a sine, SinOsc.ar(freq, phase, mul, add))\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  w, carrfreqslider, modfreqslider, moddepthslider, synth;\
+\
+w=\cf2 SCWindow\cf0 (\cf6 "frequency modulation"\cf0 , \cf2 Rect\cf0 (100, 400, 400, 300));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator = \cf2 FlowLayout\cf0 (w.view.bounds);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+synth= \{\cf2 arg\cf0  carrfreq=440, modfreq=1, moddepth=0.01; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SinOsc\cf0 .ar(carrfreq, 2pi*(moddepth*\cf2 SinOsc\cf0 .ar(modfreq)),0.25)\
+\}.scope;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 carrfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "carrfreq"\cf0 , \cf2 ControlSpec\cf0 (20, 5000, \cf5 'exponential'\cf0 , 10, 440), \{\cf2 |ez|\cf0   synth.set(\cf5 \\carrfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modfreq"\cf0 , \cf2 ControlSpec\cf0 (1, 5000, \cf5 'exponential'\cf0 , 1, 1), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 moddepthslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "moddepth"\cf0 , \cf2 ControlSpec\cf0 (0.01, 5000, \cf5 'exponential'\cf0 , 0.01, 0.01), \{\cf2 |ez|\cf0   synth.set(\cf5 \\moddepth\cf0 , ez.value)\});\
+\
+w.front;\
+)\
+\
+\
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  w, carrfreqslider, modfreqslider, modindexslider, synth;\
+\
+w=\cf2 SCWindow\cf0 (\cf6 "frequency modulation via modulation index"\cf0 , \cf2 Rect\cf0 (100, 400, 400, 300));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator = \cf2 FlowLayout\cf0 (w.view.bounds);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+synth= \{\cf2 arg\cf0  carrfreq=440, modfreq=1, modindex=0; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SinOsc\cf0 .ar(carrfreq, (modindex*modfreq*\cf2 SinOsc\cf0 .ar(modfreq)),0.25)\
+\}.scope;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 carrfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "carrfreq"\cf0 , \cf2 ControlSpec\cf0 (20, 5000, \cf5 'exponential'\cf0 , 10, 440), \{\cf2 |ez|\cf0   synth.set(\cf5 \\carrfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modfreqslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modfreq"\cf0 , \cf2 ControlSpec\cf0 (1, 5000, \cf5 'exponential'\cf0 , 1, 1), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modfreq\cf0 , ez.value)\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 w.view.decorator.nextLine;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 modindexslider= \cf2 EZSlider\cf0 (w, 300@50, \cf6 "modindex"\cf0 , \cf2 ControlSpec\cf0 (0.0, 10, \cf5 'linear'\cf0 , 0.01, 0.0), \{\cf2 |ez|\cf0   synth.set(\cf5 \\modindex\cf0 , ez.value)\});\
+\
+w.front;\
+)\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 //or via mouse control\cf0 \
+(\
+\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 var\cf0  modf, ind;\
+\
+modf= \cf2 MouseX\cf0 .kr(1,440, \cf5 'exponential'\cf0 );\
+ind=\cf2 MouseY\cf0 .kr(0.0,10.0);\
+\
+\cf2 SinOsc\cf0 .ar(440, \cf2 SinOsc\cf0 .ar(modf,0,modf*ind),0.25)\
+\}.scope\
+)\
+\
+\
+\
+The rate of change of phase is frequency. So phase modulation is related to frequency modulation.  \
+\
+[\cf2 \ul \ulc2 PMOsc\cf0 \ulnone ]	\cf3 //A dedicated phase modulation oscillator\cf0 \
+\
+In fact, anything you could control can be modulated, that is, changed over time by some oscillator or other signal. \
+\
+\
+}

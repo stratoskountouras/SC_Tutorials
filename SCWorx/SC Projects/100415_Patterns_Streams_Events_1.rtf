@@ -1,0 +1,66 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf290
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 /* 100415 Algorithmiki Domisi toy Hxoy\
+Cygnus Thu, 15 April 2010, 11:49AM\
+\
+======= Patterns-Streams-Events ======== 1. Introduction\
+*/\cf3 \
+\
+\cf2 // A stream example using Routine\cf3 \
+a = \cf4 Routine\cf3  \{\
+	\cf4 var\cf3  i = 0;\
+	loop \{\
+	i.yield;\
+	i = i + 1;\
+	\};\
+	\
+\};\
+\
+a.nextN(10);\
+a.nextN(100);\
+ \
+\cf2 // A more simplified stream example using Routine\cf3 \
+\
+a = \cf4 Routine\cf3  \{\
+	(0..).do \{ \cf4 |i|\cf3 \
+		i.yield;\
+		\};\
+\};\
+\
+a.nextN(10);\
+a.nextN(100);\
+\
+\cf2 // The same example this time using Pseries\cf3 \
+\
+a = \cf4 Pseries\cf3 (start: 0, step: 23, length: \cf4 inf\cf3 ).asStream; \cf2 // start, step and lenght can be omitted\cf3 \
+b = \cf4 Pseries\cf3 (0, 50, \cf4 inf\cf3 ).asStream;\
+\
+a.nextN(10);\
+b.nextN(10);\
+\
+\cf2 // ==== Patterns VS Streams ======\cf3 \
+\
+\cf2 // NOTE: Patterns define behavior; streams execute it.\cf3 \
+\
+a = \cf4 Pseries\cf3  (0, 10, 10); \cf2 // always returns the Pseries, not actual numbers\cf3 \
+a.next;\
+\
+b = a.asStream; \cf2 // calling this repeatedly gets the desired increasing integers\cf3 \
+b.next;\
+\
+c = a.asStream; \cf2 // starts from zero, even though q already gave out some numbers\cf3 \
+c.next;\
+\
+d = a.asStream \cf2 // resumes where q left off, with no effect from getting values from r\cf3 \
+d.next;\
+\
+[b.next, c.next] \cf2 // and so on..\cf3 \
+\
+\
+\
+\
+}

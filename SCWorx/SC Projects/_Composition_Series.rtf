@@ -1,0 +1,43 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf350
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red252\green133\blue36;\red230\green179\blue153;\red179\green51\blue0;
+\red26\green153\blue230;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs18 \cf2 /* 	Composition Series\
+	Last update: Cygnus Thu, 05 May 2011, 21:58PM\
+*/\cf3 \
+\cf4 1\cf3 . \cf5 Eyes\cf3  \cf5 Bli\cf3 (p)\
+play\{x = \cf5 Duty\cf3 .kr(\cf5 Dseq\cf3 ([\cf4 0.1\cf3 , \cf4 0.2\cf3 , \cf4 0.1\cf3 , \cf4 0.2\cf3 , \cf4 0.3\cf3 ], \cf5 inf\cf3 ),\cf4 0\cf3 , \cf5 Dseq\cf3 ([\cf4 10\cf3 , \cf4 20\cf3 , \cf4 15\cf3 , \cf4 18\cf3 , \cf4 20\cf3 ], \cf5 inf\cf3 )); \cf5 FreeVerb\cf3 .ar(\cf5 RLPF\cf3 .ar(\cf5 Blip\cf3 .ar(\cf5 LFNoise0\cf3 .kr([\cf5 XLine\cf3 .kr(x/\cf4 6\cf3 , x/\cf4 2\cf3 , \cf4 60\cf3 ),\cf5 XLine\cf3 .kr(x/\cf4 2\cf3 , x/\cf4 8\cf3 , \cf4 180\cf3 )], \cf5 XLine\cf3 .kr(x*\cf4 2\cf3 , x/\cf4 8\cf3 , \cf4 120\cf3 ))) * \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 ([\cf4 0\cf3 ,\cf4 5\cf3 ,\cf4 6\cf3 ,\cf4 0\cf3 ],[\cf4 10\cf3 ,\cf4 230\cf3 ,\cf4 20\cf3 ],\cf6 \\welch\cf3 ))), \cf5 Line\cf3 .kr(\cf4 10\cf3 , \cf4 0.7\cf3 , \cf4 120\cf3 ))\}\
+\
+\
+\cf4 2\cf3 . \cf5 Wrapin\cf3 ' Low\
+play\{x = Duty.kr(Dseq([0.1, 0.2, 0.3, 0.2, 0.1, 0.5], inf), 0 ,Drand(fib(8,8,64),inf)); CombN.ar(Wrap.ar(SinOsc.ar([x*100,x/4], 0, 0.4), Line.kr(0.00001, 0.9, 180), Line.kr(0.00005, 1, 180)))\}\
+\
+\
+\cf4 \
+3\cf3 . \cf5 Looping\cf3  the \cf5 Robot\cf3 \
+\
+f = \{ | x = 7 | \
+\
+\{\
+	loop \{\
+		\
+	\{ \cf5 FreeVerb\cf3 .ar(\cf5 Blip\cf3 .ar([x*\cf4 1500\cf3 .rand, x*\cf4 1700\cf3 ].rand) * \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 ([\cf4 0\cf3 , \cf4 1\cf3 , \cf4 0\cf3 ],[\cf4 0.1\cf3 , \cf4 0.3\cf3 ],\cf6 \\welch\cf3 ), doneAction: \cf4 2\cf3 ), 	\cf5 Line\cf3 .kr(\cf4 10\cf3 , \cf4 0.2\cf3 , \cf4 0.1\cf3 )) \}.play;\
+	\cf4 0.2\cf3 .wait;\
+		\
+	\{ \cf5 FreeVerb\cf3 .ar(\cf5 LFSaw\cf3 .ar([x*\cf4 1500\cf3 .rand, x*\cf4 1500\cf3 ]) * \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 ([\cf4 0\cf3 , \cf4 0.5\cf3 , \cf4 0\cf3 ],[\cf4 0.1\cf3 , \cf4 0.3\cf3 ],\cf6 \\welch\cf3 ), doneAction: \cf4 2\cf3 ), 		\cf5 Line\cf3 .kr(\cf4 10\cf3 , \cf4 0.2\cf3 , \cf4 0.1\cf3 )) \}.play;\
+	\cf4 0.2\cf3 .wait;\
+	\
+	\{ \cf5 FreeVerb\cf3 .ar(\cf5 Impulse\cf3 .ar([x*\cf4 500\cf3 .rand, x*\cf4 700\cf3 .rand]) * \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 ([\cf4 0\cf3 , \cf4 1\cf3 , \cf4 0\cf3 ],[\cf4 0.1\cf3 , \cf4 0.3\cf3 ],\cf6 \\welch\cf3 ), doneAction: \cf4 2\cf3 ), \cf5 Line\cf3 .kr	(\cf4 10\cf3 , \cf4 0.2\cf3 , \cf4 0.1\cf3 )) \}.play;\
+	\cf4 0.2\cf3 .wait;	\
+	\{\cf5 FreeVerb\cf3 .ar(\cf5 VarSaw\cf3 .ar([x*\cf4 1500\cf3 .rand, x*\cf4 1500\cf3 .rand]) * \cf5 EnvGen\cf3 .kr(\cf5 Env\cf3 ([\cf4 0\cf3 , \cf4 1\cf3 , \cf4 0\cf3 ],[\cf4 0.1\cf3 , \cf4 0.3\cf3 ],\cf6 \\welch\cf3 ), doneAction: \cf4 2\cf3 ), \cf5 Line\cf3 .kr(\cf4 10\cf3 , \cf4 0.2\cf3 , \cf4 0.1\cf3 ))\}.play; \
+	\cf4 0.2\cf3 .wait;\
+	\
+	\}\
+\}.fork;\
+\
+\};\
+\
+}

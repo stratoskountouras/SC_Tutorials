@@ -1,0 +1,384 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red191\green0\blue0;
+\red0\green0\blue0;\red191\green0\blue0;\red0\green0\blue191;\red96\green96\blue96;\red0\green115\blue0;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Scheduling with Routines and Tasks\cf0 \
+\
+some relevant help files:\
+\
+[\cf3 \ul \ulc3 Routine\cf0 \ulnone ]\
+[\cf3 \ul Task\cf0 \ulnone ]\
+\
+\
+s = \cf3 Server\cf0 .local; \
+s.boot;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 //make sure you have already loaded the \\bleep SynthDef from 6.1 Scheduling \cf5 \
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf6 \
+\
+\cf0 \
+\
+\cf5 So far, scheduling was always achieved by scheduling a function for a specific time. In order to be able to step through different stages of a program, it is helpful to have a special type of function that can have a number of execution stages. It is not evaluated all at once with .value, but can \cf0 "yield" its current value at each of multiple stages\cf5 .\
+\cf0 \
+This is a Routine:\
+\
+(\
+r=Routine(\{\
+\
+1.yield; \
+\
+2.yield;\
+\
+3.yield;\
+\
+\})\
+)\
+\
+\cf5 r.value; \cf4 //run this line four times\cf5 \
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf5 \
+\cf4 //another example with more going on\cf5 \
+(\
+\cf7 var\cf5  r;\
+r = \cf7 Routine\cf5 (\{\
+		\cf7 var\cf5  x;\
+		x = 1.0.rand;\
+		2.yield;\
+		x.yield;\
+		1000.yield;\
+		x.yield;\
+		x = 1.0.rand;\
+		x.yield;\
+	\});\
+	\
+10.do(\{ r.value.postln \});\
+)\
+\
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf6 // a routine can also have side effects\cf0 \
+\
+(\
+r = \cf3 Routine\cf0 (\{\
+		1.yield;\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 );\
+		2.yield;\
+		1.yield;\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 );\
+		1.yield;\
+	\});\
+)\
+\
+r.next; \cf6 // btw. r.next is a synonym. r.value or r.next both return the "yield value".\cf0 \
+r.next;\
+r.next;\
+r.next;\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf6 // we can now simply use the routine by playing it on a certain Clock\cf0 \
+\
+(\
+r = \cf3 Routine\cf0 (\{\
+		0.5.yield;\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 );\
+		1.yield;\
+		0.5.yield;\
+		\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , 43]);\
+		0.5.yield;\
+	\});\
+	\
+\cf3 SystemClock\cf0 .sched(0, r);		\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+However, best practice is usually just to "play" the Routine, passing in the Clock\
+\
+\cf5 r.reset;	\cf4 // reset transforms the routine back into its original state\cf5 \
+r.play(\cf7 SystemClock\cf5 ); \
+\
+r.reset;\
+r.play(\cf7 TempoClock\cf5 (3));\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf5 Yield can return any kind of object. \
+Nevertheless, a meaningful time period value needs to be a float or an integer. \
+To make clear that we mean a relative time, wait is used instead of yield (.wait just means the same as .yield);\
+\cf0 \
+\
+\cf7 TempoClock\cf5 .default.tempo_(1); \cf4 //just making sure default is sensible. In actual fact, for a tempoclock going at 1 bps, time in beats is the same as time in seconds \cf5 \
+\cf0 \
+(\cf5 \
+\cf7 var\cf5  r;\
+r = \cf7 Routine\cf5 .new(\{\
+	\cf8 "I just began!"\cf5 .postln;\
+	1.0.wait;\
+	\cf8 "1 second later"\cf5 .postln;\
+	2.0.wait;\
+	\cf8 "finished"\cf5 .postln;\
+\});\
+\
+r.play; \cf4 //defaults to TempoClock.default;\cf5 \
+\cf0 )\
+ \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+(\cf5 \
+\cf7 var\cf5  r;\
+r = \cf7 Routine\cf5 .new(\{\
+	16.do(\{ \cf7 arg\cf5  i; \
+		\
+		\cf7 Synth\cf5 (\cf9 \\bleep\cf5 , [ \cf9 \\note\cf5 , 36+(3*i) ]);\
+		0.25.yield;  \cf4 //  yield and wait mean the same thing \cf5 \
+	\
+	\});\
+\});\
+\
+r.play;\
+\cf0 )\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+inf.do can be used to keep going forever; but you must be very careful never to miss out some positive time .wait command. Because otherwise, the loop will go infinitely fast and SuperCollider (and possibly also your computer) will crash. \
+\
+(\cf5 \
+\cf7 var\cf5  r;\
+r = \cf7 Routine\cf5 .new(\{\
+	\cf7 inf\cf5 .do(\{ \cf7 arg\cf5  i; \
+		\
+		\cf7 Synth\cf5 (\cf9 \\bleep\cf5 , [ \cf9 \\note\cf5 , 36+(3*(i%10)) ]); \cf4 //added %10 to stop it going up forever\cf5 \
+		0.25.wait;   \cf4 //do not miss me out!\cf5 \
+	\
+	\});\
+\});\
+\
+r.play;\
+\cf0 )\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf6 // a Task is a Routine that can be paused and resumed:\cf0 \
+\
+(\
+t = \cf3 Task\cf0 .new(\{\
+		\cf3 inf\cf0 .do(\{ \cf3 arg\cf0  i; \cf6 // keep going forever (until stopped externally)\cf0 \
+			\cf3 Synth\cf0 (\cf2 \\bleep\cf0 , [\cf2 \\note\cf0 , 36+(2.3*(i%17))]);\
+			0.25.wait; \
+		\});\
+\});    \
+)\
+\
+\cf5 t.play(\cf7 TempoClock\cf5 (1.4)); \cf4 //start the Task going\cf5 \
+\
+t.pause;  \cf4 //pause\cf5 \
+\
+t.resume;  \cf4 //unpause\cf5 \
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There is a special shortcut for a Routine that can be useful:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\{\}.fork\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\
+This will automatically wrap your function in a routine and play it; you pass in the clock as an argument to fork:\
+\
+\
+\
+\cf5 \{5.do\{\cf8 "hello"\cf5 .postln; 1.0.wait\} \}.fork(\cf7 TempoClock\cf5 (1))\
+\
+\
+(\
+\{16.do\{\cf7 arg\cf5  i; \cf7 Synth\cf5 (\cf9 \\bleep\cf5 , [\cf9 \\note\cf5 ,rrand(48,84) ,\cf9 \\amp\cf5 , rrand(0.0,0.125)]); 0.125.wait\} \}.fork(\cf7 TempoClock\cf5 (2))\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf0 \
+\
+}

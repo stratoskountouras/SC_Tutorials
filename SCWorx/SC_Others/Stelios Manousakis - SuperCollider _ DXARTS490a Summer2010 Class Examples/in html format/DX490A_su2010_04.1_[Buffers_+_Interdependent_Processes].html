@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 56.0px; text-indent: -56.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 56.0px; text-indent: -56.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p12 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 14.0px Optima; color: #000000}
+p.p13 {margin: 0.0px 0.0px 0.0px 85.0px; text-indent: -85.0px; font: 14.0px Optima; color: #bf0000}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #0000bf}
+span.s3 {color: #000000}
+span.s4 {color: #bf0000}
+span.s5 {font: 9.0px Monaco}
+span.s6 {color: #606060}
+span.s7 {text-decoration: underline}
+span.s8 {color: #007300}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 4.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Buffers and interdependent processes</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Buffers<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- About</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Synchronous vs Asyncronous</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>completion messages</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>action function</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Condition</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= BUFFERS =================</b></p>
+<p class="p7">// Buffers are essentially arrays of floating point numbers (up to 32-bit), that you load in RAM and store in the Server, making them globally available. We tend to use buffers for audio, but you can really put in them any kind of data you 'd like to store temporarily or permanently.</p>
+<p class="p7">// The number of buffers you can load in a Server is pre-assigned before you boot the Server from the ServerOptions. The default is 1024 buffers:<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s2">Server</span>.internal.options.numBuffers</p>
+<p class="p7">// The actual number of buffers you can load simultaneously, really depends on their length, and on the available memory of your machine.<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p7">// Buffers can be accessed by referring to their index number inside the server, their bufnum; think of this as accessing a specific member inside an array. When loading a buffer, a bufnum will be automatically allocated to it, unless you provide one yourself to know where it is. Nevertheless, a much easier way to access a buffer is to assign it a specific variable in the language.</p>
+<p class="p9"><span class="s3">b = <a href="SC://Buffer"><span class="s2">Buffer</span></a>.read(s, </span>"sounds/a11wlk01.wav"<span class="s3">);</span></p>
+<p class="p8">b.bufnum.postln; <span class="s4">// see its bufnum</span></p>
+<p class="p6"><br></p>
+<p class="p7">// Loading buffers takes up valuable memory space, so don't forget to .free a buffer once you're done using it! Look at the memory load increase and decrease in Activity Monitor (OSX only):</p>
+<p class="p9">"open '/Applications/Utilities/Activity Monitor.app'"<span class="s3">.unixCmd</span></p>
+<p class="p7">// let's load 20 buffers of 20 seconds:</p>
+<p class="p8">s.waitForBoot{ ~a = <span class="s2">Array</span>.fill(20, {<span class="s2">Buffer</span>.alloc(s,44100 * 12.0, 2)})};</p>
+<p class="p7">// You can see that the memory load increased</p>
+<p class="p7">// And now:</p>
+<p class="p8">20.do({<span class="s2">arg</span> i; ~a[i].free;})</p>
+<p class="p7">// or<span class="Apple-converted-space"> </span></p>
+<p class="p8">~a.collect(<span class="s2">_</span>.free;)</p>
+<p class="p7">// It went back down again</p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== Synchronous vs Asyncronous ======</b></p>
+<p class="p7">// A buffer of just 1 second with a 44.1kHz sampling rate contains 44100 floating point values. Allocating the appropriate RAM and sending all that data to the server to fill that space up may take a while - and you can't really know how long, as it depends on your computer's available resources at any given moment (usually less than a second, but for very very large soundfiles it can take much longer). In order to make sure that this activity will not get in the way of other processes that are running, the Server loads buffers in a lower priority thread, running them asynchronously - that is, at its own convenience.</p>
+<p class="p6"><br></p>
+<p class="p7">// Given this property of reading (and writing) buffers, the Buffer class provides you with two methods for knowing when a buffer has finished loading (or writing), so that you can go on using it:</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Completion messages ------</b></p>
+<p class="p7">// This is a second OSC command (a direct command) included in the buffer filling message sent to the server, and ensuring it will happen immediately upon the first command has been executed.</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Action functions ------</b></p>
+<p class="p7">// In this case, the Server sends back to sclang an OSC message once the buffer bussiness has finished; upon reception of the message, the provided function gets evaluated. Action functions take a little extra time, as they need an additional message coming back from the server, but are more flexible.</p>
+<p class="p6"><br></p>
+<p class="p7">// Try this example, using a completion message:</p>
+<p class="p8">s.boot;</p>
+<p class="p7">// allocate an array of Buffers and fill them with different harmonics</p>
+<p class="p8">(</p>
+<p class="p8">b = <span class="s2">Buffer</span>.allocConsecutive(8, s, 4096, 1, { <span class="s2">|buf, i|</span></p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span>buf.sine1Msg((1..((i+1)*6)).reciprocal) </span>// completion messages to fill each buffer as soon as it's created</p>
+<p class="p8">});</p>
+<p class="p6"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8">a = { <span class="s2">VOsc</span>.ar(<span class="s2">SinOsc</span>.kr(0.5, 0).range(b.first.bufnum + 0.1, b.last.bufnum - 0.1), [440, 441], 0, 0.2) }.play;</p>
+<p class="p8">)</p>
+<p class="p7">// free the synth:</p>
+<p class="p8">a.free;<span class="Apple-converted-space"> </span></p>
+<p class="p7">// iterate over the array of buffers and free it:</p>
+<p class="p10">b.do(<span class="s2">_</span>.free);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7">// Another example, using an action function:<span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p12">(</p>
+<p class="p12">b = <span class="s2">Buffer</span>.read(s, <span class="s6">"sounds/a11wlk01.wav"</span>, action: { <span class="s2">arg</span> buffer;<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="Apple-tab-span">	</span>(<span class="s6">"After update:"</span> + buffer.numFrames).postln;</p>
+<p class="p12"><span class="Apple-tab-span">	</span>x = { <span class="s2">PlayBuf</span>.ar(1, buffer, <span class="s2">BufRateScale</span>.kr(buffer)) }.play;</p>
+<p class="p12">});</p>
+<p class="p13"><span class="s3">(</span><span class="s6">"Before update:"</span><span class="s3"> + b.numFrames).postln; </span>// notice that this happens first!</p>
+<p class="p12">)</p>
+<p class="p12">x.free; b.free;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p11"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7">///// Also check these two methods inside Buffer: very handy if you want to send very large data</p>
+<p class="p8">.loadCollection</p>
+<p class="p8">.sendCollection</p>
+<p class="p6"><br></p>
+<p class="p7">// Notice that if you want to create and modify a buffer within a SynthDef, you should use <a href="SC://LocalBuf"><b>LocalBuf</b></a> instead!</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= CONDITION =================</b></p>
+<p class="p7">// <span class="s7">[Condition]</span> is a very useful class which you can use to create networks of interdependend processes:</p>
+<p class="p7">// For example:</p>
+<p class="p6"><br></p>
+<p class="p8">(</p>
+<p class="p7">// create a condition</p>
+<p class="p14"><span class="s3">c = </span>Condition<span class="s3">.new(</span>false<span class="s3">);</span></p>
+<p class="p6"><br></p>
+<p class="p7">// a process</p>
+<p class="p8">~process1 = {<span class="s2">arg</span> input;</p>
+<p class="p8"><span class="Apple-tab-span">	</span>r = <span class="s2">Routine</span> {</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 1</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input.postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 2</p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"waited for 1 second"<span class="s3">.postln;</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 10).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 3</p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"waited for another second, now waiting for you ... "<span class="s3">.postln;</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 10).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 4</p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"the condition has stopped waiting."<span class="s3">.postln;</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 10).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 5</p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"waited for another second"<span class="s3">.postln;</span></p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"waiting for you ... "<span class="s3">.postln;</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.test = <span class="s2">false</span>;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 100).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 6</p>
+<p class="p9"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"the condition has stopped waiting."<span class="s3">.postln;</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 10).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// 7</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>input = (input * 0.0001).postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s6">"the end"</span>.postln;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>r.play;<span class="Apple-converted-space"> </span></p>
+<p class="p8">};</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">// another process</p>
+<p class="p8">~process2 = {<span class="s2">arg</span> input;</p>
+<p class="p8"><span class="Apple-tab-span">	</span>if ((input &gt; 0).postln, {c.test = <span class="s2">true</span>;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.signal})</p>
+<p class="p8">};</p>
+<p class="p8">);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s3">~process1.value(23); </span>// start first process</p>
+<p class="p7">// do this when it stops:</p>
+<p class="p7"><span class="s3">~process2.value(-1); </span>// second process is false; nothing happens</p>
+<p class="p7">// try again:</p>
+<p class="p8">~process2.value(1.0);</p>
+<p class="p7">// once more:</p>
+<p class="p8">~process2.value(1.0);</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">///////////////////////////////</p>
+<p class="p7">// Let's try a sound example:</p>
+<p class="p7">(<i>note that this exampe is just for demonstration purposes, you woudn't ordinarily want to use {}.play for creating synths in such manner</i>):</p>
+<p class="p6"><br></p>
+<p class="p8">s.boot;</p>
+<p class="p7">// allocate a buffer:</p>
+<p class="p8">~test = <span class="s2">Buffer</span>.alloc(s, 1024);<span class="Apple-converted-space"> </span></p>
+<p class="p6"><br></p>
+<p class="p8">(</p>
+<p class="p14"><span class="s3">t = </span>TempoClock<span class="s3">(1);<span class="Apple-converted-space"> </span></span></p>
+<p class="p7">// create a condition</p>
+<p class="p14"><span class="s3">c = </span>Condition<span class="s3">.new(</span>false<span class="s3">);</span></p>
+<p class="p6"><br></p>
+<p class="p7">// A function to create random wavetables:</p>
+<p class="p14"><span class="s3">~wrand<span class="Apple-converted-space">  </span>= {</span>|bufnum, startTime, size, segments, minVal, maxVal, interp, action|<span class="s3"> <span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">var</span><span class="Apple-converted-space">  </span>pointVals, segLengths, env, sampVals;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>pointVals = <span class="s2">Array</span>.rand(segments, minVal, maxVal).cubed; <span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>segLengths = (<span class="s2">Array</span>.rand(segments - 1, 1, 100).cubed).normalizeSum;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>env = <span class="s2">Env</span>(pointVals, segLengths, interp);</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>sampVals = sampVals.addAll(env.asSignal(size));</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">SystemClock</span>.sched(startTime, {bufnum.sendCollection(sampVals, action: action)});</p>
+<p class="p8">};</p>
+<p class="p6"><br></p>
+<p class="p7">// the function to make some sound in a Routine:</p>
+<p class="p7"><span class="s3">~process1 = {</span><span class="s2">arg</span><span class="s3"> interpol; </span>// this should be a valid interpolation method</p>
+<p class="p8"><span class="Apple-tab-span">	</span>r = <span class="s2">Routine</span> ({<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>loop ({</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~wrand.value(~test, 0, ~test.numFrames, 5.rrand(500), -1.rrand(-0.333), 1.0.rrand(0.333), interpol, 2, action: {<span class="s2">|buf|</span></p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// do this once the buffer is ready:</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// free the synths if they're playing already</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>p.free;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>q.free;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then start two new instances</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>p = { <span class="s2">Out</span>.ar(0, <span class="s2">PlayBuf</span>.ar(1, ~test, <span class="s2">BufRateScale</span>.kr(~test) * 1.0111, loop: 1) * 0.2 )}.play;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>q = { <span class="s2">Out</span>.ar(1, <span class="s2">PlayBuf</span>.ar(1, ~test, <span class="s2">BufRateScale</span>.kr(~test) * 0.98567, loop: 1) * 0.2 )}.play;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[0.125, 0.25, 0.5, 1].wchoose([0.85, 0.09, 0.04, 0.02]).wait;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.wait;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// do it twice to avoid glitches from freeing</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~wrand.value(~test, 0, ~test.numFrames, 5.rrand(500), -1.rrand(-0.333), 1.0.rrand(0.333), interpol, 2, action: {<span class="s2">|buf|</span></p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// free the other two synths if they're playing</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x.free;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>y.free;</p>
+<p class="p7"><span class="s3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// then start two more new instances</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>x = { <span class="s2">Out</span>.ar(0, <span class="s2">PlayBuf</span>.ar(1, ~test, <span class="s2">BufRateScale</span>.kr(~test) * 1.0139, loop: 1) * 0.2 )}.play;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>y = { <span class="s2">Out</span>.ar(1, <span class="s2">PlayBuf</span>.ar(1, ~test, <span class="s2">BufRateScale</span>.kr(~test) * 0.98432, loop: 1) * 0.2 )}.play;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[0.125, 0.25, 0.5, 1].wchoose([0.85, 0.1, 0.04, 0.01]).wait;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>c.wait;</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span>r.play(t);<span class="Apple-converted-space"> </span></p>
+<p class="p8">};</p>
+<p class="p8">)</p>
+<p class="p6"><span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s3">~process1.value(</span><span class="s8">\sin</span><span class="s3">); </span>// choose an interpolation type</p>
+<p class="p8">(</p>
+<p class="p7">// start triggering random wavetables by focusing on the SCWindow and pressing the spacebar; stop with any key</p>
+<p class="p9"><span class="s3">w = </span><span class="s2">SCWindow</span><span class="s3">.new(</span>"random wavetable trigger"<span class="s3">);</span></p>
+<p class="p8">w.view.keyDownAction = { <span class="s2">arg</span> view, char, modifiers, unicode, keycode;</p>
+<p class="p8"><span class="Apple-tab-span">	</span>if (unicode == 32, {<span class="s6">"start"</span>.postln; c.test = <span class="s2">true</span>; c.signal}, {<span class="s6">"stop"</span>.postln; c.test = <span class="s2">false</span>; c.signal});</p>
+<p class="p8">};</p>
+<p class="p8">w.front</p>
+<p class="p8">)</p>
+<p class="p7"><span class="s3">t.tempo_(0.8); </span>// change the tempo</p>
+<p class="p8">p.free; q.free; x.free; y.free;</p>
+<p class="p8">~test.free</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">/* LAB exercise:</p>
+<p class="p7">Using what you 've learned this week about scheduling and interfacing, make up a small instrument that incorporates timed processes controllable through interaction</p>
+<p class="p7">*/</p>
+</body>
+</html>

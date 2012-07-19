@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #000000}
+span.s1 {color: #000000}
+span.s2 {color: #0000bf}
+span.s3 {color: #007300}
+span.s4 {color: #606060}
+span.s5 {text-decoration: underline ; color: #bf0000}
+span.s6 {text-decoration: underline ; color: #0000ff}
+span.s7 {text-decoration: underline}
+span.s8 {color: #bf0000}
+span.s9 {text-decoration: underline ; color: #0000bf}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p5"><b>Class 2.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Server &lt;-&gt; language communication</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Open Sound Control</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Client-Server communication</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sending messages from sclang to scsynth</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- direct and indirect</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- message bundles</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sending messages from scsynth to sclang</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Poll and .poll</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SendTrig</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- SendReply</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Bus.control.get</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= OPEN SOUND CONTROL (OSC) =================</b></p>
+<p class="p7">// OSC is a communication protocol developed by Matthew Wright at CNMAT UC Berkley in 1998. It is optimized for networking technology, and has a client-server messaging architecture that uses a dynamic URL-style symbolic scheme, bundling messages that need to be sent simultaneously together. It is a very general protocol, initially developed for controlling digital sound and as a non-keyboard-centric successor of MIDI, but is currently used in many non-audio applications as well. The protocol is open, fast, efficient and flexible with up to 32-bits of resolution. You can create your own tags, and you can bundle messages together to ensure they are evaluated at the same time; a time-tag is also enclosed to control timed execution of messages precisely.</p>
+<p class="p7">// Have a look at the specifications of the protocol here:</p>
+<p class="p8">"open http://opensoundcontrol.org/spec-1_0"<span class="s1">.unixCmd<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ================= CLIENT-SERVER COMMUNICATION =================</b></p>
+<p class="p7">// In SuperCollider the client <b>sclang</b> (or any other client) requests and the server <b>scsynth</b> provides information. The two applications communicate through a network. In the case of the SuperCollider application this network exists inside the same machine, but it is possible to connect remote machines on the same Local-Area-Network if you know their IP addresses, or through the internet, if you know their IP addresses and have access to a web server! All commands are received via TCP or UDP (networking protocols) using a simplified Open Sound Control (OSC) version. OSC is used to communicate both ways: sclang -&gt; scsynth and scsynth -&gt; sclang</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ====== SENDING MESSAGES FROM SCLANG TO SCSYNTH ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// sclang can send OSC messages to the server directly, or indirectly.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// - <b>Direct</b> communication involves sending raw OSC messages 'by hand', using the .sendMsg method of the server and other similar formats. This is the way in which other client applicationos need to communicate with the server as well, if one does not use sclang.</p>
+<p class="p9"><br></p>
+<p class="p7">// - <b>Inderect</b> communication, or <i>object style</i> communication is provided by numerous objects inside the language, which allow you to operate using a higher-level syntax, and take the responsibility of internally translating those messages to raw OSC data.</p>
+<p class="p9"><br></p>
+<p class="p7">// For example, having this SynthDef</p>
+<p class="p10">s.boot;</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s2">SynthDef</span>(<span class="s3">\test</span>, {<span class="s2">arg</span> outbus = 0, freq = 220;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(outbus, <span class="s2">SinOsc</span>.ar(freq, 0, 0.25));</p>
+<p class="p10">}).send(s)</p>
+<p class="p10">)</p>
+<p class="p7">// the <b>direct</b> method for creating an instance is:</p>
+<p class="p10">s.sendMsg(<span class="s4">"/s_new"</span>, <span class="s3">\test</span>, 100, 1, 0);</p>
+<p class="p7"><span class="s1"><span class="Apple-tab-span">	</span></span>//<span class="Apple-converted-space">  </span>100 is the node ID</p>
+<p class="p7"><span class="s1"><span class="Apple-tab-span">	</span></span>// 1 is the action (0: addToHead, 1: addToTail)</p>
+<p class="p7"><span class="s1"><span class="Apple-tab-span">	</span></span>// 0 is the 'target' ID</p>
+<p class="p7">// to change the frequency</p>
+<p class="p10">s.sendMsg(<span class="s4">"/n_set"</span>, 100, <span class="s3">\freq</span>, 200);</p>
+<p class="p7">// to free the node:</p>
+<p class="p10">s.sendMsg(<span class="s4">"/n_free"</span>, 100)</p>
+<p class="p9"><br></p>
+<p class="p7">// <b>indirect</b> methods are much easier, though add a slight overhead:</p>
+<p class="p10">a = <span class="s2">Synth</span>(<span class="s3">\test</span>).play</p>
+<p class="p7"><span class="s1">a.run(</span><span class="s2">false</span><span class="s1">); </span>// stop it</p>
+<p class="p7"><span class="s1">a.run(</span><span class="s2">true</span><span class="s1">); </span>// start again</p>
+<p class="p10">a.set(<span class="s3">\freq</span>, 200)</p>
+<p class="p7"><span class="s1">a.free; </span>// free the server resources</p>
+<p class="p9"><br></p>
+<p class="p7">// {}.play is a very indirect method construct, creating a SynthDef for you and sending the appropriate messages to the Server</p>
+<p class="p10">{<span class="s2">SinOsc</span>.ar(220, 0, 0.25)}.play</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ------ Message Bundles ------</b></p>
+<p class="p7">// Timing is crucial in music, so many times it is very useful to bundle messages together to ensure timing</p>
+<p class="p9"><br></p>
+<p class="p10"><span class="s2">SynthDef</span>(<span class="s3">\sine</span>, {<span class="s2">arg</span> outBus = 0, freq = 400, amp = 1, dur = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s2">var</span> env, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s2">EnvGen</span>.kr(<span class="s2">Env</span>([0, 1, 0], [0.5, 0.5], <span class="s3">\sin</span>), timeScale: dur, levelScale: amp, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s2">SinOsc</span>.ar(freq, 0, env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(outBus, <span class="s2">Pan2</span>.ar(src, <span class="s2">Rand</span>.new(-0.7, 0.7)));</p>
+<p class="p10">}).send(s);</p>
+<p class="p9"><br></p>
+<p class="p10">s.sendMsg(<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1);</p>
+<p class="p10">s.sendBundle(1, [<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1]);</p>
+<p class="p9"><br></p>
+<p class="p10">(</p>
+<p class="p10"><span class="s2">var</span> basefreq = 400;</p>
+<p class="p10">s.sendBundle(0.1,<span class="Apple-converted-space"> </span></p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq, <span class="s3">\dur</span>, 1, <span class="s3">\amp</span>, 0.5],</p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq * 0.99, <span class="s3">\dur</span>, 0.8, <span class="s3">\amp</span>, 0.4],</p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq * 1.97, <span class="s3">\dur</span>, 2, <span class="s3">\amp</span>, 0.3],</p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq * 2.01, <span class="s3">\dur</span>, 2.3, <span class="s3">\amp</span>, 0.1],</p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq * 2.59, <span class="s3">\dur</span>, 0.9, <span class="s3">\amp</span>, 0.05],</p>
+<p class="p10">[<span class="s3">\s_new</span>, <span class="s3">\sine</span>, s.nextNodeID, 0, 1, <span class="s3">\freq</span>, basefreq * 3.99, <span class="s3">\dur</span>, 4.1, <span class="s3">\amp</span>, 0.02]</p>
+<p class="p10">);</p>
+<p class="p10">)</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><span class="Apple-converted-space"> </span>Have a look at these files:</p>
+<p class="p11"><span class="s5">[<a href="SC://NodeMessaging"><span class="s6">NodeMessaging</span></a>]</span></p>
+<p class="p1"><span class="s7">[<a href="SC://Server-Command-Reference"><span class="s6">Server-Command-Reference</span></a>]</span><b> </b>// a list of all server commands and their arguments</p>
+<p class="p1"><span class="s7">[<a href="SC://bundledCommands"><span class="s6">bundledCommands</span></a>]</span> // on sending messages to the server together as a bundle</p>
+<p class="p1">*/</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ====== SENDING MESSAGES FROM SCSYNTH TO SCLANG ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">// At times it can be very useful to know what happens inside a SynthDef. There are a few different ways to do that:</p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ------ 1| Poll UGen or .poll method<span class="Apple-converted-space">  </span>------</b></p>
+<p class="p7">// This UGen and method allows you to monitor things inside a SynthDef by printing values in the post window. This should only be used during programming for debugging, as it can add a considerable amount of overhead, especially if it's triggered very often.</p>
+<p class="p10">s.boot;</p>
+<p class="p10">{ <a href="SC://Poll"><span class="s2">Poll</span></a>.kr(<span class="s2">Impulse</span>.kr(10), <span class="s2">Line</span>.kr(0, 1, 1), <span class="s3">\test</span>) }.play(s); <span class="s8">// the UGen</span></p>
+<p class="p7"><span class="s1">{ </span><span class="s2">SinOsc</span><span class="s1">.ar(375, 0, 1).poll(</span><span class="s2">Impulse</span><span class="s1">.ar(20), </span><span class="s3">\test2</span><span class="s1">) }.play(s); </span>// the method .poll can be called to all UGens</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ------ 2| SendTrig UGen (for triggers) + OSCresponder ------</b></p>
+<p class="p7">// Send a trigger message back to sclang, upon receiving a trigger. An OSCresponder (client-side network responder) has to be setup to receive the messages. Note that the OSCresponder's command-name has to be "/tr".</p>
+<p class="p9"><br></p>
+<p class="p10">{ <a href="SC://SendTrig"><span class="s2">SendTrig</span></a>.kr(<span class="s2">Impulse</span>.kr(1.0),0,0.9) }.play;</p>
+<p class="p7">// register to receive this message</p>
+<p class="p10">(</p>
+<p class="p10">r = <a href="SC://OSCresponderNode"><span class="s2">OSCresponderNode</span></a>(s.addr,<span class="s3">'/tr'</span>,{ <span class="s2">arg</span> time, responder, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s4">"bang!"</span>.postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time,responder,msg].postln;</p>
+<p class="p10">}).add</p>
+<p class="p10">);</p>
+<p class="p7"><span class="s1">r.remove; </span>// don't forget to remove the responder once you're done</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ------ 3| SendReply UGen (for values) + OSCresponder ------</b></p>
+<p class="p7">// Same idea as SendTrig, except this time for floats, ints or arrays instead just triggers - and you need to provide a trigger UGen yourself. The OSCresponder's command-name is up to you to set.</p>
+<p class="p9"><br></p>
+<p class="p10">{<a href="SC://SendReply"><span class="s2">SendReply</span></a>.kr(<span class="s2">Impulse</span>.kr(1.0), <span class="s3">'the_answer'</span>, [40, 41, 42, 43] + <span class="s2">SinOsc</span>.kr, 1905)}.play(s);</p>
+<p class="p7">// register to receive this message</p>
+<p class="p10">(</p>
+<p class="p12"><span class="s1">r = <a href="SC://OSCresponderNode"><span class="s9">OSCresponderNode</span></a>(</span>nil<span class="s1">, </span><span class="s3">'the_answer'</span><span class="s1">, { </span>|t, r, msg|<span class="s1"><span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"><span class="Apple-tab-span">	</span></span>"received!"<span class="s1">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>[t, r, msg].postln }).add;</p>
+<p class="p10">)</p>
+<p class="p10">r.remove;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><b>// ------ 4| Control Bus<span class="Apple-converted-space">  </span>.get ------</b></p>
+<p class="p1">// Lastly, you can query a control bus for its value with the .get method</p>
+<p class="p6"><br></p>
+<p class="p1"><span class="s1">a = </span><span class="s2">Bus</span><span class="s1">.control(s, 1); </span>// a single channel control bus on the default server</p>
+<p class="p10">{<span class="s2">Out</span>.kr(a, <span class="s2">LFSaw</span>.kr(0.1))}.play; <span class="s8">// run a test synth</span></p>
+<p class="p7"><span class="s1">a.get({</span><span class="s2">arg</span><span class="s1"> val; val.postln}); </span>//ask for the bus' value from the language</p>
+<p class="p9"><br></p>
+<p class="p7">// If you look inside the source of the Bus class, you'll see that the .get method uses an OSCresponder:</p>
+<p class="p13"><span class="Apple-tab-span">	</span>get { <span class="s2">arg</span> action;<span class="Apple-converted-space"> </span></p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>action = action ? { <span class="s2">|vals|</span> <span class="s4">"Bus % index: % values: %.\n"</span>.postf(rate, index, vals); };</p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">OSCpathResponder</span>(server.addr,[<span class="s3">'/c_set'</span>,index], { <span class="s2">arg</span> time, r, msg;</p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>action.value(msg.at(2)); r.remove }).add;</p>
+<p class="p13"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>server.listSendMsg([<span class="s4">"/c_get"</span>,index]);</p>
+<p class="p7">// Note that there is an inherent latency involved in this process, as sclang asks scsynth for a value and then scsynth responds.</p>
+<p class="p9"><br></p>
+</body>
+</html>

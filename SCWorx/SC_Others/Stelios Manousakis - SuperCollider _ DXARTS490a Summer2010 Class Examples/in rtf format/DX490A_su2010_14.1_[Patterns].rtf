@@ -1,0 +1,796 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 LucidaGrande;
+}
+{\colortbl;\red255\green255\blue255;\red168\green34\blue14;\red0\green24\blue232;\red0\green19\blue187;
+\red96\green96\blue96;\red49\green111\blue17;\red0\green26\blue249;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid0\'02\'05.;}{\levelnumbers\'01;}}{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 14.1:
+\b0 \
+
+\b 	Patterns
+\b0 \
+
+\fs28 		Contents:\
+			\'95 General / about\
+				- Pattern vs Routine\
+				- Some advantages and disadvantages of Patterns\
+			\'95 Some Pattern classes and other issues\
+				- Deterministic patterns\
+				- Randomness and probability\
+				- Math operations on patterns\
+				- Pattern nesting \
+				- Filter patterns\
+				- Pfunc\
+			\'95 Patterns in non-real time (NRT)\
+			\'95 Patterns in real time (RT)\
+				- Event\
+				- Pbind and EventStreams\
+				- Using your own SynthDefs \
+				- Pchain\
+				- Polyphony\
+				- Bonus: Envs as Patterns\
+			\'95 Additional Pattern quarks\
+			\'95\'a0More references\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \
+\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\
+
+\b \cf2 // ================= PATTERNS =================
+\b0 \
+// (Some of the content below has been compiled and/or rephrased from James Harkins' detailed Practical (and lengthy) Guide to Patterns, included with SC: {\field{\*\fldinst{HYPERLINK "file:///Applications/SuperCollider/Help/Streams-Patterns-Events/A%20Practical%20Guide/PG_01_Introduction.html"}}{\fldrslt \cf3 \ul \ulc3 PG_01_Introduction}}. This long and well written tutorial is a 
+\i \cf2 must read 
+\i0 \cf2 if you intend to use Patterns...\
+\cf0 \
+\
+\
+\
+
+\b \cf2 // ====== GENERAL / ABOUT ======
+\b0 \
+// You can think of Patterns as the language-side equivalent of Demand UGens, which we saw a few classes ago (Class10.1).\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 // Patterns allow you to create multiple streams from a single specification - kind of like a mold for streams: whereas Patterns define behavior, streams execute it. Patterns usually have compound names, starting with the letter 'P' and then a discription of their functionality. As they are but molds, they only work once placed into a Stream: you have to send them the 
+\b .asStream
+\b0  or 
+\b .embedInStream
+\b0  message, otherwise they will NOT work. \
+\cf0 \
+\cf2 // Here is how you can get multiple streams from one Pattern:\
+\cf0 (\
+\pard\pardeftab560\ql\qnatural
+\cf4 var\cf0  a, b, c;\
+a = \cf4 Prand\cf0 ([0, 1, 2], \cf4 inf\cf0 );\
+b = a.asStream;	\
+c = a.asStream;\
+b.nextN(10).postln;\
+c.nextN(10);\
+)\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Pattern vs Routine --
+\b0 \
+\cf0 \
+\cf2 // Patterns are high-level representations of computational tasks; they can be convenient to use, but at the same time confusing as to what exactly they do, hiding their functionality behind a magic veil. With patterns, one writes the result (what is supposed to happen) rather than the process (how to accomplish something).\
+// Patterns can generate any kind of object, but are most commonly used for creating sequences of numbers, and most people use them for real-time processes, taking advantage of their 'lazy' implementation (they produce a value only when you ask them to).\
+// Overall, patterns are compact and very good at iterating through data, but cannot really have the internal complexity, nor the customizability of Routines and Tasks. \
+\cf0 \
+\cf2 // Here is an example of a simple counter with a Routine:\
+\cf0 (\
+r = \cf4 Routine\cf0  \{\cf4 \
+\cf0 		\cf4 inf\cf0 .do\{\cf4 |i|\cf0 \
+			i = i + 1;\
+			i.yield\};\
+	\};\
+)\
+r.next;\
+r.next;\
+\cf2 // or, let's just get the first ten elements together:\
+\cf0 r.reset; \cf2 // reset from before\
+\cf0 r.nextN(10);\
+\cf2 // The above is same as this:\
+\cf0 r.reset;\
+10.collect(\{r.next\})\
+	\
+\cf2 // or shorter:\
+\cf0 (\
+r = \cf4 Routine\cf0  \{\cf4 \
+\cf0 		(0..).do\{\cf4 |i|\cf0 \
+			i.yield\};\
+\};\
+)\
+r.nextN(10);\
+\
+\cf2 // The same process can be simply written as a Pseries Pattern like this:\
+\cf0 p = \cf4 Pseries\cf0 (start: 0, step: 1, length: \cf4 inf\cf0 ).asStream;\
+p.nextN(10);\
+\cf2 // or simply:\
+\cf0 p = \cf4 Pseries\cf0 ().asStream;\
+p.nextN(10);\
+\
+\
+\
+
+\b \cf2 // ------ Some advantages and disadvantages of Patterns --
+\b0 \
+/* Pros\
+- compact\
+- no need to debug internal functionality (as opposed to a Routine you create yourself)\
+- no need to decipher how it works once you know what it does\
+- there is a lot of them\
+- great for pattern-based music\
+*/\
+/* Cons\
+- more new stuff to learn - and it's a lot of it!\
+- if there is not a Pattern that does what you want, you'll either have to combine several patterns, or write your own with a Proutine, which practically means having to go back to Routines...\
+- fairly static, can't change too much in real-time\
+*/\
+\cf0 \
+\
+\
+\
+
+\b \cf2 // ====== SOME PATTERN CLASSES AND OTHER ISSUES ======
+\b0 \
+\cf0 \
+\cf2 // As mentioned above, Patterns are in many aspects a parallel to Demand UGens, something that becomes also obvious with the naming and functionality of several Pattern classes. Some non-exhaustive examples follow:\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Deterministic patterns --
+\b0 \
+\cf0 \
+\cf2 // \'95 
+\b Pseries(start, step, length):
+\b0  Arithmetic series (addition).\
+\cf0 p = \cf4 Pseries\cf0 (0, 1, 8);\
+p.asStream.nextN(10);\
+\cf2 // You can call the entire pattern until it runs out of values\
+\cf0 p.asStream.all\
+\
+\cf2 // \'95 
+\b Pgeom(start, grow, length):
+\b0  Geometric series (multiplication).\
+\cf0 p = \cf4 Pgeom\cf0 (1, 1.1, 9);\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pseq(list, repeats, offset):
+\b0  Play through the entire list 'repeats' times. Like list.do.\
+// loop through an array, n times:\
+\cf0 p = \cf4 Pseq\cf0 ([0, 1, 2, 3], \cf4 inf\cf0 )	\cf2 // repeat infinite times\
+\cf0 p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pser(list, repeats, offset):
+\b0  Play through the list as many times as needed, but output only 'repeats' items.\
+\cf0 p = \cf4 Pser\cf0 ([0, 1, 2, 3], 6, 2)\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95\'a0
+\b Pslide(list, repeats, len, step, start, wrapAtEnd):
+\b0  Play overlapping segments from the list.\
+\cf0 p = \cf4 Pslide\cf0 ([1, 2, 3, 4, 5], 6, 3, 1, 0);\
+p.asStream.nextN(10);\
+\
+\
+\
+
+\b \cf2 // ------ Randomness and probability --
+\b0 \
+\cf0 \
+\cf2 // Random choice from a list of values:\
+// \'95 
+\b Prand(list, repeats):
+\b0  Choose items from the list randomly (same as list.choose)\
+\cf0 p = \cf4 Prand\cf0 ([0, 1, 2, 3], \cf4 inf\cf0 );	\cf2 // repeat infinite times\
+\cf0 p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pxrand(list, repeats):
+\b0  Choose randomly, but never repeat the same item twice\
+\cf0 p = \cf4 Pxrand\cf0 ([0, 1, 2, 3], \cf4 inf\cf0 )	\cf2 // repeat infinite times\
+\cf0 p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pwrand(list, weights, repeats):
+\b0  Choose randomly by weighted probabilities (like list.wchoose(weights))\
+\cf0 p = \cf4 Pwrand\cf0 ([0, 1, 2, 3], [5, 1, 1, 3].normalizeSum, \cf4 inf\cf0 )	\cf2 // weights must sum-up to 1\cf0 \
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pshuf(list, repeats):
+\b0  Shuffle the list in random order, and use the same random order 'repeats' times. Like list.scramble\
+\cf0 p = \cf4 Pshuf\cf0 ([0, 1, 2, 3], 2);	\
+p.asStream.nextN(10);\
+\
+\
+\cf2 // Random number generators:\
+// \'95\'a0
+\b Pwhite(lo, hi, length):
+\b0  Random numbers, equal distribution ("white noise"). Like rrand(lo, hi)\
+\cf0 p = \cf4 Pwhite\cf0 (0, 1.0, 6);	\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pbrown(lo, hi, step, length):
+\b0  Brownian motion, arithmetic scale (addition)\
+\cf0 p = \cf4 Pbrown\cf0 (0, 1.0, 0.1, 6);	\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Plprand(lo, hi, length):
+\b0  Returns the lesser of two equal-distribution random numbers.\
+\cf0 p = \cf4 Plprand\cf0 (0, 1.0, 6);	\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pmeanrand(lo, hi, length):
+\b0  Returns the average of two equal-distribution random numbers, i.e., (x +  y) / 2.\
+\cf0 p = \cf4 Pmeanrand\cf0 (0, 1.0, 6);	\
+p.asStream.nextN(10);\
+\
+\cf2 // \'95 
+\b Pbeta(lo, hi, prob1, prob2, length):
+\b0  Beta distribution, where prob1 = 
+\f2 \cf2 \uc0\u945 
+\f0 \cf2  (alpha) and prob2 = 
+\f2 \cf2 \uc0\u946 
+\f0 \cf2  (beta).\
+\cf0 p = \cf4 Pbeta\cf0 (0, 1.0, 0.1, 0.9, 6);	\
+p.asStream.nextN(10);\
+\
+\pard\tx220\tx720\pardeftab560\li720\fi-720\ql\qnatural
+\ls1\ilvl0\cf2 {\listtext	\'95	}// \'95 
+\b Ppoisson(mean, length):
+\b0  Poisson distribution.\
+\pard\pardeftab560\ql\qnatural
+\cf0 p = \cf4 Ppoisson\cf0 (4.0, 6);	\
+p.asStream.nextN(10);\
+\
+\cf2 // Random patterns can be seeded with 
+\f1\b\fs24 \cf2 Pseed(seed, pattern)
+\f0\b0\fs28 \cf2 \
+\cf0 p = \cf4 Pseed\cf0 (23, \cf4 Plprand\cf0 (0, 1.0, 6));	\
+p.asStream.nextN(10);\
+\
+\
+\
+
+\b \cf2 // ------ Math operations on patterns --
+\b0 \
+// You can use math operation and conversions that you use with Arrays and SimpleNumbers in streams\
+\cf0 \
+\cf2 // Simple math\
+\cf0 p = \cf4 Pseries\cf0 (0, 1, 8) * 100;\
+p.asStream.nextN(10);\
+\
+\cf2 // Can also do arrayed math\
+\cf0 p = \cf4 Pseries\cf0 (0, 1, 8) * [10, 100];\
+p.asStream.nextN(10);\
+\
+\cf2 // and conversion methods\
+\cf0 p = \cf4 Pseq\cf0 ([57, 58, 59, 69].midicps, \cf4 inf\cf0 )	\cf2 // this is infinite times\cf0 \
+p.asStream.nextN(10);\
+\
+\
+\
+
+\b \cf2 // ------ Pattern nesting --
+\b0 \
+\cf0 \
+\cf2 // Again, similarly to Demand UGens, you can nest patterns within patterns within patterns, etc, as arguments, creating structures of increasing complexity. \
+\cf0 (\
+p = \cf4 Pseq\cf0 (\
+		[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \cf2 // steps 1 - 10; steps 1-5 are the same as 6-10\
+\cf0 		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])],\cf4 inf\cf0 ); \cf2 // step 13 is random\cf0 \
+p.asStream.nextN(26);\
+)\
+\
+\
+\
+
+\b \cf2 // ------ Filter patterns --
+\b0 \
+\cf0 \
+\cf2 // There are patterns whose job is to modify the output of other patterns - essentially acting as filters. For example:\
+\cf0 \
+\cf2 // \'95 
+\b Pn(pattern, repeats):
+\b0  Embeds the source pattern 'repeats' times: simple repetition. This also works on single values: Pn(1, 5) outputs the number 1 5 times.\
+\cf0 p = \cf4 Pn\cf0 (\cf4 Pseq\cf0 ([1, 2, 3], 1), 4);	\cf2 // repeat pattern four times\
+\cf0 p.asStream.nextN(15)\
+\
+\cf2 // \'95 
+\b Pstutter(n, pattern):
+\b0  'n' and 'pattern' are both patterns. Each value from 'pattern' is repeated 'n' times. If 'n' is a pattern, each value can be repeated a different number of times.\
+\cf0 p = \cf4 Pstutter\cf0 (3, \cf4 Pseq\cf0 ([1, 2, 3], 1));	\
+p.asStream.nextN(10)\
+\
+\cf2 // There is quite a few more, but most have to do with timing and creating parallel streams (more on that later)\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Pfunc --
+\b0 \
+\cf0 \
+\cf2 // 
+\b Pfunc(nextFunc, resetFunc)
+\b0 , is a Pattern whose function you can define yourself. It also can contain a function to be evaluated on reset. \
+// There is also Pfuncn (same, but stops after 'repeats' times instead of providing a reset function) and Proutine.\
+\cf0 p = \cf4 Pfunc\cf0 (\{rrand(0, 1.0)\}, \{\cf5 "reset"\cf0 .postln\})\
+b = p.asStream; \cf2 // turn the stream into a variable, so that we can reset it\
+\cf0 b.nextN(10)\
+b.reset\
+b.next\
+\
+\cf2 // Something  a bit more complex\
+\cf0 (\
+i = 1;\
+p = \cf4 Pfunc\cf0 (\
+	\{\cf2 // the function\
+\cf0 		i = i * rrand(0.1, 10);\
+		(i > 10).if (\{b.reset\}); \cf2 // reset the stream if 'i' goes above 10\
+\cf0 		i \cf2 // function returns 'i' \
+\cf0 	\},\
+	\{\cf2 // the reset function\
+\cf0 		i = 0.01\
+		\}\
+	);\
+)\
+b = p.asStream; \cf2 // turn the stream into a variable, so that we can reset it\
+\cf0 b.nextN(30)\
+b.reset\
+b.next\
+\
+\
+\
+\
+
+\b \cf2 // ====== PATTERNS IN NON-REAL TIME (NRT) ======
+\b0 \
+// This is definitely not the most common way to use patterns, but they can be quite effective as score generators - and this is a good way to view their functionality with a work paradigm that you are familiar with from DX461/2/3.\
+\cf0  \
+\cf2 // Here is a slightly modified version of a quick-and-dirty example by Josh on how to use patterns to populate a CtkScore:\
+\cf0 (\
+\pard\pardeftab560\ql\qnatural
+\cf4 var\cf0  score, note, pitch, dur, now, thisDur;\
+score = \cf4 CtkScore\cf0 .new;\
+note = \cf4 CtkSynthDef\cf0 (\cf6 \\test\cf0 , \{\cf4 arg\cf0  freq, dur;\
+	\cf4 var\cf0  env;\
+	env = \cf4 EnvGen\cf0 .kr(\cf4 Env\cf0 ([0, 1, 0], [0.05, dur-0.05], [2, -2]));\
+	\cf4 Out\cf0 .ar(0, \cf4 SinOsc\cf0 .ar(freq, 0, 0.1 * env))\
+\});\
+\
+pitch = \cf4 Pseq\cf0 ([\cf6 \\a4\cf0 , \cf6 \\cs5\cf0 , \cf6 \\e5\cf0 , \cf6 \\c5\cf0 , \cf6 \\a4\cf0 , \cf6 \\e4\cf0 , \cf6 \\gs4\cf0 ], \cf4 inf\cf0 ).asStream;\
+dur = \cf4 Pseq\cf0 (2/[4, 8, 8, 4, 4, 8], \cf4 inf\cf0 ).asStream;\
+now = 0;\
+25.do(\{\
+	thisDur = dur.next;\
+	score.add(note.new(now, thisDur).freq_(pitch.next.hertz).dur_(thisDur));\
+	now = now + (thisDur * 0.5)\
+\});\
+\
+score.play;\
+)\
+ \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== PATTERNS IN REAL TIME ======
+\b0 \
+\cf0 \
+\cf2 // Now, for the more standard use of patterns: real-time\
+// Similarily to Tasks and Routines, patterns can also be played, paused, resumed and stopped, with the .play, .pause, .resume and .stop messages, in which case they TempoClock to send control messages to the server.\
+\cf0 \
+\cf2 // Before going further on with playing patterns in real time, we need to talk a bit about Events, to understand better how Patterns actually work.\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Event --
+\b0 \
+// An {\field{\*\fldinst{HYPERLINK "SC://Event"}}{\fldrslt \cf3 \ul \ulc3 Event}} is an Environment specifying an action to be taken when a 
+\b .play
+\b0  message has been received. As a Dictionary subclass it typically consists of a collection of key/value pairs which determine what actually happens when the event is .played.\
+// Empty parentheses create events, making them quite useful as name-space storage: \
+\cf0 a = ()\
+a.class\
+\
+\cf2 // The default class method of Event provides a 
+\b defaultParentEvent
+\b0 , which - to make a long story short - is mapped to the default SynthDef, allowing you to set its arguments and play it:\
+\cf0 ().play ; 	\cf2 // an instance of the default synth using the default argument settings\
+// now, set some parameters:\
+\cf0 (freq: 555, pan: -1).play; \cf2 // 555Hz, panned left\cf0 \
+\cf2 // You can change the SynthDef used by changing the key named \\instrument:\
+// Let's pick a new SynthDef first:\
+\cf0 a = (instrument: \cf6 \\sine\cf0 , freq: 333).play; \cf2 // this is a SynthDef we've used several times in this class, if it's not there, don't worry, we'll see more examples further on\
+\cf0 a.free\
+\
+\cf2 // Event contains quite a few different keys mapped to the same parameters just with a few conversions, and you'll see those used by Patterns quite frequently. \
+\cf0 a = (instrument: \cf6 \\sine\cf0 , midinote: 60, amp: -12.dbamp).play\
+a.free\
+\
+\cf2 // Look at the bottom part of the {\field{\*\fldinst{HYPERLINK "SC://Event"}}{\fldrslt \cf3 \ul \ulc3 Event}} helpfile for more key jargon.\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Pbind and EventStreams --
+\b0 \
+\cf0 \
+\cf2 // In order for patterns to work in RT (real-time) every .next value in the stream that they generate needs to be passed to a key of an Event, in its turn passing it to the SynthDef. This would mean defining anew an event every time we get a value from a pattern, which would be quite a hassle. To make this more efficient, there is a shortcut class, {\field{\*\fldinst{HYPERLINK "SC://Pbind"}}{\fldrslt \cf3 \ul \ulc3 Pbind}}, which is used for playing patterns in real time. What Pbind actually does, is combining several pattern streams into a single event stream. Let's have  a look at an example, and make some sense out of it (taken from {\field{\*\fldinst{HYPERLINK "file:///-%20DXARTS%202009-2010/Applications/SuperCollider/Help/Streams-Patterns-Events/A%20Practical%20Guide/PG_03_What_Is_Pbind.html"}}{\fldrslt \cf3 \ul \ulc3 PG_03_What_Is_Pbind}}, which explains things in more detail):\
+\cf0 \
+(\
+p = \cf4 Pbind\cf0 (\
+	\cf6 \\degree\cf0 , \cf4 Pseq\cf0 (#[0, 0, 4, 4, 5, 5, 4], 1),\
+	\cf6 \\dur\cf0 , \cf4 Pseq\cf0 (#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)\
+).asStream;	\cf2 // remember, you have to make a stream out of the pattern before using it\
+\cf0 )\
+\
+p.next(\cf4 Event\cf0 .new);		\cf2 // shorter: p.next(())\
+\cf0 \
+\cf2 // Here is what this outputs:\
+\cf0 ( \cf6 'degree'\cf0 : 0, \cf6 'dur'\cf0 : 0.5 )\
+( \cf6 'degree'\cf0 : 0, \cf6 'dur'\cf0 : 0.5 )\
+( \cf6 'degree'\cf0 : 4, \cf6 'dur'\cf0 : 0.5 )\
+( \cf6 'degree'\cf0 : 4, \cf6 'dur'\cf0 : 0.5 )\
+\
+\cf2 // As you see, Pbind essentially re-maps the keys to new values with every .next\
+\cf0 \
+\
+\cf2 // Let's do the same thing using the .play method to make some sound using the TempoClock:\
+\cf0 (\
+p = \cf4 Pbind\cf0 (\
+	\cf6 \\degree\cf0 , \cf4 Pseq\cf0 (#[0, 0, 4, 4, 5, 5, 4], 1),\
+	\cf6 \\dur\cf0 , \cf4 Pseq\cf0 (#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)\
+).play;	\cf2 // and you'll notice that "an EventStreamPlayer" was posted on the post window instead of "a Routine", meaning that a few extra steps have been taken care of behind the scenes\
+\cf0 )\
+\
+\cf2 // Same thing, twice as fast:\
+\cf0 (\
+p = \cf4 Pbind\cf0 (\
+	\cf6 \\degree\cf0 , \cf4 Pseq\cf0 (#[0, 0, 4, 4, 5, 5, 4], 1),\
+	\cf6 \\dur\cf0 , \cf4 Pseq\cf0 (#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)\
+).play(\cf4 TempoClock\cf0 (2));	\cf2 // You can set the timing of the .play command in the same way as you do with Routines and Tasks\
+\cf0 )\
+\
+\
+\cf2 // Now, let's try a few more examples using Patterns in RT with Pbind; this time, using nested patterns to demonstrate how they can produce some quite interesting results (this is the same example as above when talking about nested patterns this time with sound:\
+\cf0 \
+(\
+\pard\pardeftab560\ql\qnatural
+\cf4 Pbind\cf0 (\cf4 \
+\pard\pardeftab560\ql\qnatural
+\cf0 	\cf6 \\freq\cf0 , \cf4 Pseq\cf0 (\cf6 \
+\cf0 		[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \cf2 // steps 1 - 10; steps 1-5 are the same as 6-10\
+\cf0 		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])],\cf4 inf\cf0 ) \cf2 // step 13 is random\cf0 \
+).play(\cf4 TempoClock\cf0 (3));\
+)\
+\
+\cf2 // Another example:\
+\cf0 (\
+\pard\pardeftab560\ql\qnatural
+\cf4 Pbind\cf0 (\cf4 \
+\pard\pardeftab560\ql\qnatural
+\cf0 	\cf6 \\freq\cf0 , \cf4 Pseq\cf0 ([\
+		\cf4 Prand\cf0 (\cf4 \
+\cf0 			\cf2 // steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition\
+\cf0 			[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \
+			\cf4 Pshuf\cf0 ([200, 150, 300, 250, 400], 2)]),\
+		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])],\cf4 inf\cf0 ) \cf2 // step 13 is random\cf0 \
+).play(\cf4 TempoClock\cf0 (3));\
+)\
+\
+\
+\cf2 // Yet another example, changing durations as well:\
+\cf0 (\
+\pard\pardeftab560\ql\qnatural
+\cf4 Pbind\cf0 (\cf4 \
+\pard\pardeftab560\ql\qnatural
+\cf0 	\cf6 \\freq\cf0 , \cf4 Pseq\cf0 ([\
+		\cf4 Prand\cf0 (\cf4 \
+\cf0 			\cf2 // steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition\
+\cf0 			[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \
+			\cf4 Pshuf\cf0 ([200, 150, 300, 250, 400], 2)]),\
+		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])],\cf4 inf\cf0 ), \cf2 // step 13 is random\cf0 \
+	\cf6 \\dur\cf0 , \cf4 Pseq\cf0 ([\
+			\cf4 Pseq\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),\
+			\cf4 Pshuf\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], \cf4 inf\cf0 )\
+).play(\cf4 TempoClock\cf0 (1.5));\
+)\
+\
+\
+\
+
+\b \cf2 // ------ Using your own SynthDefs --
+\b0 \
+// The examples above where using the 'default' SynthDef. But, as we saw with Event, you can use your own SynthDefs. There are a few guidelines that you need to follow:\
+/*\
+\'95 Use .store and .memStore or .add to save the Synth to the SynthDescLib, as this is where patterns will be looking. .load won't do the trick.\
+\'95 Use the same names that are set as the SynthDefs args as the Pbind keys to actually map a pattern to that argument. \
+	\\freq and \\dur only work above because the default synthdef has arguments named as such. \
+	(Although, as we saw above, Event does have some conversion tricks for 'midi-style' synthdefs, dealing with some conversions for frequency, amplitude and duration.)\
+\'95 Always have the synth release itself! (ex. with a doneAction in an EnvGen either of a fixed duration, or containing a release node). Patterns will not do that for you\
+*/\
+\cf0 \
+\cf2 // An example, using a nice Bass synth posted by Thor Magnusson in the sc-users list:\
+\cf0 (\
+\pard\pardeftab560\ql\qnatural
+\cf4 SynthDef\cf0 (\cf6 \\ixibass\cf0 , \{\cf4 arg\cf0  out=0, amp=0.3, t_trig=1, freq=100, rq=0.004;\
+	\cf4 var\cf0  env, signal;\
+	\cf4 var\cf0  rho, theta, b1, b2;\
+	b1 = 1.98 * 0.989999999 * cos(0.09);\
+	b2 = 0.998057.neg;\
+	signal = \cf4 SOS\cf0 .ar(\cf4 K2A\cf0 .ar(t_trig), 0.123, 0.0, 0.0, b1, b2);\
+	signal = \cf4 RHPF\cf0 .ar(signal, freq, rq) + \cf4 RHPF\cf0 .ar(signal, freq*0.5, rq);\
+	signal = \cf4 Decay2\cf0 .ar(signal, 0.4, 0.3, signal);\
+	\cf4 DetectSilence\cf0 .ar(signal, 0.01, doneAction:2);\
+	\cf4 Out\cf0 .ar(out, signal*(amp*0.45)!2);\
+\}).add;\
+)\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // now, play something:\
+\cf0 (\
+p = \cf4 Pbind\cf0 (\
+	\cf6 \\instrument\cf0 , \cf6 \\ixibass\cf0 , \cf6 \
+\cf0 	\cf6 \\freq\cf0 , \cf4 Pseq\cf0 ([\
+		\cf4 Prand\cf0 (\cf4 \
+\cf0 			\cf2 // steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition\
+\cf0 			[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \
+			\cf4 Pshuf\cf0 ([200, 150, 300, 250, 400], 2)]),\
+		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])], \cf4 inf\cf0 ), \cf2 // step 13 is random\cf0 \
+	\cf6 \\dur\cf0 , \cf4 Pseq\cf0 ([\
+			\cf4 Pseq\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),\
+			\cf4 Pshuf\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], \cf4 inf\cf0 ),\
+	\cf6 \\rq\cf0 , \cf4 Pseq\cf0 ([\
+			\cf4 Pbrown\cf0 (0.0001, 0.02, 7),\
+			\cf4 Plprand\cf0 (0.0001, 0.3, 7)], \cf4 inf\cf0 ),\
+	\cf6 \\amp\cf0 , \cf4 Pmeanrand\cf0 (0.2, 0.4, \cf4 inf\cf0 )\
+).play(\cf4 TempoClock\cf0 (1.5));\
+)\
+p.stop\
+\
+\cf2 // Also have a look at {\field{\*\fldinst{HYPERLINK "SC://Pmono"}}{\fldrslt \cf3 \ul \ulc3 Pmono}} and {\field{\*\fldinst{HYPERLINK "SC://PmonoArtic"}}{\fldrslt \cf3 \ul \ulc3 PmonoArtic}}, which are monophonic Pbind variants.\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Pchain --
+\b0 \
+// It can be very handy and more meaningful to split argument definitions into different sets of patterns, and then arbitrarily bind them together with Pbind, instead of defining everything within one block. \
+\cf0 \
+(\
+~mel = \cf4 Pbind\cf0 (\
+	\cf6 \\freq\cf0 , \cf4 Pseq\cf0 ([\
+		\cf4 Prand\cf0 (\cf4 \
+\cf0 			\cf2 // steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition\
+\cf0 			[\cf4 Pseq\cf0 ([200, 150, 300, 250, 200], 2), \
+			\cf4 Pshuf\cf0 ([200, 150, 300, 250, 400], 2)]),\
+		600, \cf2 // step 11, always the same\
+\cf0 		500, \cf2 // step 12, always the same\
+\cf0 		\cf4 Prand\cf0 ([125, 250, 500, 750, 1000])],\cf4 inf\cf0 )); \cf2 // step 13 is random\cf0 \
+\
+~mel2 = \cf4 Pbind\cf0 (\
+	\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([ \cf6 \
+\cf0 		\cf4 Plprand\cf0 (40, 80, 7),\
+		\cf4 Pbrown\cf0 (48, 72, 7)], \cf4 inf\cf0 ));\
+\
+~durs = \cf4 Pbind\cf0 ( \
+		\cf6 \\dur\cf0 , \cf4 Pseq\cf0 ([\
+			\cf4 Pseq\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),\
+			\cf4 Pshuf\cf0 ([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], \cf4 inf\cf0 ));\
+)\
+\
+\cf2 // use the first melody\
+\cf0 p = \cf4 Pchain\cf0 (~mel, ~durs).play(\cf4 TempoClock\cf0 (1.5));\
+p.stop\
+\
+\cf2 // or, use the second melody:\
+\cf0 p = \cf4 Pchain\cf0 (~mel2, ~durs).play(\cf4 TempoClock\cf0 (1.5));\
+p.stop\
+\
+\cf2 // It is also possible to swap Pbinds on the fly: see {\field{\*\fldinst{HYPERLINK "SC://PG_06c_Composition_of_Patterns"}}{\fldrslt \cf3 \ul \ulc3 PG_06c_Composition_of_Patterns}}\
+\cf0 \
+\
+
+\b \cf2 // ------ Polyphony --
+\b0 \
+// You can combine patterns into a single parallel stream creating polyphonic structures that can be started and stopped as a single unit
+\b . 
+\b0 There are a few different patterns to do that, with the most common one being Ppar.\
+\cf0 \
+\cf2 // Here is a polyphonic example from Josh Parmenter and Pete Moss; note that Ppars can be nested, similarily to other patterns:\
+\cf0 \
+(\
+\pard\pardeftab560\ql\qnatural
+\cf4 Ppar\cf0 ([\cf4 \
+\pard\pardeftab560\ql\qnatural
+\cf0 	\cf4 Pbind\cf0 (\cf4 \
+\cf0 		\cf6 \\dur\cf0 , \cf4 Prand\cf0 ([0.2, 0.4, 0.6], \cf4 inf\cf0 ), \
+		\cf6 \\midinote\cf0 , \cf4 Prand\cf0 ([72, 74, 76, 77, 79, 81], \cf4 inf\cf0 ),\
+		\cf6 \\db\cf0 , -26,\
+		\cf6 \\legato\cf0 , 1.1\
+	),\
+	\cf4 Pseq\cf0 ([\cf4 \
+\cf0 		\cf4 Pbind\cf0 (\cf4 \
+\cf0 			\cf6 \\dur\cf0 , 3.2,\
+			\cf6 \\freq\cf0 , \cf4 Pseq\cf0 ([\cf6 \\rest\cf0 ])),\
+		\cf4 Prand\cf0 ([\cf4 \
+\cf0 			\cf4 Ppar\cf0 ([\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.2, \
+					\cf6 \\pan\cf0 ,  0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([60, 64, 67, 64])),\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.4, \
+					\cf6 \\pan\cf0 , -0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([48, 43]))\
+			]),\
+			\cf4 Ppar\cf0 ([\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.2, \
+					\cf6 \\pan\cf0 ,  0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([62, 65, 69, 65])),\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.4, \
+					\cf6 \\pan\cf0 , -0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([50, 45]))\
+			]),\
+			\cf4 Ppar\cf0 ([\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.2, \
+					\cf6 \\pan\cf0 ,  0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([64, 67, 71, 67])),\
+				\cf4 Pbind\cf0 (\
+					\cf6 \\dur\cf0 , 0.4, \
+					\cf6 \\pan\cf0 , -0.5, \
+					\cf6 \\midinote\cf0 , \cf4 Pseq\cf0 ([52, 47]))\
+			])\
+		], 12)\
+	], \cf4 inf\cf0 )\
+], \cf4 inf\cf0 ).play(\cf4 TempoClock\cf0 (1));\
+)\
+\
+\cf2 // Also, have a look at an SC rendering of a classic, Kraftwerk's 'Spacelab' for the use of Ppar and patterns in general (this is included in the SC distribution):\
+\pard\pardeftab560\ql\qnatural
+\cf4 Document\cf0 .open(\cf5 "examples/pieces/spacelab.scd"\cf0 )\cf5 \
+\pard\pardeftab560\ql\qnatural
+\cf0 \
+\cf2 // For more, see: {\field{\*\fldinst{HYPERLINK "SC://PG_06d_Parallel_Patterns"}}{\fldrslt \cf3 \ul \ulc3 PG_06d_Parallel_Patterns}}\
+\cf0 \
+\
+\
+
+\b \cf2 // ------ Bonus: Envs as Patterns -- 
+\b0 \
+\cf0 \
+\cf2 // Finally, here' s a bonus for you:\
+// Env contains the .asStream method, so you can use it as a stream using the .next message. This is similar to the array-style indexing you are familiar with:\
+\cf0 e = \cf4 Env\cf0 ([0, 1, 1, 0], [1, 1, 1]);\
+e.at(2);		\cf2 // == 1\cf0 \
+e[2.5];		\cf2 // == 0.5\cf0 \
+\
+\cf2 // When Env is converted to a stream, it will return the value at the specified elapsed time\
+\cf0 (\
+r = fork \{\
+	e = \cf4 Env\cf0 ([0, 1, 1, 0], [1, 1, 1]).asStream;\
+	40.do\{\
+		e.next.postln;\
+		0.25.wait; \cf2 // elapsed time\
+\cf0 	\}\
+\}\
+)\
+\
+\cf2 // When done, the stream will keep polling the last value of the envelope. You can use the Pif class to make it either stop, or loop (see {\field{\*\fldinst{HYPERLINK "SC://PG_06b_Time_Based_Patterns"}}{\fldrslt \cf7 \ul \ulc7 PG_06b_Time_Based_Patterns}})\
+\cf0 \
+\cf2 // Here is a quick example from Harkins' tutorial, without getting too much into the details:\
+\cf0 (\
+p = \cf4 Pbind\cf0 (\
+	\cf6 \\degree\cf0 , \cf4 Pwhite\cf0 (-4, 11, \cf4 inf\cf0 ),\
+	\cf6 \\pan\cf0 , \cf4 Pn\cf0 (\cf4 Pif\cf0 (\cf4 Ptime\cf0 (\cf4 inf\cf0 ) <= 4.0, \cf4 Env\cf0 (#[-1, 1, -1], #[2, 2], \cf6 \\sin\cf0 )), \cf4 inf\cf0 ),\
+	\cf6 \\dur\cf0 , 0.125\
+).play;\
+)\
+\
+\
+\
+\
+
+\b \cf2 // ====== ADDITIONAL PATTERN QUARKS ======
+\b0 \
+// You may want to check out Harkins' 
+\i \cf2 ddwPatterns
+\i0 \cf2  quark, which contains some more pattern tools:\
+\pard\pardeftab560\ql\qnatural
+\cf4 Quarks\cf0 .install( \cf5 "ddwPatterns"\cf0 , checkoutIfNeeded: \cf4 false\cf0 )\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // Also, redFrik has a quark with a library of patterns acting as UGens, called 
+\i \cf2 UGenPatterns:
+\i0 \cf2 \
+\pard\pardeftab560\ql\qnatural
+\cf4 Quarks\cf0 .install( \cf5 "UGenPatterns"\cf0 , checkoutIfNeeded: \cf4 false\cf0 )\
+\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== MORE REFERENCES ======
+\b0 \
+\cf0 \
+
+\b \cf2 /*
+\b0 \
+Patterns are an entire world in SuperCollider. This was only meant as an introduction, and to ease the pain of delving into them, if you so wish. For more information look here:\
+\
+[{\field{\*\fldinst{HYPERLINK "SC://Pattern"}}{\fldrslt \cf3 \ul \ulc3 Pattern}}]\
+\pard\pardeftab560\ql\qnatural
+\cf2 \ul \ulc2 [{\field{\*\fldinst{HYPERLINK "file:///Applications/SuperCollider/Help/Streams-Patterns-Events/A%20Practical%20Guide/PG_01_Introduction.html"}}{\fldrslt \cf3 \ulc3 A Practical Guide to Patterns}}]\cf2 \ulnone  
+\b -  
+\b0 (James Harkins' tutorial)\
+[{\field{\*\fldinst{HYPERLINK "SC://Streams-Patterns-Events2"}}{\fldrslt \cf7 \ul \ulc7 Streams-Patterns-Events2}} - 7]
+\b   -  
+\b0 (a bit older tutorial on patterns)\
+[{\field{\*\fldinst{HYPERLINK "SC://Streams"}}{\fldrslt \cf3 \ul \ulc3 Streams}}] an overview of the whole Pattern and Stream system!\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 */
+\b0 \
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf0 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf0 \
+}

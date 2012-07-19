@@ -1,0 +1,403 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;\f2\fswiss\fcharset0 Helvetica;
+}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 12.1:
+\b0 \
+
+\b 	Graphic User Interfaces (GUI) in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95 General\
+			\'95 GUI Kits\
+			\'95 Basics\
+				- Window\
+				- decorators\
+				- Resizing\
+			\'95 Performing actions\
+				- Controlling a synth\
+			\'95 Scheduling\
+				- Controlled by a synth\
+			\'95 More references\
+			\'95 Useful Quarks for GUI\
+			\'95 Architecture: Model-View-Controller	\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ================= GRAPHIC USER INTERFACES IN SUPERCOLLIDER =================
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== GENERAL ======
+\b0 \cf3 \
+\
+\cf2 // SuperCollider is probably least famous for its GUI capabilities, but in all truth, it can be very powerful, allowing you to take advantage of its algorithmic functionality and language power to create some very good looking GUIs. Truth be told, it can take some lines of code to write GUIs... but the syntax is simple enough.\cf3 \
+\
+\cf2 // In Mac OS X, you can press shift+cmd+N to see what the available GUI widgets are. Just drag anything in the window, toggle edit, and try it out.In this way, you can actually drag and drop and then position GUI widgets as you like in a window, and then get an automatically generated code!\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== GUI Kits ======
+\b0 \cf3 \
+\
+\cf2 // You may remember from class 1 that there are different types of gui servers that one can use in SC: the standard 
+\b CocoaGUI
+\b0  for Mac OS X, and 
+\b SwingGUI
+\b0  (in Java; it is installed by default in Windows, but can also be used on Linux and OS X, although you will have to install it yourself); Swing OSC acts like a server, sending/receiving messages to/from sclang. There are specific subclasses for each GUI kit: the CocoaGUI kit uses the SC prefix (ex. SCWindow), and the Swing kit uses the JSC or J prefix (ex. JSCWindow, or JStethoscope). Luckily, you can write platform independent GUIs by using the classes without their prefix (ex. Window), which makes them work in any platform. For a table of all gui classes and their kit-dependent equivalents, see {\field{\*\fldinst{HYPERLINK "SC://GUI-Classes"}}{\fldrslt \cf2 \ul \ulc2 GUI-Classes}}.\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs24 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 // {\field{\*\fldinst{HYPERLINK "SC://GUI"}}{\fldrslt \cf2 \ul \ulc2 GUI}} is a class providing the means for writing platform-independent code, doing all the necessary translation from one scheme to the other. \cf3 \
+\cf2 // You can ask the class what schemes are available in your machine:\cf3 \
+\cf4 GUI\cf3 .schemes;\
+\
+\cf2 // Check which one you 're using at the moment:\cf3 \
+\cf4 GUI\cf3 .current\
+\
+\cf2 // You can switch the GUI kit by calling the appropriate clas method:\cf3 \
+\cf4 GUI\cf3 .cocoa;	\cf2 // use cocoa in subsequent GUI creation procedures\cf3 \
+\cf4 GUI\cf3 .swing;	\cf2 // use swing in subsequent GUI creation procedures NOTE: If you do not have SwingOSC installed, you get a warning only, and do not switch; so you cannot accidentally disable your (mac) gui system.\cf3 \
+\
+\cf2 // For more on gui kits, see the {\field{\*\fldinst{HYPERLINK "SC://GUI"}}{\fldrslt \cf2 \ul \ulc2 GUI}} helpfile\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== BASICS ======
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs18 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f0\b\fs28 \cf2 // ------ Window --
+\b0 \cf3 \
+(\
+\cf2 //make a 300x100 window at 400x50 screen co-ordinates. \cf3 \
+\cf2 /* Coordinates are and instance of Rect, calculated as:\
+	origin from left of screen\
+	origin from bottom of screen\
+	size in x (width)\
+	size in y (height)\
+	*/\cf3 \
+w = \cf4 Window\cf3 (\cf5 "Test window"\cf3 , \cf4 Rect\cf3 (400, 50, 300, 100)); \cf2 // use Window for cross-platform compatibility\cf3 \
+w.front; \cf2 //this line is need to make the window actually appear\cf3 \
+)\
+\
+(\
+\cf2 // you could also use screenbounds to position something according to the size of the screen\cf3 \
+w = \cf4 Window\cf3 (\cf5 "Test window"\cf3 , \cf4 Rect\cf3 (\cf4 Window\cf3 .screenBounds.width-300, \cf4 Window\cf3 .screenBounds.height-500, 300, 100)); \cf2 // use Window for cross-kit compatibility\cf3 \
+w.front; \cf2 //this line is need to make the window actually appear\cf3 \
+)\
+\
+\
+\cf2 // You can add any GUI element to the window:\cf3 \
+(\
+w = \cf4 Window\cf3 (\cf5 "Test window"\cf3 , \cf4 Rect\cf3 (100, 500, 300, 300)); \
+\cf4 Slider\cf3 (w, \cf4 Rect\cf3 (20, 60, 250, 20));\
+\cf4 Button\cf3 (w, \cf4 Rect\cf3 (20, 120, 150, 20))\
+	.states_([[\cf5 "a button"\cf3 ], [\cf5 "yes, still a button"\cf3 ], [\cf5 "3rd state"\cf3 ]]);\
+w.front; \
+)\
+\
+
+\b \cf2 // ------ decorators --
+\b0 \cf3 \
+\cf2 // Instead of manually defining where UI elements should be positioned inside a window, you could also use {\field{\*\fldinst{HYPERLINK "SC://FlowLayout"}}{\fldrslt \cf2 \ul \ulc2 FlowLayout}} to position things for you:\cf3 \
+\
+(\
+	\cf2 // Window returns the window class for the current kit\cf3 \
+	w = \cf4 Window\cf3 ( \cf5 "my name is..."\cf3 , \cf4 Rect\cf3 ( 128, 64, 340, 360 ));\
+\
+	w.view.decorator = \cf4 FlowLayout\cf3 ( w.view.bounds ); \cf2 // comment this out for no decorator\cf3 \
+	\cf2 // w.addFlowLayout // you can use this instead of the above line for brevity.\cf3 \
+	\
+	w.view.background = \cf4 Color\cf3 ( 0.6, 0.8, 0.8 );\
+\
+	32.do(\{ \cf4 arg\cf3  i;\
+		\cf2 // Here Button returns the button class for the current kit\cf3 \
+		b = \cf4 Button\cf3 ( w, \cf4 Rect\cf3 ( rrand( 20, 300 ), rrand( 20, 300 ), 75, 24 ));\
+		b.states = [[ \cf5 "Start "\cf3  ++ i, \cf4 Color\cf3 .black, \cf4 Color\cf3 .rand ],\
+				[ \cf5 "Stop "\cf3  ++ i, \cf4 Color\cf3 .white, \cf4 Color\cf3 .red ]];\
+	\});\
+\
+	w.front;\
+)\
+\cf2 // Try uncommenting the FlowLayout line - what a mess!\cf3 \
+\
+\cf2 // Nevertheless, doing this algorithmically will always be more precise and versatile\cf3 \
+\
+(\
+	\cf4 var\cf3  window, size, offset, btnAmt, mod;\
+	size = 75;\
+	offset = 5;\
+	btnAmt = 32;\
+	mod = 4;\
+\
+	window = \cf4 Window\cf3 ( \cf5 "Algorithmically created"\cf3 , \cf4 Rect\cf3 ( 128, 64, (size * mod) + offset, (size * btnAmt) / mod + offset ));\
+\
+	window.view.background = \cf4 Color\cf3 ( 0, 0.3, 0.2 );\
+\
+	\cf2 // use an array to be able to access the elements afterwards\cf3 \
+	~btnArray = \cf4 Array\cf3 .fill(btnAmt, \{\cf4 arg\cf3  i;\
+		\cf2 // Here Button returns the button class for the current kit\cf3 \
+		\cf4 Button\cf3 ( window, \cf4 Rect\cf3 ((i%mod) * size + offset, i.div(mod) * size + offset, size - 5, size - 5))\
+		.states = [[ \cf5 "Start "\cf3  ++ i, \cf4 Color\cf3 .black, \cf4 Color\cf3 .rand ],\
+				[ \cf5 "Stop "\cf3  ++ i, \cf4 Color\cf3 .white, \cf4 Color\cf3 .red ]];\
+	\});\
+	window.front;\
+)\
+\
+\cf2 // Change font on 0-15 buttons (you will need to refocus on the Window to see the effect):\cf3 \
+(\
+16.do(\{ \cf4 |i|\cf3 \
+	~btnArray[i].font_(\cf4 Font\cf3 (\cf5 "Monaco"\cf3 , 12))\
+	\})\
+)\
+\
+\
+\
+
+\b \cf2 // ------ resizing --
+\b0 \cf3 \
+\cf2 // For resizing GUIs when resizing their window, look at {\field{\*\fldinst{HYPERLINK "SC://resize"}}{\fldrslt \cf2 \ul \ulc2 resize}}\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== PERFORMING ACTIONS ======
+\b0 \cf3 \
+\cf2 // All GUIs have an action method that may contain a function to be evaluated when a user interacts with the GUI\cf3 \
+\
+(\
+	w = \cf4 Window\cf3  (\cf5 "A Slider"\cf3 );\
+	a = \cf4 Slider\cf3  (w, \cf4 Rect\cf3 (40, 10, 300, 30));\
+	a.action=\{ \cf4 arg\cf3  sl; sl.value.postln \}; \cf2 // set the action of the slider\cf3 \
+	w.front\
+);\
+\cf2 // add and remove actions on the fly\cf3 \
+	f = (\{ \cf4 |sl|\cf3  w.view.background = \cf4 Color\cf3 .green(sl.value) \});\
+	a.addAction(f);\
+	a.removeAction(f);\
+\cf2 // you can remove all actions simultaneously\cf3 \
+	a.action = \cf4 nil\cf3 ;\
+\
+\
+\
+
+\b \cf2 // ------ Controlling a synth --
+\b0 \cf3 \
+\
+s.boot;\
+\cf2 // The synth\cf3 \
+(\
+g = \cf4 CtkSynthDef\cf3 (\cf6 \\gray\cf3 , \{\cf4 arg\cf3  outBus = 0, freq = 400, amp = 1, gate = 1;\
+	\cf4 var\cf3  env, src, fdbin, fdbout;\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 1, 0], [0.05, 0.95], \cf6 \\sin\cf3 , 1), gate, levelScale: amp, doneAction: 2);\
+	src = \cf4 LPF\cf3 .ar(\cf4 GrayNoise\cf3 .ar(amp), freq, env);\
+	\cf4 Out\cf3 .ar(outBus, \cf4 Pan2\cf3 .ar(src, \cf4 Rand\cf3 .new(-0.7, 0.7)));\
+\});\
+)\
+h = g.new().play\
+h.release\
+\
+\
+\cf2 // The GUI\cf3 \
+(\
+\cf4 var\cf3  spec;\
+w = \cf4 Window\cf3  (\cf5 "GrayNoise"\cf3 , \cf4 Rect\cf3 ( 128, 64, 310, 80 ));\
+w.view.background_(\cf4 Color\cf3 .red(0.4));\
+w.view.decorator = \cf4 FlowLayout\cf3 ( w.view.bounds );\
+b = \cf4 Button\cf3 ( w, \cf4 Rect\cf3 ( 10, 10, 125, 24 ))\
+	.states_([[ \cf5 "Start "\cf3 , \cf4 Color\cf3 .red, \cf4 Color\cf3 .black ],\
+			[ \cf5 "Stop "\cf3 , \cf4 Color\cf3 .white, \cf4 Color\cf3 .red ]])\
+	.mouseDownAction_(\{ \cf4 |val|\cf3 \
+		val.value.postln;\
+		c = case\
+			\{val.value == 0\}	\{h = g.new.play\}\
+			\{val.value == 1\}	\{h.release\}\
+			\});\
+c = \cf4 Slider\cf3  (w, \cf4 Rect\cf3 (40, 10, 300, 30));\
+	c.background_(\cf4 Gradient\cf3 (\cf4 Color\cf3 .red(0.1), \cf4 Color\cf3 .red(0.8)));\
+	spec = \cf4 ControlSpec\cf3 (20, 20000, \cf6 'exp'\cf3 , 10);  \cf2 // args: min, max, curve, stepsize\cf3 \
+	c.action_(\{\cf4 |sl|\cf3  \
+		h.freq_(spec.map(sl.value));\
+		\}); \cf2 // set the action of the slider\cf3 \
+w.front\
+);\
+\
+\
+\
+\
+
+\b \cf2 // ====== SCHEDULING ======
+\b0 \cf3 \
+\cf2 // You may remember from the class on timing (3.1) that GUI runs on a lower priority thread in SC to save up resources for more important processes. Therefore, if you want to control a GUI with a timed process you need to use the AppClock or .defer the function.\cf3 \
+\
+\cf2 // don't try this if you 're epileptic!\cf3 \
+(\
+\cf4 var\cf3  w, r;\
+w = \cf4 Window\cf3 .new(\cf5 "trem"\cf3 , \cf4 Rect\cf3 (0, 0, \cf4 Window\cf3 .screenBounds.width, \cf4 Window\cf3 .screenBounds.height));\
+w.front;\
+r = \cf4 Routine\cf3 (\{ \cf4 arg\cf3  time;\
+		200.do(\{ \cf4 arg\cf3  i;\
+			0.01.yield;			\
+			\{\cf2 // must enclose this in a defered loop!\cf3 \
+				w.view.background_(\cf4 Color\cf3 .rand);\
+			\}.defer; \cf2 // Notice the .defer here - otherwise it won't work!\cf3 \
+		\});\
+		1.yield;\
+		w.close;\
+\});\
+\cf4 SystemClock\cf3 .play(r);\
+)\
+\
+\
+\
+
+\b \cf2 // ------ Controlled by a synth --
+\b0 \cf3 \
+\
+\cf2 // You can use a function to poll values, like a Routine, or an OSCResponder to get data back from the server. In either case, you need to defer the routine or responder, as they will be driving a GUI\cf3 \
+\
+(\
+w = \cf4 Window\cf3 (\cf5 "Frequency Monitor"\cf3 , \cf4 Rect\cf3 (200, \cf4 Window\cf3 .screenBounds.height-200,300,150)).front;\
+w.view.background_(\cf4 Color\cf3 .grey(0.9));\
+	\
+a = \cf4 StaticText\cf3 (w, \cf4 Rect\cf3 (45, 10, 200, 20)).background_(\cf4 Color\cf3 .rand);\
+	\
+a.string = \cf5 "Current Frequency"\cf3 ;\
+	\
+\cf4 Button\cf3 .new(w, \cf4 Rect\cf3 (45, 70, 200, 20)).states_([[\cf5 "close"\cf3 ,\cf4 Color\cf3 .black,\cf4 Color\cf3 .rand]]).action_(\{w.close\});\
+	\
+s.waitForBoot(\{\
+	\
+	b = \cf4 Bus\cf3 .new(\cf6 \\control\cf3 ,0,1); \cf2 // a bus, used to write values in it from scsynth and then get them back to sclang\cf3 \
+		\
+	q = \cf4 SynthDef\cf3 (\cf6 \\Docs_FreqMonitor\cf3 , \{\cf4 var\cf3  freq,snd;\
+		freq=\cf4 LFNoise0\cf3 .ar(2, 400, 650);\
+		snd=\cf4 SinOsc\cf3 .ar(freq,0,0.2);\
+		\cf4 Out\cf3 .ar(0,snd);\
+		\cf4 Out\cf3 .kr(b.index,freq); \cf2 // output the frequency to a control bus\cf3 \
+	\}).play;\
+				\
+r= \cf4 Routine\cf3 \{\
+	\{			\cf2 // Set the value of the StaticText to the value in the control bus.\cf3 \
+				\cf2 // Setting GUI values is asynchronous, so you must use .defer in the system clock.\cf3 \
+				\cf2 // Also you must check if the window is still open, since Routine will continue for at least									// one step after you close the window.\cf3 \
+		b.get( \{\cf4 arg\cf3  v; \{w.isClosed.not.if\{ a.string= \cf5 " Current Frequency: "\cf3 ++v.round(0.01)\}; \}.defer\} );\
+		\cf2 // b.get sends query to the server, and waits for a response before it sets the StaticText.	\cf3 \
+		0.01.wait;\
+		\}.loop\
+		\
+	\}.play\
+\});\
+	\
+\cf4 CmdPeriod\cf3 .doOnce(\{w.close\});\
+w.onClose=\{r.stop; q.free; b.free \}; \cf2 //clean up if the window closes\cf3 \
+	\
+)\
+			\
+			\
+\
+\
+\
+
+\b \cf2 // ====== MORE REFERENCES ======
+\b0 \cf3 \
+\
+\cf2 // For more, have a look at the following files:\cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://GUI-Overview"}}{\fldrslt \cf4 \ul \ulc4 GUI\cf3 \ulc3 -\cf4 \ulc4 Overview}}\
+{\field{\*\fldinst{HYPERLINK "SC://GUI-Classes"}}{\fldrslt \cf7 \ul \ulc7 GUI-Classes}}\
+\pard\pardeftab560\ql\qnatural
+\cf4 Document\cf3 .open(\cf5 "examples/GUI examples/GUI_examples1.scd"\cf3 )\
+\cf4 Document\cf3 .open(\cf5 "examples/GUI examples/GUI_examples2.scd"\cf3 )\
+\cf2 // Also, if you want to write your own GUI widget classes, look here:\cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://SCUserView-Subclassing"}}{\fldrslt \cf4 \ul \ulc4 SCUserView\cf3 \ulnone -\cf4 \ul \ulc4 Subclassing}}\
+\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== USEFUL QUARKS FOR GUI ======
+\b0 \cf3 \
+\cf2 // Here is a list with some useful GUI quarks that you may want to get:\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Automation/Help/Automation.scd"}}{\fldrslt \cf7 \ul \ulc7 Automation}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ClockFace/ClockFace.html"}}{\fldrslt \cf7 \ul \ulc7 ClockFace}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/FileListView/FileListView.help.rtf"}}{\fldrslt \cf7 \ul \ulc7 FileListView}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ixiViews/help/ixiViews.html"}}{\fldrslt \cf7 \ul \ulc7 ixiViews}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/PopUpTreeMenu/PopUpTreeMenu.html"}}{\fldrslt \cf7 \ul \ulc7 PopUpTreeMenu}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/TabbedView/TabbedView.html"}}{\fldrslt \cf7 \ul \ulc7 TabbedView}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/VuView/VuView.html"}}{\fldrslt \cf7 \ul \ulc7 VuView}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/wslib.html"}}{\fldrslt \cf7 \ul \ulc7 wslib}} \cf2 // a quark library with many - and the best looking - GUIs\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== ARCHITECTURE: MODEL-VIEW-CONTROLLER ======
+\b0 \cf3 \
+\
+\cf2 // Similarily to the architectural ideas presented in Class11.1 for dealing with large projects, it is much wiser to aim for a modular structure with your programs when dealing with GUIs, so that you can change elements of the GUI, the actual control and mapping, or the synthesis engine you're using, without breaking things. Also, the GUI should only be there to help you control things, and not trusted with delicate timing, as it runs on a lower priority thread.\cf3 \
+\
+\cf2 // Having said that, a good design software architecture paradigm is the 
+\b Model-View-Controller (MVC)
+\b0 . For example, in a musical instrument/system, the Model is the sound synthesis part, the Controller is the functions, procmods, mapping, etc - anything that can receive input, interpret it and send the appropriate commands to the Model, and the View is your GUI, sending user commands to the Controller, but also potentially receiving commands from it for state updates. If you  use both a hardware interface and a GUI, then the hardware should be directly linked to your Controller, not the GUI.\cf3 \
+\
+\cf2 // You can find more info on MVC here:\cf3 \
+\cf5 "open http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller"\cf3 .unixCmd\
+\
+\
+\
+	\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f1\fs18 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+}

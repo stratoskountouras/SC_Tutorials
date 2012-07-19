@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p14 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p16 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #000000}
+span.s5 {font: 14.0px Lucida Grande}
+span.s6 {color: #606060}
+span.s7 {color: #007300}
+span.s8 {color: #bf0000}
+span.s9 {text-decoration: underline ; color: #0000bf}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 7.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 3: Human Interface Devices (HID) in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• General</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Connecting</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Receiving data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Types of data-slots</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- An example: Internal trackpad (MBP)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Mapping actions</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Naming input-slots</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Example: 3DConnexxion's SpaceNavigator</p>
+<p class="p6"><br></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= HID DEVICES IN SUPERCOLLIDER =================</b></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== GENERAL ======</b></p>
+<p class="p1">// HID devices include most computer peripherals: keyboards, mice, gamepads, joysticks and most game controllers in general, as well as some more specialized devices.</p>
+<p class="p1">// In SuperCollider, there is a cross-platform Class for accessing HID devices: <a href="SC://GeneralHID"><span class="s2">GeneralHID</span></a>.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Connecting --</b></p>
+<p class="p1">// The first thing you need to do is look at the devices that are connected to your machine:</p>
+<p class="p10"><span class="s3">GeneralHID</span>.buildDeviceList</p>
+<p class="p1">// You can make a list of the devices:</p>
+<p class="p11">d = <span class="s3">GeneralHID</span>.deviceList;</p>
+<p class="p8">// or post in a more legible format:</p>
+<p class="p11"><span class="s3">GeneralHID</span>.postDevices;</p>
+<p class="p8">// You then can pick a specific device<span class="Apple-converted-space">  </span>and open it for usage:</p>
+<p class="p11">a = <span class="s3">GeneralHID</span>.open(d[2])</p>
+<p class="p1"><span class="s4">a.close; </span>// you can close a device like this</p>
+<p class="p8">// get info on the device</p>
+<p class="p10">a.info</p>
+<p class="p1">// Another useful method for accessing is to refer to the device by name, with the GeneralHID.findBy method. First, get all the arguments like this:</p>
+<p class="p10">a.info.findArgs</p>
+<p class="p1">// this info corresponds to: vendor ID, productID, location ID, version ID</p>
+<p class="p10">d = <span class="s3">GeneralHID</span>.findBy(1118, 40, -49152000, 258);<span class="Apple-converted-space"> </span></p>
+<p class="p10">d = <span class="s3">GeneralHID</span>.findBy(*a.info.findArgs);<span class="Apple-converted-space"> </span></p>
+<p class="p11">a = <span class="s3">GeneralHID</span>.open(d)</p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Receiving data --</b></p>
+<p class="p1">// IMPORTANT: Once you've established a connection to one or more devices, you need to start the eventloop to query data!</p>
+<p class="p10"><span class="s3">GeneralHID</span>.startEventLoop</p>
+<p class="p1">//<span class="Apple-converted-space">  </span>In MacOSX you can also set the rate of the loop, although the default of 0.005, should be fine</p>
+<p class="p10"><span class="s3">GeneralHID</span>.startEventLoop(0.005)</p>
+<p class="p7"><br></p>
+<p class="p1">// Now that the device is connected and running, let's look at what it can do:</p>
+<p class="p10">a.slots;</p>
+<p class="p1">// or more readable:</p>
+<p class="p1"><span class="s4">a.caps; </span>// capacities</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Types of data-slots --</b></p>
+<p class="p8">// there are different types of slots:<span class="s5"><br>
+</span>// button (type 1): has only on/off (1/0) states<span class="s5"><br>
+</span>// relative (type 2): counts up or down (scrollwheel for example)<span class="s5"><br>
+</span>// absolute (type 3): continuous value between 0 and 1: <span class="s5"><br>
+</span>// some other may show up on Linux (Syn (type 0) and Miscellaneous (type 4)), but these are generally not very useful.</p>
+<p class="p9"><br></p>
+<p class="p8">// You can use the debug function to see if data is coming in:</p>
+<p class="p11">a.debug_(<span class="s3">true</span>);</p>
+<p class="p8">// this takes up some resources, so use it only to have a look, then:</p>
+<p class="p11">a.debug_(<span class="s3">false</span>);</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ An example: internal trackpad (MBP) --</b></p>
+<p class="p8">// lets get some acceleration data, plus the button action from the internal trackpad (on a MacBookPro):</p>
+<p class="p8"><span class="s4">a.close; </span>// close previous device</p>
+<p class="p8"><span class="s4">a = </span><span class="s3">GeneralHID</span><span class="s4">.open(d[4]); </span>// the location could be different in your machine...</p>
+<p class="p1"><span class="s3">GeneralHID</span><span class="s4">.startEventLoop; </span>// start eventloop if you haven't yet</p>
+<p class="p11">a.debug_(<span class="s3">true</span>);</p>
+<p class="p11">a.debug_(<span class="s3">false</span>);</p>
+<p class="p8">// you can also check individual slots:</p>
+<p class="p8"><span class="s4">a.slots[3][48].debug_(</span><span class="s3">true</span><span class="s4">); </span>// get acceleration on the X axis. Notice that no acceleration is 0.5, acceleration to the right goes down to 0, and acceleration to the left goes up to 1 - well, in my machine at least...</p>
+<p class="p11">a.slots[3][48].debug_(<span class="s3">false</span>);<span class="Apple-converted-space"> </span></p>
+<p class="p8">// there is also a quick-and-dirty GUI to look at the data:</p>
+<p class="p11">a.makeGui</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Mapping actions --</b></p>
+<p class="p1">// You can use the <b>.action </b>method on a specific slot to map a function to an individual input parameter. Note that to get the value you have to call .value on the function's argument:</p>
+<p class="p11">a.slots[3][48].action_({<span class="s3">|in|</span> <span class="s6">"mouse X acceleration is: "</span>.post; (in.value - 0.5).postln});</p>
+<p class="p1">// To unmap, just use an empty function:</p>
+<p class="p11">a.slots[3][48].action_({})</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Naming input-slots --</b></p>
+<p class="p8">// The GeneralHID class contains a dictionary, so you can give a name to a specific slot and access it thusly - something<span class="Apple-converted-space">  </span>that can make your code much more readable:</p>
+<p class="p11">a.add(<span class="s7">\mouseAccel_X</span>, [3, 48]);</p>
+<p class="p11">a.add(<span class="s7">\mouseAccel_Y</span>, [3, 49]);</p>
+<p class="p11">a.add(<span class="s7">\mouseButton</span>, [1, 1]);</p>
+<p class="p9"><br></p>
+<p class="p11">a[<span class="s7">\mouseAccel_X</span>].action_({<span class="s3">|in|</span> <span class="s6">"mouse X acceleration is: "</span>.post; (in.value - 0.5).postln});</p>
+<p class="p11">a[<span class="s7">\mouseAccel_Y</span>].action_({<span class="s3">|in|</span> <span class="s6">"mouse Y acceleration is: "</span>.post; (in.value - 0.5).postln});</p>
+<p class="p11">a[<span class="s7">\mouseButton</span>].action_({<span class="s3">|in|</span> <span class="s6">"mouse Button was "</span>.post; if(in.value == 1, {<span class="s6">"Pressed"</span>.postln}, {<span class="s6">"Released!"</span>.postln})});</p>
+<p class="p9"><br></p>
+<p class="p8"><span class="s4">( </span>// stop it:</p>
+<p class="p11">a[<span class="s7">\mouseAccel_X</span>].action_({});</p>
+<p class="p11">a[<span class="s7">\mouseAccel_Y</span>].action_({});</p>
+<p class="p11">a[<span class="s7">\mouseButton</span>].action_({});</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8">// The GeneralHID class also has a method to automatically create control buses for you and send data to a synth running on the server, which can be handy if you're not using Ctk stuff</p>
+<p class="p11">s.boot;</p>
+<p class="p8"><span class="s4">a[</span><span class="s7">\mouseAccel_X</span><span class="s4">].createBus(s); </span>// you need to define the server where the bus will be created</p>
+<p class="p8"><span class="s4">a[</span><span class="s7">\mouseAccel_Y</span><span class="s4">].createBus(s); </span>// you need to define the server where the bus will be created</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p12">SynthDef<span class="s4">(</span><span class="s7">\theremin</span><span class="s4">, {</span>|outbus = 0, freq = 220, amp = 0|</p>
+<p class="p11"><span class="Apple-tab-span">	</span>freq = ((freq + 0.5) * 1000) + 200; <span class="s8">// scale the freq values a bit</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>amp = (amp - 0.5).abs; </span>// we only care about acceleration, no matter which direction it goes towards</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">SinOsc</span>.ar(freq + (freq *<span class="Apple-converted-space">  </span><span class="s3">SinOsc</span>.ar(7, 0, 0.02)), mul:<span class="Apple-converted-space">  </span><span class="s3">Lag</span>.kr((amp))))</p>
+<p class="p11">}).load(s);</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// a very weird theremin controller:</p>
+<p class="p11">t = <span class="s3">Synth</span>.new(<span class="s7">\theremin</span>)</p>
+<p class="p13"><span class="s4">t.map(</span>\freq<span class="s4">, a[</span>\mouseAccel_X<span class="s4">].bus);</span></p>
+<p class="p11">t.map(<span class="s7">\amp</span>, a[<span class="s7">\mouseAccel_Y</span>].bus);</p>
+<p class="p11">t.free</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// Although you can do everything you need with the GeneralHID class, there are 3 more specialized classes implementing specific functionalities of that class. You can check their helpfiles:<span class="Apple-converted-space"> </span></p>
+<p class="p14"><span class="s2"><a href="SC://GeneralHIDDevice">GeneralHIDDevice<span class="s9"></span></a></span></p>
+<p class="p14"><span class="s2"><a href="SC://GeneralHIDSlot">GeneralHIDSlot<span class="s9"></span></a></span></p>
+<p class="p14"><span class="s2"><a href="SC://GeneralHIDSpec">GeneralHIDSpec<span class="s9"></span></a></span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== Example: 3DConnexxion's SpaceNavigator ======</b></p>
+<p class="p8">// The 3DConnexxion SpaceNavigator is an HID device with 6 degrees of freedom and 2 buttons. You need to install drivers in your machine to make it work:</p>
+<p class="p15">"open http://www.3dconnexion.com/service/drivers.html"<span class="s4">.unixCmd</span></p>
+<p class="p8">// After installing the drivers, you may want to tweak some of the preferences, deactivating the buttons from the system (in System Preferences for OSX), and possibly reversing the axes for convenience (the examples below work with all axes reversed)</p>
+<p class="p7"><br></p>
+<p class="p1">// connect to the Space Navigator by name (this works on the device I have in my hands, you may have to find the values yourself with the .info.findArgs method)</p>
+<p class="p11"><span class="s3">GeneralHID</span>.postDevices;</p>
+<p class="p1">// n = GeneralHID.findBy(1133, 50726, -49213440, 1028);</p>
+<p class="p11">d = <span class="s3">GeneralHID</span>.deviceList;</p>
+<p class="p10">a = <span class="s3">GeneralHID</span>.open(d[2]);</p>
+<p class="p1">// start the eventloop if its not running already:</p>
+<p class="p10"><span class="s3">GeneralHID</span>.startEventLoop</p>
+<p class="p10">a.makeGui;</p>
+<p class="p10">a.slots;</p>
+<p class="p16"><br></p>
+<p class="p8">/*</p>
+<p class="p8">// Here's what the Space Navigator spits out:</p>
+<p class="p8">IdentityDictionary[<span class="Apple-converted-space"> </span></p>
+<p class="p8">// the buttons</p>
+<p class="p8"><span class="Apple-tab-span">	</span>(1 -&gt; IdentityDictionary[</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(1 -&gt; GeneralHIDSlot(Button, type: 1, id: 1, value: 0)),<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(2 -&gt; GeneralHIDSlot(Button, type: 1, id: 2, value: 0)),<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(75 -&gt; GeneralHIDSlot(Button, type: 1, id: 75, value: 0)) ]), // non-existent in hardware!</p>
+<p class="p8">// the LED</p>
+<p class="p8"><span class="Apple-tab-span">	</span>(17 -&gt; IdentityDictionary[<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(75 -&gt; GeneralHIDSlot(LED, type: 17, id: 75, value: 0)) ]),</p>
+<p class="p8">// the 6 axes<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span>(3 -&gt; IdentityDictionary[<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(48 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 48, value: 0.5)),<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(52 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 52, value: 0.5)),<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(53 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5)),</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(49 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5)),</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(50 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.685)),</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(51 -&gt; GeneralHIDSlot(Absolute, type: 3, id: 53, value: 0.5))])];</p>
+<p class="p8">*/</p>
+<p class="p16"><br></p>
+<p class="p8">// get the current values:</p>
+<p class="p8">// what's the current state of the buttons:</p>
+<p class="p8"><span class="s4">a.slots[1][1].value; </span>// button on left of logo</p>
+<p class="p8"><span class="s4">a.slots[1][2].value; </span>// button on right of logo</p>
+<p class="p8"><span class="s4">a.slots[1][75].value; </span>// non-existent in hardware</p>
+<p class="p8"><span class="s4">a.slots[17][75].value; </span>// LED - not a control...</p>
+<p class="p8">// continuous controls:</p>
+<p class="p8"><span class="s4">a.slots[3][48].value; </span>// pan right/left (right/left movement)</p>
+<p class="p8"><span class="s4">a.slots[3][49].value; </span>// pan up/down (push down / pull up)</p>
+<p class="p8"><span class="s4">a.slots[3][50].value; </span>// zoom (push front / pull back)</p>
+<p class="p8"><span class="s4">a.slots[3][51].value; </span>// tilt (nose down / nose up)</p>
+<p class="p8"><span class="s4">a.slots[3][52].value; </span>// spin (rotate right/left)</p>
+<p class="p8"><span class="s4">a.slots[3][53].value; </span>// roll (right shoulder down / left shoulder down)</p>
+<p class="p7"><br></p>
+<p class="p1">// let's make a dictionary for legibility:</p>
+<p class="p10">(</p>
+<p class="p11">a.add(<span class="s7">\leftBtn</span>, [1, 1]);</p>
+<p class="p11">a.add(<span class="s7">\rightBtn</span>, [1, 2]);</p>
+<p class="p11">a.add(<span class="s7">\r_l_pan</span>, [3, 48]);</p>
+<p class="p11">a.add(<span class="s7">\u_d_pan</span>, [3, 49]);</p>
+<p class="p11">a.add(<span class="s7">\push_pull</span>, [3, 50]);</p>
+<p class="p11">a.add(<span class="s7">\tilt</span>, [3, 51]);</p>
+<p class="p11">a.add(<span class="s7">\spin</span>, [3, 52]);</p>
+<p class="p11">a.add(<span class="s7">\roll</span>, [3, 53]);</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8">// Now, let's make some noise!:</p>
+<p class="p11">(</p>
+<p class="p8">// load a simple FM synth, no mapping inside the synth</p>
+<p class="p12"><span class="s4">~combfm = </span>CtkSynthDef<span class="s4">( </span><span class="s7">\combFM</span><span class="s4">, { </span>|outbus = 0, freq = 440, harm = 1, modix = 1, delay = 0.1, pan = 0, amp = 0.5|</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">var</span> car, mod, out, dev, modfreq;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>modfreq = freq * harm;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>dev = modix * modfreq;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>mod = <span class="s3">SinOsc</span>.ar(modfreq, 0, dev);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>car = <span class="s3">SinOsc</span>.ar(freq + (mod * modix));</p>
+<p class="p11"><span class="Apple-tab-span">	</span>out = <span class="s3">Out</span>.ar(outbus, (<span class="s3">Pan2</span>.ar(<span class="s3">CombC</span>.ar(car, 0.5, delay, 0.5), pan, amp)));<span class="s5"><br>
+</span>});</p>
+<p class="p9"><br></p>
+<p class="p8">// create as many control buses as the parameters of the controlling interface</p>
+<p class="p11">~ctrl = 6.collect({<span class="s3">CtkControl</span>.play});</p>
+<p class="p9"><br></p>
+<p class="p8">// create some envelopes to handle the parameter mapping as you wish</p>
+<p class="p11">~panEnv = <span class="s3">Env</span>([-1, 1], [1], <span class="s7">\lin</span>);</p>
+<p class="p11">~ampEnv = <span class="s3">Env</span>([0.001, 0.7], [1], 3);</p>
+<p class="p11">~modEnv = <span class="s3">Env</span>([1, 50], [1], 2);</p>
+<p class="p11">~freqEnv = <span class="s3">Env</span>([40, 3000], [1], 4);</p>
+<p class="p8">//~cutEnv = Env([50, 8000], [1], 2);</p>
+<p class="p11">~delEnv = <span class="s3">Env</span>([0, 0.5], [1], 2);</p>
+<p class="p11">~harmEnv = <span class="s3">Env</span>([0.1, 10], [1], 2);</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// within each slot's action: fill the appropriate CtkControl bus with the values coming in from the device slot:</p>
+<p class="p11">a[<span class="s7">\r_l_pan</span>].action_({<span class="s3">|val|</span> ~ctrl[0].set([~panEnv[val.value]])});</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span></span>/* what this does:</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1. pick the control slot:</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>a.slots[3][48]</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>2. .action returns a value</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.action_({|val| ...})</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>3. which we use as an index to get a value from an Env (used here as a mapping curve)</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~panEnv[val.value]</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>4. and the result is used to set the current value of the control bus</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~ctrl[0].set([.....])<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>*/</p>
+<p class="p11">a[<span class="s7">\u_d_pan</span>].action_({<span class="s3">|val|</span> ~ctrl[1].set([~modEnv[val.value]])});</p>
+<p class="p11">a[<span class="s7">\push_pull</span>].action_({<span class="s3">|val|</span> ~ctrl[2].set([~ampEnv[val.value]])});</p>
+<p class="p11">a[<span class="s7">\tilt</span>].action_({<span class="s3">|val|</span> ~ctrl[3].set([~delEnv[val.value]])});</p>
+<p class="p11">a[<span class="s7">\spin</span>].action_({<span class="s3">|val|</span> ~ctrl[4].set([~freqEnv[val.value]])});</p>
+<p class="p11">a[<span class="s7">\roll</span>].action_({<span class="s3">|val|</span> ~ctrl[5].set([~harmEnv[val.value]])});</p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8">// now, start it!:</p>
+<p class="p9"><br></p>
+<p class="p11">~note = ~combfm.new().pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(~ctrl[2]).delay_(~ctrl[3]).freq_(~ctrl[4]).harm_(~ctrl[5]).play;</p>
+<p class="p9"><br></p>
+<p class="p8">// free it</p>
+<p class="p11">~note.free</p>
+<p class="p9"><br></p>
+</body>
+</html>

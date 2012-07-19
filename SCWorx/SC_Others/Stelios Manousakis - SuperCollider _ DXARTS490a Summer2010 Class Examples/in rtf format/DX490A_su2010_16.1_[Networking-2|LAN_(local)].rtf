@@ -1,0 +1,312 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Geneva;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;\red191\green0\blue0;\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0 		\
+
+\b\fs30 Class 16.1:
+\b0 \
+
+\b 	Networking 2: Communication within a Local-Area-Network (LAN)
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Connecting\
+			\'95 A simple example \
+			\'95 An example with sound\
+			\'95 Troubleshooting\
+			\'95 Additional networking quarks\
+				- iPhone/iPodTouch/iPad\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ================= SUPERCOLLIDER IN LOCAL-AREA-NETWORKS =================
+\b0 \cf3 \
+\
+\
+\cf2 // As  we have seen in the Networking-1 class (10.2), {\field{\*\fldinst{HYPERLINK "SC://NetAddr"}}{\fldrslt \cf2 \ul \ulc2 NetAddr}} is the core object for handling networking between different applications within a computer. This is also the case for connecting two computers via LAN. (Note however that NetAddr is no good for Internet connections! More on that on the next example file).\cf3 \
+\
+\cf2 // NOTE: This examples in this file need at least two computers!\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== CONNECTING ======
+\b0 \cf3 \
+\
+\cf2 // The connection process requires working on more than one machines simultaneously. I will be pointing out which machine you need to work with by writting local/remote.\cf3 \
+\
+\
+\cf2 // \'95 Step 1: LOCAL & REMOTE\cf3 \
+\cf2 //	Make sure your Firewalls are off in both machines\cf3 \
+	\
+	\
+\cf2 // \'95 Step 2: LOCAL	\cf3 \
+\cf2 //	
+\b Create a Local-Area-Network
+\b0  (sometimes referred to as ad-hoc network) with one of the available machines\cf3 \
+\
+\
+\cf2 // \'95 Step 3: REMOTE\cf3 \
+\cf2 //	
+\b Connect
+\b0  other computers to this particular LAN. \cf3 \
+\
+\
+\cf2 // \'95 Step 4: LOCAL & REMOTE\cf3 \
+\cf2 // 	
+\b Create a new NetAddr
+\b0 ; you can use the computer's IP address as an argument for the NetAddr object, OR, you can use the name of the specific computer to log into it from a remote machine, appending ".local". For example, my computer's name is "stm", so I can log in like this: \cf3 \
+\
+	
+\i \cf4 NetAddr\cf3 (\cf5 "stm.local"\cf3 , 57120)
+\i0 \
+\cf2 // Note that you need to use the current sclang port as the port argument  (by default set to 57120).\cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 	\cf4 NetAddr\cf3 .langPort; \cf2 // retrieve the current port SC is listening to\cf3 \
+	\
+\cf2 // So:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // connect LOCAL to the remote machine:\cf3 \
+~remoteComp = \cf4 NetAddr\cf3 (\cf5 "128.95.92.193"\cf3 , 57120);  \cf2 // 57120 is sclang default port, use it to send to a remote sclang\cf3 \
+\cf2 // do the same from the remote machine, using the local machine's IP or name\cf3 \
+\
+\
+\cf2 // \'95 Step 5: LOCAL & REMOTE\cf3 \
+\cf2 //	Create an OSCresponder. The one below is just for testing, so it only prints out what it received.\cf3 \
+r = \cf4 OSCresponder\cf3 (~remoteComp, \cf6 'stmIncoming'\cf3 , \{ \cf4 arg\cf3  time, resp, msg; \
+	[time, msg[1]].postln;\
+	\}).add;\
+\
+\
+\cf2 // \'95 Step 6: LOCAL & REMOTE\cf3 \
+\cf2 // 	test by manually sending a message to the other computer. After creating an OSCresponder called 'dxlab8' on the remote machine you can send it this message. \cf3 \
+~remoteComp.sendMsg(\cf6 'dxlab8'\cf3 , \cf5 "did my message arrive?"\cf3 , 0.5);\
+\
+\cf2 // Similarily, you can send a message to this machine like this: \cf3 \
+	~remoteComp.sendMsg(\cf6 'stmIncoming'\cf3 , \cf5 "did my message arrive?"\cf3 , 0.5);\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\cf2 // now, remove the responder to try something a bit more involved:\cf3 \
+r.remove\
+\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== A SIMPLE EXAMPLE: LOCAL ======
+\b0 \cf3 \
+\
+\cf2 // In this simple example, we will create a GUI interface with two knobs, one to send data to a remote machine, and one to receive.\cf3 \
+\
+\cf2 // 1. connecting:\cf3 \
+~remoteComp = \cf4 NetAddr\cf3 (\cf5 "169.254.144.182"\cf3 , 57120); \cf2 // replace the IP ("Tesla.local") with the IP or name of the machine you want to connect to\cf3 \
+\
+\cf2 // 2. making a responder for receiving\cf3 \
+r = \cf4 OSCresponder\cf3 (~remoteComp, \cf6 'stmIncoming'\cf3 , \{ \cf4 arg\cf3  time, resp, msg; \
+	[time, msg[1]].postln;\
+	\{~recKnob.value_(msg[1])\}.defer;\
+	\}).add;\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // 3. Making a GUI window with a knob to send, and a knob to receive:\cf3 \
+(\
+\cf4 var\cf3  window = \cf4 Window\cf3 .new(\cf5 "Networking test"\cf3 ,\cf4 Rect\cf3 (318, 456, 400, 400)).front;\
+~recKnob = \cf4 Knob\cf3 .new(window,\cf4 Rect\cf3 (175, 205, 217, 189))\
+	.action_\{\cf4 |v|\cf3  \};\
+~sendKnob = \cf4 Knob\cf3 .new(window,\cf4 Rect\cf3 (8, 11, 216, 188))\
+	.action_\{\cf4 |v|\cf3  \
+		~remoteComp.sendMsg(\cf6 'dxlab8'\cf3 , v.value); \cf2 // << action: sending to remote machine\cf3 \
+		\};\
+\cf4 StaticText\cf3 .new(window,\cf4 Rect\cf3 (24, 333, 148, 50))\
+	.string_(\cf5 "Receive some data -->>"\cf3 );\
+\cf4 StaticText\cf3 .new(window,\cf4 Rect\cf3 (229, 15, 130, 47))\
+	.string_(\cf5 "<<-- Send some data"\cf3 );\
+)\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\cf2 /* Now, do the same in the remote machine, replacing in:\
+1. the IP of the receiving machine to the IP of this one\
+2. the cmdName of the OSCresponder to the name you're using in (3)\
+3. Replace the name you're using in (3) with the name you use in (2)\
+*/\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // Don't forget to remove your responder once you're done!\cf3 \
+r.remove\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== AN EXAMPLE WITH SOUND: LOCAL ======
+\b0 \cf3 \
+\cf2 // In this simple example, we will create the same GUI interface with two knobs, except this time the 'sending' knob will get data from analysis of the sound in the local machine, and will send the data to the remote machine to affect the synthesis there - and vice versa.\cf3 \
+\
+\cf2 // \'95 Synthesis: a self-phase-modulated Sinewave, with analysis to show how noisy it is:\cf3 \
+\
+s.boot; \
+\
+(\
+~mult = 4;\
+\cf2 // buffer for FFT \cf3 \
+~buf = \cf4 Buffer\cf3 .alloc(s,2048,1); \
+\cf2 // the synthdef\cf3 \
+~fdbFM = \cf4 CtkSynthDef\cf3 (\cf6 \\fdbSine\cf3 , \{\cf4 arg\cf3  freq, fdbAmt, amp, pollFreq = 2, gate = 1;\
+	\cf4 var\cf3  sine, mod, fdbIn, fdbOut, env, chain, flatness;\
+	fdbIn = \cf4 LocalIn\cf3 .ar(1);\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .new([0.00001, 1, 1, 0.00001], [0.05, 0.9, 0.5], [\cf6 \\exp\cf3 , \cf6 \\sin\cf3 ], 1), gate,  doneAction: 2);\
+	mod = fdbIn * fdbAmt;\
+	sine = \cf4 SinOsc\cf3 .ar(freq, mod, amp); \cf2 // fdb phase modulation\cf3 \
+	chain = \cf4 FFT\cf3 (~buf, sine);\
+	flatness = \cf4 SpecFlatness\cf3 .kr(chain);\
+	\cf4 SendReply\cf3 .kr(\cf4 Impulse\cf3 .kr(pollFreq), \cf6 'flatness'\cf3 , flatness);\
+	\cf4 Out\cf3 .ar(0, sine * env);\
+	fdbOut = \cf4 LocalOut\cf3 .ar(sine);\
+\})\
+);\
+\
+\cf2 // 1. connecting:\cf3 \
+~remoteComp = \cf4 NetAddr\cf3 (\cf5 "169.254.144.182"\cf3 , 57120); \cf2 // replace the IP ("Tesla.local") with the IP or name of the machine you want to connect to\cf3 \
+\
+\cf2 // 2. making a responder for receiving\cf3 \
+r = \cf4 OSCresponder\cf3 (~remoteComp, \cf6 'stmIncoming'\cf3 , \{ \cf4 arg\cf3  time, resp, msg; \
+	[time, msg[1]].postln;\
+	\{~recKnob.value_(msg[1])\}.defer;\
+	~note.fdbAmt_(msg[1] * ~mult + 1)	\
+	\}).add;\
+\
+\
+\cf2 // 2a. making a responder for receiving from the analysis data from the synthdef, and moving the knob\cf3 \
+~noisiness = \cf4 OSCresponder\cf3 (~remoteComp, \cf6 'flatness'\cf3 , \{ \cf4 arg\cf3  time, resp, msg; \
+	msg[3].postln;\
+	\{~sendKnob.valueAction_(msg[3])\}.defer; \cf2 // naturally, it would be more efficient to send the message directly to the remote server, this is just for demonstration purposes...\cf3 \
+	\}).add;\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // 3. Making a GUI window with a knob to send, and a knob to receive:\cf3 \
+(\
+\cf4 var\cf3  window = \cf4 Window\cf3 .new(\cf5 "Networking test"\cf3 ,\cf4 Rect\cf3 (318, 456, 400, 400)).front;\
+~recKnob = \cf4 Knob\cf3 .new(window,\cf4 Rect\cf3 (175, 205, 217, 189))\
+	.action_\{\cf4 |v|\cf3  \};\
+~sendKnob = \cf4 Knob\cf3 .new(window,\cf4 Rect\cf3 (8, 11, 216, 188))\
+	.action_\{\cf4 |v|\cf3  \
+		~remoteComp.sendMsg(\cf6 'dxlab8'\cf3 , v.value); \cf2 // << action: sending to remote machine\cf3 \
+		\};\
+\cf4 StaticText\cf3 .new(window,\cf4 Rect\cf3 (24, 333, 148, 50))\
+	.string_(\cf5 "Receive some data -->>"\cf3 );\
+\cf4 StaticText\cf3 .new(window,\cf4 Rect\cf3 (229, 15, 130, 47))\
+	.string_(\cf5 "<<-- Send some data"\cf3 );\
+)\
+\
+\
+\
+~note = ~fdbFM.new().freq_(160).fdbAmt_(5.5).amp_(0.5).play\
+\cf2 // change some numbers\cf3 \
+~note.freq_(124)\
+~note.fdbAmt_(5.4)\
+~note.fdbAmt_(1244)\
+~mult = 4.6\
+~note.pollFreq_(2.6)\
+~note.release\
+\
+\
+\cf2 // remove the responders\cf3 \
+r.remove;\
+~noisiness.remove; \
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== TROUBLESHOOTING ======
+\b0 	\cf3 \
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf2 /* ATTENTION: IF THE ABOVE DOESN'T WORK, TRY TO RESET THE FOLLOWING: \
+- NetAddr ip (\cf7 IPs may have changed and \cf2 you may be using an older one)\
+- disconnect/reconnect to LAN (that has worked many times for me in the past...)\
+- relaunch SC (maybe something is hanging from before)\
+*/\cf3 \
+\
+\
+\cf2 // You can use the code below to troubleshoot, and see if there is anything coming in:\cf3 \
+(\
+\cf4 thisProcess\cf3 .recvOSCfunc = \{ \cf4 |time, addr, msg|\cf3  \
+	if(msg[0] != \cf6 'status.reply'\cf3 ) \{\
+		\cf5 "time: % sender: %\\nmessage: %\\n"\cf3 .postf(time, addr, msg); \
+		\
+	\}  \
+\}\
+);\
+\
+\cf2 // stop posting.\cf3 \
+\cf4 thisProcess\cf3 .recvOSCfunc = \cf4 nil\cf3 ;\
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== ADDITIONAL NETWORKING QUARKS ======
+\b0 \cf3 \
+\
+\pard\pardeftab560\li1140\fi-1140\ql\qnatural
+\cf2 // {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/NetLib/help/NetLib.html"}}{\fldrslt \cf8 \ul \ulc8 NetLib}} is a very nice, small experimental library for collaborative network ensembles\cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Republic/Republic.html"}}{\fldrslt \cf8 \ul \ulc8 Republic}} is a class taking over some of the administrational burdens of organizing LAN group performances\cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ListeningClocks/help/ListeningClocks.html"}}{\fldrslt \cf8 \ul \ulc8 ListeningClocks}} 3 clocks that can communicate with other clocks for synchronizing performances over several computer in a nework\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ iPhone/iPodTouch/iPad --
+\b0 \cf3 \
+\cf2 // Connecting to an iThing is a very similar process, except the fact that you need a dedicated environment for sending OSC messages from the portable device. Until there is an official port of SC for iThings, a couple (free) examples include the mrmr App and rjdj. \cf3 \
+\
+\cf2 // \'95 Mrmr\cf3 \
+\cf2 // With mrmr you can create interfaces and control SC remotely. There is a quark that lets you create those interfaces from your computer, and which handles some of burdens of communication internally.\cf3 \
+\cf4 Quarks\cf3 .install( \cf5 "Mrmr"\cf3 , checkoutIfNeeded: \cf4 false\cf3 )\
+\cf2 // The helpfile is pretty much all you need to get started\cf3 \
+\
+\cf2 // \'95\'a0rjdj \cf3 \
+\cf2 // rjdj is a port of PureData for the iPhone/iPodTouch. There is also an iPad version, called rjVoyager. What is nice about it is that you can create Pd patches in your computer and load them to the portable device. This is probably worse for using as a controller of a remote machine as there are less GUI widgets, but you can actually do part of the processing in the portable device, and even make sounds with it!\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf3 \
+}

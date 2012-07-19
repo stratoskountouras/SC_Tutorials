@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {text-decoration: underline ; color: #000000}
+span.s4 {color: #0000bf}
+span.s5 {color: #000000}
+span.s6 {color: #007300}
+span.s7 {color: #606060}
+span.s8 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+ul.ul1 {list-style-type: disc}
+ul.ul2 {list-style-type: circle}
+ul.ul3 {list-style-type: square}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class ??:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Sets: Dictionaries &amp; Environments</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sets</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Types of Dictionaries</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Dictionary</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- IdentityDictionary</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- TwoWayIdentityDictionary</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- IdentitySet</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Environment</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= SETS =================</b></p>
+<p class="p7">// Throughout the year, we have dealt extensively with <a href="../../../../../../Applications/SuperCollider/Help/Collections/SequenceableCollection.html">SequenceableCollections</a>: Lists, Arrays, Wavetables, strings, etc. <b>Sets</b> are a parallel branch, stemming from the same root-branch, the abstract superclass '<b>Collection</b>'/</p>
+<p class="p7">// A Set is defined as a collection of objects, no two of which are equal. Whereas SequencableCollections are ordered, Sets are not always so.</p>
+<p class="p6"><br></p>
+<p class="p7">// Here are the sub-branches of Collection that this file deals with (for the entire tree look at <a href="SC://Collections"><span class="s2">Collections</span></a>:</p>
+<p class="p8"><span class="s2"><a href="SC://Collection"><b>Collection</b></a></span><span class="s3"><b><span class="Apple-converted-space"> </span></b></span></p>
+<p class="p9"><span class="Apple-converted-space">   </span>....</p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000"> <a href="SC://Set"><span class="s4"><b>Set</b></span></a></li>
+<ul class="ul2">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf"><span class="s5"> <a href="SC://Dictionary"><span class="s4"><b>Dictionary</b></span></a></span></li>
+<ul class="ul3">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf"><span class="s5"> <a href="SC://IdentityDictionary"><span class="s4"><b>IdentityDictionary</b></span></a></span></li>
+<ul class="ul3">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf"><span class="s5"> <a href="SC://Environment"><span class="s4"><b>Environment</b></span></a></span></li>
+<ul class="ul3">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000">...</li>
+</ul>
+</ul>
+</ul>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf"><span class="s5"> <a href="SC://IdentitySet"><span class="s4"><b>IdentitySet</b></span></a><span class="Apple-converted-space"> </span></span></li>
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000"><span class="Apple-converted-space">  </span>...</li>
+<ul class="ul3">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf"><span class="s5"><span class="Apple-converted-space">  </span>•<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span> <a href="SC://TwoWayIdentityDictionary"><span class="s4"><b>TwoWayIdentityDictionary</b></span></a></span></li>
+</ul>
+</ul>
+</ul>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== TYPES OF DICTIONARIES ======</b></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Dictionary --</b></p>
+<p class="p7">// A <a href="SC://Dictionary"><span class="s2">Dictionary</span></a> is an <b>unordered</b> collection mapping keys to values through association. Keys and values match if they are <b>equal</b> (i.e. == returns true).</p>
+<p class="p6"><br></p>
+<p class="p7"><span class="s5">d = </span><span class="s4">Dictionary</span><span class="s5">.new; </span>//create a new dictionary</p>
+<p class="p7"><span class="s5">d.add(</span><span class="s6">\entry_1</span><span class="s5"> -&gt; 10); </span>// add an association of: symbol-or-string -&gt; value</p>
+<p class="p9">d.add(<span class="s6">\entry_2</span> -&gt; 23);</p>
+<p class="p7"><span class="s5">d.put(</span><span class="s6">\entry_3</span><span class="s5">, 31); </span>// create, then add an association between two objects</p>
+<p class="p7"><span class="s5">d.put(</span><span class="s7">"entry_4"</span><span class="s5">, 44); </span>// a string also works</p>
+<p class="p7"><span class="s5">d.put(5, 20); </span>// a number as well</p>
+<p class="p7"><span class="s5">d; </span>// see what's in there</p>
+<p class="p7">// or like this:</p>
+<p class="p9">d.postcs;<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>/*<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Note:</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.postcs can be very useful to look inside many objects: ex:</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>e = Env([0, 1, 0], [0.2, 0.8], -4);</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>e.postln;</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>// BUT:</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>e.postcs<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>*/<span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p7"><span class="s5">d.removeAt(</span><span class="s7">"entry_4"</span><span class="s5">); </span>// remove a key from the Dictionary</p>
+<p class="p7"><span class="s5">d[</span><span class="s6">\entry_1</span><span class="s5">]; </span>// query the value of a key</p>
+<p class="p7"><span class="s5">d.at(</span><span class="s6">\entry_1</span><span class="s5">); </span>// same thing, different syntax</p>
+<p class="p7"><span class="s5">d[</span><span class="s7">"entry_1"</span><span class="s5">]; </span>// this won't work: the key is a symbol, not a string</p>
+<p class="p6"><br></p>
+<p class="p7">// • Iterating through a Dictionary</p>
+<p class="p7"><span class="s5">d.do({</span><span class="s4">arg</span><span class="s5"> me, i; [me, i].postln;}); </span>// passes in value and incrementer</p>
+<p class="p9">d.keysDo({<span class="s4">arg</span> me, i; [me, i].postln}); <span class="s8">// passes in keys and incrementer</span></p>
+<p class="p9">d.keysValuesDo({<span class="s4">arg</span> key, val, i; [key, val, i].postln}); <span class="s8">// passes in key, val and incrementer</span></p>
+<p class="p7"><span class="s5">d.findKeyForValue(10); </span>// return the key associated with this value</p>
+<p class="p6"><br></p>
+<p class="p7">// • Dictionaries of dictionaries</p>
+<p class="p9">d.add(<span class="s6">\entry_5</span> -&gt; <span class="s4">Dictionary</span>[<span class="s6">\a_node</span> -&gt; 1000, <span class="s6">\a_controlBus</span> -&gt; 20, <span class="s6">\a_group</span> -&gt; 2000])</p>
+<p class="p7">// query the contens of the 2nd level dictionary:</p>
+<p class="p10"><span class="s5">d[</span>\entry_5<span class="s5">][</span>\a_node<span class="s5">]; </span><span class="s8">// or:</span></p>
+<p class="p7"><span class="s5">d.at(</span><span class="s6">\entry_5</span><span class="s5">).at(</span><span class="s6">\a_node</span><span class="s5">); </span>// same as with arrays, as this is a Collection nomenclature</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ IdentityDictionary --</b></p>
+<p class="p7">// An <a href="SC://IdentityDictionary"><span class="s2">IdentityDictionary</span></a> is similar in all accounts, except that keys match only if they are <b>identical </b>objects (i.e. == returns true). This makes it faster than the Dictionary</p>
+<p class="p6"><br></p>
+<p class="p7">// Notice this:</p>
+<p class="p11">"aString"<span class="s5"> == </span>"aString"<span class="s5"> </span><span class="s8">// BUT</span></p>
+<p class="p11">"aString"<span class="s5"> === </span>"aString"</p>
+<p class="p7">// whereas:</p>
+<p class="p10">\aSymbol<span class="s5"> == </span>\aSymbol</p>
+<p class="p10">\aSymbol<span class="s5"> === </span>\aSymbol</p>
+<p class="p7">// and also:</p>
+<p class="p9">2 == 2</p>
+<p class="p9">2 === 2</p>
+<p class="p7">// whereas:</p>
+<p class="p9">a = <span class="s4">Array</span>.new</p>
+<p class="p9">b = <span class="s4">Array</span>.new</p>
+<p class="p9">a == b</p>
+<p class="p9">a===b</p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ TwoWayIdentityDictionary --</b></p>
+<p class="p7"><b>// </b><a href="SC://TwoWayIdentityDictionary"><span class="s2">TwoWayIdentityDictionary</span></a> is similar to the IdentityDictionary, but it has the extra feature of allowing you to go from the key to the value as well as from the value to the key. However, it needs a bit more memory.</p>
+<p class="p6"><br></p>
+<p class="p8"><span class="s5">t = </span>TwoWayIdentityDictionary<span class="s5">.new; </span><span class="s8">// create a new instance</span></p>
+<p class="p7"><span class="s5">t.put(</span><span class="s6">\test</span><span class="s5">, 999); </span>// create and store an association</p>
+<p class="p9">t.put([<span class="s7">"some"</span>, <span class="s7">"strings"</span>], 1200); <span class="s8">// yet another one</span></p>
+<p class="p7"><span class="s5">t.at(</span><span class="s6">\test</span><span class="s5">); </span>// what is the value at this key?</p>
+<p class="p7"><span class="s5">t.getID(999); </span>// and what is the key of this value?</p>
+<p class="p7"><span class="s5">t.getID(1200); </span>// how about this value?</p>
+<p class="p7"><span class="s5">t.getID(888); </span>// nil, as there is no such value</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ IdentitySet --</b></p>
+<p class="p7">// An <a href="SC://IdentitySet"><span class="s2">IdentitySet</span></a> is to a Set what in IdentityDictionary is to a Dictionary: similar in all accounts but for it checking for identity instead of equality, which makes it faster.</p>
+<p class="p7">// A handy trick: You can use IdentitySet to remove duplicates from an Array:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> e, f, g, h;</p>
+<p class="p11"><span class="s5">e = </span>"such"<span class="s5">; f = </span>"fallacy"<span class="s5">; g = </span>"is"<span class="s5">; h = </span>"common"<span class="s5">;</span></p>
+<p class="p9">a = [e, e, f, g, e, h, e];</p>
+<p class="p9">);</p>
+<p class="p7"><span class="s5">a.as(</span><span class="s4">IdentitySet</span><span class="s5">);<span class="Apple-tab-span">	</span></span>// convert to set</p>
+<p class="p7"><span class="s5">a.as(</span><span class="s4">Set</span><span class="s5">).as(</span><span class="s4">Array</span><span class="s5">); </span>// and convert back</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Environment --</b></p>
+<p class="p7">// An <b>Environment </b>is an IdentityDictionary mapping Symbols to values; it has some with additional features and is commonly used as a storage 'name space' for creating, storing and accessing sets of persistent variables. In SC, there is always one Environment running, and this is were the global variables are stored. Upon startup, an Environment providing the memory space to store a universally accessible collection of named values, starting with '~'; this is the <i>currentEnvironment.</i></p>
+<p class="p7"><i>// </i>You can look at its state like this:</p>
+<p class="p9">currentEnvironment;</p>
+<p class="p7">// add a variable</p>
+<p class="p9">~a_variable = 3.14;<span class="Apple-converted-space"> </span></p>
+<p class="p7">// now check again:</p>
+<p class="p9">currentEnvironment;</p>
+<p class="p7">// ~a_variable = ... is actually a shortcut for this:</p>
+<p class="p9">currentEnvironment.put(<span class="s6">\a_variable</span>, 3.14)</p>
+<p class="p7">// and the accessing method</p>
+<p class="p9">~a_variable;</p>
+<p class="p7">// is a shortcut for:</p>
+<p class="p9">currentEnvironment[<span class="s6">\a_variable</span>];</p>
+<p class="p6"><br></p>
+<p class="p7">// You can create and Environment with the <b>.make</b> method and then fill it with values. This<b> </b>temporarily replaces the current Environment with a new one inside its scope.<span class="Apple-converted-space"> </span></p>
+<p class="p7">// For example:</p>
+<p class="p9">~a = 124</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> a;</p>
+<p class="p9">a = <span class="s4">Environment</span>.make({</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a = 100;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~b = 200;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~c = 300;</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>"inside the scope, ~a is: "<span class="s5">.post;</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a.postln</p>
+<p class="p6"><br></p>
+<p class="p9">});</p>
+<p class="p9">a.postln;</p>
+<p class="p11">"outside the scope, ~a is: "<span class="s5">.post;</span></p>
+<p class="p9">~a.postln</p>
+<p class="p9">)</p>
+<p class="p6"><br></p>
+<p class="p7">// You can use the contents of the Environment you created with the <b>.use</b> method and a function:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> a;</p>
+<p class="p9">a = <span class="s4">Environment</span>.make({</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a = 10;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~b = 200;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~c = 3000;</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>"inside the scope, ~a is: "<span class="s5">.post;</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a.postln</p>
+<p class="p9">});</p>
+<p class="p9">a.use({</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a + ~b + ~c;</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span></span>"inside the function, ~a is: "<span class="s5">.post;</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a.postln</p>
+<p class="p9">}).postln;</p>
+<p class="p11">"outside the scope, ~a still is: "<span class="s5">.post;</span></p>
+<p class="p9">~a.postln;</p>
+<p class="p9">)</p>
+<p class="p6"><br></p>
+<p class="p7">// you can also <b>.use </b>directly when creating the Environment:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> a;</p>
+<p class="p8"><span class="s5">a = </span>Environment<span class="s5">.use({</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a = 10;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~b = 200;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~c = 3000;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~a + ~b + ~c</p>
+<p class="p9">}).postln;</p>
+<p class="p9">)</p>
+<p class="p6"><br></p>
+<p class="p7">// You can call a function inside an Environment evaluating it with the <b>valueEnvir</b> and <b>valueArrayEnvir</b> methods, to make it lookup any unspecified arguments from that environment; if there are any symbols with the same name there, then the function will use their values, if not it will just use the defaults.</p>
+<p class="p7">// For example:</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> f;</p>
+<p class="p6"><br></p>
+<p class="p7">// define a function</p>
+<p class="p9">f = { <span class="s4">arg</span> x, y, z; [x, y, z].postln; };</p>
+<p class="p6"><br></p>
+<p class="p8">Environment<span class="s5">.use({</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~x = 7;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~y = 8;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~z = 9;</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>f.valueEnvir(1, 2, 3);<span class="Apple-tab-span">	</span><span class="s8">// all values supplied</span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(1, 2);<span class="Apple-tab-span">	</span></span>// z is looked up in the current Environment</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(1);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// y and z are looked up in the current Environment<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// all arguments are looked up in the current Environment</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(z: 1);<span class="Apple-tab-span">	</span></span>// x and y are looked up in the current Environment</p>
+<p class="p9">});</p>
+<p class="p6"><br></p>
+<p class="p8">Environment<span class="s5">.use({</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>~x = 17;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~y = 18;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>~z = 19;</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>f.valueEnvir(1, 2, 3);<span class="Apple-tab-span">	</span><span class="s8">// all values supplied</span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(1, 2);<span class="Apple-tab-span">	</span></span>// z is looked up in the current Environment</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(1);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// y and z are looked up in the current Environment<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// all arguments are looked up in the current Environment</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span>f.valueEnvir(z: 1);<span class="Apple-tab-span">	</span></span>// x and y are looked up in the current Environment</p>
+<p class="p9">});</p>
+<p class="p12">)</p>
+<p class="p6"><br></p>
+<p class="p7">/* Let's look at a sound example from the Streams-Patterns-Events4 helpfile:</p>
+<p class="p7">This is a somewhat contrived example of how the Environment might be used to manufacture SynthDefs.</p>
+<p class="p7">Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because valueEnvir looks them up in the environment.<span class="Apple-converted-space"> </span></p>
+<p class="p7">*/</p>
+<p class="p9">(</p>
+<p class="p9"><span class="s4">var</span> a, b, c, n;</p>
+<p class="p6"><br></p>
+<p class="p7"><span class="s5">n = 40; </span>// how many synths to create</p>
+<p class="p6"><br></p>
+<p class="p7">// 3 different processes</p>
+<p class="p9">a = { <span class="s4">arg</span> freq, amp, pan;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">Pan2</span>.ar(<span class="s4">SinOsc</span>.ar(freq), pan, amp)};</p>
+<p class="p9">b =<span class="Apple-converted-space">  </span>{ <span class="s4">arg</span> amp, pan, freq;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">Pan2</span>.ar(<span class="s4">RLPF</span>.ar(<span class="s4">Saw</span>.ar(freq), freq * 6, 0.1), pan, amp)};</p>
+<p class="p9">c =<span class="Apple-converted-space">  </span>{ <span class="s4">arg</span> pan, freq, amp;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="s4">Pan2</span>.ar(<span class="s4">Resonz</span>.ar(<span class="s4">GrayNoise</span>.ar, freq * 2, 0.1), pan, amp * 2)};</p>
+<p class="p6"><br></p>
+<p class="p7">// a task to automatically create the synthdefs<span class="Apple-converted-space"> </span></p>
+<p class="p8">Task<span class="s5">({</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span>n.do({ <span class="s4">arg</span> i;</p>
+<p class="p11"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s4">SynthDef</span><span class="s5">(</span>"Help-SPE4-EnvirDef-"<span class="s5"> ++ i.asString, {</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">var</span> out;</p>
+<p class="p8"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Environment<span class="s5">.use({</span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// set values in the environment</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~freq = exprand(80, 600);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~amp = 0.1 + 0.3.rand;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~pan = 1.0.rand2;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// call a randomly chosen instrument function<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// with values from the environment</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>out = [a,b,c].choose.valueEnvir;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>out = <span class="s4">CombC</span>.ar(out, 0.2, 0.2, 3, 1, out);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>out = out * <span class="s4">EnvGen</span>.kr(<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">Env</span>.sine, doneAction: 2, timeScale: 1.0 + 6.0.rand, levelScale: 0.3<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">Out</span>.ar( 0, out );</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}).send(s);</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.02.wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>});</p>
+<p class="p7"><span class="s5"><span class="Apple-tab-span">	</span></span>// play the synth</p>
+<p class="p9"><span class="Apple-tab-span">	</span>loop({</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">Synth</span>( <span class="s7">"Help-SPE4-EnvirDef-"</span> ++ n.rand.asString );</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0.5 + 2.0.rand).wait;</p>
+<p class="p9"><span class="Apple-tab-span">	</span>});</p>
+<p class="p9">}).play;</p>
+<p class="p9">)</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+</body>
+</html>

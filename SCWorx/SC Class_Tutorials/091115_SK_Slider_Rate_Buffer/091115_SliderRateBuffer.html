@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1038.11">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #e10000}
+p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000}
+p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #2500cf}
+p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #008c00}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #737373}
+span.s1 {color: #000000}
+span.s2 {color: #2500cf}
+span.s3 {color: #737373}
+span.s4 {color: #008c00}
+span.s5 {color: #e10000}
+span.s6 {color: #007300}
+span.s7 {color: #e00000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><br></p>
+<p class="p2">//Buffer<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p2"><span class="s1">b = </span><span class="s2">Buffer</span><span class="s1">.read(s, </span><span class="s3">"./sounds/Ultrabeat.aif"</span><span class="s1">); </span>// remember to free the buffer later.</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p2">//SynthDef</p>
+<p class="p1"><br></p>
+<p class="p3">(</p>
+<p class="p4"><span class="s1">d = </span>SynthDef<span class="s1">(</span><span class="s4">\ultrabeat</span><span class="s1">, { </span>| out = 0, bufnum = 0, loop = 1, rate = 1 |<span class="s1"><span class="Apple-tab-span">	</span></span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="s2">Out</span>.ar(out,<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s2">PlayBuf</span>.ar(1, bufnum, <span class="s2">BufRateScale</span>.kr(bufnum) * rate, loop: loop, doneAction: 2)</p>
+<p class="p3"><span class="Apple-tab-span">	</span>)</p>
+<p class="p3">});</p>
+<p class="p3">)</p>
+<p class="p1"><br></p>
+<p class="p2"><span class="s1">d.send(</span><span class="s2">Server</span><span class="s1">.default);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//send Synthdef to default Server.</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p5"><span class="s1">f = </span><span class="s2">Synth</span><span class="s1">(</span>\ultrabeat<span class="s1">, [</span>\bufnum<span class="s1">, b]);<span class="Apple-tab-span">	</span></span></p>
+<p class="p1"><br></p>
+<p class="p1"><span class="Apple-tab-span">	</span></p>
+<p class="p2">/// =========================================================</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p2">//Cocoa GUI<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p3">(</p>
+<p class="p6"><span class="s1">w = </span><span class="s2">Window</span><span class="s1">.new( </span>"Ultrabeat Sample Slider"<span class="s1"> ).front;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s5">// create a new window<span class="Apple-tab-span">	</span></span></p>
+<p class="p1"><br></p>
+<p class="p3"><span class="s2">StaticText</span>(w, <span class="s2">Rect</span>(0,100,400,20))</p>
+<p class="p3"><span class="Apple-tab-span">	</span>.background_(<span class="s2">Color</span>.rand)</p>
+<p class="p6"><span class="s1"><span class="Apple-tab-span">	</span>.string_(</span>"Use the slider to control the rate of synth"<span class="s1">)</span></p>
+<p class="p2"><span class="s1"><span class="Apple-tab-span">	</span>.align_(</span><span class="s6">\center</span><span class="s1">);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// Put some text to the window</p>
+<p class="p1"><br></p>
+<p class="p3">n = <span class="s2">NumberBox</span>(w, <span class="s2">Rect</span>(20, 20, 150, 20));<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s5">// create a numberbox<span class="Apple-converted-space"> </span></span></p>
+<p class="p3">a = <span class="s2">Slider</span>(w, <span class="s2">Rect</span>(20, 60, 150, 20))<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s7">// create a slider</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p3"><span class="Apple-tab-span">	</span>.action_({</p>
+<p class="p2"><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s2">var</span><span class="s1"> therealvalue;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// declare the variable "therealvalue"</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>therealvalue =<span class="Apple-converted-space">  </span>a.value - 0.5 * 5;<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>n.value_(therealvalue);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s5">// Numberbox value<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>f.set(<span class="s4">\rate</span>, therealvalue);</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p3">)</p>
+<p class="p1"><br></p>
+<p class="p1"><span class="Apple-tab-span">	</span></p>
+<p class="p2">/// =========================================================</p>
+<p class="p1"><br></p>
+<p class="p2">// Classes - Mark up each one of the following classes and press cmd-d for help</p>
+<p class="p1"><br></p>
+<p class="p4">Buffer</p>
+<p class="p4">SynthDef</p>
+<p class="p4">Out</p>
+<p class="p4">PlayBuf</p>
+<p class="p4">Server</p>
+<p class="p4">Synth</p>
+<p class="p4">Window</p>
+<p class="p4">Numberbox</p>
+<p class="p4">Slider</p>
+<p class="p4">Rect</p>
+<p class="p4">StaticText</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+</body>
+</html>

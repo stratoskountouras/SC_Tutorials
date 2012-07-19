@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p12 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {color: #007300}
+span.s5 {font: 14.0px Lucida Grande}
+span.s6 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 9.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 6: Wii in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Connecting</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Preparing: step-by-step (5 steps)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Receiving data</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• A sound example using Ctk and Procmod</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= WII IN SUPERCOLLIDER =================</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== CONNECTING ======</b></p>
+<p class="p7">// The Wiimote connects to your computer via bluetooth, using a proprietary format from Nintendo. There are a few different implementations hacking their way through the protocol, with some being more stable than others.</p>
+<p class="p7">// Most of these implementations can also get data from the Nunchuk add-on, but none yet from the WiiMotionPlus. However, as these add-ons connect to the Wiimote with a SerialPort, it is very easy to get data from then with an Arduino - all you need to do is read the data through the Arduino's analog ins. There is an adapter (Wiichuck), but you can also stick cables to your Nunchuk's or WiiMotionPlus' connectors and easily retreive all data.</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Preparing: step-by-step (5 steps)--</b></p>
+<p class="p6"><br></p>
+<p class="p7">// Connect Wii with DarwiinRemoteOSC</p>
+<p class="p7">// get DarwiinRemoteOSC here:</p>
+<p class="p8">"open http://code.google.com/p/darwiinosc/downloads/list"<span class="s2">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p7">/*<span class="Apple-converted-space"> </span></p>
+<p class="p7">• This project is based on darwiinremote. It is stable (though I haven't used it extensively).<span class="Apple-converted-space"> </span></p>
+<p class="p7">// You can also use the MusicController app, but there is no support for nunchuk and IR</p>
+<p class="p7">• There is another implementation based on the aka.wiimote max/msp object but that one is very shaky. Inside SC, the WiiMote object uses that implementation, but I never got it to work. Supposedly it is perfect in Linux.<span class="Apple-converted-space"> </span></p>
+<p class="p7">• There is yet another implementation, (the class is called Wiimote), but I didn't get that to work ever either - maybe it was written on a PPC machine... or maybe it just is a bad implementation</p>
+<p class="p7">• If you feel like spending a bit of money ($20-40), there is also OSCulator, which can talk to the Wiimote and send OSC data to SC</p>
+<p class="p7">*/</p>
+<p class="p6"><br></p>
+<p class="p7">/*</p>
+<p class="p7"><b>• step 1:</b><span class="Apple-converted-space"> </span></p>
+<p class="p7">turn on your computer's bluetooth</p>
+<p class="p9"><br></p>
+<p class="p7"><b>• step 2:<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">turn on DarwiinRemoteOSC<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p7"><b>• step 3:<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">Press buttons 1 &amp; 2 simultaneously; the LED's will flash until your Wii connects</p>
+<p class="p9"><br></p>
+<p class="p7"><b>• step 4:<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">Go to the preferences of DarwiinRemoteOSC and set the port nr to 57120 (the sclang port)</p>
+<p class="p9"><br></p>
+<p class="p7"><b>• step 5:<span class="Apple-converted-space"> </span></b></p>
+<p class="p7">Turn on your responders below, and you're good to go!</p>
+<p class="p7">*/</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">/* <b>addres space</b>: this is how the incoming OSC data from DarwiinRemoteOSC is named <span class="Apple-converted-space">  </span>*/</p>
+<p class="p7">/*</p>
+<p class="p7">/wii/connected , i</p>
+<p class="p7">/wii/mousemode , i</p>
+<p class="p7">/wii/button/a , i</p>
+<p class="p7">/wii/button/b , i</p>
+<p class="p7">/wii/button/up , i</p>
+<p class="p7">/wii/button/down , i</p>
+<p class="p7">/wii/button/left , i</p>
+<p class="p7">/wii/button/right , i</p>
+<p class="p7">/wii/button/minus , i</p>
+<p class="p7">/wii/button/plus , i</p>
+<p class="p7">/wii/button/home , i</p>
+<p class="p7">/wii/button/one , i</p>
+<p class="p7">/wii/button/two , i</p>
+<p class="p7">/wii/acc , fff</p>
+<p class="p7">/wii/orientation , ff</p>
+<p class="p7">/wii/irdata , ffffffffffff</p>
+<p class="p7">/wii/batterylevel , f</p>
+<p class="p7">/nunchuk/joystick , ff</p>
+<p class="p7">/nunchuk/button/z , i</p>
+<p class="p7">/nunchuk/button/c , i</p>
+<p class="p7">/nunchuk/acc , fff</p>
+<p class="p7">/nunchuk/orientation , ff</p>
+<p class="p7">*/</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Receiving data --</b></p>
+<p class="p10">(</p>
+<p class="p6"><br></p>
+<p class="p7">// accelerometer (format is x, y, z)</p>
+<p class="p10">~accel = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/acc'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// orientation<span class="Apple-converted-space"> </span></p>
+<p class="p10">~orient = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/orientation'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// buttons:</p>
+<p class="p10">~buttonA= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/a'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonB= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/b'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~button1= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/one'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~button2= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/two'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonLeft= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'//wii/button/left'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonRight= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/right'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonUp= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/up'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonDown= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/down'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonPlus= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/plus'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonMinus= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/minus'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonHome= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/home'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// infrared data (will only work with two IR LEDs)</p>
+<p class="p10">~ir = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/irdata'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// battery level: doesn't seem to work, but no big deal...</p>
+<p class="p10">~bat = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/batterylevel'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// nunchuck: joystick</p>
+<p class="p10">~nunJoy = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/nunchuk/joystick'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// nunchuck: accelerometer</p>
+<p class="p10">~nunAccel = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/nunchuk/acc'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// nunchuck: orientation</p>
+<p class="p10">~nunOrient = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/nunchuk/orientation'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// nunchuck: button C</p>
+<p class="p10">~nunZ = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/nunchuk/button/c'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// nunchuck: button Z</p>
+<p class="p10">~nunC = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/nunchuk/button/z'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">args[2].postln;</p>
+<p class="p10">}).add;</p>
+<p class="p10">)</p>
+<p class="p6"><br></p>
+<p class="p7">// remove all OSCresponders:</p>
+<p class="p10">[~accel, ~orient, ~buttonA, ~buttonB, ~button1, ~button2, ~buttonLeft, ~buttonRight, ~buttonUp, ~buttonDown, ~buttonPlus, ~buttonMinus, ~buttonHome, ~ir, ~bat, ~nunJoy, ~nunAccel, ~nunOrient, ~nunZ, ~nunC].do{<span class="s3">|i|</span> i.remove}</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== A SOUND EXAMPLE USING CTK AND PROCMOD ======</b></p>
+<p class="p1">// This is a similar example with Class7.1 and Class7.2. The implementation is a bit crude, and only a few parameters of the wii are mapped, but you'll get the idea:</p>
+<p class="p11"><br></p>
+<p class="p12">(</p>
+<p class="p1">// === • Interfacing connections: ===</p>
+<p class="p1">// first, connect your Wiimote, according to the directions above</p>
+<p class="p6"><br></p>
+<p class="p7">// === • Sound synthesis ===</p>
+<p class="p7">// load a simple FM synth, no mapping inside the synth</p>
+<p class="p13"><span class="s2">~combfm = </span>CtkSynthDef<span class="s2">( </span><span class="s4">\combFM</span><span class="s2">, { </span>|outbus = 0, freq = 440, harm = 1, modix = 1, delay = 0.1, pan = 0, amp = 0.5, envbus, freqMul = 1|</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> car, mod, out, dev, modfreq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq = freq * freqMul;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>modfreq = <span class="s3">Lag</span>.kr(freq * harm);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>dev = modix * modfreq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>mod = <span class="s3">SinOsc</span>.ar(modfreq, 0, dev);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>car = <span class="s3">SinOsc</span>.ar(freq + (mod * modix));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>out = <span class="s3">Out</span>.ar(outbus, (<span class="s3">Pan2</span>.ar(<span class="s3">CombC</span>.ar(car, 0.5, delay, 0.5), pan, amp) * <span class="s3">In</span>.kr(envbus)));<span class="s5"><br>
+</span>});</p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p6"><span class="Apple-tab-span">	</span></p>
+<p class="p7">/// === • mapping stuff ===</p>
+<p class="p6"><br></p>
+<p class="p7">// create as many control buses as the parameters of the controlling interface</p>
+<p class="p10">~ctrl = 6.collect({<span class="s3">CtkControl</span>.play});</p>
+<p class="p6"><br></p>
+<p class="p7">// create some envelopes to handle the parameter mapping as you wish</p>
+<p class="p10">~panEnv = <span class="s3">Env</span>([-1, 1], [1], <span class="s4">\lin</span>);</p>
+<p class="p10">~ampEnv = <span class="s3">Env</span>([0.001, 0.7], [1], 3);</p>
+<p class="p10">~modEnv = <span class="s3">Env</span>([1, 50], [1], 4);</p>
+<p class="p10">~freqEnv = <span class="s3">Env</span>([40, 3000], [1], 4);</p>
+<p class="p7">//~cutEnv = Env([50, 8000], [1], 2);</p>
+<p class="p10">~delEnv = <span class="s3">Env</span>([0.001, 0.5], [1], 2);</p>
+<p class="p10">~harmEnv = <span class="s3">Env</span>([0.1, 10], [1], 2);</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">/// --- the wii controls --- \\\</p>
+<p class="p6"><br></p>
+<p class="p7">// buttons:</p>
+<p class="p7">/*</p>
+<p class="p7">B starts the procmod</p>
+<p class="p7">A stops<span class="Apple-converted-space">  </span>the procmod</p>
+<p class="p7">*/</p>
+<p class="p10">~buttonB= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/b'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">p.play;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p10">~buttonA= <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/button/a'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10">p.release;</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p7">// use the accelerometer to deduce positioning in 3space and overall acceleration (this would definitely benefit from some low-pass filtering, that's up to you to implement using mapping examples seen previously)<span class="Apple-converted-space"> </span></p>
+<p class="p10">~acc = <span class="s3">OSCresponderNode</span>(<span class="s3">nil</span>, <span class="s4">'/wii/acc'</span>, {<span class="s3">arg</span> ...args;<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> accels, magnitude, pitch, roll, yaw, testyaw;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// scale down incoming data to 0to1 range</p>
+<p class="p10"><span class="Apple-tab-span">	</span>accels = [args[2][1], args[2][2], args[2][3]] - 122; <span class="s6">// 0 is the middle point</span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>accels = accels / 200; </span>// try to turn it into a 0to1 range</p>
+<p class="p6"><br></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// deduce magnitude of movement:</p>
+<p class="p10"><span class="Apple-tab-span">	</span>magnitude = ((accels[0] ** 2) + (accels[1] ** 2) + (accels[2] ** 2)) ** 0.5;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// deduce pitch: in radians</p>
+<p class="p10"><span class="Apple-tab-span">	</span>pitch = ((accels[1]/accels[2]).atan) * -1;<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// deduce roll: in radians</p>
+<p class="p10"><span class="Apple-tab-span">	</span>roll = (accels[0]/accels[2]).atan;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// deduce yaw: in radians (attn: it gives NaN every now and then...)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>testyaw = (accels[0]/accels[1]).atan;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>if (testyaw.isValidUGenInput == <span class="s3">true</span>, {yaw = testyaw}, {yaw = 0}); <span class="s6">// protect from NaN<span class="Apple-tab-span">	</span></span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>//[magnitude, pitch, roll, yaw].postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>~ctrl[1].set([~harmEnv[(pitch + (pi/2)) / pi]]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>~ctrl[0].set([~panEnv[(roll + (pi/2)) / pi]]);<span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>~ctrl[3].set([~delEnv[(yaw + (pi/2)) / pi]]);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>~ctrl[5].set([~modEnv[magnitude]]);</p>
+<p class="p10">}).add;</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7">// === • the procmod ===</p>
+<p class="p10">p = <span class="s3">ProcMod</span>.new(<span class="s3">Env</span>([0, 1, 0], [0.1, 3], <span class="s4">\sin</span>, 1), id: <span class="s4">\testHID</span>, server: s)</p>
+<p class="p10">.function_({<span class="s3">arg</span> group, envbus, server;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> note;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>note = ~combfm.new(target:group)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.freqMul_(1)</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>//.pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(0.5).delay_(~ctrl[3]).freq_(220).harm_(~ctrl[5])</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(0.1).delay_(~ctrl[3]).freq_(220).harm_(~ctrl[5])</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.envbus_(envbus).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p10">)</p>
+<p class="p6"><br></p>
+<p class="p7">// don't forget to free the OSCresponders!</p>
+<p class="p10">~acc.remove</p>
+<p class="p10">~buttonB.remove</p>
+<p class="p10">~buttonA.remove</p>
+<p class="p6"><br></p>
+</body>
+</html>

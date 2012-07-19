@@ -1,0 +1,237 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 3.1:
+\b0 \
+
+\b 	Timing in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Clocks\
+				- SystemClock\
+				- TempoClock\
+				- AppClock\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= CLOCKS =================
+\b0 \cf3 \
+\cf2 // In order to time processes, you need a class that can parse time: a Clock\cf3 \
+\cf2 // There are three different clocks in SC.\cf3 \
+\
+
+\b \cf2 // ====== SystemClock ======
+\b0 \cf3 \
+\cf2 // In SC there is a global clock, called {\field{\*\fldinst{HYPERLINK "SC://SystemClock"}}{\fldrslt \cf2 \ul \ulc2 SystemClock}}. This is the most accurate option if you want to measure time in seconds. Notice that SystemClock is global, or a 
+\b singleton
+\b0 ; that is, only one instance can exist at a time inside SC (which makes a lot of sense since it's the 'system' clock)\cf3 \
+\
+\cf2 // let's create a syntdef to use in this entire file:\cf3 \
+s.boot;\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\gray\cf3 , \{\cf4 arg\cf3  outBus = 0, freq = 400, amp = 1, dur = 1;\
+	\cf4 var\cf3  env, src, fdbin, fdbout;\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 1, 0], [0.05, 0.95], \cf5 \\sin\cf3 ), timeScale: dur, levelScale: amp, doneAction: 2);\
+	src = \cf4 LPF\cf3 .ar(\cf4 GrayNoise\cf3 .ar(amp), freq, env);\
+	\cf4 Out\cf3 .ar(outBus, \cf4 Pan2\cf3 .ar(src, \cf4 Rand\cf3 .new(-0.7, 0.7)));\
+\}).load(s);\
+)\
+\
+\cf2 // now, play it once after half a second using the system clock. \cf3 \
+(\
+\cf4 SystemClock\cf3 .sched(\
+	0.5, \cf2 // time delay from evaluation  \cf3 \
+	\{\cf4 Synth\cf3 (\cf5 \\gray\cf3 )\} \cf2 // what you want your clock to do; Attention: Must be a function!\cf3 \
+	);\
+)\
+\
+\cf2 // now let's create a few repeating noise bursts:\cf3 \
+(\
+\cf4 SystemClock\cf3 .sched(\
+	0.5, \cf2 // time delay from evaluation  \cf3 \
+	\{\cf4 Synth\cf3 (\cf5 \\gray\cf3 ); \cf2 // function for the clock to perform	\cf3 \
+	0.75\} \cf2 // repeat every 0.75 secs\cf3 \
+	);\
+)\
+\cf2 // you can manually stop it with 
+\i \cf2 Command-period, 
+\i0 \cf2 or:\cf3 \
+\cf4 SystemClock\cf3 .clear; \
+\cf2 // Yes, either way will clear ALL running SystemClocks...\cf3 \
+\
+\
+\cf2 // let's try to make it a bit more interesting\cf3 \
+(\
+b = \cf4 Array\cf3 .series(7, 0.125, 0.125).reverse; \cf2 // use this to create a bit more complex timing \cf3 \
+\cf4 SystemClock\cf3 .sched(\
+	0.5, \cf2 // time delay from evaluation  \cf3 \
+	\{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([\cf5 \\freq\cf3 , 1200.rrand(400) , \cf5 \\amp\cf3 , 1.rrand(0.5)])); \cf2 // function for the clock to perform, made slightly more interesting\cf3 \
+	b.choose\}  \cf2 // pick any value from that array\cf3 \
+	);\
+)\
+\
+\cf2 // now let's trigger a 10 second gesture  by pressing spacebad\cf3 \
+(\
+b = \cf4 Array\cf3 .series(7, 0.125, 0.125).reverse; \cf2 // use this to create a bit more complex timing \cf3 \
+w = \cf4 SCWindow\cf3 .new(\cf6 "press space to start a 10sec gesture"\cf3 );\
+w.view.keyDownAction = \{ \cf4 arg\cf3  view, char, modifiers, unicode, keycode;\
+	if (unicode == 32, \{\
+		t = \cf4 Main\cf3 .elapsedTime; \
+		\cf6 "elapsed time is: "\cf3 .post; t.postln;\
+		\cf4 SystemClock\cf3 .sched(\
+		1, \cf2 // time delay from evaluation  \cf3 \
+		\{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([\cf5 \\freq\cf3 , 1200.rrand(400) , \cf5 \\amp\cf3 , 1.rrand(0.5)])); \cf2 // function for the clock to perform, made slightly more interesting\cf3 \
+		b.choose\}  \cf2 // pick any value from that array\cf3 \
+		);\
+		\cf4 SystemClock\cf3 .sched(11, \{\cf4 SystemClock\cf3 .clear\}) \cf2 // after 10 seconds, stop the clock\cf3 \
+	\})\};\
+w.front;\
+)\
+\
+\cf2 // The .sched method uses relative timing, counting from when the code was evaluate\cf3 \
+\cf2 // But, you can also time things to happen in a specific time after SC loads, using the .schedAbs method. The following example gives the same exact results, but with a different method:\cf3 \
+\
+(\
+b = \cf4 Array\cf3 .series(7, 0.125, 0.125).reverse; \cf2 // use this to create a bit more complex timing \cf3 \
+w = \cf4 SCWindow\cf3 .new(\cf6 "press space to start a 10sec gesture"\cf3 );\
+w.view.keyDownAction = \{ \cf4 arg\cf3  view, char, modifiers, unicode, keycode;\
+	if (unicode == 32, \{\
+		t = \cf4 Main\cf3 .elapsedTime; \
+		(\cf6 "SC has been open for "\cf3 ++ t.asString++\cf6 " seconds"\cf3 ).postln;\
+		\cf4 SystemClock\cf3 .schedAbs(\
+		t +1, \cf2 // time delay from evaluation  \cf3 \
+		\{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([\cf5 \\freq\cf3 , 1200.rrand(400) , \cf5 \\amp\cf3 , 1.rrand(0.5)])); \cf2 // function for the clock to perform, made slightly more interesting\cf3 \
+		b.choose\}  \cf2 // pick any value from that array\cf3 \
+		);\
+		\cf4 SystemClock\cf3 .schedAbs(t + 11, \{\cf4 SystemClock\cf3 .clear\})\
+	\})\};\
+w.front;\
+)\
+\
+\
+
+\b \cf2 // ====== TempoClock ======
+\b0 \cf3 \
+\cf2 // Another option for timing is to use {\field{\*\fldinst{HYPERLINK "SC://TempoClock"}}{\fldrslt \cf2 \ul \ulc2 TempoClock}}. This clock measures time in beats-per-second (not beats-per-minute) and is as stable as the SystemClock; besides tempo related time, it can give you the elapsed time too. It is also NOT a singleton, so you can have many instances running at the same time - and you can stop each one individually. It has many more methods than SystemClock.\cf3 \
+\
+\cf2 // Here's an example we saw with SystemClock, but using TempoClock instead:\cf3 \
+\
+(\
+c = \cf4 TempoClock\cf3 (1.5); \cf2 // create a new clock with 1.5 beats-per-second, ie: 1.5 * 60 = 90bpm\cf3 \
+c.schedAbs(\
+	1, \cf2 // time delay from evaluation (in beats)\cf3 \
+	\{\cf4 arg\cf3  ...args;\
+		[c.bar, args[0], args[1]].postln; \cf2 // post current bar, current beat nr and elapsed time\cf3 \
+		\cf4 Synth\cf3 (\cf5 \\gray\cf3 ); \cf2 // make some sound\cf3 \
+	2.0\}); \cf2 // repeat every second beat\cf3 \
+)\
+c.tempo_(3); \cf2 // double the tempo\cf3 \
+c.elapsedBeats.postln; \cf2 // you can also ask what the current beat nr is\cf3 \
+c.elapsedBeats.ceil; \cf2 // or get the next beat\cf3 \
+c.stop; \cf2 //stop the clock\cf3 \
+\
+\
+\cf2 // some polyrthythm: 4/4 on 7/4 \cf3 \
+(\
+c = \cf4 TempoClock\cf3 (6);\
+c.schedAbs(1, \{\cf4 arg\cf3  beat, sec;\
+	if (beat % 4 == 0, \{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:5000.rrand(8000), amp:0.25]))\});\
+	if (beat % 4 == 2, \{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:4000.rrand(5000), amp:0.3]))\});\
+	if (beat % 7 == 0, \{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:400.rrand(800), amp:0.6]))\});\
+	if (beat % 7 == 2, \{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:800.rrand(1000), amp:0.55]))\});\
+	if (beat % 7 == 4, \{\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:1000.rrand(3000), amp:0.35]))\});\
+	0.5\}); \
+)\
+c.tempo_(3)\
+c.stop\
+\cf2 // You can have two clocks running at the same time.\cf3 \
+(\
+m = \cf4 Main\cf3 .elapsedTime; \cf2 // use this to synchronize them\cf3 \
+c = \cf4 TempoClock\cf3 (2, 0, m + 1); \cf2 // create a new clock with 1.5 beats-per-second, ie: 1.5 * 60 = 90bpm\cf3 \
+c.schedAbs( 0, \cf2 // time delay from evaluation (in beats)\cf3 \
+	\{\cf4 arg\cf3  ...args;\
+		\cf6 "clock one is here: "\cf3 .post;\
+		[c.bar, args[0], args[1]].postln; \cf2 // post current bar, current beat nr and elapsed time\cf3 \
+		\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:500, amp:0.6])); \cf2 // make some sound\cf3 \
+	2.0\}); \cf2 // repeat every second beat\cf3 \
+	\
+d = \cf4 TempoClock\cf3 (3.5, 0, m + 1); \cf2 // create a new clock with 1.5 beats-per-second, ie: 1.5 * 60 = 90bpm\cf3 \
+d.schedAbs( 1, \cf2 // time delay from evaluation (in beats)\cf3 \
+	\{\cf4 arg\cf3  ...args;\
+		\cf6 "clock two is here: "\cf3 .post;\
+		[c.bar, args[0], args[1]].postln; \cf2 // post current bar, current beat nr and elapsed time\cf3 \
+		\cf4 Synth\cf3 (\cf5 \\gray\cf3 , ([freq:5000, amp:0.25])); \cf2 // make some sound\cf3 \
+	1.0\}); \cf2 // repeat every second beat\cf3 \
+)\
+\
+\
+
+\b \cf2 // ====== AppClock ======
+\b0 \cf3 \
+\
+\cf2 // Finally, {\field{\*\fldinst{HYPERLINK "SC://AppClock"}}{\fldrslt \cf2 \ul \ulc2 AppClock}} is another singleton clock, very similar in functionality to SystemClock - but less reliable because it runs on a lower priority thread. This is because AppClock is the clock to use for dealing with graphics, which in SuperCollider 3 have to run on a lower priority. \cf3 \
+\cf2 // If you do something and get a post like "cannot be called from this process", you need to replace the clock you're using with the AppClock, OR put your GUI code inside a function running on a lower priority thread by using the .defer method:\cf3 \
+\{\cf2 //GUI code\cf3 \
+	\}.defer\
+\cf2 // This will actually reassign the function to the AppClock for you behind the scenes. So this:\cf3 \
+(\
+\cf4 var\cf3  w, r;\
+w = \cf4 Window\cf3 .new(\cf6 "trem"\cf3 , \cf4 Rect\cf3 (200, 200, \cf4 Window\cf3 .screenBounds.width * 0.5, \cf4 Window\cf3 .screenBounds.height * 0.5));\
+w.front;\
+r = \cf4 Routine\cf3 (\{ \cf4 arg\cf3  time;\
+		60.do(\{ \cf4 arg\cf3  i;\
+			0.05.yield;\
+				w.bounds = w.bounds.moveBy(10.rand2, 10.rand2);\
+				w.alpha = cos(i*0.1pi)*0.5+0.5;\
+		\});\
+		1.yield;\
+		w.close;\
+\});\
+\cf4 AppClock\cf3 .play(r);\
+)\
+\cf2 // Is the same as this:\cf3 \
+(\
+\cf4 var\cf3  w, r;\
+w = \cf4 Window\cf3 .new(\cf6 "trem"\cf3 , \cf4 Rect\cf3 (200, 200, \cf4 Window\cf3 .screenBounds.width * 0.5, \cf4 Window\cf3 .screenBounds.height * 0.5));\
+w.front;\
+r = \cf4 Routine\cf3 (\{ \cf4 arg\cf3  time;\
+		60.do(\{ \cf4 arg\cf3  i;\
+			0.05.yield;\
+			\{\cf2 // must enclose this in a defered loop!\cf3 \
+				w.bounds = w.bounds.moveBy(10.rand2, 10.rand2);\
+				w.alpha = cos(i*0.1pi)*0.5+0.5;\
+			\}.defer; \cf2 // Notice the .defer here - otherwise it won't work!\cf3 \
+		\});\
+		1.yield;\
+		w.close;\
+\});\
+\cf4 SystemClock\cf3 .play(r);\
+)\
+}

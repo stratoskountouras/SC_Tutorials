@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px Optima; color: #000000; min-height: 13.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 11.0px Optima; color: #bf0000}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p14 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p15 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p16 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #0000ff}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {text-decoration: underline}
+span.s5 {text-decoration: underline ; color: #0000bf}
+span.s6 {text-decoration: underline ; color: #000000}
+span.s7 {text-decoration: underline ; color: #0000ff}
+span.s8 {color: #0000ff}
+span.s9 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 2.3:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Extending SuperCollider with Quarks</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Quarks</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- About</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Downloading and keeping up-to-date</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Publishing a Quark</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Adding classes manually</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Some useful Quarks for the scope of this class (June 2010)</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= QUARKS =================</b></p>
+<p class="p8"><br></p>
+<p class="p1">// Quarks are third-party extensions to SC's library, documentation and UGen plugins. A Quark is a package containing SC classes (.sc file(s)), helpfiles (.html), possibly C++ source for UGens (.scx) and perhaps example, overview or other files.<span class="Apple-converted-space"> </span></p>
+<p class="p1">// When you download the full SC version, you get the entire Quarks library existing at the point of your download.</p>
+<p class="p6"><br></p>
+<p class="p1">//Here's a link to the online quark repository:</p>
+<p class="p9">"open http://quarks.sourceforge.net/"<span class="s2">.unixCmd</span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== DOWNLOAD AND UPDATE ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ OSX and LINUX ------</b></p>
+<p class="p1"><span class="s3">Quarks</span><span class="s2">.gui </span>// use this command to install any quark via a GUI, then do what the GUI says</p>
+<p class="p10"><br></p>
+<p class="p1">/* or, read here for different ways, and more info:</p>
+<p class="p1"><span class="s4">[<a href="SC://Quarks">Quarks</a></span>]</p>
+<p class="p1">*/</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Windows -----</b></p>
+<p class="p11">// to install quarks into windows machines look here (the method is different:</p>
+<p class="p12">// http://swiki.hfbk-hamburg.de:8888/MusicTechnology/883</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Publishing a Quark ------</b></p>
+<p class="p1">// Read here as well if you want to publish a quark. You probably also want to consult the sc-users mailing list for naming conflicts...</p>
+<p class="p1">// [<a href="SC://Quark"><span class="s4">Quark</span></a>]</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ------ Adding classes manually ------</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Of course, you can also add or remove classes that you've downloaded or classes that you have created yourself:</p>
+<p class="p8"><span class="Apple-converted-space"> </span></p>
+<p class="p7">// Class files are located in the SCCLassLibrary folder of your SuperCollider application directory:</p>
+<p class="p9">"open SCCLassLibrary"<span class="s2">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p7">// Help files are located in the same directory, inside the Help file:</p>
+<p class="p9">"open Help"<span class="s2">.unixCmd<span class="Apple-converted-space"> </span></span></p>
+<p class="p7">// If you add help-files, you may have to recompile the help path for them to appear on the Help GUI. The command is:</p>
+<p class="p13"><span class="s3">Help</span>.rebuildTree</p>
+<p class="p8"><br></p>
+<p class="p7">// UGen plugin files are located inside the plugins file:</p>
+<p class="p9">"open plugins"<span class="s2">.unixCmd</span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// Have a look here for more details on folder locations and extension file organization:</p>
+<p class="p1">// [<a href="SC://Using-Extensions"><span class="s4">Using-Extensions</span></a>]</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ====== SOME USEFUL QUARKS FOR THIS CLASS (as of June 2010) ======<span class="Apple-converted-space"> </span></b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= large libraries =======<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s5"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Ctk/Ctk Help/Ctk.htm">Ctk</a></span><span class="s2"> </span>// Josh Parmenter's MUST-HAVE library</p>
+<p class="p1"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/dewdrop_lib/dewdrop_lib/dewdrop.html">dewdrop</a></span><span class="s2"> </span>// (huge library, some useful MIDI stuff, Patterns and other)</p>
+<p class="p1"><span class="s5"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/redSys/RedSys.html">RedSys</a></span><span class="s2"> </span>// (huge library, 'traditional' electronica toolkit)</p>
+<p class="p1"><span class="s6"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/wslib.html">wslib</a></span><span class="s2"> </span>// (huge library, some MIDI, extensions, and the best looking GUI)</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= Interfacing =======<span class="Apple-converted-space"> </span></p>
+<p class="p1">// Computer Peripherals</p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MultiTouchPad/Help/MultiTouchPad.html">MultiTouchPad<span class="s5"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// On-board laptop sensors</p>
+<p class="p15"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Laptop/Laptop.html">Laptop<span class="s5"></span></a></span></p>
+<p class="p14"><span class="s4"><a href="SC://RedInfoLmu">RedInfoLmu<span class="s5"></span></a></span></p>
+<p class="p14"><span class="s4"><a href="SC://RedInfoSms">RedInfoSms<span class="s5"></span></a></span></p>
+<p class="p15"><span class="s4"><a href="SC://RedInfoBat">RedInfoBat<span class="s5"></span></a></span></p>
+<p class="p8"><br></p>
+<p class="p1">//Arduino</p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SCPyduino/SCPyduino.html">SCPyduino<span class="s5"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// Sensors</p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/SenseWorld.html">SenseWorld<span class="s5"></span></a></span></p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/DataNetwork/Help/SenseWorldDataNetwork.html">SenseWorldDataNetwork<span class="s5"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// Haptic controllers</p>
+<p class="p1"><span class="s5"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Dimple/Help/Dimple.html">Dimple</a></span><span class="s2"><span class="Apple-converted-space">  </span></span>// only partial implementation for now...</p>
+<p class="p6"><br></p>
+<p class="p1">// tangible interfaces</p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/tuio/help/TUIO.html">TUIO<span class="s5"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= Open Sound Control =======<span class="Apple-converted-space"> </span></p>
+<p class="p1">// OSC</p>
+<p class="p1"><span class="s5"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/OpenObject/OpenObject.html">OpenObject</a></span><span class="s2"> </span>//OSC simplified</p>
+<p class="p6"><br></p>
+<p class="p1">// Networking</p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/NetLib/help/NetLib.html">NetLib<span class="s5"></span></a></span></p>
+<p class="p14"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Republic/Republic.html">Republic<span class="s5"></span></a></span></p>
+<p class="p1"><span class="s5"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/OscGroupClient/OscGroupClient.html">OscGroupClient</a></span><span class="s2"> </span>//OSC through the internet</p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= GUI and graphics =======<span class="Apple-converted-space"> </span></p>
+<p class="p1">//GUI</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Automation/Help/Automation.scd">Automation<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ClockFace/ClockFace.html">ClockFace<span class="s7"></span></a></span></p>
+<p class="p14"><span class="s4"><a href="http://../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/FileListView/FileListView.help.rtf">FileListView<span class="s5"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ixiViews/help/ixiViews.html">ixiViews<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/PopUpTreeMenu/PopUpTreeMenu.html">PopUpTreeMenu<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/TabbedView/TabbedView.html">TabbedView<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/VuView/VuView.html">VuView<span class="s7"></span></a></span></p>
+<p class="p1"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/wslib.html">wslib</a></span><span class="s2"> </span>// a quark library with many - and the best looking - GUIs</p>
+<p class="p6"><br></p>
+<p class="p1">// graphics</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SCAnimation/help/SCAnimation.html">SCAnimation<span class="s7"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= Utilities and other =======<span class="Apple-converted-space"> </span></p>
+<p class="p1">// Scheduling</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/DayTimer/DayTimer.html">DayTimer<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ListeningClocks/help/ListeningClocks.html">ListeningClocks<span class="s7"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p1">// Presets</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/DataCollector.html">DataCollector</a></span><span class="s2"> (from </span><span class="s3">SenseWorld</span><span class="s2">)</span></p>
+<p class="p6"><br></p>
+<p class="p1">// Statistics</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MathLib/help/extStatistics.html">extStatistics</a></span><span class="s2"> (from <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MathLib/help/MathLib.html"><span class="s8">MathLib</span></a>)</span></p>
+<p class="p14"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd">StatUGens</a></span><span class="s2"> (from </span>SenseWorld<span class="s2">)</span></p>
+<p class="p6"><br></p>
+<p class="p1">// physical models</p>
+<p class="p1"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/redUniverse/redUniverseExamplesOverview.html">redUniverseExamplesOverview</a></span><span class="s2"> </span>// redUniverse quark (huge library, with some amazing stuff)</p>
+<p class="p6"><br></p>
+<p class="p1">// Bio-algorithmic goodies</p>
+<p class="p16"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/NatureToolkit/NatureToolkit.html">NatureToolkit</a></p>
+<p class="p6"><br></p>
+<p class="p1">// other</p>
+<p class="p1"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/MP3/MP3.html">MP3</a></span><span class="s2"> </span>// read mp3's locally and on the net</p>
+<p class="p1"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/ProcessTools/ProcessTools.html">ProcessTools</a></span><span class="s2"> </span>// interact with UNIX</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/redSys/redTapTempo/RedTapTempoGUI.html">RedTapTempoGUI</a></span><span class="s2"> </span><span class="s9">//from redSys</span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/Spectrogram/Spectrogram.html">Spectrogram<span class="s7"></span></a></span></p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/TuningLib/Help/TuningLib.html">TuningLib<span class="s7"></span></a></span></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p1">// ======= Various audio (not the focus of this list) =======<span class="Apple-converted-space"> </span></p>
+<p class="p1">// sampling</p>
+<p class="p1"><span class="s7"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/redSampler/RedSampler.html">RedSampler</a></span><span class="s2"> </span>// a giga-sampler-like Class</p>
+<p class="p6"><br></p>
+<p class="p1">// Spatialization</p>
+<p class="p1"><span class="s3">Atk</span><span class="s2"> </span>// Ambisonics (not released yet)</p>
+<p class="p1"><span class="s8"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/AmbIEM/Help/AmbIEM.html">AmbIEM</a></span><span class="s2"> </span>// binaural</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/SpeakersCorner/SpeakersCorner.html">SpeakersCorner</a></span><span class="s2"> </span><span class="s9">//</span></p>
+<p class="p6"><br></p>
+<p class="p1">// Builduing AUs</p>
+<p class="p16"><span class="s4"><a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/AudioUnitBuilder/AudioUnitBuilder.html">AudioUnitBuilder<span class="s7"></span></a></span></p>
+</body>
+</html>

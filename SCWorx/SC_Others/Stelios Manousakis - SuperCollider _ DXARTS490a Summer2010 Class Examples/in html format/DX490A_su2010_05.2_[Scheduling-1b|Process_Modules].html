@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {color: #007300}
+span.s5 {color: #606060}
+span.s6 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 5.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Scheduling 2: Process Modules</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Background</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• A simple model</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• ProcMod</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• ProcModR</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• ProcEvents</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• ProcSink</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p2"><b>(Note: The code examples below have been written by Josh Parmenter, who has written the ProcMod family class; these classes are part of the JoshUGens sc3-plugins)</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= PROCESS MODULES =================</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== Background (by Josh Parmenter) ======</b></p>
+<p class="p7"><b>/*</b></p>
+<p class="p7"><i>"In SC2, Richard Karpen's pieces 'Sotto/Sopra' and 'Solo/Tutti', Juan Pampin's 'OID' and my 'Music for Bassoon' were made up of 'processes'. When re-writing some of these into SC3, the idea of making them modular and into classes led to 'ProcMod'.</i></p>
+<p class="p7"><i>These 'processes' were then placed into an event list (a fixed event list) that a computer controller would advance as a player came to certain parts in the piece. (This event list became 'ProcEvents'). There HAD to be certain flexibilites. Flexibility with the performance was crucial, and is one of the more important aspects of the system.</i></p>
+<p class="p7"><i>ProcModR came about as a way to capture computer processing for recordings.</i></p>
+<p class="p9"><br></p>
+<p class="p7"><i>Some of the things we needed to be able to do:</i></p>
+<p class="p7"><i><span class="Apple-tab-span">	</span>- start and stop a routine,<span class="Apple-converted-space"> </span></i></p>
+<p class="p7"><i><span class="Apple-tab-span">	</span>- free resources when a process is done,<span class="Apple-converted-space"> </span></i></p>
+<p class="p7"><i><span class="Apple-tab-span">	</span>- global envelopes,<span class="Apple-converted-space"> </span></i></p>
+<p class="p7"><i><span class="Apple-tab-span">	</span>- simple GUI controls to start and stop things..."</i></p>
+<p class="p7">*/<span class="s2"><span class="Apple-tab-span">	</span></span></p>
+<p class="p7"><b>// ------ ... ------</b></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== A simple model ======</b></p>
+<p class="p8"><br></p>
+<p class="p10">s.boot;</p>
+<p class="p8"><br></p>
+<p class="p7">// A simple model of what kinds of things we may expect a real-time environment to be capable of:</p>
+<p class="p8"><br></p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> gate = 1, outbus, freq, amp;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">Control</span>.names(<span class="s4">\env</span>).kr(<span class="s3">Env</span>.newClear(4).asArray);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// here, we use doneAction: 2, since we don't know how long a note may be...</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// when the gate closes, and the Env is done executing, this will kill the synth</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(env, gate, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">SinOsc</span>.ar(freq, 0, amp * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, src);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><br></p>
+<p class="p7">// play the note</p>
+<p class="p7"><span class="s2">b = a.new.outbus_(0).freq_(440).amp_(0.1).env_(</span><span class="s3">Env</span><span class="s2">([0, 1, 0], [2, 4], [4, -4], 1)).play; </span>// notice the use of a 'releaseNode' in the envelope - this will make it sustain at node 1 of the envelope (in this example) until released</p>
+<p class="p8"><br></p>
+<p class="p7">// release it</p>
+<p class="p10">b.release;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">/*</p>
+<p class="p7">things you may want in real-time controls:</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- start things on the fly</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- stop things on the fly</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- overlap multiple events</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- give an envelope, assign a group and otherwise control a number of events</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- probably DON'T want to use scores at this point, since you don't want to fix the number</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>of events</p>
+<p class="p7"><span class="Apple-tab-span">	</span>- and possibly, take a single 'event' and record its output to disk</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== ProcMod ======</b></p>
+<p class="p7">/* A ProcMod is a real-time control structure for modular processes</p>
+<p class="p7"><span class="Apple-tab-span">	</span>'Process' - a single algorithmic idea, gesture or process - something to do</p>
+<p class="p7"><span class="Apple-tab-span">	</span>'Module' - it is modular</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p7">// creation method</p>
+<p class="p7">ProcMod(env, amp, id, group, addAction, target, function, releaseFunc, onReleaseFunc, responder,</p>
+<p class="p7"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>timeScale, lag, clock, server)</p>
+<p class="p7"><span class="Apple-tab-span">	</span>BUT - usually you just create with:</p>
+<p class="p7">ProcMod(env, amp, (id))</p>
+<p class="p7">*/<span class="s2"><span class="Apple-tab-span">	</span></span></p>
+<p class="p8"><br></p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s4">\singrain</span>, {<span class="s3">arg</span> freq, amp, dur, envbus;</p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span></span>OffsetOut<span class="s2">.ar(0,<span class="Apple-converted-space"> </span></span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pan2</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(freq, 0, amp) *<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>.sine(dur, amp), doneAction: 2) *</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">In</span>.kr(envbus),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Rand</span>.new(-1.0, 1.0)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span>) </span>// read off the overall env control of the ProcMod</p>
+<p class="p10">}).load(s);</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p7">// create a new proc mod, and assign a function to it</p>
+<p class="p10">p = <span class="s3">ProcMod</span>.new(<span class="s3">Env</span>([0, 1, 0], [1, 1], <span class="s4">\sin</span>, 1), server: s);</p>
+<p class="p10">p.function_({<span class="s3">arg</span> group, envbus, server;</p>
+<p class="p11"><span class="s2"><span class="Apple-tab-span">	</span></span>Task<span class="s2">({</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// start a new synth... run it inside this ProcMod's group,</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// and read control values off the envbus</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>server.sendMsg(<span class="s4">\s_new</span>, <span class="s4">\singrain</span>, server.nextNodeID, 0, group,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">\freq</span>, 440.rrand(1760), <span class="s4">\amp</span>, 0.1, <span class="s4">\dur</span>, 5, <span class="s4">\envbus</span>, envbus);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.5.wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><br></p>
+<p class="p7">// play it</p>
+<p class="p10">p.play;</p>
+<p class="p7">// change the amp</p>
+<p class="p10">p.amp_(2);</p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s2">p.release; </span>// when the global envelope is done, ALL running synths in this group are freed,</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-converted-space">  </span></span>// and the Task / inf.do loop is stopped</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><span class="s2">s.queryAllNodes; </span>// look at the node tree: notice that the ProcMod has created its own tree, and all the synths it creates are incorporated in it</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== ProcModR ======</b></p>
+<p class="p7">/*</p>
+<p class="p7">An extension to the ProcMod class, enabling you to record the output of the ProcModR to disk, tagging it with the ProcModR's id and a timestamp of when it was activated.</p>
+<p class="p7"><span class="Apple-tab-span">	</span>'Process' - a single algorithmic idea or process - something to do</p>
+<p class="p7"><span class="Apple-tab-span">	</span>'Module' - it is modular</p>
+<p class="p7"><span class="Apple-tab-span">	</span>'Record' - able to record this processes output</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7">// creation method:</p>
+<p class="p7">ProcModR(env, amp, numChannels, procout, id, group, addAction, target, function, releaseFunc,</p>
+<p class="p7"><span class="Apple-tab-span">	</span>onReleaseFunc, responder, timeScale, lag, clock, server);</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span>BUT - usually you just create with:</p>
+<p class="p7">ProcModR(env, amp, numChannels, procout, (id))</p>
+<p class="p9"><br></p>
+<p class="p7">NOTICE: ProcModR has two more arguments than ProcMod: <i>numChannels</i>, <i>procout. </i>You need to account for that, and the position of your set arguments if you want to convert a ProcMod into a ProcModR or vice-versa</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p7">// Now an example using the Ctk library</p>
+<p class="p8"><br></p>
+<p class="p10">a = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> gate = 1, outbus, freq, amp, pan;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">Control</span>.names(<span class="s4">\env</span>).kr(<span class="s3">Env</span>.newClear(4).asArray);</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// here, we use doneAction: 2, since we don't know how long a note may be...</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// when the gate closes, and the Env is done executing, this will kill the synth</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(env, gate, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">SinOsc</span>.ar(freq, 0, amp * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">Pan2</span>.ar(src, pan));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">p = <span class="s3">ProcModR</span>(<span class="s3">Env</span>([0, 1, 0], [2, 4], [4, -2], 1), 1, 2, 0, <span class="s4">\test</span>)</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// the unique Group id created by ProcModR is passed in to this function,<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// as well as the unique routing bus and the server, as well as the ProcModR itself</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.function_({<span class="s3">arg</span> group, routebus, server, pm;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> freqMask, task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freqMask = <span class="s3">Tendency</span>(<span class="s3">Env</span>([880, 440], [20]), <span class="s3">Env</span>([880, 1760], [20]));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task = <span class="s3">Task</span>({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> curFreq, curNote;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">arg</span> i;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// grab a value for a freq, using the 'now' value from the ProcModR</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curFreq = freqMask.at(pm.now);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote = a.new(target: group)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.env_(<span class="s3">Env</span>([0, 1, 0], [0.1, 4], [10, -4], 1)).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote.release(4.rrand(12));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0.5 + 2.0.rand).wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// return the task from the function. This tells ProcModR to manage it</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10">p.play;</p>
+<p class="p7"><span class="s2">p.release; </span>// when the global envelope is done, ALL running synths in this group are freed,</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-converted-space">  </span></span>// and the Task / inf.do loop is stopped</p>
+<p class="p8"><br></p>
+<p class="p10">s.queryAllNodes;</p>
+<p class="p8"><br></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-converted-space"> </span></p>
+<p class="p10">p.play(<span class="s5">"~/Desktop/"</span>.standardizePath, <span class="s3">true</span>, <span class="s5">"wav"</span>, <span class="s5">"float"</span>);</p>
+<p class="p10">p.release;</p>
+<p class="p8"><br></p>
+<p class="p10">p.recordPM(<span class="s5">"~/Desktop/"</span>.standardizePath);</p>
+<p class="p10">p.gui;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// you can use functions to create your ProcModRs to automate this process even more!</p>
+<p class="p8"><br></p>
+<p class="p10">f = {<span class="s3">arg</span> globenv, id, freqMask;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freqMask = freqMask ?? {<span class="s3">Tendency</span>(<span class="s3">Env</span>([880, 440], [20]), <span class="s3">Env</span>([880, 1760], [20]))};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod = <span class="s3">ProcModR</span>(globenv, 1, 2, 0, id)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.function_({<span class="s3">arg</span> group, routebus, server, pm;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task = <span class="s3">Task</span>({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> curFreq, curNote;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">arg</span> i;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curFreq = freqMask.at(pm.now);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote = a.new(target: group)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.env_(<span class="s3">Env</span>([0, 1, 0], [0.1, 4], [10, -4], 1)).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote.release(4.rrand(12));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0.5 + 2.0.rand).wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">y = f.value(<span class="s3">Env</span>([0, 1, 0], [10, 20], [4, 0], 1), <span class="s4">\test1</span>);</p>
+<p class="p8"><br></p>
+<p class="p7">// no releaseNode in the Env - so the following ProcModR will just stop when it's done</p>
+<p class="p10">z = f.value(<span class="s3">Env</span>([0, 1, 1, 0], [0.1, 1, 10], [10, 0, -5]), <span class="s4">\test2</span>, <span class="s3">Tendency</span>(3000, 2000));</p>
+<p class="p8"><br></p>
+<p class="p10">y.play(<span class="s5">"~/Desktop/"</span>.standardizePath, <span class="s3">true</span>, <span class="s5">"wav"</span>, <span class="s5">"float"</span>);</p>
+<p class="p8"><br></p>
+<p class="p10">z.play(<span class="s5">"~/Desktop/"</span>.standardizePath, <span class="s3">true</span>, <span class="s5">"wav"</span>, <span class="s5">"float"</span>);<span class="Apple-tab-span">	</span></p>
+<p class="p10">y.release;</p>
+<p class="p8"><br></p>
+<p class="p10">y.gui;</p>
+<p class="p10">z.gui;</p>
+<p class="p7">// z releases itself</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== ProcEvents ======</b></p>
+<p class="p7">/*</p>
+<p class="p7">For real-time pieces where you know that events will happen in a preset order, there is a class to help you manage these things so you don't have to execute code in order to move on to the next event. ProcEvents also has a GUI interface, so now we can go back to using full code blocks.</p>
+<p class="p9"><br></p>
+<p class="p7">ProcEvents(eventsArray, amp, initmod, killmod, id, server)</p>
+<p class="p7">*/</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> sines, pevents, note, initmod, killmod, buffer;</p>
+<p class="p8"><br></p>
+<p class="p10">note = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> gate = 1, outbus, freq, amp, pan;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">Control</span>.names(<span class="s4">\env</span>).kr(<span class="s3">Env</span>.newClear(4).asArray);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(env, gate, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">SinOsc</span>.ar(freq, 0, amp * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">Pan2</span>.ar(src, pan));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">sines = {<span class="s3">arg</span> globenv, id, freqMask, amp = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freqMask = freqMask ?? {<span class="s3">Tendency</span>(<span class="s3">Env</span>([880, 440], [20]), <span class="s3">Env</span>([880, 1760], [20]))};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod = <span class="s3">ProcModR</span>(globenv, amp, 2, 0, id)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.function_({<span class="s3">arg</span> group, routebus, server, pm;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task = <span class="s3">Task</span>({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> curFreq, curNote;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// you can query how long it has been since the piece started</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>pevents.now.postln;</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// or - if you give the below message to ProcEvents, you can find out</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// when a ProcMod with the given id was started ...</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// pevents.starttime(id)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">arg</span> i;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curFreq = freqMask.at(pm.now);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote = note.new(target: group)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.env_(<span class="s3">Env</span>([0, 1, 0], [0.1, 4], [10, -4], 1)).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote.release(4.rrand(12));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0.5 + 2.0.rand).wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p8"><br></p>
+<p class="p10">buffer = <span class="s3">CtkBuffer</span>.buffer(32768).load;</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">initmod = <span class="s3">ProcMod</span>.new.function_({</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Something to do when you start"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">killmod = <span class="s3">ProcMod</span>.new.function_({</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// the kill function is a good place to clean up - buffers, busses, etc.</p>
+<p class="p10"><span class="Apple-tab-span">	</span>buffer.free;</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Buffers freed!"<span class="s2">.postln;</span></p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Things to do when the piece is done"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><br></p>
+<p class="p10">pevents = <span class="s3">ProcEvents</span>([</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// the events array contains arrays of events to start and stop</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// [startEvents, stopEvents]</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// startEvents expects a ProcMod, OR an array of ProcMods.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// stopEvents can be a ProcMod to shut of, an array of ProcMods to shut off OR ids to stop.</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// I use ids</p>
+<p class="p10"><span class="s6">/* 0 */</span><span class="Apple-tab-span">	</span>[sines.value(<span class="s3">Env</span>([0, 1, 0], [1, 1], <span class="s4">\sin</span>, 1), <span class="s4">\ev0</span>, amp: -18.dbamp), <span class="s3">nil</span>],</p>
+<p class="p7">/* 1 */<span class="s2"><span class="Apple-tab-span">	</span>[</span><span class="s3">nil</span><span class="s2">, </span><span class="s4">\ev0</span><span class="s2">],</span></p>
+<p class="p10"><span class="s6">/* 2 */</span><span class="Apple-tab-span">	</span>[sines.value(<span class="s3">Env</span>([0, 1, 0], [1, 4], <span class="s4">\sin</span>, 1), <span class="s4">\ev2</span>, amp: -12.dbamp), <span class="s3">nil</span>],</p>
+<p class="p10"><span class="s6">/* 3 */</span><span class="Apple-tab-span">	</span>[sines.value(<span class="s3">Env</span>([0, 1, 0], [4, 1], <span class="s4">\sin</span>, 1), <span class="s4">\ev3</span>, <span class="s3">Tendency</span>(3000, 2000), -6.dbamp), <span class="s4">\ev2</span>],</p>
+<p class="p7">/* 4 */<span class="s2"><span class="Apple-tab-span">	</span>[</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>sines.value(<span class="s3">Env</span>([0, 1, 0], [10, 20], [4, -4], 1), <span class="s4">\ev4a</span>,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Tendency</span>(<span class="s3">Env</span>([3000, 4000], [30], <span class="s4">\exp</span>), <span class="s3">Env</span>([3000, 2500], [30], <span class="s4">\exp</span>)),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>-12.dbamp),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>sines.value(<span class="s3">Env</span>([0, 1, 0.3, 0], [0.1, 10, 20], [4, -4, -4], 2), <span class="s4">\ev4b</span>,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Tendency</span>(<span class="s3">Env</span>([4000, 3000], [30], <span class="s4">\exp</span>), <span class="s3">Env</span>([2500, 3000], [30], <span class="s4">\exp</span>)),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>-12.dbamp)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>],<span class="Apple-converted-space"> </span></p>
+<p class="p13"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>\ev3</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>],</p>
+<p class="p10"><span class="s6">/* 5 */</span><span class="Apple-tab-span">	</span>[sines.value(<span class="s3">Env</span>([0, 1, 0], [20, 1], [4, <span class="s4">\sin</span>], 1), <span class="s4">\ev5</span>, <span class="s3">Tendency</span>(120, 125), -6.dbamp),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">nil</span>],</p>
+<p class="p7">/* 6 */<span class="s2"><span class="Apple-tab-span">	</span>[</span><span class="s3">nil</span><span class="s2">, </span><span class="s4">\ev5</span><span class="s2">],</span></p>
+<p class="p10"><span class="s6">/* 7 */</span><span class="Apple-tab-span">	</span>[<span class="s3">nil</span>, [<span class="s4">\ev4a</span>, <span class="s4">\ev4b</span>]]<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>], 1, initmod, killmod, <span class="s4">\myNicePiece</span>);</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">pevents.perfGUI;</p>
+<p class="p10">p = pevents;</p>
+<p class="p7">//pevents.record("~/Desktop/myNicePiece/".standardizePath);</p>
+<p class="p8"><br></p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== ProcSink======</b></p>
+<p class="p7">/*<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p7">For freer structures, organized improvisation that uses no external controllers, or even just testing how some processing may work, ProcSink may work for you.</p>
+<p class="p9"><br></p>
+<p class="p7">// Creation method:</p>
+<p class="p7">ProcSink(name, sinkBounds, bounds, columns, initmod, killmod, server, parent);</p>
+<p class="p9"><br></p>
+<p class="p7">Mostly - you'll use name, initmod and killmod</p>
+<p class="p9"><br></p>
+<p class="p7">You can then add ProcMods using ProcSink.add, or simply drag them to the 'sink'</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> sines, psink, note, initmod, killmod, buffer;</p>
+<p class="p8"><br></p>
+<p class="p10">note = <span class="s3">CtkSynthDef</span>(<span class="s4">\test</span>, {<span class="s3">arg</span> gate = 1, outbus, freq, amp, pan;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, src;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">Control</span>.names(<span class="s4">\env</span>).kr(<span class="s3">Env</span>.newClear(4).asArray);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(env, gate, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>src = <span class="s3">SinOsc</span>.ar(freq, 0, amp * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">Pan2</span>.ar(src, pan));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">sines = {<span class="s3">arg</span> globenv, id, freqMask, amp = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freqMask = freqMask ?? {<span class="s3">Tendency</span>(<span class="s3">Env</span>([880, 440], [20]), <span class="s3">Env</span>([880, 1760], [20]))};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod = <span class="s3">ProcModR</span>(globenv, amp, 2, 0, id)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.function_({<span class="s3">arg</span> group, routebus, server, pm;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task = <span class="s3">Task</span>({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> curFreq, curNote;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do({<span class="s3">arg</span> i;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curFreq = freqMask.at(pm.now);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote = note.new(target: group)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.env_(<span class="s3">Env</span>([0, 1, 0], [0.1, 4], [10, -4], 1)).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>curNote.release(4.rrand(12));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0.5 + 2.0.rand).wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>task;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span>procMod;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p8"><br></p>
+<p class="p10">buffer = <span class="s3">CtkBuffer</span>.buffer(32768).load;</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">initmod = <span class="s3">ProcMod</span>.new.function_({</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Something to do when you start"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">killmod = <span class="s3">ProcMod</span>.new.function_({</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span></span>// the kill function is a good place to clean up - buffers, busses, etc.</p>
+<p class="p10"><span class="Apple-tab-span">	</span>buffer.free;</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Buffers freed!"<span class="s2">.postln;</span></p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>"Things to do when the piece is done"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><br></p>
+<p class="p10">psink = <span class="s3">ProcSink</span>(<span class="s4">\myRadPiece</span>, initmod: initmod, killmod: killmod);</p>
+<p class="p8"><br></p>
+<p class="p10">psink.add(sines.value(<span class="s3">Env</span>([0, 1, 0], [4, 4], <span class="s4">\sin</span>, 1), <span class="s4">\medium</span>, amp: -18.dbamp));</p>
+<p class="p10">psink.add(sines.value(<span class="s3">Env</span>([0, 1, 0], [4, 4], <span class="s4">\sin</span>, 1), <span class="s4">\high</span>,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Tendency</span>(<span class="s3">Env</span>([3000, 4000], [30], <span class="s4">\exp</span>), <span class="s3">Env</span>([3000, 2500], [30], <span class="s4">\exp</span>)), -18.dbamp));</p>
+<p class="p10">psink.add(sines.value(<span class="s3">Env</span>([0, 1, 0], [4, 4], <span class="s4">\sin</span>, 1), <span class="s4">\low</span>, <span class="s3">Tendency</span>(120, 125), -18.dbamp));</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p7">// now, add a new ProcMod:<span class="Apple-converted-space"> </span></p>
+<p class="p10">n = <span class="s3">CtkSynthDef</span>(<span class="s4">\bindel</span>, {<span class="s3">arg</span> dur, inbus, outbus, dels, fb;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> in, chain, fftbuf, env;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>in = <span class="s3">In</span>.ar(inbus, 1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>([0, 1, 1, 0], [0.2, 0.6, 0.2], <span class="s4">\sin</span>), timeScale: dur, doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>fftbuf = <span class="s3">LocalBuf</span>.new(1024);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chain = <span class="s3">FFT</span>(fftbuf, in, 0.25);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chain = <span class="s3">PV_BinDelay</span>(chain, 0.5, dels, fb, 0.25);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">IFFT</span>(chain).dup * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><span class="Apple-tab-span">	</span></p>
+<p class="p10">p = <span class="s3">ProcModR</span>(<span class="s3">Env</span>([0, 1, 0], [1, 1], <span class="s4">\sin</span>, 1), 1, 2, 0, <span class="s4">\myFFT</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.function_({<span class="s3">arg</span> group, routebus, server, pm;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">var</span> fbbufs, delbufs, thisfb, thisdel;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>fbbufs = [];</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>delbufs = [];</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>pm.onReleaseFunc_({</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"Start releasing the proc!"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>pm.releaseFunc_({</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"This firest when the ProcMod is done"<span class="s2">.postln;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(fbbufs ++ delbufs).do({<span class="s3">arg</span> thisbuf; thisbuf.free});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Task</span>({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>loop({</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>thisfb = <span class="s3">CtkBuffer</span>.buffer(512).load(sync: <span class="s3">true</span>);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>thisdel = <span class="s3">CtkBuffer</span>.buffer(512).load(sync: <span class="s3">true</span>);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.1.wait;<span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>thisfb.set(0, 0, 512.collect({0.6.rrand(0.99)}));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>thisdel.set(0, 0, 512.collect({0.01.rrand(0.25)}));</p>
+<p class="p7"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// play the note:</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>n.new(target: group).dur_(16).inbus_(server.options.numOutputBusChannels)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>.outbus_(routebus).dels_(thisdel).fb_(thisfb).play;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>fbbufs = fbbufs.add(thisfb);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>delbufs = delbufs.add(thisdel);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SystemClock</span>.sched(16.2, {</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>fbbufs.removeAt(0).free;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>delbufs.removeAt(0).free;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>6.0.rrand(9.0).wait;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>})</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>});</p>
+<p class="p8"><br></p>
+<p class="p10">p.play</p>
+<p class="p8"><br></p>
+<p class="p10">p.release;</p>
+<p class="p8"><br></p>
+</body>
+</html>

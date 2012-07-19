@@ -1,0 +1,224 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf480
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red0\green33\blue231;\red0\green0\blue255;
+\red191\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs84 \cf0 FFT Processing\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs42 \cf0 \
+Also see: \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "file:///Volumes/data/SuperCollider/SuperCollider3/build/Help/UGens/FFT/FFT%20Overview.html"}}{\fldrslt \cf2 \ul \ulc3 FFT\cf0  \cf2 Overview}}\
+{\field{\*\fldinst{HYPERLINK "SC://FFT"}}{\fldrslt \cf4 FFT}}\cf4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+The Fast Fourier Transform (FFT) is a central technnology in computer music, allowing an efficient transformation between the time domain (amplitude-time waveforms) and the frequency domain (spectrum, representing the phase and energy of component pure frequencies). It enables a variety of useful spectral processing techniques, and Fourier re-synthesis back into the time domain can be accomplished by an IFFT (Inverse FFT) or a third party additive synthesis UGen.  \
+\
+To process sound SuperCollider has a selection of PV (Phase Vocoder) UGens which are commonly used as in place operators on the FFT data: \
+\
+input -> FFT -> PV_UGen1 ... PV_UGenN... -> IFFT -> output\
+\
+See the code examples below for how this 'chain' looks in actual SC code form\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+example 1: do nothing transformation \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 s = \cf2 Server\cf0 .local.boot;\
+b = \cf2 Buffer\cf0 .alloc(s,1024,1); \cf5 //a buffer must be allocated which gives the size of the FFT; 1024 sample window size in this case. The hop size is half the window by default.\cf0 \
+	\
+(\
+\{ \cf2 var\cf0  in, chain;\
+	\
+	in = \cf2 WhiteNoise\cf0 .ar(0.8);\
+	\
+	chain = \cf2 FFT\cf0 (b, in);	\cf5 //go from time domain to frequency domain; note that the UGen does not appear to run at a conventional rate (no .ar or .kr); in actual fact, FFT and PV_UGens are at control rate, but only calculate when there is data to act on; IFFT is at audio rate to produce output samples\cf0 \
+	\
+						\cf5 //the output chain will always be -1 except when a block of fft data has been calculated; a trigger is then sent, essentially\cf0  \cf5 by returning the buffer number containing the data (i.e., b.bufnum in this case) \cf0 \
+						\
+	[\cf2 IFFT\cf0 (chain),in];			\cf5 //convert the data back to the time domain when input chain is a valid buffer number; I'm outputting in stereo with the IFFT output on the left and the original input on the right channel for comparison\cf0 \
+\}.play(s);\
+)\
+\
+b.free; \cf5 //frees the resource\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs42 \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+example 2 PV UGen example; spectral filtering\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 b = \cf2 Buffer\cf0 .alloc(s,1024,1); \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs42 \cf0 \
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 (\
+\{ \cf2 var\cf0  in, chain;\
+	\
+	in = \cf2 WhiteNoise\cf0 .ar(0.8);\
+\
+	chain = \cf2 FFT\cf0 (b, in);	\
+		\
+	\cf5 //PV_BrickWall acts as a spectral filter, low pass when second argument (wipe) is -1 to 0 and high pass for 0 to 1   	\cf0 \
+	chain= \cf2 PV_BrickWall\cf0 (chain, \cf2 Line\cf0 .kr(-1,1,10));\
+	\
+	\cf2 Pan2\cf0 .ar(\cf2 IFFT\cf0 (chain),0.0)\
+\}.play(s);\
+)\
+\
+b.free; \cf5 //frees the resource\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab560\ql\qnatural\pardirnatural
+
+\fs42 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+example 3 Multiple PV UGens across two chains!\
+\
+(\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 b = \cf2 Buffer\cf0 .alloc(s,1024,1); \
+c = \cf2 Buffer\cf0 .alloc(s,1024,1); \
+d = \cf2 Buffer\cf0 .alloc(s,1024,1); \cf5 //buffer for a copy of spectral data
+\fs42 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab560\ql\qnatural\pardirnatural
+\cf0 )\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 (\
+\{ \cf2 var\cf0  in1, in2, chain1, chain2, copychain;\
+	\
+	in1 = \cf2 Saw\cf0 .ar(440,0.8);\
+	in2 = \cf2 SoundIn\cf0 .ar(0);\
+\
+	chain1 = \cf2 FFT\cf0 (b, in1);	\
+	chain2 = \cf2 FFT\cf0 (c, in2);\
+	copychain= \cf2 PV_Copy\cf0 (chain2, d); \cf5 //copy of FFT analysis of SoundIn \cf0 \
+	chain1 = \cf2 PV_MagMul\cf0 (chain1,chain2);		\
+	copychain = \cf2 PV_MagFreeze\cf0 (copychain,\cf2 LFNoise0.kr(10)\cf0 ); \cf5 //random spectral freeze effect, when random numbers (generated at 10 times a second) go above 0\cf0 \
+	\
+	[0.25*\cf2 IFFT\cf0 (chain1),\cf2 IFFT\cf0 (copychain)]\
+\}.play(s);\
+)\
+\
+(\
+b.free; \cf5 //frees the resource\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab560\ql\qnatural\pardirnatural
+
+\fs42 \cf0 c.free;\
+d.free;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 )\
+\
+\
+\
+\
+example 4 Individually modifying spectral data using other UGens\
+\
+See {\field{\*\fldinst{HYPERLINK "SC://pvcollect"}}{\fldrslt \cf4 pvcollect}}\
+\
+\
+(\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 b = \cf2 Buffer\cf0 .alloc(s,1024,1); \
+c = \cf2 Buffer\cf0 .read(s,"sounds/a11wlk01.wav"); \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs42 \cf0 )\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs38 \cf0 (\
+\{ \cf2 var\cf0  in, chain;\
+	\
+	in = \cf2 PlayBuf\cf0 .ar(1,c,\cf2 BufRateScale\cf0 .kr(c),loop:1);\
+\
+	chain = \cf2 FFT\cf0 (b, in);	\
+		\
+	chain= chain.pvcollect(b.numFrames,\{\cf2 |mag, phase, index|\cf0 \
+	\cf5 //this function gets called once for every bin \cf0 \
+	\cf2 var\cf0  noise;\
+	\
+	noise= \cf2 LFNoise1\cf0 .kr(rrand(0.5,1.1));\
+	 \
+	[noise*mag,noise.range(-pi,pi)]	\
+	\}, \
+	frombin:0, tobin:250,zeroothers:1);\
+	\
+	\cf2 Pan2\cf0 .ar(\cf2 IFFT\cf0 (chain),0.0)\
+\}.play(s);\
+)\
+\
+(\
+b.free; \cf5 //frees the resource\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab560\ql\qnatural\pardirnatural
+
+\fs42 \cf0 c.free;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 )\
+\
+\
+\
+\
+\
+\
+Some third party sources: \
+\
+Non-realtime analysis using LORIS, SPEAR and ATS, and real-time resynthesis: work by Scott Wilson and Josh Parmenter. \
+\
+JoshUGens library from sc3-plugins project has many additional PV_UGens\
+\
+FFT also used as a first stage in various machine listening UGens: \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "SC://Onsets"}}{\fldrslt \cf4 Onsets}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "SC://MFCC"}}{\fldrslt \cf4 MFCC}}\
+\
+\
+Technical Note: It is possible to run multiple machine listening UGens on a single FFT (since they usually do not disturb the data source itself); but unless you know what you're doing (i.e., are willing to check the source code for the UGens!) it is usually safest to assume they are changing the fft data in place. PV_Copy can be used to create copies of the FFT output without having to run the actual FFT itself again. \
+\
+\
+ }

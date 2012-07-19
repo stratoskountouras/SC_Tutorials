@@ -1,0 +1,497 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 5.2:
+\b0 \
+
+\b 	Scheduling 2: Process Modules
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Background\
+			\'95 A simple model\
+			\'95 ProcMod\
+			\'95 ProcModR\
+			\'95 ProcEvents\
+			\'95 ProcSink\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b (Note: The code examples below have been written by Josh Parmenter, who has written the ProcMod family class; these classes are part of the JoshUGens sc3-plugins)
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= PROCESS MODULES =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== Background (by Josh Parmenter) ======
+\b0 \cf3 \
+
+\b \cf2 /*
+\b0 \
+
+\i "In SC2, Richard Karpen's pieces 'Sotto/Sopra' and 'Solo/Tutti', Juan Pampin's 'OID' and my 'Music for Bassoon' were made up of 'processes'. When re-writing some of these into SC3, the idea of making them modular and into classes led to 'ProcMod'.
+\i0 \
+
+\i These 'processes' were then placed into an event list (a fixed event list) that a computer controller would advance as a player came to certain parts in the piece. (This event list became 'ProcEvents'). There HAD to be certain flexibilites. Flexibility with the performance was crucial, and is one of the more important aspects of the system.
+\i0 \
+
+\i ProcModR came about as a way to capture computer processing for recordings.
+\i0 \
+\
+
+\i Some of the things we needed to be able to do:
+\i0 \
+
+\i 	- start and stop a routine, 
+\i0 \
+
+\i 	- free resources when a process is done, 
+\i0 \
+
+\i 	- global envelopes, 
+\i0 \
+
+\i 	- simple GUI controls to start and stop things..."
+\i0 \
+*/\cf3 	\
+
+\b \cf2 // ------ ... ------
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== A simple model ======
+\b0 \cf3 \
+\
+s.boot;\
+\
+\cf2 // A simple model of what kinds of things we may expect a real-time environment to be capable of:\cf3 \
+\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  gate = 1, outbus, freq, amp;\
+	\cf4 var\cf3  env, src;\
+	env = \cf4 Control\cf3 .names(\cf5 \\env\cf3 ).kr(\cf4 Env\cf3 .newClear(4).asArray);\
+	\cf2 // here, we use doneAction: 2, since we don't know how long a note may be...\cf3 \
+	\cf2 // when the gate closes, and the Env is done executing, this will kill the synth\cf3 \
+	env = \cf4 EnvGen\cf3 .kr(env, gate, doneAction: 2);\
+	src = \cf4 SinOsc\cf3 .ar(freq, 0, amp * env);\
+	\cf4 Out\cf3 .ar(outbus, src);\
+	\});\
+\
+\cf2 // play the note\cf3 \
+b = a.new.outbus_(0).freq_(440).amp_(0.1).env_(\cf4 Env\cf3 ([0, 1, 0], [2, 4], [4, -4], 1)).play; \cf2 // notice the use of a 'releaseNode' in the envelope - this will make it sustain at node 1 of the envelope (in this example) until released\cf3 \
+\
+\cf2 // release it\cf3 \
+b.release;\
+\
+\
+\cf2 /*\
+things you may want in real-time controls:\
+	- start things on the fly\
+	- stop things on the fly\
+	- overlap multiple events\
+	- give an envelope, assign a group and otherwise control a number of events\
+	- probably DON'T want to use scores at this point, since you don't want to fix the number\
+		of events\
+	- and possibly, take a single 'event' and record its output to disk\
+*/\cf3 \
+\
+
+\b \cf2 // ====== ProcMod ======
+\b0 \cf3 \
+\cf2 /* A ProcMod is a real-time control structure for modular processes\
+	'Process' - a single algorithmic idea, gesture or process - something to do\
+	'Module' - it is modular\
+	\
+// creation method\
+ProcMod(env, amp, id, group, addAction, target, function, releaseFunc, onReleaseFunc, responder,\
+		timeScale, lag, clock, server)\
+	BUT - usually you just create with:\
+ProcMod(env, amp, (id))\
+*/\cf3 	\
+\
+\cf4 SynthDef\cf3 (\cf5 \\singrain\cf3 , \{\cf4 arg\cf3  freq, amp, dur, envbus;\
+	\cf4 OffsetOut\cf3 .ar(0, \
+		\cf4 Pan2\cf3 .ar(\
+			\cf4 SinOsc\cf3 .ar(freq, 0, amp) * \
+				\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .sine(dur, amp), doneAction: 2) *\
+				\cf4 In\cf3 .kr(envbus),\
+			\cf4 Rand\cf3 .new(-1.0, 1.0)\
+		)\
+	) \cf2 // read off the overall env control of the ProcMod\cf3 \
+\}).load(s);\
+	\
+\cf2 // create a new proc mod, and assign a function to it\cf3 \
+p = \cf4 ProcMod\cf3 .new(\cf4 Env\cf3 ([0, 1, 0], [1, 1], \cf5 \\sin\cf3 , 1), server: s);\
+p.function_(\{\cf4 arg\cf3  group, envbus, server;\
+	\cf4 Task\cf3 (\{\
+		\cf4 inf\cf3 .do(\{\
+			\cf2 // start a new synth... run it inside this ProcMod's group,\cf3 \
+			\cf2 // and read control values off the envbus\cf3 \
+			server.sendMsg(\cf5 \\s_new\cf3 , \cf5 \\singrain\cf3 , server.nextNodeID, 0, group,\
+				\cf5 \\freq\cf3 , 440.rrand(1760), \cf5 \\amp\cf3 , 0.1, \cf5 \\dur\cf3 , 5, \cf5 \\envbus\cf3 , envbus);\
+			0.5.wait;\
+			\})\
+		\});\
+	\});\
+\
+\cf2 // play it\cf3 \
+p.play;\
+\cf2 // change the amp\cf3 \
+p.amp_(2);\
+\
+p.release; \cf2 // when the global envelope is done, ALL running synths in this group are freed,\cf3 \
+		  \cf2 // and the Task / inf.do loop is stopped\cf3 \
+\
+\
+s.queryAllNodes; \cf2 // look at the node tree: notice that the ProcMod has created its own tree, and all the synths it creates are incorporated in it\cf3 \
+\
+\
+
+\b \cf2 // ====== ProcModR ======
+\b0 \cf3 \
+\cf2 /*\
+An extension to the ProcMod class, enabling you to record the output of the ProcModR to disk, tagging it with the ProcModR's id and a timestamp of when it was activated.\
+	'Process' - a single algorithmic idea or process - something to do\
+	'Module' - it is modular\
+	'Record' - able to record this processes output\
+\
+\
+// creation method:\
+ProcModR(env, amp, numChannels, procout, id, group, addAction, target, function, releaseFunc,\
+	onReleaseFunc, responder, timeScale, lag, clock, server);\
+	\
+	BUT - usually you just create with:\
+ProcModR(env, amp, numChannels, procout, (id))\
+\
+NOTICE: ProcModR has two more arguments than ProcMod: 
+\i numChannels
+\i0 , 
+\i procout. 
+\i0 You need to account for that, and the position of your set arguments if you want to convert a ProcMod into a ProcModR or vice-versa\
+*/\cf3 \
+\
+\cf2 // Now an example using the Ctk library\cf3 \
+\
+a = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  gate = 1, outbus, freq, amp, pan;\
+	\cf4 var\cf3  env, src;\
+	env = \cf4 Control\cf3 .names(\cf5 \\env\cf3 ).kr(\cf4 Env\cf3 .newClear(4).asArray);\
+	\cf2 // here, we use doneAction: 2, since we don't know how long a note may be...\cf3 \
+	\cf2 // when the gate closes, and the Env is done executing, this will kill the synth\cf3 \
+	env = \cf4 EnvGen\cf3 .kr(env, gate, doneAction: 2);\
+	src = \cf4 SinOsc\cf3 .ar(freq, 0, amp * env);\
+	\cf4 Out\cf3 .ar(outbus, \cf4 Pan2\cf3 .ar(src, pan));\
+	\});\
+	\
+p = \cf4 ProcModR\cf3 (\cf4 Env\cf3 ([0, 1, 0], [2, 4], [4, -2], 1), 1, 2, 0, \cf5 \\test\cf3 )\
+	\cf2 // the unique Group id created by ProcModR is passed in to this function, \cf3 \
+	\cf2 // as well as the unique routing bus and the server, as well as the ProcModR itself\cf3 \
+	.function_(\{\cf4 arg\cf3  group, routebus, server, pm;\
+		\cf4 var\cf3  freqMask, task;\
+		freqMask = \cf4 Tendency\cf3 (\cf4 Env\cf3 ([880, 440], [20]), \cf4 Env\cf3 ([880, 1760], [20]));\
+		task = \cf4 Task\cf3 (\{\
+			\cf4 var\cf3  curFreq, curNote;\
+			\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+				\cf2 // grab a value for a freq, using the 'now' value from the ProcModR\cf3 \
+				curFreq = freqMask.at(pm.now);\
+				curNote = a.new(target: group)\
+					.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)\
+					.env_(\cf4 Env\cf3 ([0, 1, 0], [0.1, 4], [10, -4], 1)).play;\
+				curNote.release(4.rrand(12));\
+				(0.5 + 2.0.rand).wait;\
+				\})\
+			\});\
+		\cf2 // return the task from the function. This tells ProcModR to manage it\cf3 \
+		task;\
+		\});\
+		\
+p.play;\
+p.release; \cf2 // when the global envelope is done, ALL running synths in this group are freed,\cf3 \
+		  \cf2 // and the Task / inf.do loop is stopped\cf3 \
+\
+s.queryAllNodes;\
+\
+		 \
+p.play(\cf6 "~/Desktop/"\cf3 .standardizePath, \cf4 true\cf3 , \cf6 "wav"\cf3 , \cf6 "float"\cf3 );\
+p.release;\
+\
+p.recordPM(\cf6 "~/Desktop/"\cf3 .standardizePath);\
+p.gui;\
+\
+\
+\cf2 // you can use functions to create your ProcModRs to automate this process even more!\cf3 \
+\
+f = \{\cf4 arg\cf3  globenv, id, freqMask;\
+	\cf4 var\cf3  procMod;\
+	freqMask = freqMask ?? \{\cf4 Tendency\cf3 (\cf4 Env\cf3 ([880, 440], [20]), \cf4 Env\cf3 ([880, 1760], [20]))\};\
+	procMod = \cf4 ProcModR\cf3 (globenv, 1, 2, 0, id)\
+		.function_(\{\cf4 arg\cf3  group, routebus, server, pm;\
+			\cf4 var\cf3  task;\
+			task = \cf4 Task\cf3 (\{\
+				\cf4 var\cf3  curFreq, curNote;\
+				\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+					curFreq = freqMask.at(pm.now);\
+					curNote = a.new(target: group)\
+						.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)\
+						.env_(\cf4 Env\cf3 ([0, 1, 0], [0.1, 4], [10, -4], 1)).play;\
+					curNote.release(4.rrand(12));\
+					(0.5 + 2.0.rand).wait;\
+					\})\
+				\});\
+			task;\
+			\});\
+	procMod;\
+	\};\
+	\
+y = f.value(\cf4 Env\cf3 ([0, 1, 0], [10, 20], [4, 0], 1), \cf5 \\test1\cf3 );\
+\
+\cf2 // no releaseNode in the Env - so the following ProcModR will just stop when it's done\cf3 \
+z = f.value(\cf4 Env\cf3 ([0, 1, 1, 0], [0.1, 1, 10], [10, 0, -5]), \cf5 \\test2\cf3 , \cf4 Tendency\cf3 (3000, 2000));\
+\
+y.play(\cf6 "~/Desktop/"\cf3 .standardizePath, \cf4 true\cf3 , \cf6 "wav"\cf3 , \cf6 "float"\cf3 );\
+\
+z.play(\cf6 "~/Desktop/"\cf3 .standardizePath, \cf4 true\cf3 , \cf6 "wav"\cf3 , \cf6 "float"\cf3 );	\
+y.release;\
+\
+y.gui;\
+z.gui;\
+\cf2 // z releases itself\cf3 \
+\
+\
+
+\b \cf2 // ====== ProcEvents ======
+\b0 \cf3 \
+\cf2 /*\
+For real-time pieces where you know that events will happen in a preset order, there is a class to help you manage these things so you don't have to execute code in order to move on to the next event. ProcEvents also has a GUI interface, so now we can go back to using full code blocks.\
+\
+ProcEvents(eventsArray, amp, initmod, killmod, id, server)\
+*/\cf3 \
+(\
+\cf4 var\cf3  sines, pevents, note, initmod, killmod, buffer;\
+\
+note = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  gate = 1, outbus, freq, amp, pan;\
+	\cf4 var\cf3  env, src;\
+	env = \cf4 Control\cf3 .names(\cf5 \\env\cf3 ).kr(\cf4 Env\cf3 .newClear(4).asArray);\
+	env = \cf4 EnvGen\cf3 .kr(env, gate, doneAction: 2);\
+	src = \cf4 SinOsc\cf3 .ar(freq, 0, amp * env);\
+	\cf4 Out\cf3 .ar(outbus, \cf4 Pan2\cf3 .ar(src, pan));\
+	\});\
+	\
+sines = \{\cf4 arg\cf3  globenv, id, freqMask, amp = 1;\
+	\cf4 var\cf3  procMod;\
+	freqMask = freqMask ?? \{\cf4 Tendency\cf3 (\cf4 Env\cf3 ([880, 440], [20]), \cf4 Env\cf3 ([880, 1760], [20]))\};\
+	procMod = \cf4 ProcModR\cf3 (globenv, amp, 2, 0, id)\
+		.function_(\{\cf4 arg\cf3  group, routebus, server, pm;\
+			\cf4 var\cf3  task;\
+			task = \cf4 Task\cf3 (\{\
+				\cf4 var\cf3  curFreq, curNote;\
+				\cf2 // you can query how long it has been since the piece started\cf3 \
+				pevents.now.postln;\
+				\cf2 // or - if you give the below message to ProcEvents, you can find out\cf3 \
+				\cf2 // when a ProcMod with the given id was started ...\cf3 \
+				\cf2 // pevents.starttime(id)\cf3 \
+				\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+					curFreq = freqMask.at(pm.now);\
+					curNote = note.new(target: group)\
+						.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)\
+						.env_(\cf4 Env\cf3 ([0, 1, 0], [0.1, 4], [10, -4], 1)).play;\
+					curNote.release(4.rrand(12));\
+					(0.5 + 2.0.rand).wait;\
+					\})\
+				\});\
+			task;\
+			\});\
+	procMod;\
+	\};\
+\
+buffer = \cf4 CtkBuffer\cf3 .buffer(32768).load;\
+	\
+initmod = \cf4 ProcMod\cf3 .new.function_(\{\
+	\cf6 "Something to do when you start"\cf3 .postln;\
+	\});\
+	\
+killmod = \cf4 ProcMod\cf3 .new.function_(\{\
+	\cf2 // the kill function is a good place to clean up - buffers, busses, etc.\cf3 \
+	buffer.free;\
+	\cf6 "Buffers freed!"\cf3 .postln;\
+	\cf6 "Things to do when the piece is done"\cf3 .postln;\
+	\});\
+\
+pevents = \cf4 ProcEvents\cf3 ([\
+	\cf2 // the events array contains arrays of events to start and stop\cf3 \
+	\cf2 // [startEvents, stopEvents]\cf3 \
+	\cf2 // startEvents expects a ProcMod, OR an array of ProcMods. \cf3 \
+	\cf2 // stopEvents can be a ProcMod to shut of, an array of ProcMods to shut off OR ids to stop.\cf3 \
+	\cf2 // I use ids\cf3 \
+\cf2 /* 0 */\cf3 	[sines.value(\cf4 Env\cf3 ([0, 1, 0], [1, 1], \cf5 \\sin\cf3 , 1), \cf5 \\ev0\cf3 , amp: -18.dbamp), \cf4 nil\cf3 ],\
+\cf2 /* 1 */\cf3 	[\cf4 nil\cf3 , \cf5 \\ev0\cf3 ],\
+\cf2 /* 2 */\cf3 	[sines.value(\cf4 Env\cf3 ([0, 1, 0], [1, 4], \cf5 \\sin\cf3 , 1), \cf5 \\ev2\cf3 , amp: -12.dbamp), \cf4 nil\cf3 ],\
+\cf2 /* 3 */\cf3 	[sines.value(\cf4 Env\cf3 ([0, 1, 0], [4, 1], \cf5 \\sin\cf3 , 1), \cf5 \\ev3\cf3 , \cf4 Tendency\cf3 (3000, 2000), -6.dbamp), \cf5 \\ev2\cf3 ],\
+\cf2 /* 4 */\cf3 	[\
+			[\
+				sines.value(\cf4 Env\cf3 ([0, 1, 0], [10, 20], [4, -4], 1), \cf5 \\ev4a\cf3 ,\
+					\cf4 Tendency\cf3 (\cf4 Env\cf3 ([3000, 4000], [30], \cf5 \\exp\cf3 ), \cf4 Env\cf3 ([3000, 2500], [30], \cf5 \\exp\cf3 )),\
+					-12.dbamp),\
+				sines.value(\cf4 Env\cf3 ([0, 1, 0.3, 0], [0.1, 10, 20], [4, -4, -4], 2), \cf5 \\ev4b\cf3 ,\
+					\cf4 Tendency\cf3 (\cf4 Env\cf3 ([4000, 3000], [30], \cf5 \\exp\cf3 ), \cf4 Env\cf3 ([2500, 3000], [30], \cf5 \\exp\cf3 )),\
+					-12.dbamp)\
+				], \
+			\cf5 \\ev3\cf3 \
+			],\
+\cf2 /* 5 */\cf3 	[sines.value(\cf4 Env\cf3 ([0, 1, 0], [20, 1], [4, \cf5 \\sin\cf3 ], 1), \cf5 \\ev5\cf3 , \cf4 Tendency\cf3 (120, 125), -6.dbamp), \
+			\cf4 nil\cf3 ],\
+\cf2 /* 6 */\cf3 	[\cf4 nil\cf3 , \cf5 \\ev5\cf3 ],\
+\cf2 /* 7 */\cf3 	[\cf4 nil\cf3 , [\cf5 \\ev4a\cf3 , \cf5 \\ev4b\cf3 ]]		\
+	], 1, initmod, killmod, \cf5 \\myNicePiece\cf3 );\
+	\
+pevents.perfGUI;\
+p = pevents;\
+\cf2 //pevents.record("~/Desktop/myNicePiece/".standardizePath);\cf3 \
+\
+)\
+\
+\
+
+\b \cf2 // ====== ProcSink======
+\b0 \cf3 \
+\cf2 /* \
+\
+For freer structures, organized improvisation that uses no external controllers, or even just testing how some processing may work, ProcSink may work for you.\
+\
+// Creation method:\
+ProcSink(name, sinkBounds, bounds, columns, initmod, killmod, server, parent);\
+\
+Mostly - you'll use name, initmod and killmod\
+\
+You can then add ProcMods using ProcSink.add, or simply drag them to the 'sink'\
+*/\cf3 \
+\
+(\
+\cf4 var\cf3  sines, psink, note, initmod, killmod, buffer;\
+\
+note = \cf4 CtkSynthDef\cf3 (\cf5 \\test\cf3 , \{\cf4 arg\cf3  gate = 1, outbus, freq, amp, pan;\
+	\cf4 var\cf3  env, src;\
+	env = \cf4 Control\cf3 .names(\cf5 \\env\cf3 ).kr(\cf4 Env\cf3 .newClear(4).asArray);\
+	env = \cf4 EnvGen\cf3 .kr(env, gate, doneAction: 2);\
+	src = \cf4 SinOsc\cf3 .ar(freq, 0, amp * env);\
+	\cf4 Out\cf3 .ar(outbus, \cf4 Pan2\cf3 .ar(src, pan));\
+	\});\
+	\
+sines = \{\cf4 arg\cf3  globenv, id, freqMask, amp = 1;\
+	\cf4 var\cf3  procMod;\
+	freqMask = freqMask ?? \{\cf4 Tendency\cf3 (\cf4 Env\cf3 ([880, 440], [20]), \cf4 Env\cf3 ([880, 1760], [20]))\};\
+	procMod = \cf4 ProcModR\cf3 (globenv, amp, 2, 0, id)\
+		.function_(\{\cf4 arg\cf3  group, routebus, server, pm;\
+			\cf4 var\cf3  task;\
+			task = \cf4 Task\cf3 (\{\
+				\cf4 var\cf3  curFreq, curNote;\
+				\cf4 inf\cf3 .do(\{\cf4 arg\cf3  i;\
+					curFreq = freqMask.at(pm.now);\
+					curNote = note.new(target: group)\
+						.outbus_(routebus).freq_(curFreq).amp_(0.1).pan_(1.0.rand2)\
+						.env_(\cf4 Env\cf3 ([0, 1, 0], [0.1, 4], [10, -4], 1)).play;\
+					curNote.release(4.rrand(12));\
+					(0.5 + 2.0.rand).wait;\
+					\})\
+				\});\
+			task;\
+			\});\
+	procMod;\
+	\};\
+\
+buffer = \cf4 CtkBuffer\cf3 .buffer(32768).load;\
+	\
+initmod = \cf4 ProcMod\cf3 .new.function_(\{\
+	\cf6 "Something to do when you start"\cf3 .postln;\
+	\});\
+	\
+killmod = \cf4 ProcMod\cf3 .new.function_(\{\
+	\cf2 // the kill function is a good place to clean up - buffers, busses, etc.\cf3 \
+	buffer.free;\
+	\cf6 "Buffers freed!"\cf3 .postln;\
+	\cf6 "Things to do when the piece is done"\cf3 .postln;\
+	\});\
+\
+psink = \cf4 ProcSink\cf3 (\cf5 \\myRadPiece\cf3 , initmod: initmod, killmod: killmod);\
+\
+psink.add(sines.value(\cf4 Env\cf3 ([0, 1, 0], [4, 4], \cf5 \\sin\cf3 , 1), \cf5 \\medium\cf3 , amp: -18.dbamp));\
+psink.add(sines.value(\cf4 Env\cf3 ([0, 1, 0], [4, 4], \cf5 \\sin\cf3 , 1), \cf5 \\high\cf3 ,\
+	\cf4 Tendency\cf3 (\cf4 Env\cf3 ([3000, 4000], [30], \cf5 \\exp\cf3 ), \cf4 Env\cf3 ([3000, 2500], [30], \cf5 \\exp\cf3 )), -18.dbamp));\
+psink.add(sines.value(\cf4 Env\cf3 ([0, 1, 0], [4, 4], \cf5 \\sin\cf3 , 1), \cf5 \\low\cf3 , \cf4 Tendency\cf3 (120, 125), -18.dbamp));\
+)\
+\
+\cf2 // now, add a new ProcMod: \cf3 \
+n = \cf4 CtkSynthDef\cf3 (\cf5 \\bindel\cf3 , \{\cf4 arg\cf3  dur, inbus, outbus, dels, fb;\
+	\cf4 var\cf3  in, chain, fftbuf, env;\
+	in = \cf4 In\cf3 .ar(inbus, 1);\
+	env = \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([0, 1, 1, 0], [0.2, 0.6, 0.2], \cf5 \\sin\cf3 ), timeScale: dur, doneAction: 2);\
+	fftbuf = \cf4 LocalBuf\cf3 .new(1024);\
+	chain = \cf4 FFT\cf3 (fftbuf, in, 0.25);\
+	chain = \cf4 PV_BinDelay\cf3 (chain, 0.5, dels, fb, 0.25);\
+	\cf4 Out\cf3 .ar(outbus, \cf4 IFFT\cf3 (chain).dup * env);\
+	\});\
+	\
+p = \cf4 ProcModR\cf3 (\cf4 Env\cf3 ([0, 1, 0], [1, 1], \cf5 \\sin\cf3 , 1), 1, 2, 0, \cf5 \\myFFT\cf3 )\
+	.function_(\{\cf4 arg\cf3  group, routebus, server, pm;\
+		\cf4 var\cf3  fbbufs, delbufs, thisfb, thisdel;\
+		fbbufs = [];\
+		delbufs = [];\
+		pm.onReleaseFunc_(\{\
+			\cf6 "Start releasing the proc!"\cf3 .postln;\
+			\});\
+		pm.releaseFunc_(\{\
+			\cf6 "This firest when the ProcMod is done"\cf3 .postln;\
+			(fbbufs ++ delbufs).do(\{\cf4 arg\cf3  thisbuf; thisbuf.free\});\
+			\});\
+		\cf4 Task\cf3 (\{\
+			loop(\{\
+				thisfb = \cf4 CtkBuffer\cf3 .buffer(512).load(sync: \cf4 true\cf3 );\
+				thisdel = \cf4 CtkBuffer\cf3 .buffer(512).load(sync: \cf4 true\cf3 );\
+				0.1.wait;	\
+				thisfb.set(0, 0, 512.collect(\{0.6.rrand(0.99)\}));\
+				thisdel.set(0, 0, 512.collect(\{0.01.rrand(0.25)\}));\
+				\cf2 // play the note:\cf3 \
+				n.new(target: group).dur_(16).inbus_(server.options.numOutputBusChannels)\
+					.outbus_(routebus).dels_(thisdel).fb_(thisfb).play;\
+				fbbufs = fbbufs.add(thisfb);\
+				delbufs = delbufs.add(thisdel);\
+				\cf4 SystemClock\cf3 .sched(16.2, \{\
+					fbbufs.removeAt(0).free;\
+					delbufs.removeAt(0).free;\
+					\});\
+				6.0.rrand(9.0).wait;\
+				\})\
+			\})\
+		\});\
+\
+p.play\
+\
+p.release;\
+\
+}

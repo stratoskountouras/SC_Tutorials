@@ -1,0 +1,271 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue191;\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 2.3:
+\b0 \
+
+\b 	Extending SuperCollider with Quarks
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Quarks\
+				- About\
+				- Downloading and keeping up-to-date\
+				- Publishing a Quark\
+				- Adding classes manually\
+				- Some useful Quarks for the scope of this class (June 2010)\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= QUARKS =================
+\b0 \cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Quarks are third-party extensions to SC's library, documentation and UGen plugins. A Quark is a package containing SC classes (.sc file(s)), helpfiles (.html), possibly C++ source for UGens (.scx) and perhaps example, overview or other files. \cf3 \
+\cf2 // When you download the full SC version, you get the entire Quarks library existing at the point of your download.\cf3 \
+\
+\cf2 //Here's a link to the online quark repository:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf4 "open http://quarks.sourceforge.net/"\cf3 .unixCmd\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== DOWNLOAD AND UPDATE ====== 
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ OSX and LINUX ------
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf5 Quarks\cf3 .gui \cf2 // use this command to install any quark via a GUI, then do what the GUI says\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\fs22 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\fs28 \cf2 /* or, read here for different ways, and more info:\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 \ul \ulc2 [{\field{\*\fldinst{HYPERLINK "SC://Quarks"}}{\fldrslt \cf2 \ulc2 Quarks}}\cf2 \ulnone ]\
+*/\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Windows -----
+\b0 \cf3 \
+
+\fs26 \cf2 // to install quarks into windows machines look here (the method is different:\cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\fs22 \cf2 // http://swiki.hfbk-hamburg.de:8888/MusicTechnology/883\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\fs28 \cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Publishing a Quark ------
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Read here as well if you want to publish a quark. You probably also want to consult the sc-users mailing list for naming conflicts...\cf3 \
+\cf2 // [{\field{\*\fldinst{HYPERLINK "SC://Quark"}}{\fldrslt \cf2 \ul \ulc2 Quark}}]\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ------ Adding classes manually ------
+\b0 \cf3 \
+\
+\cf2 // Of course, you can also add or remove classes that you've downloaded or classes that you have created yourself:\cf3 \
+ \
+\cf2 // Class files are located in the SCCLassLibrary folder of your SuperCollider application directory:\cf3 \
+\cf4 "open SCCLassLibrary"\cf3 .unixCmd\
+\
+\cf2 // Help files are located in the same directory, inside the Help file:\cf3 \
+\cf4 "open Help"\cf3 .unixCmd \
+\cf2 // If you add help-files, you may have to recompile the help path for them to appear on the Help GUI. The command is:\cf3 \
+\cf5 Help\cf3 .rebuildTree\
+\
+\cf2 // UGen plugin files are located inside the plugins file:\cf3 \
+\cf4 "open plugins"\cf3 .unixCmd\
+\
+\
+\cf2 // Have a look here for more details on folder locations and extension file organization:\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // [{\field{\*\fldinst{HYPERLINK "SC://Using-Extensions"}}{\fldrslt \cf2 \ul \ulc2 Using-Extensions}}]\cf3 \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ====== SOME USEFUL QUARKS FOR THIS CLASS (as of June 2010) ====== 
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\
+\cf2 // ======= large libraries ======= \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Ctk/Ctk%20Help/Ctk.htm"}}{\fldrslt \cf5 \ul \ulc5 Ctk}} \cf2 // Josh Parmenter's MUST-HAVE library\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/dewdrop_lib/dewdrop_lib/dewdrop.html"}}{\fldrslt \ul dewdrop}} \cf2 // (huge library, some useful MIDI stuff, Patterns and other)\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/redSys/RedSys.html"}}{\fldrslt \cf5 \ul \ulc5 RedSys}} \cf2 // (huge library, 'traditional' electronica toolkit)\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/wslib.html"}}{\fldrslt \ul wslib}} \cf2 // (huge library, some MIDI, extensions, and the best looking GUI)\cf3 \
+\
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // ======= Interfacing ======= \cf3 \
+\cf2 // Computer Peripherals\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MultiTouchPad/Help/MultiTouchPad.html"}}{\fldrslt \cf5 \ul \ulc5 MultiTouchPad}}\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // On-board laptop sensors\cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Laptop/Laptop.html"}}{\fldrslt \cf5 \ul \ulc5 Laptop}}\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://RedInfoLmu"}}{\fldrslt \cf5 \ul \ulc5 RedInfoLmu}}\
+{\field{\*\fldinst{HYPERLINK "SC://RedInfoSms"}}{\fldrslt \cf5 \ul \ulc5 RedInfoSms}}\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://RedInfoBat"}}{\fldrslt \cf5 \ul \ulc5 RedInfoBat}}\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 //Arduino\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SCPyduino/SCPyduino.html"}}{\fldrslt \cf5 \ul \ulc5 SCPyduino}}\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Sensors\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/SenseWorld.html"}}{\fldrslt \cf5 \ul \ulc5 SenseWorld}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/DataNetwork/Help/SenseWorldDataNetwork.html"}}{\fldrslt \cf5 \ul \ulc5 SenseWorldDataNetwork}}\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Haptic controllers\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Dimple/Help/Dimple.html"}}{\fldrslt \cf5 \ul \ulc5 Dimple}}  \cf2 // only partial implementation for now...\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // tangible interfaces\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/tuio/help/TUIO.html"}}{\fldrslt \cf5 \ul \ulc5 TUIO}}\
+\
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // ======= Open Sound Control ======= \cf3 \
+\cf2 // OSC\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/OpenObject/OpenObject.html"}}{\fldrslt \cf5 \ul \ulc5 OpenObject}} \cf2 //OSC simplified\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Networking\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/NetLib/help/NetLib.html"}}{\fldrslt \cf5 \ul \ulc5 NetLib}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Republic/Republic.html"}}{\fldrslt \cf5 \ul \ulc5 Republic}}\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/OscGroupClient/OscGroupClient.html"}}{\fldrslt \cf5 \ul \ulc6 OscGroupClient}} \cf2 //OSC through the internet\cf3 \
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // ======= GUI and graphics ======= \cf3 \
+\cf2 //GUI\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Automation/Help/Automation.scd"}}{\fldrslt \cf6 \ul \ulc6 Automation}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ClockFace/ClockFace.html"}}{\fldrslt \cf6 \ul \ulc6 ClockFace}}\
+{\field{\*\fldinst{HYPERLINK "http://../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/FileListView/FileListView.help.rtf"}}{\fldrslt \cf5 \ul \ulc5 FileListView}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ixiViews/help/ixiViews.html"}}{\fldrslt \cf6 \ul \ulc6 ixiViews}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/PopUpTreeMenu/PopUpTreeMenu.html"}}{\fldrslt \cf6 \ul \ulc6 PopUpTreeMenu}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/TabbedView/TabbedView.html"}}{\fldrslt \cf6 \ul \ulc6 TabbedView}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/VuView/VuView.html"}}{\fldrslt \cf6 \ul \ulc6 VuView}}\
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/wslib.html"}}{\fldrslt \cf6 \ul \ulc6 wslib}} \cf2 // a quark library with many - and the best looking - GUIs\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // graphics\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SCAnimation/help/SCAnimation.html"}}{\fldrslt \cf6 \ul \ulc6 SCAnimation}}\
+\
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // ======= Utilities and other ======= \cf3 \
+\cf2 // Scheduling\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/DayTimer/DayTimer.html"}}{\fldrslt \cf6 \ul \ulc6 DayTimer}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ListeningClocks/help/ListeningClocks.html"}}{\fldrslt \cf6 \ul \ulc6 ListeningClocks}}\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Presets\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/DataCollector.html"}}{\fldrslt \cf6 \ul \ulc6 DataCollector}} (from \cf5 SenseWorld\cf3 )\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Statistics\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MathLib/help/extStatistics.html"}}{\fldrslt \cf6 \ul \ulc6 extStatistics}} (from {\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MathLib/help/MathLib.html"}}{\fldrslt \cf6 MathLib}})\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SenseWorld/Help/StatUGens.help.scd"}}{\fldrslt \cf6 \ul \ulc6 StatUGens}} (from \cf5 SenseWorld\cf3 )\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // physical models\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/redUniverse/redUniverseExamplesOverview.html"}}{\fldrslt \cf6 \ul \ulc6 redUniverseExamplesOverview}} \cf2 // redUniverse quark (huge library, with some amazing stuff)\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Bio-algorithmic goodies\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/NatureToolkit/NatureToolkit.html"}}{\fldrslt \cf6 NatureToolkit}}\
+\
+\cf2 // other\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MP3/MP3.html"}}{\fldrslt \cf6 \ul \ulc6 MP3}} \cf2 // read mp3's locally and on the net\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/ProcessTools/ProcessTools.html"}}{\fldrslt \cf6 \ul \ulc6 ProcessTools}} \cf2 // interact with UNIX\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/redSys/redTapTempo/RedTapTempoGUI.html"}}{\fldrslt \cf6 \ul \ulc6 RedTapTempoGUI}} \cf2 //from redSys\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/Spectrogram/Spectrogram.html"}}{\fldrslt \cf6 \ul \ulc6 Spectrogram}}\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/TuningLib/Help/TuningLib.html"}}{\fldrslt \cf6 \ul \ulc6 TuningLib}}\
+\
+\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // ======= Various audio (not the focus of this list) ======= \cf3 \
+\cf2 // sampling\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/redSampler/RedSampler.html"}}{\fldrslt \cf6 \ul \ulc6 RedSampler}} \cf2 // a giga-sampler-like Class\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Spatialization\cf3 \
+\cf5 Atk\cf3  \cf2 // Ambisonics (not released yet)\cf3 \
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/AmbIEM/Help/AmbIEM.html"}}{\fldrslt \cf6 AmbIEM}} \cf2 // binaural\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/SpeakersCorner/SpeakersCorner.html"}}{\fldrslt \cf6 \ul \ulc6 SpeakersCorner}} \cf2 //\cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // Builduing AUs\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/AudioUnitBuilder/AudioUnitBuilder.html"}}{\fldrslt \cf6 \ul \ulc6 AudioUnitBuilder}}\
+}

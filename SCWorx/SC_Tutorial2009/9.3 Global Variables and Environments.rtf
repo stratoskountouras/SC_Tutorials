@@ -1,0 +1,101 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red191\green0\blue0;\red0\green0\blue0;
+\red191\green0\blue0;\red0\green115\blue0;\red0\green115\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs48 \cf0 Global variables and Environments\
+
+\fs36 \
+The interpreter provides a-z for free\
+\
+a=9;\
+\
+This is not recommended for anything other than simple code because it is too easy to overwrite contents accidentally, say by running multiple patches which use such variables. \
+\
+(\
+\cf2 var\cf0  a;\
+\
+a=9;	\cf3 //sets local a, NOT global\cf0 \
+)\
+\
+would have a variable called a which remains local to the patch scope without overwriting the global. \
+\
+You should never use these variables for large projects, though they are occasionally helpful for small short examples.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There is another place global data might be stored. \
+\
+The currentEnvironment is a special collection which can be used as a big storage space for name tagged data- see the [\ul Environment\ulnone ] help file.\
+\
+\cf4 currentEnvironment; \cf5 //run this line to the current state of the currentEnvironment\cf4 \
+\cf0 \
+You use the currentEnvironment via the ~ sign\
+\
+~myvar= 0.9;\
+\
+The ~ and = is a shortcut here for \
+\
+currentEnvironment.put(\cf6 \\myvar\cf0 , 0.9);\
+\
+You can access the variable wherever you need it by \
+\
+~myvar\
+\
+Which is the same as \
+\
+currentEnvironment.put(\cf6 \\myvar\cf0 , 0.9);\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+The currentEnvironment uses a special collection called an IdentityDictionary. \
+\
+The shortcut to make one in SuperCollider is\
+\cf4 \
+a= (); \cf5 //make a new IdentityDictionary\cf4 \
+\
+a.put(\cf7 \\hello\cf4 , 67)\
+\
+a.at(\cf7 \\hello\cf4 )\
+\
+b= (a:8, fortune:\cf8 "darmstadt"\cf4 , hello:10); \cf5 //shortcut to set one up\cf4 \
+\
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

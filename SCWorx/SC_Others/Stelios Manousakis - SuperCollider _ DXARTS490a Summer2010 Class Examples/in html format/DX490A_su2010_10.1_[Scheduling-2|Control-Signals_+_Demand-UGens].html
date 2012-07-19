@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #000000}
+span.s5 {color: #bf0000}
+span.s6 {color: #007300}
+span.s7 {text-decoration: underline ; color: #000000}
+span.s8 {text-decoration: underline ; color: #0000bf}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 10.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Patterns in the server: Analog-style control signals and Demand UGens</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Analog-style control signals</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Counters</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&gt; PulseCount</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&gt; Stepper</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&gt; PulseDivider</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Selectors</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>&gt; Select</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Sample-and-Hold</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Demand UGens</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- a list of Demand UGens (June 2010)</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p7"><b>// ================= ANALOG-STYLE CONTROL SIGNALS =================</b></p>
+<p class="p8"><br></p>
+<p class="p7">// SynthDefs don't have to be completely static: you can schedule things using analog-studio-style controls inside a synthdef, sequencing signals with signals - there are a few different UGens to do that. Most importantly, however, and breaking out from the analog paradigm, you can use Demand UGens to create signal patterns.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== COUNTERS ======</b></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ PulseCount --</b></p>
+<p class="p7">// <a href="SC://PulseCount"><span class="s2">PulseCount</span></a> is the simplest, most basic signal counter. You provide it with a trigger and it starts counting integers from 0, until you reset it:</p>
+<p class="p8"><br></p>
+<p class="p9"><span class="s3">SynthDef</span><span class="s4">(</span>"help-PulseCount"<span class="s4">,{ </span><span class="s3">arg</span><span class="s4"> out=0;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(out,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(<span class="s3">PulseCount</span>.ar(<span class="s3">Impulse</span>.ar(8), <span class="s3">Impulse</span>.ar(1.2)).poll * 200) + 100,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Stepper --</b></p>
+<p class="p7">// <a href="SC://Stepper"><span class="s2">Stepper</span></a> is a counter that you can trigger and reset with a signal like PulseCount, except you can also define the minimum and maximum values, as well as the step size.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><br></p>
+<p class="p9"><span class="s3">SynthDef</span><span class="s4">(</span>"help-Stepper"<span class="s4">,{ </span><span class="s3">arg</span><span class="s4"> out=0;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(out,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Stepper</span>.kr(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Impulse</span>.kr(7), <span class="s5">// trigger</span></p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, </span>// reset</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>5, </span>// min value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>17, </span>// max value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>1,<span class="Apple-converted-space">  </span></span>// step value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s3">nil</span><span class="s4">) </span>// reset value</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>* 100,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// much nicer when resetting and using a big enough step to make the pattern foldover:</p>
+<p class="p9"><span class="s3">SynthDef</span><span class="s4">(</span>"help-Stepper"<span class="s4">,{ </span><span class="s3">arg</span><span class="s4"> out=0;</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(out,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Stepper</span>.kr(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Impulse</span>.kr(7), <span class="s5">// trigger</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Impulse</span>.kr(0.25), <span class="s5">// reset</span></p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>5, </span>// min value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>17, </span>// max value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>5,<span class="Apple-converted-space">  </span></span>// step value</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>3) </span>// reset value</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>* 100,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ PulseDivider --</b></p>
+<p class="p7">// <a href="SC://PulseDivider"><span class="s2">PulseDivider</span></a> does what its name says: outputs an impulse after receiving a specified number of triggers in its input.</p>
+<p class="p7"><b>// </b>Here 's a cool little example by the ixi people</p>
+<p class="p8"><br></p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\drummer</span>, { <span class="s3">arg</span> out=0, tempo=4, amp = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> snare, base, hihat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>tempo = </span><span class="s3">Impulse</span><span class="s4">.ar(tempo); </span>// for a drunk drummer replace Impulse with Dust !!!</p>
+<p class="p10"><span class="Apple-tab-span">	</span>snare = <span class="Apple-tab-span">	</span><span class="s3">WhiteNoise</span>.ar(<span class="s3">Decay2</span>.ar(<span class="s3">PulseDivider</span>.ar(tempo, 4, 2), 0.005, 0.5));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>base = <span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(<span class="s3">Line</span>.ar(120,60, 1), 0, <span class="s3">Decay2</span>.ar(<span class="s3">PulseDivider</span>.ar(tempo, 4, 0), 0.005, 0.5));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>hihat = <span class="Apple-tab-span">	</span><span class="s3">HPF</span>.ar(<span class="s3">WhiteNoise</span>.ar(1), 10000) * <span class="s3">Decay2</span>.ar(tempo, 0.005, 0.5);<span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(out, ((snare + base + hihat) * 0.4!2) * amp)</p>
+<p class="p10">}).load(s);</p>
+<p class="p10">)</p>
+<p class="p8"><br></p>
+<p class="p11"><span class="s4">a = </span><span class="s3">Synth</span><span class="s4">(</span>\drummer<span class="s4">);</span></p>
+<p class="p10">a.set(<span class="s6">\tempo</span>, 6);</p>
+<p class="p10">a.set(<span class="s6">\tempo</span>, 18, <span class="s6">\amp</span>, 0.75);</p>
+<p class="p7"><span class="s4">a.set(</span><span class="s6">\tempo</span><span class="s4">, 180, </span><span class="s6">\amp</span><span class="s4">, 0.2); </span>// check the CPU! no increase.</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== SELECTORS ======</b></p>
+<p class="p8"><br></p>
+<p class="p7">// The Select UGens are very handy for switching or mixing between members of an array; these can be sequences of values, or even different UGens. Be warned though, as this is server-side, all the UGens are constantly running, regardless of wether you can hear them or not.</p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ </b><a href="SC://Select"><b>Select</b></a><b> --</b></p>
+<p class="p8"><br></p>
+<p class="p7">// Here is yet one more not very musical example (but you get the idea):</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\SelectSeq</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> array;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>array = [<span class="s3">LFSaw</span>.kr(1),<span class="Apple-converted-space">  </span><span class="s3">LFPulse</span>.kr(3), <span class="s3">LFDNoise1</span>.kr(2), <span class="s3">LFTri</span>.kr(0.5), <span class="s3">LFPulse</span>.kr(5), <span class="s3">DC</span>.ar(0.5)];</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(<span class="s3">SelectX</span>.kr(<span class="s3">LFDNoise0</span>.kr(5) * array.size, array) * 440).abs + 220,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// Or, going through an array instead of using UGens</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\SelectSeq</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> array;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>array = </span><span class="s3">Array</span><span class="s4">.series(12, 60, 1).midicps; </span>// create an octave starting at middle C</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Select</span>.kr(<span class="s3">LFDNoise0</span>.kr(5) * array.size, array),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// There is also <a href="SC://SelectX"><span class="s2">SelectX</span></a>, which lets you mix and crossfade between adjacent member of the array. Also, you may want to check out <span class="s2">[<a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/wslib/wslib-help/SelectL.help.rtf">SelectL</a>]</span>, <span class="s7">[</span><span class="s8">RotateN</span><span class="s7">]</span>, and <span class="s7">[</span><span class="s8">RotateL</span><span class="s7">]</span>, all part of the wslib quark.</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ====== SAMPLE-AND-HOLD ======</b></p>
+<p class="p7">// This is the most 'traditional', analog studio technique: having a signal run and using another signal to sample it at regular or irregular intervals. The SC object that does that is called <a href="SC://Latch"><span class="s2">Latch</span></a>. Latch is audio rate, and the signal it samples also needs to be audio rate.</p>
+<p class="p8"><br></p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\sampleAndHold</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Latch</span>.ar(<span class="s3">WhiteNoise</span>.ar(440, 220) , <span class="s3">Impulse</span>.ar(7)),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// Let's make the trigger signal a bit more interesting (this is the very basics of a clock idea I developed in the analog studio at the Institute of Sonology):</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\sampleAndHold</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Latch</span>.ar(<span class="s3">WhiteNoise</span>.ar(440, 220), trig),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ================= DEMAND UGENS =================</b></p>
+<p class="p8"><br></p>
+<p class="p7">// With Demand UGens you can implement pattern/stream-style behavior in the server, inside a SynthDef.<span class="Apple-converted-space">  </span>You provide a trigger and get a signal output calculated from the Demand UGen. There is quite a few different behaviors implemented, with several Demand UGens existing in SC - their names begin with 'D' so they are easy to spot. What's nice about them, is that they are very efficient, as they use a 'lazy' implementation, and you can get specific values out of them without worrying about the timing of your triggers compared to your control signal (which would not be the case with a more standard sample-and-hold technique). Also, there is quite a lot of options.</p>
+<p class="p8"><br></p>
+<p class="p7">// The fundamental UGen here is <a href="SC://Demand"><span class="s2">Demand</span></a>. This is the UGen that you need to use to get data from the rest of the Demand UGens. You provide it a trigger, and it demands a value form the UGen or UGens in its list. You can also reset it, in which case Demand will reset all the UGens it contains. Demand is essentially a Sample-and-Hold mechanism, but it is different than Latch in that it can handle all the Demand UGen bureaucracy.</p>
+<p class="p8"><br></p>
+<p class="p7">// Here is the same example as above, but rewritten with Demand instead of Latch:</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\sampleAndHold</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, <span class="s3">WhiteNoise</span>.ar(440, 220)),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// Now, using some of the Demand UGens:</p>
+<p class="p7"><b>// • Dseries</b>: generate arithmetic series</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>pat = </span><span class="s3">Dseries</span><span class="s4">(0, 1, </span><span class="s3">inf</span><span class="s4">) % 13; </span>// generate an infinite series of values, starting from 0 and with a step-size of 1, and have them fold between 0 and 13</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, (pat * 440) + 220),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// • Dgeom: </b>generate geometric series</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>pat = </span><span class="s3">Dgeom</span><span class="s4">(1, 1.2, </span><span class="s3">inf</span><span class="s4">) % 13; </span>// generate an infinite series of values, starting from 0 and with a step-size of 1, and have them fold between 0 and 13</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, (pat * 440) + 220),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// now, let's use Demand's reset input to bring it back:</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>pat = </span><span class="s3">Dgeom</span><span class="s4">(1, 1.2, </span><span class="s3">inf</span><span class="s4">) % 13; </span>// generate an infinite geometric series of values, starting from 0 and growing by 1.2, and have them fold between 0 and 13</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, <span class="s3">Dust</span>.ar(0.25), (pat * 440) + 220),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// • Dseq: </b>play back a sequence</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7) - </span><span class="s3">Impulse</span><span class="s4">.ar(2) + </span><span class="s3">Dust</span><span class="s4">.ar(0.5); </span>// the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>pat = </span><span class="s3">Dseq</span><span class="s4">([1, 4, 5, 2, 7, 5, 8], </span><span class="s3">inf</span><span class="s4">); </span>// play back the sequence infinite times</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, (pat * 440) + 220),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// • Dshuf: </b>shuffle a sequence</p>
+<p class="p7">// Now, for a more complex example, using two demand ugens, one embedded in the other:</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7); </span>// simple clock to hear what's going on</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>pat = </span><span class="s3">Dseq</span><span class="s4">([</span><span class="s3">Dshuf</span><span class="s4">([1, 4, 5, 2, 7, 5, 8], 4)], </span><span class="s3">inf</span><span class="s4">); </span>// play back the shuffled sequence four times, then play another shuffle; repeat infinite times</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, (pat * 440) + 220),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • now, for an even more complex example, using <b>Dbrown</b>, <b>Dstutter<span class="Apple-converted-space"> </span></b> and <b>Dwhite </b>as well</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{ <span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> trig, pat;</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span>trig = </span><span class="s3">Impulse</span><span class="s4">.ar(7); </span>// simple clock to hear what's going on</p>
+<p class="p10"><span class="Apple-tab-span">	</span>pat = <span class="s3">Dseq</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s3">Dshuf</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[1, 4, 5, 2, 7, 5, 8], 3),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Dbrown</span>(1, 12, 1, 7),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Dstutter</span>(3, <span class="s3">Dwhite</span>(1, 12, 7))],</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s3">inf</span><span class="s4">); </span>// play back the shuffled sequence three times, then play another seven values from dbrown; repeat infinite times</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SinOsc</span>.ar(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Demand</span>.ar(trig, 0, (pat * 440) + 220),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0, 0.25)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>)</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7">// • <b>Duty</b> and <b>TDuty </b>have their own triggering system, so you can use another Demand UGen to specify a stream of durations<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{<span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> freq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq = <span class="s3">Duty</span>.kr(</p>
+<p class="p7"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span><span class="s3">Drand</span><span class="s4">([0.01, 0.2, 0.4], </span><span class="s3">inf</span><span class="s4">), </span>// demand ugen as durations</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Dseq</span>([204, 400, 201, 502, 300, 200], <span class="s3">inf</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>);<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">SinOsc</span>.ar(freq * [1, 1.01]) * 0.1);</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p7">// Demand UGens can run at audio rate as well:</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s6">\demand</span>,{<span class="s3">arg</span> outbus = 0;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> freq;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>freq = <span class="s3">Duty</span>.kr(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Drand</span>([0.01, 0.2, 0.4] * <span class="s3">MouseX</span>.kr(0.001, 3, 1), <span class="s3">inf</span>), <span class="s5">// demand ugen as durations</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Dseq</span>([204, 400, 201, 502, 300, 200], <span class="s3">inf</span>)</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>);<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">SinOsc</span>.ar(freq * [1, 1.01]) * 0.1);</p>
+<p class="p10">}).play;</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p7"><b>// ------ Demand UGen list (June 2010) --</b></p>
+<p class="p7">/*</p>
+<p class="p7"><span class="s2"><a href="SC://Dbrown">Dbrown</a></span>, Dibrown<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate brownian movement generators</p>
+<p class="p7"><span class="s2"><a href="SC://Dbufrd">Dbufrd</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>buffer demand ugen</p>
+<p class="p7"><span class="s2"><a href="http://../Users/steliosm/Library/Application%20Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/DbufTag.htm">DbufTag</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate tag system on a buffer</p>
+<p class="p7"><span class="s2"><a href="SC://Dbufwr">Dbufwr</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>buffer demand ugen</p>
+<p class="p7"><span class="s2"><a href="SC://Demand">Demand</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand results from demand rate ugens</p>
+<p class="p7"><span class="s2"><a href="SC://DemandEnvGen">DemandEnvGen</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate envelope generator</p>
+<p class="p7"><span class="s2"><a href="../../../../../Users/steliosm/Library/Application Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/Dfsm.html">Dfsm</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate finite state machine</p>
+<p class="p7"><span class="s2"><a href="SC://Dgeom">Dgeom</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate geometric series ugen</p>
+<p class="p7">Donce</p>
+<p class="p7"><span class="s2"><a href="SC://Dpoll">Dpoll</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>print the current output value of a demand rate UGen</p>
+<p class="p7"><span class="s2"><a href="SC://Drand">Drand</a></span>, Dxrand<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate random sequence generators</p>
+<p class="p7"><span class="s2"><a href="SC://Dseq">Dseq</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate sequence generator</p>
+<p class="p7"><span class="s2"><a href="SC://Dser">Dser</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate sequence generator</p>
+<p class="p7"><span class="s2"><a href="SC://Dseries">Dseries</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate arithmetic series ugen</p>
+<p class="p7"><span class="s2"><a href="SC://Dshuf">Dshuf</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate random sequence generator</p>
+<p class="p7"><span class="s2"><a href="SC://Dstutter">Dstutter</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate input replicator</p>
+<p class="p7"><span class="s2"><a href="SC://Dswitch">Dswitch</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate generator for embedding different inputs</p>
+<p class="p7"><span class="s2"><a href="SC://Dswitch1">Dswitch1</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate generator for switching between inputs</p>
+<p class="p7"><span class="s2"><a href="../../../../../Users/steliosm/Library/Application Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/Dtag.htm">Dtag</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate tag system</p>
+<p class="p7">DUGen</p>
+<p class="p7"><span class="s2"><a href="SC://Duty">Duty</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand results from demand rate ugens</p>
+<p class="p7"><span class="s2"><a href="SC://Dwhite">Dwhite</a></span>, Diwhite<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate white noise random generators</p>
+<p class="p7">ListDUGen</p>
+<p class="p7"><span class="s2"><a href="SC://TDuty">TDuty</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand results as trigger from demand rate ugens</p>
+<p class="p7">// Also:</p>
+<p class="p7"><span class="s2"><a href="../../../../../Users/steliosm/Library/Application Support/SuperCollider/Extensions/sc3-plugins/BhobUGens/help/Dbrown2.help.rtf">Dbrown2</a></span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>demand rate brownian movement with Gendyn distributions</p>
+<p class="p7">*/</p>
+<p class="p8"><br></p>
+<p class="p8"><br></p>
+<p class="p12"><br></p>
+</body>
+</html>

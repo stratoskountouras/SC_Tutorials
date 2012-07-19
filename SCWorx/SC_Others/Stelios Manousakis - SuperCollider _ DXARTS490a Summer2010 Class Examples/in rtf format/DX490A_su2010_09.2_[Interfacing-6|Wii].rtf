@@ -1,0 +1,328 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 LucidaGrande;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red96\green96\blue96;
+\red0\green0\blue191;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 9.2:
+\b0 \
+
+\b 	Interfacing 6: Wii in SuperCollider
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Connecting\
+				- Preparing: step-by-step (5 steps)\
+				- Receiving data\
+			\'95 A sound example using Ctk and Procmod\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+
+\b \cf2 // ================= WII IN SUPERCOLLIDER =================
+\b0 \cf3 \
+\
+\
+
+\b \cf2 // ====== CONNECTING ======
+\b0 \cf3 \
+\cf2 // The Wiimote connects to your computer via bluetooth, using a proprietary format from Nintendo. There are a few different implementations hacking their way through the protocol, with some being more stable than others.\cf3 \
+\cf2 // Most of these implementations can also get data from the Nunchuk add-on, but none yet from the WiiMotionPlus. However, as these add-ons connect to the Wiimote with a SerialPort, it is very easy to get data from then with an Arduino - all you need to do is read the data through the Arduino's analog ins. There is an adapter (Wiichuck), but you can also stick cables to your Nunchuk's or WiiMotionPlus' connectors and easily retreive all data.\cf3 \
+\
+\
+
+\b \cf2 // ------ Preparing: step-by-step (5 steps)--
+\b0 \cf3 \
+\
+\cf2 // Connect Wii with DarwiinRemoteOSC\cf3 \
+\cf2 // get DarwiinRemoteOSC here:\cf3 \
+\cf4 "open http://code.google.com/p/darwiinosc/downloads/list"\cf3 .unixCmd\
+\
+\cf2 /* \
+\'95 This project is based on darwiinremote. It is stable (though I haven't used it extensively). \
+// You can also use the MusicController app, but there is no support for nunchuk and IR\
+\'95 There is another implementation based on the aka.wiimote max/msp object but that one is very shaky. Inside SC, the WiiMote object uses that implementation, but I never got it to work. Supposedly it is perfect in Linux. \
+\'95 There is yet another implementation, (the class is called Wiimote), but I didn't get that to work ever either - maybe it was written on a PPC machine... or maybe it just is a bad implementation\
+\'95 If you feel like spending a bit of money ($20-40), there is also OSCulator, which can talk to the Wiimote and send OSC data to SC\
+*/\cf3 \
+\
+\cf2 /*\
+
+\b \'95 step 1:
+\b0  \
+turn on your computer's bluetooth\
+\
+
+\b \'95 step 2: 
+\b0 \
+turn on DarwiinRemoteOSC \
+\
+
+\b \'95 step 3: 
+\b0 \
+Press buttons 1 & 2 simultaneously; the LED's will flash until your Wii connects\
+\
+
+\b \'95 step 4: 
+\b0 \
+Go to the preferences of DarwiinRemoteOSC and set the port nr to 57120 (the sclang port)\
+\
+
+\b \'95 step 5: 
+\b0 \
+Turn on your responders below, and you're good to go!\
+*/\cf3 \
+\
+\
+\cf2 /* 
+\b addres space
+\b0 : this is how the incoming OSC data from DarwiinRemoteOSC is named   */\cf3 \
+\cf2 /*\
+/wii/connected , i\
+/wii/mousemode , i\
+/wii/button/a , i\
+/wii/button/b , i\
+/wii/button/up , i\
+/wii/button/down , i\
+/wii/button/left , i\
+/wii/button/right , i\
+/wii/button/minus , i\
+/wii/button/plus , i\
+/wii/button/home , i\
+/wii/button/one , i\
+/wii/button/two , i\
+/wii/acc , fff\
+/wii/orientation , ff\
+/wii/irdata , ffffffffffff\
+/wii/batterylevel , f\
+/nunchuk/joystick , ff\
+/nunchuk/button/z , i\
+/nunchuk/button/c , i\
+/nunchuk/acc , fff\
+/nunchuk/orientation , ff\
+*/\cf3 \
+\
+\
+
+\b \cf2 // ------ Receiving data --
+\b0 \cf3 \
+(\
+\
+\cf2 // accelerometer (format is x, y, z)\cf3 \
+~accel = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/acc'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // orientation \cf3 \
+~orient = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/orientation'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // buttons:\cf3 \
+~buttonA= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/a'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonB= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/b'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~button1= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/one'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~button2= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/two'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonLeft= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '//wii/button/left'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonRight= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/right'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonUp= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/up'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonDown= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/down'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonPlus= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/plus'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonMinus= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/minus'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+~buttonHome= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/home'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // infrared data (will only work with two IR LEDs)\cf3 \
+~ir = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/irdata'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // battery level: doesn't seem to work, but no big deal...\cf3 \
+~bat = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/batterylevel'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // nunchuck: joystick\cf3 \
+~nunJoy = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/nunchuk/joystick'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // nunchuck: accelerometer\cf3 \
+~nunAccel = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/nunchuk/acc'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // nunchuck: orientation\cf3 \
+~nunOrient = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/nunchuk/orientation'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // nunchuck: button C\cf3 \
+~nunZ = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/nunchuk/button/c'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+\
+\cf2 // nunchuck: button Z\cf3 \
+~nunC = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/nunchuk/button/z'\cf3 , \{\cf5 arg\cf3  ...args; \
+args[2].postln;\
+\}).add;\
+)\
+\
+\cf2 // remove all OSCresponders:\cf3 \
+[~accel, ~orient, ~buttonA, ~buttonB, ~button1, ~button2, ~buttonLeft, ~buttonRight, ~buttonUp, ~buttonDown, ~buttonPlus, ~buttonMinus, ~buttonHome, ~ir, ~bat, ~nunJoy, ~nunAccel, ~nunOrient, ~nunZ, ~nunC].do\{\cf5 |i|\cf3  i.remove\}\
+\
+\
+\
+
+\b \cf2 // ====== A SOUND EXAMPLE USING CTK AND PROCMOD ======
+\b0 \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // This is a similar example with Class7.1 and Class7.2. The implementation is a bit crude, and only a few parameters of the wii are mapped, but you'll get the idea:\cf3 \
+\
+(\
+\cf2 // === \'95 Interfacing connections: ===\cf3 \
+\cf2 // first, connect your Wiimote, according to the directions above\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\cf2 // === \'95 Sound synthesis ===\cf3 \
+\cf2 // load a simple FM synth, no mapping inside the synth\cf3 \
+~combfm = \cf5 CtkSynthDef\cf3 ( \cf6 \\combFM\cf3 , \{ \cf5 |outbus = 0, freq = 440, harm = 1, modix = 1, delay = 0.1, pan = 0, amp = 0.5, envbus, freqMul = 1|\cf3 \
+	\cf5 var\cf3  car, mod, out, dev, modfreq;\
+	freq = freq * freqMul;\
+	modfreq = \cf5 Lag\cf3 .kr(freq * harm);\
+	dev = modix * modfreq;\
+	mod = \cf5 SinOsc\cf3 .ar(modfreq, 0, dev);\
+	car = \cf5 SinOsc\cf3 .ar(freq + (mod * modix));\
+	out = \cf5 Out\cf3 .ar(outbus, (\cf5 Pan2\cf3 .ar(\cf5 CombC\cf3 .ar(car, 0.5, delay, 0.5), pan, amp) * \cf5 In\cf3 .kr(envbus)));
+\f1 \uc0\u8232 
+\f0 \});\
+	\
+	\
+\cf2 /// === \'95 mapping stuff ===\cf3 \
+\
+\cf2 // create as many control buses as the parameters of the controlling interface\cf3 \
+~ctrl = 6.collect(\{\cf5 CtkControl\cf3 .play\});\
+\
+\cf2 // create some envelopes to handle the parameter mapping as you wish\cf3 \
+~panEnv = \cf5 Env\cf3 ([-1, 1], [1], \cf6 \\lin\cf3 );\
+~ampEnv = \cf5 Env\cf3 ([0.001, 0.7], [1], 3);\
+~modEnv = \cf5 Env\cf3 ([1, 50], [1], 4);\
+~freqEnv = \cf5 Env\cf3 ([40, 3000], [1], 4);\
+\cf2 //~cutEnv = Env([50, 8000], [1], 2);\cf3 \
+~delEnv = \cf5 Env\cf3 ([0.001, 0.5], [1], 2);\
+~harmEnv = \cf5 Env\cf3 ([0.1, 10], [1], 2);\
+\
+\
+\cf2 /// --- the wii controls --- \\\\\\\cf3 \
+\
+\cf2 // buttons:\cf3 \
+\cf2 /*\
+B starts the procmod\
+A stops  the procmod\
+*/\cf3 \
+~buttonB= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/b'\cf3 , \{\cf5 arg\cf3  ...args; \
+p.play;\
+\}).add;\
+\
+~buttonA= \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/button/a'\cf3 , \{\cf5 arg\cf3  ...args; \
+p.release;\
+\}).add;\
+\
+\cf2 // use the accelerometer to deduce positioning in 3space and overall acceleration (this would definitely benefit from some low-pass filtering, that's up to you to implement using mapping examples seen previously) \cf3 \
+~acc = \cf5 OSCresponderNode\cf3 (\cf5 nil\cf3 , \cf6 '/wii/acc'\cf3 , \{\cf5 arg\cf3  ...args; \
+	\cf5 var\cf3  accels, magnitude, pitch, roll, yaw, testyaw;\
+	\cf2 // scale down incoming data to 0to1 range\cf3 \
+	accels = [args[2][1], args[2][2], args[2][3]] - 122; \cf2 // 0 is the middle point\cf3 \
+	accels = accels / 200; \cf2 // try to turn it into a 0to1 range\cf3 \
+\
+	\cf2 // deduce magnitude of movement:\cf3 \
+	magnitude = ((accels[0] ** 2) + (accels[1] ** 2) + (accels[2] ** 2)) ** 0.5;\
+	\cf2 // deduce pitch: in radians\cf3 \
+	pitch = ((accels[1]/accels[2]).atan) * -1; \
+	\cf2 // deduce roll: in radians\cf3 \
+	roll = (accels[0]/accels[2]).atan;\
+	\cf2 // deduce yaw: in radians (attn: it gives NaN every now and then...)\cf3 \
+	testyaw = (accels[0]/accels[1]).atan;\
+	if (testyaw.isValidUGenInput == \cf5 true\cf3 , \{yaw = testyaw\}, \{yaw = 0\}); \cf2 // protect from NaN	\cf3 \
+		\cf2 //[magnitude, pitch, roll, yaw].postln;\cf3 \
+	~ctrl[1].set([~harmEnv[(pitch + (pi/2)) / pi]]);\
+	~ctrl[0].set([~panEnv[(roll + (pi/2)) / pi]]);	\
+	~ctrl[3].set([~delEnv[(yaw + (pi/2)) / pi]]);\
+	~ctrl[5].set([~modEnv[magnitude]]);\
+\}).add;\
+\
+\
+\
+\cf2 // === \'95 the procmod ===\cf3 \
+p = \cf5 ProcMod\cf3 .new(\cf5 Env\cf3 ([0, 1, 0], [0.1, 3], \cf6 \\sin\cf3 , 1), id: \cf6 \\testHID\cf3 , server: s)\
+.function_(\{\cf5 arg\cf3  group, envbus, server;\
+	\cf5 var\cf3  note;\
+	note = ~combfm.new(target:group)\
+	.freqMul_(1)\
+	\cf2 //.pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(0.5).delay_(~ctrl[3]).freq_(220).harm_(~ctrl[5])\cf3 \
+	.pan_(~ctrl[0]).modix_(~ctrl[1]).amp_(0.1).delay_(~ctrl[3]).freq_(220).harm_(~ctrl[5])\
+	.envbus_(envbus).play;\
+	\});\
+\
+\
+)\
+\
+\cf2 // don't forget to free the OSCresponders!\cf3 \
+~acc.remove\
+~buttonB.remove\
+~buttonA.remove\
+\
+}

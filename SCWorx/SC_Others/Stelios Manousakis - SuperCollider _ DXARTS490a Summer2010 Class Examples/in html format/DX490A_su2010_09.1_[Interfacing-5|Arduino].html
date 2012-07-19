@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p13 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #bf0000}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p15 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {color: #606060}
+span.s5 {text-decoration: underline}
+span.s6 {color: #bf0000}
+span.s7 {color: #007300}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 9.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Interfacing 5: Arduino in SuperCollider</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Connecting (5 steps)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Activating and setting pins: digital/analog, input/output</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Digital ports</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Digital pins</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Analog ports and pins</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Reading data (inputs)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Digital read</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Analog read</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Writing data (outputs)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Digital write</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- PWM write</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Disconnecting</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sound example</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p6"><br></p>
+<p class="p8"><b>// ================= ARDUINO AND SUPERCOLLIDER =================</b></p>
+<p class="p8">// The Arduino is a microcontroller development platform; it is an open-source hardware/software system. You can find more info here:<span class="Apple-converted-space"> </span></p>
+<p class="p9">"open http://www.arduino.cc"<span class="s2">.unixCmd</span></p>
+<p class="p8">// Connects via the SerialPort</p>
+<p class="p8">// Best results using the SCPyduino Class in SC, which is what this file deals with</p>
+<p class="p8">// Needs Firmata firmaware uploaded into Arduino (could also work with your own)</p>
+<p class="p8">// There is also the ArduinoSMS class (Arduino quark)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== CONNECTING ======</b></p>
+<p class="p8"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p8"><b>• Step 1:</b> Load the <b>Standard Firmata</b> firmware to your Arduino board (Standard_Firmata.pde). Note that this seems to currently load best using the Arduino v0016 software (June 2010).</p>
+<p class="p8"><span class="Apple-tab-span">	</span>You will have to do the following steps to upload the firmware:</p>
+<p class="p8"><span class="Apple-tab-span">	</span>(A): connect the Arduino board to your computer</p>
+<p class="p8"><span class="Apple-tab-span">	</span>(B): In the Arduino software:</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(a): select the type of board you have from Tools/Board</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(b): select the port you plugged the board into, from Tools/Serial Port</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(c): open the firmare from File/Sketchbook/Examples/Library-Firmata/StandardFirmata</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(d): make sure your firmware runs on the maximum baud rate. The StandardFirmata firmata firmware contains a line around the end of the 'void setup()' loop:</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Firmata.begin();</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Change it to:</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Firmata.begin(115200) // this is probably the default though, at least this is what SCPyduino assumes...</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>If you are using your own firmware, this would be written as Serial.begin(115200)</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(e): press the upload to I/O Board button from the software's interface (shortcut: Cmd-u)</p>
+<p class="p8"><span class="Apple-tab-span">	</span>(C): quit Arduino (this is important, as only one software can access the same serial port at a time!)<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="Apple-tab-span">	</span>You can find more info on Firmata here:</p>
+<p class="p8"><span class="Apple-tab-span">	</span>"open http://www.firmata.org/wiki/Main_Page".unixCmd</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p8">// Now, in SuperCollider:</p>
+<p class="p8"><b>// • Step 2: </b>Install the <b>SCPyduino</b> SuperCollider quark, if it's not installed yet:</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">Quarks</span>.install( <span class="s4">"SCPyduino"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// • Step 3:</b> list all devices; this will bring up an array of available serial devices:</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">SerialPort</span>.listDevices</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// or view the array like this:</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span></span>SerialPort<span class="s2">.devices</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><b>// • Step 4:</b> Now, from this array, select the index where your Arduino is located (usually that's the usbserial one):</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~port = <span class="s3">SerialPort</span>.devices[2];</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// OR, you could also access the path name directly here, once you know how it is named in your computer. For example, in my MBP machine:</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span>p = </span><span class="s3">SerialPort</span><span class="s2">(</span><span class="s4">"/dev/tty.usbserial-A40015nw"</span><span class="s2">) </span>// this doesn't seem to always work though...</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// If you are NOT using StandardFirmata, but your own firmware, you can configure a number of settings of your SerialPort, upon connecting it to SC:</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>/* SerialPort instance creation arguments (from the <a href="SC://SerialPort"><span class="s5">SerialPort</span></a> helpfile)</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>port <span class="Apple-converted-space">          </span>device path or index</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>baudrate <span class="Apple-converted-space">      </span>baudrate [4800..230400]</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>databits <span class="Apple-converted-space">      </span>5 | 6 | 7 | 8</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>stopbits <span class="Apple-converted-space">      </span>true | false</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>parity <span class="Apple-converted-space">        </span>nil | 'even' | 'odd'</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>crtscts<span class="Apple-converted-space">        </span>hardware flow control (true | false)</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>xonxoff<span class="Apple-converted-space">        </span>software flow control (true | false)</p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>//<span class="Apple-tab-span">	</span>exclusive<span class="Apple-converted-space">      </span>open the device exclusively (true | false)<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>*/</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// For example</p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p12"><span class="s2"><span class="Apple-tab-span">	</span>p = </span>SerialPort<span class="s2">(</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">SerialPort</span>.devices[2], <span class="s6">// port name</span></p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>baudrate: 115200); </span>// maximum baud rate for the Arduino; this will NOT work with StandardFirmata</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><b>// • Step 5: </b>Create an instance of the SCPyduino object, using the port defined above; then wait for a bit to post the firmata version, which will be returned if the connection is OK:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>(</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~connectArduino = <span class="s3">Routine</span>{</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino = <span class="s3">SCPyduino</span>.new(~port);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>4.wait;</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"The Firmata firmware version on this Arduino board is: "<span class="s2">.post;</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.firmataVersion.postln}.play;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== ACTIVATING AND SETTING PINS: DIGITAL/ANALOG, INPUTS/OUTPUTS ======</b></p>
+<p class="p8">// StandardFirmata lets you set from the client application whether your pins will be used as outputs or inputs, and as digital (true/false) or analog (10-bit data). In our case, we do that calling the appropriate pin and method in the SCPyduino class.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Digital Ports<span class="Apple-converted-space">  </span>--</b></p>
+<p class="p8">// In Firmata, the digital pins are split into digitalPort arrays, with pins [0..7] belonging to .digitalPorts[0] and pins [8..13] belonging to .digitalPorts[1] (only this many are implemented in SCPyduino).</p>
+<p class="p8">// The appropriate ports have to be set and activated before we can read/write data from/to any pins:</p>
+<p class="p7"><br></p>
+<p class="p11">~arduino.digitalPorts[1].active_(1);</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Digital<span class="Apple-converted-space">  </span>Pins --</b></p>
+<p class="p8">// Arduino's digital pins have three possible modes:</p>
+<p class="p8">/*</p>
+<p class="p8"><span class="Apple-tab-span">	</span>digital_output : write data to pin; this mode is enumerated as 0</p>
+<p class="p13"><span class="Apple-tab-span">	</span>digital_input : read data from pin;<span class="Apple-converted-space">  </span>this mode is enumerated as 1</p>
+<p class="p13"><span class="Apple-tab-span">	</span>digital_pwm : for PWM output (only on pins: 3, 5, 6, 9, 10, 11 with the standard size Arduino);<span class="Apple-converted-space">  </span>this mode is enumerated as<span class="Apple-converted-space">  </span>2</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Analog ports and Pins --</b></p>
+<p class="p8">// Analog pins also need to be activated in order to read incoming values. In the current SCPyduino implementation there is an array of 6 analog ports available, with each index corresponding to the hardware pin of that number:</p>
+<p class="p8"><span class="s2">~arduino.analog[0].active_(1); </span>// activates polling for analog pin 0 on the Arduino microcontroller</p>
+<p class="p14"><br></p>
+<p class="p14"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== READING DATA (INPUTS) ======</b></p>
+<p class="p8">// As with all protocols, we need to sample incoming data at regular intervals. First, we need to tell the microcontroller to poll the activated ports and pins, using the <b>.iterate </b>message. Then, we need a loop to keep sampling the data.</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Digital read --</b></p>
+<p class="p8">// activate port 0 (PORTA)</p>
+<p class="p11">~arduino.digitalPorts[0].active_(1);</p>
+<p class="p8">// set the mode for digital pin 2 to digital_input</p>
+<p class="p11">~arduino.digital[2].mode_(~arduino.digital_input);</p>
+<p class="p7"><br></p>
+<p class="p8">// read digital pin 2 and post value (true/false):</p>
+<p class="p11">(</p>
+<p class="p11">a = fork {</p>
+<p class="p11"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.iterate;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[2].value.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}</p>
+<p class="p11">};</p>
+<p class="p11">)</p>
+<p class="p11">a.stop</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Analog read --</b></p>
+<p class="p8">//activate analog pin 0</p>
+<p class="p11">~arduino.analog[0].active_(1)</p>
+<p class="p8">//post value of analog pin 0</p>
+<p class="p11">(</p>
+<p class="p11">a = fork{</p>
+<p class="p11"><span class="Apple-tab-span">	</span>loop{</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.iterate;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.analog[0].value.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}</p>
+<p class="p11">};</p>
+<p class="p11">)</p>
+<p class="p11">a.stop;</p>
+<p class="p8">//deactivate reporting analog values</p>
+<p class="p11">~arduino.analog[0].active(0);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== WRITING DATA (OUTPUTS) ======</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Digital write --</b></p>
+<p class="p8">//Activate digital port 1 (PORTB) on the Arduino</p>
+<p class="p11">~arduino.digitalPorts[1].active_(1)</p>
+<p class="p8">// Set the mode for digital pin 13 to digital output</p>
+<p class="p11">~arduino.digital[13].mode_(~arduino.digital_output);</p>
+<p class="p8">// try it out manually:</p>
+<p class="p11">~arduino.digital[13].write(1);<span class="s6">//turn on LED</span></p>
+<p class="p11">~arduino.digital[13].write(0);<span class="s6">//turn off LED</span></p>
+<p class="p8">//Make the LED blink</p>
+<p class="p11">(</p>
+<p class="p11">a = fork{<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>loop{</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[13].write(1);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.25.wait;</span>// on for this long</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[13].write(0);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.25.wait; </span>// off for this long</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}</p>
+<p class="p11">};</p>
+<p class="p11">)</p>
+<p class="p8"><span class="s2">a.stop; </span>// stop writing data</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ PWM write --</b></p>
+<p class="p13">// PWM (Pulse Width Modulation) is only possible on pins: 3, 5, 6, 9, 10, 11 with the standard size Arduino.</p>
+<p class="p15"><br></p>
+<p class="p8">// Activate digital port 0 (PORTA) on the Arduino</p>
+<p class="p11">~arduino.digitalPorts[0].active_(1);</p>
+<p class="p8">// Set the mode for digital pin 3 to pwm output</p>
+<p class="p11">~arduino.digital[3].mode_(~arduino.digital_pwm);</p>
+<p class="p8">//pulsating LED</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s3">var</span> i;</p>
+<p class="p11">a = fork{</p>
+<p class="p11"><span class="Apple-tab-span">	</span>5000.do { <span class="s3">|i|</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = (((i % 500) / 500) * 2pi);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[3].write(sin(i) + 1 * 0.5);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.005.wait;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}</p>
+<p class="p11">}</p>
+<p class="p11">)</p>
+<p class="p11">a.stop;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== DISCONNECTING ======</b></p>
+<p class="p8">// VERY IMPORTANT!: don't forget to close your serial port once you're done (or if you want to access your Arduino board from another software)! Otherwise you may freeze up SC...</p>
+<p class="p11">~arduino.close</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== SOUND EXAMPLE ======</b></p>
+<p class="p8">// Here is a very simple sound example, using analog and digital inputs and outputs to control and monitor a synth.</p>
+<p class="p8">/* What this example uses:</p>
+<p class="p8">- a switch to turn the synth on and off</p>
+<p class="p8">- a logarithmic pot to control frequency</p>
+<p class="p8">- an LED to show if the synth is on or off</p>
+<p class="p8">- an LED to show how high the frequency is</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// a very simple synth:</p>
+<p class="p12"><span class="s2">~synth = </span>CtkSynthDef<span class="s2">( </span><span class="s7">\sine</span><span class="s2">, { </span>|outbus = 0, freq = 440, amp = 0.5|</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(outbus, <span class="s3">SinOsc</span>.ar(<span class="s3">Lag</span>.kr(freq, 0.05), 0, amp))});</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// Connect and activate the Arduino first:</p>
+<p class="p11">(</p>
+<p class="p11">~connectArduino = <span class="s3">Routine</span>{</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// • 1: Connect to the arduino:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino = <span class="s3">SCPyduino</span>.new(~port);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>4.wait;</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span></span>"The Firmata firmware version on this Arduino board is: "<span class="s2">.post;</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.firmataVersion.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span>0.25.wait;</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// • 2: Activate the ports and pins:</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// activate port 0 (PORTA)</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.digitalPorts[0].active_(1);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>//Activate digital port 1 (PORTB) on the Arduino</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.digitalPorts[1].active_(1);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>//activate analog pin 0</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.analog[0].active_(1);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// set the mode for digital pin 2 to digital_input</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.digital[2].mode_(~arduino.digital_input);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// set the mode for digital pin 13 to digital output</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.digital[13].mode_(~arduino.digital_output);</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// Set the mode for digital pin 3 to pwm output</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~arduino.digital[3].mode_(~arduino.digital_pwm);</p>
+<p class="p11"><span class="Apple-tab-span">	</span>}.play;</p>
+<p class="p11">)</p>
+<p class="p7"><br></p>
+<p class="p8">// now run the loop:</p>
+<p class="p11">(</p>
+<p class="p11">~arduinoRWr = fork {</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span></span>// the ON/OFF switch will be a bit tricky, as we want to only report a changing state</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">var</span> change, state, switch; <span class="s6">// for the toggle</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s3">var</span> pot, freq, memArray; <span class="s6">// for the pot</span></p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span>change = 0 ! 2; </span>// compare the toggle's state with the previous value</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span>memArray = 0 ! 10; </span>// add a low-pass filtering mechanism for the pot</p>
+<p class="p11"><span class="Apple-tab-span">	</span>loop {</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// for everything</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.iterate;</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// • deal with the ON/OFF switch first, and turn on/off the LED to show the state:</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (~arduino.digital[2].value == <span class="s3">false</span>, {state = 0}, {state = 1});</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>change = change.shift(-1);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>change.put((change.size -1), state);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>switch = case<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{change[0] &lt; change[1]} </span>// means the toggle was turned ON</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">"ON"</span>.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (~note.isPlaying == <span class="s3">false</span>, {~note = ~synth.new().play}); <span class="s6">// turn the synth on</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[13].write(1); <span class="s6">// turn the LED on</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{change[0] &gt; change[1]} </span>// means the toggle was turned OFF</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>{<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s4">"OFF"</span>.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>if (~note.isPlaying == <span class="s3">true</span>, {~note.free}); <span class="s6">// turn the synth off</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[13].write(0); <span class="s6">// turn the LED off</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// • now, the freq pot input, and freq LED output:</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// post data before low-pass</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"raw data: "<span class="s2">.post;</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq = ((~arduino.analog[0].value * 5) + 100).postln;</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~arduino.digital[3].write(freq / 6000); </span>// a frequency of about 6000Hz would give out max intensity</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// add a low-pass mechanism<span class="Apple-tab-span">	</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>memArray = memArray.shift(-1);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>memArray.put((memArray.size -1), freq);</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq = memArray.sum / memArray.size;</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// post data after the low-pass</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>"lpf-ed data: "<span class="s2">.post;</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>freq.postln;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~note.freq_(freq);</p>
+<p class="p7"><br></p>
+<p class="p11"><span class="Apple-tab-span">	</span>}</p>
+<p class="p11">};</p>
+<p class="p11">)</p>
+<p class="p7"><br></p>
+<p class="p8">// stop the loop</p>
+<p class="p11">~arduinoRWr.stop</p>
+<p class="p7"><br></p>
+<p class="p8">// don't forget to free the Serial Port!</p>
+<p class="p11">~arduino.close</p>
+</body>
+</html>

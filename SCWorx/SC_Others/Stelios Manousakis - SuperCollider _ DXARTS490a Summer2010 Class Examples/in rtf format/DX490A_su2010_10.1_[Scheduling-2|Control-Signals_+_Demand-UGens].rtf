@@ -1,0 +1,395 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;\red0\green0\blue191;\red191\green0\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 10.1:
+\b0 \
+
+\b 	Patterns in the server: Analog-style control signals and Demand UGens
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Analog-style control signals\
+				- Counters\
+					> PulseCount\
+					> Stepper\
+					> PulseDivider\
+				- Selectors\
+					> Select\
+				- Sample-and-Hold\
+			\'95 Demand UGens\
+				- a list of Demand UGens (June 2010)\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= ANALOG-STYLE CONTROL SIGNALS =================
+\b0 \cf3 \
+\
+\cf2 // SynthDefs don't have to be completely static: you can schedule things using analog-studio-style controls inside a synthdef, sequencing signals with signals - there are a few different UGens to do that. Most importantly, however, and breaking out from the analog paradigm, you can use Demand UGens to create signal patterns. \cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== COUNTERS ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ PulseCount --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://PulseCount"}}{\fldrslt \cf2 \ul \ulc2 PulseCount}} is the simplest, most basic signal counter. You provide it with a trigger and it starts counting integers from 0, until you reset it:\cf3 \
+\
+\cf4 SynthDef\cf3 (\cf5 "help-PulseCount"\cf3 ,\{ \cf4 arg\cf3  out=0;\
+	\cf4 Out\cf3 .ar(out,\
+		\cf4 SinOsc\cf3 .ar(\
+			(\cf4 PulseCount\cf3 .ar(\cf4 Impulse\cf3 .ar(8), \cf4 Impulse\cf3 .ar(1.2)).poll * 200) + 100, \
+			0, 0.25\
+		)\
+	)\
+\}).play;\
+\
+\
+\
+
+\b \cf2 // ------ Stepper --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://Stepper"}}{\fldrslt \cf2 \ul \ulc2 Stepper}} is a counter that you can trigger and reset with a signal like PulseCount, except you can also define the minimum and maximum values, as well as the step size. \cf3 \
+\
+\cf4 SynthDef\cf3 (\cf5 "help-Stepper"\cf3 ,\{ \cf4 arg\cf3  out=0;\
+	\cf4 Out\cf3 .ar(out,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Stepper\cf3 .kr(\
+				\cf4 Impulse\cf3 .kr(7), \cf2 // trigger\cf3 \
+				0, \cf2 // reset\cf3 \
+				5, \cf2 // min value\cf3 \
+				17, \cf2 // max value\cf3 \
+				1,  \cf2 // step value\cf3 \
+				\cf4 nil\cf3 ) \cf2 // reset value\cf3 \
+			* 100, \
+			0, 0.25\
+		)\
+	)\
+\}).play;\
+\
+\cf2 // much nicer when resetting and using a big enough step to make the pattern foldover:\cf3 \
+\cf4 SynthDef\cf3 (\cf5 "help-Stepper"\cf3 ,\{ \cf4 arg\cf3  out=0;\
+	\cf4 Out\cf3 .ar(out,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Stepper\cf3 .kr(\
+				\cf4 Impulse\cf3 .kr(7), \cf2 // trigger\cf3 \
+				\cf4 Impulse\cf3 .kr(0.25), \cf2 // reset\cf3 \
+				5, \cf2 // min value\cf3 \
+				17, \cf2 // max value\cf3 \
+				5,  \cf2 // step value\cf3 \
+				3) \cf2 // reset value\cf3 \
+			* 100, \
+			0, 0.25\
+		)\
+	)\
+\}).play;\
+\
+\
+\
+\
+
+\b \cf2 // ------ PulseDivider --
+\b0 \cf3 \
+\cf2 // {\field{\*\fldinst{HYPERLINK "SC://PulseDivider"}}{\fldrslt \cf2 \ul \ulc2 PulseDivider}} does what its name says: outputs an impulse after receiving a specified number of triggers in its input.\cf3 \
+
+\b \cf2 // 
+\b0 Here 's a cool little example by the ixi people\cf3 \
+\
+(\
+\cf4 SynthDef\cf3 (\cf6 \\drummer\cf3 , \{ \cf4 arg\cf3  out=0, tempo=4, amp = 1;\
+	\cf4 var\cf3  snare, base, hihat;\
+	tempo = \cf4 Impulse\cf3 .ar(tempo); \cf2 // for a drunk drummer replace Impulse with Dust !!!\cf3 \
+	snare = 	\cf4 WhiteNoise\cf3 .ar(\cf4 Decay2\cf3 .ar(\cf4 PulseDivider\cf3 .ar(tempo, 4, 2), 0.005, 0.5));\
+	base = 	\cf4 SinOsc\cf3 .ar(\cf4 Line\cf3 .ar(120,60, 1), 0, \cf4 Decay2\cf3 .ar(\cf4 PulseDivider\cf3 .ar(tempo, 4, 0), 0.005, 0.5));\
+	hihat = 	\cf4 HPF\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(1), 10000) * \cf4 Decay2\cf3 .ar(tempo, 0.005, 0.5);	\
+	\cf4 Out\cf3 .ar(out, ((snare + base + hihat) * 0.4!2) * amp)\
+\}).load(s);\
+)\
+\
+a = \cf4 Synth\cf3 (\cf6 \\drummer\cf3 );\
+a.set(\cf6 \\tempo\cf3 , 6);\
+a.set(\cf6 \\tempo\cf3 , 18, \cf6 \\amp\cf3 , 0.75);\
+a.set(\cf6 \\tempo\cf3 , 180, \cf6 \\amp\cf3 , 0.2); \cf2 // check the CPU! no increase.\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== SELECTORS ======
+\b0 \cf3 \
+\
+\cf2 // The Select UGens are very handy for switching or mixing between members of an array; these can be sequences of values, or even different UGens. Be warned though, as this is server-side, all the UGens are constantly running, regardless of wether you can hear them or not.\cf3 \
+\
+
+\b \cf2 // ------ {\field{\*\fldinst{HYPERLINK "SC://Select"}}{\fldrslt \cf2 Select}} --
+\b0 \cf3 \
+\
+\cf2 // Here is yet one more not very musical example (but you get the idea):\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\SelectSeq\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  array;\
+	array = [\cf4 LFSaw\cf3 .kr(1),  \cf4 LFPulse\cf3 .kr(3), \cf4 LFDNoise1\cf3 .kr(2), \cf4 LFTri\cf3 .kr(0.5), \cf4 LFPulse\cf3 .kr(5), \cf4 DC\cf3 .ar(0.5)];\
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			(\cf4 SelectX\cf3 .kr(\cf4 LFDNoise0\cf3 .kr(5) * array.size, array) * 440).abs + 220, \
+			0, 0.25\
+		)\
+	)\
+\}).play;\
+\
+\cf2 // Or, going through an array instead of using UGens\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\SelectSeq\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  array;\
+	array = \cf4 Array\cf3 .series(12, 60, 1).midicps; \cf2 // create an octave starting at middle C\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Select\cf3 .kr(\cf4 LFDNoise0\cf3 .kr(5) * array.size, array), \
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\cf2 // There is also {\field{\*\fldinst{HYPERLINK "SC://SelectX"}}{\fldrslt \cf2 \ul \ulc2 SelectX}}, which lets you mix and crossfade between adjacent member of the array. Also, you may want to check out \ul [{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/wslib/wslib-help/SelectL.help.rtf"}}{\fldrslt \cf2 \ulc2 SelectL}}]\ulnone , \cf0 \ul \ulc0 [\cf7 \ulc7 RotateN\cf0 \ulc0 ]\cf2 \ulnone , and \cf0 \ul \ulc0 [\cf7 \ulc7 RotateL\cf0 \ulc0 ]\cf2 \ulnone , all part of the wslib quark.\cf3 \
+\
+\
+\
+\
+
+\b \cf2 // ====== SAMPLE-AND-HOLD ======
+\b0 \cf3 \
+\cf2 // This is the most 'traditional', analog studio technique: having a signal run and using another signal to sample it at regular or irregular intervals. The SC object that does that is called {\field{\*\fldinst{HYPERLINK "SC://Latch"}}{\fldrslt \cf2 \ul \ulc2 Latch}}. Latch is audio rate, and the signal it samples also needs to be audio rate.\cf3 \
+\
+\cf4 SynthDef\cf3 (\cf6 \\sampleAndHold\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Latch\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(440, 220) , \cf4 Impulse\cf3 .ar(7)),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\cf2 // Let's make the trigger signal a bit more interesting (this is the very basics of a clock idea I developed in the analog studio at the\cf8  Institute of Sonology\cf2 ):\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\sampleAndHold\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Latch\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(440, 220), trig),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+\
+\
+
+\b \cf2 // ================= DEMAND UGENS =================
+\b0 \cf3 \
+\
+\cf2 // With Demand UGens you can implement pattern/stream-style behavior in the server, inside a SynthDef.  You provide a trigger and get a signal output calculated from the Demand UGen. There is quite a few different behaviors implemented, with several Demand UGens existing in SC - their names begin with 'D' so they are easy to spot. What's nice about them, is that they are very efficient, as they use a 'lazy' implementation, and you can get specific values out of them without worrying about the timing of your triggers compared to your control signal (which would not be the case with a more standard sample-and-hold technique). Also, there is quite a lot of options.\cf3 \
+\
+\cf2 // The fundamental UGen here is {\field{\*\fldinst{HYPERLINK "SC://Demand"}}{\fldrslt \cf2 \ul \ulc2 Demand}}. This is the UGen that you need to use to get data from the rest of the Demand UGens. You provide it a trigger, and it demands a value form the UGen or UGens in its list. You can also reset it, in which case Demand will reset all the UGens it contains. Demand is essentially a Sample-and-Hold mechanism, but it is different than Latch in that it can handle all the Demand UGen bureaucracy.\cf3 \
+\
+\cf2 // Here is the same example as above, but rewritten with Demand instead of Latch:\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\sampleAndHold\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, \cf4 WhiteNoise\cf3 .ar(440, 220)),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+\cf2 // Now, using some of the Demand UGens:\cf3 \
+
+\b \cf2 // \'95 Dseries
+\b0 : generate arithmetic series\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	pat = \cf4 Dseries\cf3 (0, 1, \cf4 inf\cf3 ) % 13; \cf2 // generate an infinite series of values, starting from 0 and with a step-size of 1, and have them fold between 0 and 13\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, (pat * 440) + 220),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+
+\b \cf2 // \'95 Dgeom: 
+\b0 generate geometric series\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	pat = \cf4 Dgeom\cf3 (1, 1.2, \cf4 inf\cf3 ) % 13; \cf2 // generate an infinite series of values, starting from 0 and with a step-size of 1, and have them fold between 0 and 13\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, (pat * 440) + 220),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\cf2 // now, let's use Demand's reset input to bring it back:\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	pat = \cf4 Dgeom\cf3 (1, 1.2, \cf4 inf\cf3 ) % 13; \cf2 // generate an infinite geometric series of values, starting from 0 and growing by 1.2, and have them fold between 0 and 13\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, \cf4 Dust\cf3 .ar(0.25), (pat * 440) + 220),\
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+
+\b \cf2 // \'95 Dseq: 
+\b0 play back a sequence\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7) - \cf4 Impulse\cf3 .ar(2) + \cf4 Dust\cf3 .ar(0.5); \cf2 // the second impulse generator will remove some of the triggers, and the Dust will add a bit of randomness\cf3 \
+	pat = \cf4 Dseq\cf3 ([1, 4, 5, 2, 7, 5, 8], \cf4 inf\cf3 ); \cf2 // play back the sequence infinite times\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, (pat * 440) + 220), \
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+
+\b \cf2 // \'95 Dshuf: 
+\b0 shuffle a sequence\cf3 \
+\cf2 // Now, for a more complex example, using two demand ugens, one embedded in the other:\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7); \cf2 // simple clock to hear what's going on\cf3 \
+	pat = \cf4 Dseq\cf3 ([\cf4 Dshuf\cf3 ([1, 4, 5, 2, 7, 5, 8], 4)], \cf4 inf\cf3 ); \cf2 // play back the shuffled sequence four times, then play another shuffle; repeat infinite times\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, (pat * 440) + 220), \
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+\cf2 // \'95 now, for an even more complex example, using 
+\b Dbrown
+\b0 , 
+\b Dstutter 
+\b0  and 
+\b Dwhite 
+\b0 as well\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{ \cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  trig, pat;\
+	trig = \cf4 Impulse\cf3 .ar(7); \cf2 // simple clock to hear what's going on\cf3 \
+	pat = \cf4 Dseq\cf3 (\
+			[\cf4 Dshuf\cf3 (\
+				[1, 4, 5, 2, 7, 5, 8], 3), \
+			\cf4 Dbrown\cf3 (1, 12, 1, 7), \
+			\cf4 Dstutter\cf3 (3, \cf4 Dwhite\cf3 (1, 12, 7))],\
+			\cf4 inf\cf3 ); \cf2 // play back the shuffled sequence three times, then play another seven values from dbrown; repeat infinite times\cf3 \
+	\cf4 Out\cf3 .ar(outbus,\
+		\cf4 SinOsc\cf3 .ar(\
+			\cf4 Demand\cf3 .ar(trig, 0, (pat * 440) + 220), \
+			0, 0.25)\
+	)\
+\}).play;\
+\
+\
+\cf2 // \'95 
+\b Duty
+\b0  and 
+\b TDuty 
+\b0 have their own triggering system, so you can use another Demand UGen to specify a stream of durations \cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{\cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  freq;\
+	freq = \cf4 Duty\cf3 .kr(\
+				\cf4 Drand\cf3 ([0.01, 0.2, 0.4], \cf4 inf\cf3 ), \cf2 // demand ugen as durations\cf3 \
+				0, \
+				\cf4 Dseq\cf3 ([204, 400, 201, 502, 300, 200], \cf4 inf\cf3 )\
+			); \
+		\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq * [1, 1.01]) * 0.1);\
+\}).play;\
+\
+\cf2 // Demand UGens can run at audio rate as well:\cf3 \
+\cf4 SynthDef\cf3 (\cf6 \\demand\cf3 ,\{\cf4 arg\cf3  outbus = 0;\
+	\cf4 var\cf3  freq;\
+	freq = \cf4 Duty\cf3 .kr(\
+				\cf4 Drand\cf3 ([0.01, 0.2, 0.4] * \cf4 MouseX\cf3 .kr(0.001, 3, 1), \cf4 inf\cf3 ), \cf2 // demand ugen as durations\cf3 \
+				0, \
+				\cf4 Dseq\cf3 ([204, 400, 201, 502, 300, 200], \cf4 inf\cf3 )\
+			); \
+		\cf4 Out\cf3 .ar(outbus, \cf4 SinOsc\cf3 .ar(freq * [1, 1.01]) * 0.1);\
+\}).play;\
+\
+\
+\
+\
+
+\b \cf2 // ------ Demand UGen list (June 2010) --
+\b0 \cf3 \
+\cf2 /*\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Dbrown"}}{\fldrslt \cf2 \ul \ulc2 Dbrown}}, Dibrown		demand rate brownian movement generators\
+{\field{\*\fldinst{HYPERLINK "SC://Dbufrd"}}{\fldrslt \cf2 \ul \ulc2 Dbufrd}}					buffer demand ugen\
+{\field{\*\fldinst{HYPERLINK "http://../Users/steliosm/Library/Application%20Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/DbufTag.htm"}}{\fldrslt \cf2 \ul \ulc2 DbufTag}}					demand rate tag system on a buffer\
+{\field{\*\fldinst{HYPERLINK "SC://Dbufwr"}}{\fldrslt \cf2 \ul \ulc2 Dbufwr}}					buffer demand ugen\
+{\field{\*\fldinst{HYPERLINK "SC://Demand"}}{\fldrslt \cf2 \ul \ulc2 Demand}}					demand results from demand rate ugens\
+{\field{\*\fldinst{HYPERLINK "SC://DemandEnvGen"}}{\fldrslt \cf2 \ul \ulc2 DemandEnvGen}}			demand rate envelope generator\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/Dfsm.html"}}{\fldrslt \cf2 \ul \ulc2 Dfsm}}					demand rate finite state machine\
+{\field{\*\fldinst{HYPERLINK "SC://Dgeom"}}{\fldrslt \cf2 \ul \ulc2 Dgeom}}					demand rate geometric series ugen\
+Donce\
+{\field{\*\fldinst{HYPERLINK "SC://Dpoll"}}{\fldrslt \cf2 \ul \ulc2 Dpoll}}					print the current output value of a demand rate UGen\
+{\field{\*\fldinst{HYPERLINK "SC://Drand"}}{\fldrslt \cf2 \ul \ulc2 Drand}}, Dxrand			demand rate random sequence generators\
+{\field{\*\fldinst{HYPERLINK "SC://Dseq"}}{\fldrslt \cf2 \ul \ulc2 Dseq}}					demand rate sequence generator\
+{\field{\*\fldinst{HYPERLINK "SC://Dser"}}{\fldrslt \cf2 \ul \ulc2 Dser}}					demand rate sequence generator\
+{\field{\*\fldinst{HYPERLINK "SC://Dseries"}}{\fldrslt \cf2 \ul \ulc2 Dseries}}					demand rate arithmetic series ugen\
+{\field{\*\fldinst{HYPERLINK "SC://Dshuf"}}{\fldrslt \cf2 \ul \ulc2 Dshuf}}					demand rate random sequence generator\
+{\field{\*\fldinst{HYPERLINK "SC://Dstutter"}}{\fldrslt \cf2 \ul \ulc2 Dstutter}}					demand rate input replicator\
+{\field{\*\fldinst{HYPERLINK "SC://Dswitch"}}{\fldrslt \cf2 \ul \ulc2 Dswitch}}					demand rate generator for embedding different inputs\
+{\field{\*\fldinst{HYPERLINK "SC://Dswitch1"}}{\fldrslt \cf2 \ul \ulc2 Dswitch1}}				demand rate generator for switching between inputs\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/Extensions/sc3-plugins/TagSystemUGens/Help/Dtag.htm"}}{\fldrslt \cf2 \ul \ulc2 Dtag}}					demand rate tag system\
+DUGen\
+{\field{\*\fldinst{HYPERLINK "SC://Duty"}}{\fldrslt \cf2 \ul \ulc2 Duty}}					demand results from demand rate ugens\
+{\field{\*\fldinst{HYPERLINK "SC://Dwhite"}}{\fldrslt \cf2 \ul \ulc2 Dwhite}}, Diwhite			demand rate white noise random generators\
+ListDUGen\
+{\field{\*\fldinst{HYPERLINK "SC://TDuty"}}{\fldrslt \cf2 \ul \ulc2 TDuty}}					demand results as trigger from demand rate ugens\
+// Also:\
+{\field{\*\fldinst{HYPERLINK "http://../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/Extensions/sc3-plugins/BhobUGens/help/Dbrown2.help.rtf"}}{\fldrslt \cf2 \ul \ulc2 Dbrown2}}				demand rate brownian movement with Gendyn distributions\
+*/\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf3 \
+}

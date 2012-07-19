@@ -1,0 +1,668 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #007300}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p14 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000; min-height: 17.0px}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #0000bf}
+span.s4 {color: #000000}
+span.s5 {color: #bf0000}
+span.s6 {font: 14.0px Lucida Grande}
+span.s7 {font: 12.0px Helvetica}
+span.s8 {color: #606060}
+span.s9 {color: #007300}
+span.s10 {text-decoration: underline ; color: #0000ff}
+span.Apple-tab-span {white-space:pre}
+ul.ul1 {list-style-type: disc}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 14.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Patterns</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• General / about</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pattern vs Routine</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Some advantages and disadvantages of Patterns</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Some Pattern classes and other issues</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Deterministic patterns</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Randomness and probability</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Math operations on patterns</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pattern nesting<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Filter patterns</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pfunc</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Patterns in non-real time (NRT)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Patterns in real time (RT)</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Event</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pbind and EventStreams</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using your own SynthDefs<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Pchain</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Polyphony</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Bonus: Envs as Patterns</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Additional Pattern quarks</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• More references</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= PATTERNS =================</b></p>
+<p class="p8">// (Some of the content below has been compiled and/or rephrased from James Harkins' detailed Practical (and lengthy) Guide to Patterns, included with SC: <a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_01_Introduction.html"><span class="s2">PG_01_Introduction</span></a>. This long and well written tutorial is a <i>must read </i>if you intend to use Patterns...</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== GENERAL / ABOUT ======</b></p>
+<p class="p8">// You can think of Patterns as the language-side equivalent of Demand UGens, which we saw a few classes ago (Class10.1).</p>
+<p class="p9"><br></p>
+<p class="p8">// Patterns allow you to create multiple streams from a single specification - kind of like a mold for streams: whereas Patterns define behavior, streams execute it. Patterns usually have compound names, starting with the letter 'P' and then a discription of their functionality. As they are but molds, they only work once placed into a Stream: you have to send them the <b>.asStream</b> or <b>.embedInStream</b> message, otherwise they will NOT work.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8">// Here is how you can get multiple streams from one Pattern:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> a, b, c;</p>
+<p class="p10">a = <span class="s3">Prand</span>([0, 1, 2], <span class="s3">inf</span>);</p>
+<p class="p10">b = a.asStream;<span class="Apple-tab-span">	</span></p>
+<p class="p10">c = a.asStream;</p>
+<p class="p10">b.nextN(10).postln;</p>
+<p class="p10">c.nextN(10);</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Pattern vs Routine --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Patterns are high-level representations of computational tasks; they can be convenient to use, but at the same time confusing as to what exactly they do, hiding their functionality behind a magic veil. With patterns, one writes the result (what is supposed to happen) rather than the process (how to accomplish something).</p>
+<p class="p8">// Patterns can generate any kind of object, but are most commonly used for creating sequences of numbers, and most people use them for real-time processes, taking advantage of their 'lazy' implementation (they produce a value only when you ask them to).</p>
+<p class="p8">// Overall, patterns are compact and very good at iterating through data, but cannot really have the internal complexity, nor the customizability of Routines and Tasks.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8">// Here is an example of a simple counter with a Routine:</p>
+<p class="p10">(</p>
+<p class="p11"><span class="s4">r = </span>Routine<span class="s4"> {</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">inf</span>.do{<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i + 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.yield};</p>
+<p class="p10"><span class="Apple-tab-span">	</span>};</p>
+<p class="p10">)</p>
+<p class="p10">r.next;</p>
+<p class="p10">r.next;</p>
+<p class="p8">// or, let's just get the first ten elements together:</p>
+<p class="p8"><span class="s4">r.reset; </span>// reset from before</p>
+<p class="p10">r.nextN(10);</p>
+<p class="p8">// The above is same as this:</p>
+<p class="p10">r.reset;</p>
+<p class="p10">10.collect({r.next})</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// or shorter:</p>
+<p class="p10">(</p>
+<p class="p11"><span class="s4">r = </span>Routine<span class="s4"> {</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(0..).do{<span class="s3">|i|</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i.yield};</p>
+<p class="p10">};</p>
+<p class="p10">)</p>
+<p class="p10">r.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// The same process can be simply written as a Pseries Pattern like this:</p>
+<p class="p10">p = <span class="s3">Pseries</span>(start: 0, step: 1, length: <span class="s3">inf</span>).asStream;</p>
+<p class="p10">p.nextN(10);</p>
+<p class="p8">// or simply:</p>
+<p class="p10">p = <span class="s3">Pseries</span>().asStream;</p>
+<p class="p10">p.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Some advantages and disadvantages of Patterns --</b></p>
+<p class="p8">/* Pros</p>
+<p class="p8">- compact</p>
+<p class="p8">- no need to debug internal functionality (as opposed to a Routine you create yourself)</p>
+<p class="p8">- no need to decipher how it works once you know what it does</p>
+<p class="p8">- there is a lot of them</p>
+<p class="p8">- great for pattern-based music</p>
+<p class="p8">*/</p>
+<p class="p8">/* Cons</p>
+<p class="p8">- more new stuff to learn - and it's a lot of it!</p>
+<p class="p8">- if there is not a Pattern that does what you want, you'll either have to combine several patterns, or write your own with a Proutine, which practically means having to go back to Routines...</p>
+<p class="p8">- fairly static, can't change too much in real-time</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== SOME PATTERN CLASSES AND OTHER ISSUES ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// As mentioned above, Patterns are in many aspects a parallel to Demand UGens, something that becomes also obvious with the naming and functionality of several Pattern classes. Some non-exhaustive examples follow:</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Deterministic patterns --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pseries(start, step, length):</b> Arithmetic series (addition).</p>
+<p class="p10">p = <span class="s3">Pseries</span>(0, 1, 8);</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p8">// You can call the entire pattern until it runs out of values</p>
+<p class="p10">p.asStream.all</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pgeom(start, grow, length):</b> Geometric series (multiplication).</p>
+<p class="p10">p = <span class="s3">Pgeom</span>(1, 1.1, 9);</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pseq(list, repeats, offset):</b> Play through the entire list 'repeats' times. Like list.do.</p>
+<p class="p8">// loop through an array, n times:</p>
+<p class="p8"><span class="s4">p = </span><span class="s3">Pseq</span><span class="s4">([0, 1, 2, 3], </span><span class="s3">inf</span><span class="s4">)<span class="Apple-tab-span">	</span></span>// repeat infinite times</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pser(list, repeats, offset):</b> Play through the list as many times as needed, but output only 'repeats' items.</p>
+<p class="p10">p = <span class="s3">Pser</span>([0, 1, 2, 3], 6, 2)</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pslide(list, repeats, len, step, start, wrapAtEnd):</b> Play overlapping segments from the list.</p>
+<p class="p10">p = <span class="s3">Pslide</span>([1, 2, 3, 4, 5], 6, 3, 1, 0);</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Randomness and probability --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Random choice from a list of values:</p>
+<p class="p8">// • <b>Prand(list, repeats):</b> Choose items from the list randomly (same as list.choose)</p>
+<p class="p8"><span class="s4">p = </span><span class="s3">Prand</span><span class="s4">([0, 1, 2, 3], </span><span class="s3">inf</span><span class="s4">);<span class="Apple-tab-span">	</span></span>// repeat infinite times</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pxrand(list, repeats):</b> Choose randomly, but never repeat the same item twice</p>
+<p class="p8"><span class="s4">p = </span><span class="s3">Pxrand</span><span class="s4">([0, 1, 2, 3], </span><span class="s3">inf</span><span class="s4">)<span class="Apple-tab-span">	</span></span>// repeat infinite times</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pwrand(list, weights, repeats):</b> Choose randomly by weighted probabilities (like list.wchoose(weights))</p>
+<p class="p10">p = <span class="s3">Pwrand</span>([0, 1, 2, 3], [5, 1, 1, 3].normalizeSum, <span class="s3">inf</span>)<span class="Apple-tab-span">	</span><span class="s5">// weights must sum-up to 1</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pshuf(list, repeats):</b> Shuffle the list in random order, and use the same random order 'repeats' times. Like list.scramble</p>
+<p class="p10">p = <span class="s3">Pshuf</span>([0, 1, 2, 3], 2);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Random number generators:</p>
+<p class="p8">// • <b>Pwhite(lo, hi, length):</b> Random numbers, equal distribution ("white noise"). Like rrand(lo, hi)</p>
+<p class="p10">p = <span class="s3">Pwhite</span>(0, 1.0, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pbrown(lo, hi, step, length):</b> Brownian motion, arithmetic scale (addition)</p>
+<p class="p10">p = <span class="s3">Pbrown</span>(0, 1.0, 0.1, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Plprand(lo, hi, length):</b> Returns the lesser of two equal-distribution random numbers.</p>
+<p class="p10">p = <span class="s3">Plprand</span>(0, 1.0, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pmeanrand(lo, hi, length):</b> Returns the average of two equal-distribution random numbers, i.e., (x +<span class="Apple-converted-space">  </span>y) / 2.</p>
+<p class="p10">p = <span class="s3">Pmeanrand</span>(0, 1.0, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pbeta(lo, hi, prob1, prob2, length):</b> Beta distribution, where prob1 = <span class="s6">α</span> (alpha) and prob2 = <span class="s6">β</span> (beta).</p>
+<p class="p10">p = <span class="s3">Pbeta</span>(0, 1.0, 0.1, 0.9, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<ul class="ul1">
+<li style="margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000"><span class="s4"></span>// • <b>Ppoisson(mean, length):</b> Poisson distribution.</li>
+</ul>
+<p class="p10">p = <span class="s3">Ppoisson</span>(4.0, 6);<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// Random patterns can be seeded with <span class="s7"><b>Pseed(seed, pattern)</b></span></p>
+<p class="p10">p = <span class="s3">Pseed</span>(23, <span class="s3">Plprand</span>(0, 1.0, 6));<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Math operations on patterns --</b></p>
+<p class="p8">// You can use math operation and conversions that you use with Arrays and SimpleNumbers in streams</p>
+<p class="p7"><br></p>
+<p class="p8">// Simple math</p>
+<p class="p10">p = <span class="s3">Pseries</span>(0, 1, 8) * 100;</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// Can also do arrayed math</p>
+<p class="p10">p = <span class="s3">Pseries</span>(0, 1, 8) * [10, 100];</p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p8">// and conversion methods</p>
+<p class="p10">p = <span class="s3">Pseq</span>([57, 58, 59, 69].midicps, <span class="s3">inf</span>)<span class="Apple-tab-span">	</span><span class="s5">// this is infinite times</span></p>
+<p class="p10">p.asStream.nextN(10);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Pattern nesting --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Again, similarly to Demand UGens, you can nest patterns within patterns within patterns, etc, as arguments, creating structures of increasing complexity.<span class="Apple-converted-space"> </span></p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pseq</span>(</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[</span><span class="s3">Pseq</span><span class="s4">([200, 150, 300, 250, 200], 2), </span>// steps 1 - 10; steps 1-5 are the same as 6-10</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])],<span class="s3">inf</span>); <span class="s5">// step 13 is random</span></p>
+<p class="p10">p.asStream.nextN(26);</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Filter patterns --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// There are patterns whose job is to modify the output of other patterns - essentially acting as filters. For example:</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pn(pattern, repeats):</b> Embeds the source pattern 'repeats' times: simple repetition. This also works on single values: Pn(1, 5) outputs the number 1 5 times.</p>
+<p class="p8"><span class="s4">p = </span><span class="s3">Pn</span><span class="s4">(</span><span class="s3">Pseq</span><span class="s4">([1, 2, 3], 1), 4);<span class="Apple-tab-span">	</span></span>// repeat pattern four times</p>
+<p class="p10">p.asStream.nextN(15)</p>
+<p class="p7"><br></p>
+<p class="p8">// • <b>Pstutter(n, pattern):</b> 'n' and 'pattern' are both patterns. Each value from 'pattern' is repeated 'n' times. If 'n' is a pattern, each value can be repeated a different number of times.</p>
+<p class="p10">p = <span class="s3">Pstutter</span>(3, <span class="s3">Pseq</span>([1, 2, 3], 1));<span class="Apple-tab-span">	</span></p>
+<p class="p10">p.asStream.nextN(10)</p>
+<p class="p7"><br></p>
+<p class="p8">// There is quite a few more, but most have to do with timing and creating parallel streams (more on that later)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Pfunc --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// <b>Pfunc(nextFunc, resetFunc)</b>, is a Pattern whose function you can define yourself. It also can contain a function to be evaluated on reset.<span class="Apple-converted-space"> </span></p>
+<p class="p8">// There is also Pfuncn (same, but stops after 'repeats' times instead of providing a reset function) and Proutine.</p>
+<p class="p10">p = <span class="s3">Pfunc</span>({rrand(0, 1.0)}, {<span class="s8">"reset"</span>.postln})</p>
+<p class="p8"><span class="s4">b = p.asStream; </span>// turn the stream into a variable, so that we can reset it</p>
+<p class="p10">b.nextN(10)</p>
+<p class="p10">b.reset</p>
+<p class="p10">b.next</p>
+<p class="p7"><br></p>
+<p class="p8">// Something<span class="Apple-converted-space">  </span>a bit more complex</p>
+<p class="p10">(</p>
+<p class="p10">i = 1;</p>
+<p class="p10">p = <span class="s3">Pfunc</span>(</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>{</span>// the function</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = i * rrand(0.1, 10);</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>(i &gt; 10).if ({b.reset}); </span>// reset the stream if 'i' goes above 10</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i </span>// function returns 'i'<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>},</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span>{</span>// the reset function</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>i = 0.01</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>}</p>
+<p class="p10"><span class="Apple-tab-span">	</span>);</p>
+<p class="p10">)</p>
+<p class="p8"><span class="s4">b = p.asStream; </span>// turn the stream into a variable, so that we can reset it</p>
+<p class="p10">b.nextN(30)</p>
+<p class="p10">b.reset</p>
+<p class="p10">b.next</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== PATTERNS IN NON-REAL TIME (NRT) ======</b></p>
+<p class="p8">// This is definitely not the most common way to use patterns, but they can be quite effective as score generators - and this is a good way to view their functionality with a work paradigm that you are familiar with from DX461/2/3.</p>
+<p class="p7"><span class="Apple-converted-space"> </span></p>
+<p class="p8">// Here is a slightly modified version of a quick-and-dirty example by Josh on how to use patterns to populate a CtkScore:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> score, note, pitch, dur, now, thisDur;</p>
+<p class="p10">score = <span class="s3">CtkScore</span>.new;</p>
+<p class="p10">note = <span class="s3">CtkSynthDef</span>(<span class="s9">\test</span>, {<span class="s3">arg</span> freq, dur;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>([0, 1, 0], [0.05, dur-0.05], [2, -2]));</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">SinOsc</span>.ar(freq, 0, 0.1 * env))</p>
+<p class="p10">});</p>
+<p class="p7"><br></p>
+<p class="p10">pitch = <span class="s3">Pseq</span>([<span class="s9">\a4</span>, <span class="s9">\cs5</span>, <span class="s9">\e5</span>, <span class="s9">\c5</span>, <span class="s9">\a4</span>, <span class="s9">\e4</span>, <span class="s9">\gs4</span>], <span class="s3">inf</span>).asStream;</p>
+<p class="p10">dur = <span class="s3">Pseq</span>(2/[4, 8, 8, 4, 4, 8], <span class="s3">inf</span>).asStream;</p>
+<p class="p10">now = 0;</p>
+<p class="p10">25.do({</p>
+<p class="p10"><span class="Apple-tab-span">	</span>thisDur = dur.next;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>score.add(note.new(now, thisDur).freq_(pitch.next.hertz).dur_(thisDur));</p>
+<p class="p10"><span class="Apple-tab-span">	</span>now = now + (thisDur * 0.5)</p>
+<p class="p10">});</p>
+<p class="p7"><br></p>
+<p class="p10">score.play;</p>
+<p class="p10">)</p>
+<p class="p7"><span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== PATTERNS IN REAL TIME ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Now, for the more standard use of patterns: real-time</p>
+<p class="p8">// Similarily to Tasks and Routines, patterns can also be played, paused, resumed and stopped, with the .play, .pause, .resume and .stop messages, in which case they TempoClock to send control messages to the server.</p>
+<p class="p7"><br></p>
+<p class="p8">// Before going further on with playing patterns in real time, we need to talk a bit about Events, to understand better how Patterns actually work.</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Event --</b></p>
+<p class="p8">// An <a href="SC://Event"><span class="s2">Event</span></a> is an Environment specifying an action to be taken when a <b>.play</b> message has been received. As a Dictionary subclass it typically consists of a collection of key/value pairs which determine what actually happens when the event is .played.</p>
+<p class="p8">// Empty parentheses create events, making them quite useful as name-space storage:<span class="Apple-converted-space"> </span></p>
+<p class="p10">a = ()</p>
+<p class="p10">a.class</p>
+<p class="p7"><br></p>
+<p class="p8">// The default class method of Event provides a <b>defaultParentEvent</b>, which - to make a long story short - is mapped to the default SynthDef, allowing you to set its arguments and play it:</p>
+<p class="p8"><span class="s4">().play ; <span class="Apple-tab-span">	</span></span>// an instance of the default synth using the default argument settings</p>
+<p class="p8">// now, set some parameters:</p>
+<p class="p10">(freq: 555, pan: -1).play; <span class="s5">// 555Hz, panned left</span></p>
+<p class="p8">// You can change the SynthDef used by changing the key named \instrument:</p>
+<p class="p8">// Let's pick a new SynthDef first:</p>
+<p class="p8"><span class="s4">a = (instrument: </span><span class="s9">\sine</span><span class="s4">, freq: 333).play; </span>// this is a SynthDef we've used several times in this class, if it's not there, don't worry, we'll see more examples further on</p>
+<p class="p10">a.free</p>
+<p class="p7"><br></p>
+<p class="p8">// Event contains quite a few different keys mapped to the same parameters just with a few conversions, and you'll see those used by Patterns quite frequently.<span class="Apple-converted-space"> </span></p>
+<p class="p10">a = (instrument: <span class="s9">\sine</span>, midinote: 60, amp: -12.dbamp).play</p>
+<p class="p10">a.free</p>
+<p class="p7"><br></p>
+<p class="p8">// Look at the bottom part of the <a href="SC://Event"><span class="s2">Event</span></a> helpfile for more key jargon.</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Pbind and EventStreams --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// In order for patterns to work in RT (real-time) every .next value in the stream that they generate needs to be passed to a key of an Event, in its turn passing it to the SynthDef. This would mean defining anew an event every time we get a value from a pattern, which would be quite a hassle. To make this more efficient, there is a shortcut class, <a href="SC://Pbind"><span class="s2">Pbind</span></a>, which is used for playing patterns in real time. What Pbind actually does, is combining several pattern streams into a single event stream. Let's have<span class="Apple-converted-space">  </span>a look at an example, and make some sense out of it (taken from <a href="../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_03_What_Is_Pbind.html"><span class="s2">PG_03_What_Is_Pbind</span></a>, which explains things in more detail):</p>
+<p class="p7"><br></p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\degree</span>, <span class="s3">Pseq</span>(#[0, 0, 4, 4, 5, 5, 4], 1),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)</p>
+<p class="p8"><span class="s4">).asStream;<span class="Apple-tab-span">	</span></span>// remember, you have to make a stream out of the pattern before using it</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s4">p.next(</span><span class="s3">Event</span><span class="s4">.new);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// shorter: p.next(())</p>
+<p class="p7"><br></p>
+<p class="p8">// Here is what this outputs:</p>
+<p class="p10">( <span class="s9">'degree'</span>: 0, <span class="s9">'dur'</span>: 0.5 )</p>
+<p class="p10">( <span class="s9">'degree'</span>: 0, <span class="s9">'dur'</span>: 0.5 )</p>
+<p class="p10">( <span class="s9">'degree'</span>: 4, <span class="s9">'dur'</span>: 0.5 )</p>
+<p class="p10">( <span class="s9">'degree'</span>: 4, <span class="s9">'dur'</span>: 0.5 )</p>
+<p class="p7"><br></p>
+<p class="p8">// As you see, Pbind essentially re-maps the keys to new values with every .next</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Let's do the same thing using the .play method to make some sound using the TempoClock:</p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\degree</span>, <span class="s3">Pseq</span>(#[0, 0, 4, 4, 5, 5, 4], 1),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)</p>
+<p class="p8"><span class="s4">).play;<span class="Apple-tab-span">	</span></span>// and you'll notice that "an EventStreamPlayer" was posted on the post window instead of "a Routine", meaning that a few extra steps have been taken care of behind the scenes</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// Same thing, twice as fast:</p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\degree</span>, <span class="s3">Pseq</span>(#[0, 0, 4, 4, 5, 5, 4], 1),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)</p>
+<p class="p8"><span class="s4">).play(</span><span class="s3">TempoClock</span><span class="s4">(2));<span class="Apple-tab-span">	</span></span>// You can set the timing of the .play command in the same way as you do with Routines and Tasks</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Now, let's try a few more examples using Patterns in RT with Pbind; this time, using nested patterns to demonstrate how they can produce some quite interesting results (this is the same example as above when talking about nested patterns this time with sound:</p>
+<p class="p7"><br></p>
+<p class="p10">(</p>
+<p class="p11">Pbind<span class="s4">(</span></p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span></span>\freq<span class="s4">, </span><span class="s3">Pseq</span><span class="s4">(</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[</span><span class="s3">Pseq</span><span class="s4">([200, 150, 300, 250, 200], 2), </span>// steps 1 - 10; steps 1-5 are the same as 6-10</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])],<span class="s3">inf</span>) <span class="s5">// step 13 is random</span></p>
+<p class="p10">).play(<span class="s3">TempoClock</span>(3));</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// Another example:</p>
+<p class="p10">(</p>
+<p class="p11">Pbind<span class="s4">(</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\freq</span>, <span class="s3">Pseq</span>([</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Prand<span class="s4">(</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s3">Pseq</span>([200, 150, 300, 250, 200], 2),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([200, 150, 300, 250, 400], 2)]),</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])],<span class="s3">inf</span>) <span class="s5">// step 13 is random</span></p>
+<p class="p10">).play(<span class="s3">TempoClock</span>(3));</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Yet another example, changing durations as well:</p>
+<p class="p10">(</p>
+<p class="p11">Pbind<span class="s4">(</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\freq</span>, <span class="s3">Pseq</span>([</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Prand<span class="s4">(</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s3">Pseq</span>([200, 150, 300, 250, 200], 2),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([200, 150, 300, 250, 400], 2)]),</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])],<span class="s3">inf</span>), <span class="s5">// step 13 is random</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pseq</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], <span class="s3">inf</span>)</p>
+<p class="p10">).play(<span class="s3">TempoClock</span>(1.5));</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Using your own SynthDefs --</b></p>
+<p class="p8">// The examples above where using the 'default' SynthDef. But, as we saw with Event, you can use your own SynthDefs. There are a few guidelines that you need to follow:</p>
+<p class="p8">/*</p>
+<p class="p8">• Use .store and .memStore or .add to save the Synth to the SynthDescLib, as this is where patterns will be looking. .load won't do the trick.</p>
+<p class="p8">• Use the same names that are set as the SynthDefs args as the Pbind keys to actually map a pattern to that argument.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span>\freq and \dur only work above because the default synthdef has arguments named as such.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-tab-span">	</span>(Although, as we saw above, Event does have some conversion tricks for 'midi-style' synthdefs, dealing with some conversions for frequency, amplitude and duration.)</p>
+<p class="p8">• Always have the synth release itself! (ex. with a doneAction in an EnvGen either of a fixed duration, or containing a release node). Patterns will not do that for you</p>
+<p class="p8">*/</p>
+<p class="p7"><br></p>
+<p class="p8">// An example, using a nice Bass synth posted by Thor Magnusson in the sc-users list:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">SynthDef</span>(<span class="s9">\ixibass</span>, {<span class="s3">arg</span> out=0, amp=0.3, t_trig=1, freq=100, rq=0.004;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> env, signal;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> rho, theta, b1, b2;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>b1 = 1.98 * 0.989999999 * cos(0.09);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>b2 = 0.998057.neg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>signal = <span class="s3">SOS</span>.ar(<span class="s3">K2A</span>.ar(t_trig), 0.123, 0.0, 0.0, b1, b2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>signal = <span class="s3">RHPF</span>.ar(signal, freq, rq) + <span class="s3">RHPF</span>.ar(signal, freq*0.5, rq);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>signal = <span class="s3">Decay2</span>.ar(signal, 0.4, 0.3, signal);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">DetectSilence</span>.ar(signal, 0.01, doneAction:2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(out, signal*(amp*0.45)!2);</p>
+<p class="p10">}).add;</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// now, play something:</p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pbind</span>(</p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span></span>\instrument<span class="s4">, </span>\ixibass<span class="s4">,<span class="Apple-converted-space"> </span></span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\freq</span>, <span class="s3">Pseq</span>([</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Prand<span class="s4">(</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s3">Pseq</span>([200, 150, 300, 250, 200], 2),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([200, 150, 300, 250, 400], 2)]),</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])], <span class="s3">inf</span>), <span class="s5">// step 13 is random</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pseq</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], <span class="s3">inf</span>),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\rq</span>, <span class="s3">Pseq</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbrown</span>(0.0001, 0.02, 7),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Plprand</span>(0.0001, 0.3, 7)], <span class="s3">inf</span>),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\amp</span>, <span class="s3">Pmeanrand</span>(0.2, 0.4, <span class="s3">inf</span>)</p>
+<p class="p10">).play(<span class="s3">TempoClock</span>(1.5));</p>
+<p class="p10">)</p>
+<p class="p10">p.stop</p>
+<p class="p7"><br></p>
+<p class="p8">// Also have a look at <a href="SC://Pmono"><span class="s2">Pmono</span></a> and <a href="SC://PmonoArtic"><span class="s2">PmonoArtic</span></a>, which are monophonic Pbind variants.</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Pchain --</b></p>
+<p class="p8">// It can be very handy and more meaningful to split argument definitions into different sets of patterns, and then arbitrarily bind them together with Pbind, instead of defining everything within one block.<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p10">(</p>
+<p class="p10">~mel = <span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\freq</span>, <span class="s3">Pseq</span>([</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Prand<span class="s4">(</span></p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>// steps 1 - 10; steps 1-5 are the same as 6-10, but now they can be different with each repetition</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>[<span class="s3">Pseq</span>([200, 150, 300, 250, 200], 2),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([200, 150, 300, 250, 400], 2)]),</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>600, </span>// step 11, always the same</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>500, </span>// step 12, always the same</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Prand</span>([125, 250, 500, 750, 1000])],<span class="s3">inf</span>)); <span class="s5">// step 13 is random</span></p>
+<p class="p7"><br></p>
+<p class="p10">~mel2 = <span class="s3">Pbind</span>(</p>
+<p class="p12"><span class="s4"><span class="Apple-tab-span">	</span></span>\midinote<span class="s4">, </span><span class="s3">Pseq</span><span class="s4">([<span class="Apple-converted-space"> </span></span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Plprand</span>(40, 80, 7),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbrown</span>(48, 72, 7)], <span class="s3">inf</span>));</p>
+<p class="p7"><br></p>
+<p class="p10">~durs = <span class="s3">Pbind</span>(<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Pseq</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pseq</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5]),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pshuf</span>([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 1])], <span class="s3">inf</span>));</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// use the first melody</p>
+<p class="p10">p = <span class="s3">Pchain</span>(~mel, ~durs).play(<span class="s3">TempoClock</span>(1.5));</p>
+<p class="p10">p.stop</p>
+<p class="p7"><br></p>
+<p class="p8">// or, use the second melody:</p>
+<p class="p10">p = <span class="s3">Pchain</span>(~mel2, ~durs).play(<span class="s3">TempoClock</span>(1.5));</p>
+<p class="p10">p.stop</p>
+<p class="p7"><br></p>
+<p class="p8">// It is also possible to swap Pbinds on the fly: see <a href="SC://PG_06c_Composition_of_Patterns"><span class="s2">PG_06c_Composition_of_Patterns</span></a></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Polyphony --</b></p>
+<p class="p8">// You can combine patterns into a single parallel stream creating polyphonic structures that can be started and stopped as a single unit<b>. </b>There are a few different patterns to do that, with the most common one being Ppar.</p>
+<p class="p7"><br></p>
+<p class="p8">// Here is a polyphonic example from Josh Parmenter and Pete Moss; note that Ppars can be nested, similarily to other patterns:</p>
+<p class="p7"><br></p>
+<p class="p10">(</p>
+<p class="p11">Ppar<span class="s4">([</span></p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span></span>Pbind<span class="s4">(</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, <span class="s3">Prand</span>([0.2, 0.4, 0.6], <span class="s3">inf</span>),<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Prand</span>([72, 74, 76, 77, 79, 81], <span class="s3">inf</span>),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\db</span>, -26,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\legato</span>, 1.1</p>
+<p class="p10"><span class="Apple-tab-span">	</span>),</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span></span>Pseq<span class="s4">([</span></p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Pbind<span class="s4">(</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 3.2,</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\freq</span>, <span class="s3">Pseq</span>([<span class="s9">\rest</span>])),</p>
+<p class="p11"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>Prand<span class="s4">([</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Ppar</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.2,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>,<span class="Apple-converted-space">  </span>0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([60, 64, 67, 64])),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.4,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>, -0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([48, 43]))</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>]),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Ppar</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.2,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>,<span class="Apple-converted-space">  </span>0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([62, 65, 69, 65])),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.4,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>, -0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([50, 45]))</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>]),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Ppar</span>([</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.2,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>,<span class="Apple-converted-space">  </span>0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([64, 67, 71, 67])),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.4,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\pan</span>, -0.5,<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s9">\midinote</span>, <span class="s3">Pseq</span>([52, 47]))</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>])</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>], 12)</p>
+<p class="p10"><span class="Apple-tab-span">	</span>], <span class="s3">inf</span>)</p>
+<p class="p10">], <span class="s3">inf</span>).play(<span class="s3">TempoClock</span>(1));</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// Also, have a look at an SC rendering of a classic, Kraftwerk's 'Spacelab' for the use of Ppar and patterns in general (this is included in the SC distribution):</p>
+<p class="p13"><span class="s3">Document</span><span class="s4">.open(</span>"examples/pieces/spacelab.scd"<span class="s4">)</span></p>
+<p class="p7"><br></p>
+<p class="p8">// For more, see: <a href="SC://PG_06d_Parallel_Patterns"><span class="s2">PG_06d_Parallel_Patterns</span></a></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Bonus: Envs as Patterns --<span class="Apple-converted-space"> </span></b></p>
+<p class="p7"><br></p>
+<p class="p8">// Finally, here' s a bonus for you:</p>
+<p class="p8">// Env contains the .asStream method, so you can use it as a stream using the .next message. This is similar to the array-style indexing you are familiar with:</p>
+<p class="p10">e = <span class="s3">Env</span>([0, 1, 1, 0], [1, 1, 1]);</p>
+<p class="p10">e.at(2);<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s5">// == 1</span></p>
+<p class="p10">e[2.5];<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="s5">// == 0.5</span></p>
+<p class="p7"><br></p>
+<p class="p8">// When Env is converted to a stream, it will return the value at the specified elapsed time</p>
+<p class="p10">(</p>
+<p class="p10">r = fork {</p>
+<p class="p10"><span class="Apple-tab-span">	</span>e = <span class="s3">Env</span>([0, 1, 1, 0], [1, 1, 1]).asStream;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>40.do{</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>e.next.postln;</p>
+<p class="p8"><span class="s4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>0.25.wait; </span>// elapsed time</p>
+<p class="p10"><span class="Apple-tab-span">	</span>}</p>
+<p class="p10">}</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8">// When done, the stream will keep polling the last value of the envelope. You can use the Pif class to make it either stop, or loop (see <a href="SC://PG_06b_Time_Based_Patterns"><span class="s10">PG_06b_Time_Based_Patterns</span></a>)</p>
+<p class="p7"><br></p>
+<p class="p8">// Here is a quick example from Harkins' tutorial, without getting too much into the details:</p>
+<p class="p10">(</p>
+<p class="p10">p = <span class="s3">Pbind</span>(</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\degree</span>, <span class="s3">Pwhite</span>(-4, 11, <span class="s3">inf</span>),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\pan</span>, <span class="s3">Pn</span>(<span class="s3">Pif</span>(<span class="s3">Ptime</span>(<span class="s3">inf</span>) &lt;= 4.0, <span class="s3">Env</span>(#[-1, 1, -1], #[2, 2], <span class="s9">\sin</span>)), <span class="s3">inf</span>),</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s9">\dur</span>, 0.125</p>
+<p class="p10">).play;</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== ADDITIONAL PATTERN QUARKS ======</b></p>
+<p class="p8">// You may want to check out Harkins' <i>ddwPatterns</i> quark, which contains some more pattern tools:</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s8">"ddwPatterns"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p8">// Also, redFrik has a quark with a library of patterns acting as UGens, called <i>UGenPatterns:</i></p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s8">"UGenPatterns"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== MORE REFERENCES ======</b></p>
+<p class="p7"><br></p>
+<p class="p8"><b>/*</b></p>
+<p class="p8">Patterns are an entire world in SuperCollider. This was only meant as an introduction, and to ease the pain of delving into them, if you so wish. For more information look here:</p>
+<p class="p14"><br></p>
+<p class="p8">[<a href="SC://Pattern"><span class="s2">Pattern</span></a>]</p>
+<p class="p8"><span class="s2">[<a href="../../../../../../Applications/SuperCollider/Help/Streams-Patterns-Events/A Practical Guide/PG_01_Introduction.html">A Practical Guide to Patterns</a>]</span> <b>-<span class="Apple-converted-space">  </span></b>(James Harkins' tutorial)</p>
+<p class="p8">[<a href="SC://Streams-Patterns-Events2"><span class="s10">Streams-Patterns-Events2</span></a> - 7]<b><span class="Apple-converted-space">  </span>-<span class="Apple-converted-space">  </span></b>(a bit older tutorial on patterns)</p>
+<p class="p8">[<a href="SC://Streams"><span class="s2">Streams</span></a>] an overview of the whole Pattern and Stream system!</p>
+<p class="p8"><b>*/</b></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p7"><br></p>
+</body>
+</html>

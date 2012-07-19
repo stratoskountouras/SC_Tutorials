@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p11 {margin: 0.0px 0.0px 0.0px 57.0px; text-indent: -57.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; color: #000000; min-height: 14.0px}
+p.p13 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #0000bf}
+span.s1 {font: 13.0px Optima}
+span.s2 {color: #000000}
+span.s3 {color: #0000bf}
+span.s4 {color: #606060}
+span.s5 {color: #007300}
+span.s6 {color: #bf0000}
+span.s7 {text-decoration: underline}
+span.s8 {text-decoration: underline ; color: #0000ff}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 16.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Networking 3: SC and the Internet</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Networking computers through the Internet</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Connecting</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- A simple example</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Example with sound, and some feedback<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Sending audio through the internet</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Capturing MP3 streams</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Reading online streams</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Internet radio alarm clock</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• More internet related quarks</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= SUPERCOLLIDER AND THE INTERNET =================</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== NETWORKING COMPUTERS THROUGH THE INTERNET ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Unfortunately, connecting to remote machines through the internet is not as simple as through LAN networks. You need a server hub to which all the machines will connect, and which will route the messages accordingly. Once you have the server set up, all you need to do is connect to it using its IP address or a named DSN server, and logging into a specific group that is the same for all machines, with a unique (per machine) id.</p>
+<p class="p7"><br></p>
+<p class="p8">// You also need a program to handle the communication with the server. Josh Parmenter has built a class that interfaces with Ross Bencina's<span class="Apple-converted-space">  </span>OscGroups UNIX application, available here:</p>
+<p class="p9">"open http://www.audiomulch.com/~rossb/code/oscgroups/"<span class="s2">.unixCmd</span></p>
+<p class="p8">// This contains two applications OscGroupClient and OscGroupServer; you should add them both to SuperCollider's main directory.</p>
+<p class="p8">// Then, get the Quark:</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s4">"OscGroupClient"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p8">// You will also need the ProcessTools quark to communicate with these UNIX applications from SC:</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s4">"ProcessTools"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p8">// Luckily, JP has also setup a server for you to use, so this is actually possible to try out!</p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Connecting --</b></p>
+<p class="p8">// Once you've installed these UNIX applications, you can try the following</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// • Step 1:<span class="Apple-converted-space"> </span></p>
+<p class="p8">// <span class="Apple-tab-span">	</span>Create a <b>new OscGroupClient</b> object</p>
+<p class="p1">// The info below is using that server to handle the communication:</p>
+<p class="p8"><span class="s2">                  </span>// server address       ,userid,   userpassword, groupid, grouppassword</p>
+<p class="p9"><span class="s2">a = </span><span class="s3">OscGroupClient</span><span class="s2">(</span>"realizedsound.mooo.com"<span class="s2">, </span>"me"<span class="s2">, </span>"meword"<span class="s2">, </span>"490a"<span class="s2">, </span>"490aword"<span class="s2">)</span></p>
+<p class="p8">// Login using a different userid/pass with another machine; ex:</p>
+<p class="p8">// a = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")</p>
+<p class="p7"><br></p>
+<p class="p8">// • Step 2: <span class="Apple-converted-space"> </span></p>
+<p class="p8">// <span class="Apple-tab-span">	</span><b>Join the Server</b></p>
+<p class="p10">a.join;</p>
+<p class="p10"> </p>
+<p class="p7"><br></p>
+<p class="p8">// • Step 3: <span class="Apple-converted-space"> </span></p>
+<p class="p8">// <span class="Apple-tab-span">	</span><b>Add a responder</b> for OTHER people on the server to send messages to you</p>
+<p class="p10">a.addResp(<span class="s5">\test</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>msg.postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p7"><br></p>
+<p class="p8">// • Step 4:</p>
+<p class="p8">//<span class="Apple-tab-span">	</span><b>Send some messages <span class="Apple-converted-space"> </span></b></p>
+<p class="p8">// this sends a message to everyone else connected, and with the appropriately named responder activated. You don't see anything though on your end</p>
+<p class="p10">a.sendMsg(<span class="s5">\test</span>)</p>
+<p class="p7"><br></p>
+<p class="p8">// you can send more then just the trigger id, just comma separate the stuff you are sending!):</p>
+<p class="p10">a.sendMsg(<span class="s5">\test</span>, <span class="s4">"How much can I send?"</span>, 1232, <span class="s5">\etc</span>);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// and remove your responder. This is an IdentityDictionary in the class, so you can have as<span class="Apple-converted-space"> </span></p>
+<p class="p8">// many responders with unique ids that you want</p>
+<p class="p10">a.removeResp(<span class="s5">\test</span>);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// ATTENTION: after you're done, don't forget to close your connection to the server! </p>
+<p class="p10">a.close;</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ A simple example --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// In this simple example, we will create a GUI interface with two knobs, one to send data to a remote machine, and one to receive. The same code will work on the remote machine(s), only make sure you use a different &lt;userid,   userpassword&gt;!</p>
+<p class="p7"><br></p>
+<p class="p8">// 1. connecting:</p>
+<p class="p8"><span class="s2">                  </span>// server address       ,userid,   userpassword, groupid, grouppassword</p>
+<p class="p9"><span class="s2">~serverConnx = </span><span class="s3">OscGroupClient</span><span class="s2">(</span>"realizedsound.mooo.com"<span class="s2">, </span>"me"<span class="s2">, </span>"meword"<span class="s2">, </span>"490a"<span class="s2">, </span>"490aword"<span class="s2">);<span class="Apple-converted-space"> </span></span></p>
+<p class="p8">// ATTN: <span class="Apple-converted-space">  </span>with another machine using a different userid/pass; ex:</p>
+<p class="p8">// ~serverConnx = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")</p>
+<p class="p7"><br></p>
+<p class="p8">// join the Server</p>
+<p class="p10">~serverConnx.join;</p>
+<p class="p7"><br></p>
+<p class="p8">// 2. making a responder for receiving</p>
+<p class="p10">~serverConnx.addResp(<span class="s5">\test</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, msg].postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>{~recKnob.value_(msg[1])}.defer;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p11"><br></p>
+<p class="p8">// 3. Making a GUI window with a knob to send, and a knob to receive:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> window = <span class="s3">Window</span>.new(<span class="s4">"Networking test"</span>,<span class="s3">Rect</span>(318, 456, 400, 400)).front;</p>
+<p class="p10">~recKnob = <span class="s3">Knob</span>.new(window,<span class="s3">Rect</span>(175, 205, 217, 189))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span> };</p>
+<p class="p10">~sendKnob = <span class="s3">Knob</span>.new(window,<span class="s3">Rect</span>(8, 11, 216, 188))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span><span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~serverConnx.sendMsg(</span><span class="s5">'test'</span><span class="s2">, v.value); </span>// &lt;&lt; action: sending to remote machine</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="s3">StaticText</span>.new(window,<span class="s3">Rect</span>(24, 333, 148, 50))</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span>.string_(</span>"Receive some data --&gt;&gt;"<span class="s2">)</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span> };</p>
+<p class="p10"><span class="s3">StaticText</span>.new(window,<span class="s3">Rect</span>(229, 15, 130, 47))</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span>.string_(</span>"&lt;&lt;-- Send some data"<span class="s2">)</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span> };</p>
+<p class="p10">)</p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p11"><br></p>
+<p class="p8">// Don't forget to close your connecton to the server once you're done!</p>
+<p class="p10">~serverConnx.close</p>
+<p class="p7"><br></p>
+<p class="p11"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Example with sound, and some feedback --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// In this simple example, we will create the same GUI interface with two knobs, except this time the 'sending' knob will get data from analysis of the sound in the local machine, and will send the data to the remote machine to affect the synthesis there - and vice versa.</p>
+<p class="p8">// The same code will work on the remote machine(s), only make sure you use a different &lt;userid,   userpassword&gt;!</p>
+<p class="p7"><br></p>
+<p class="p8">// • Synthesis: a self-phase-modulated Sinewave, with analysis to show how noisy it is:</p>
+<p class="p7"><br></p>
+<p class="p10">(</p>
+<p class="p10">~mult = 4;</p>
+<p class="p8">// buffer for FFT<span class="Apple-converted-space"> </span></p>
+<p class="p10">~buf = <span class="s3">Buffer</span>.alloc(s,2048,1);<span class="Apple-converted-space"> </span></p>
+<p class="p8">// the synthdef</p>
+<p class="p10">~fdbFM = <span class="s3">CtkSynthDef</span>(<span class="s5">\fdbSine</span>, {<span class="s3">arg</span> freq, fdbAmt, amp, pollFreq = 2, gate = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> sine, mod, fdbIn, fdbOut, env, chain, flatness;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>fdbIn = <span class="s3">LocalIn</span>.ar(1);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>env = <span class="s3">EnvGen</span>.kr(<span class="s3">Env</span>.new([0.00001, 1, 1, 0.00001], [0.05, 0.9, 0.5], [<span class="s5">\exp</span>, <span class="s5">\sin</span>], 1), gate,<span class="Apple-converted-space">  </span>doneAction: 2);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>mod = fdbIn * fdbAmt;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>sine = <span class="s3">SinOsc</span>.ar(freq, mod, amp); <span class="s6">// fdb phase modulation</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>chain = <span class="s3">FFT</span>(~buf, sine);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>flatness = <span class="s3">SpecFlatness</span>.kr(chain);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">SendReply</span>.kr(<span class="s3">Impulse</span>.kr(pollFreq), <span class="s5">'flatness'</span>, flatness);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, sine * env);</p>
+<p class="p10"><span class="Apple-tab-span">	</span>fdbOut = <span class="s3">LocalOut</span>.ar(sine);</p>
+<p class="p10">})</p>
+<p class="p10">);</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// 1. connecting:</p>
+<p class="p8"><span class="s2">                  </span>// server address       ,userid,   userpassword, groupid, grouppassword</p>
+<p class="p9"><span class="s2">~serverConnx = </span><span class="s3">OscGroupClient</span><span class="s2">(</span>"realizedsound.mooo.com"<span class="s2">, </span>"me"<span class="s2">, </span>"meword"<span class="s2">, </span>"490a"<span class="s2">, </span>"490aword"<span class="s2">);<span class="Apple-converted-space"> </span></span></p>
+<p class="p8">// ATTN: Login<span class="Apple-converted-space">  </span>with another machine using a different userid/pass; ex:</p>
+<p class="p8">// ~serverConnx = OscGroupClient("realizedsound.mooo.com", "myself", "myselfword", "490a", "490aword")</p>
+<p class="p7"><br></p>
+<p class="p8">// join the Server</p>
+<p class="p10">~serverConnx.join;</p>
+<p class="p7"><br></p>
+<p class="p8">// 2a. making a responder for receiving</p>
+<p class="p10">~serverConnx.addResp(<span class="s5">\test</span>, {<span class="s3">arg</span> time, resp, msg;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>[time, msg].postln;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>{~recKnob.value_(msg[1])}.defer; <span class="s6">// show what's coming in</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>~note.fdbAmt_(msg[1] * ~mult + 1)<span class="Apple-tab-span">	</span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>});</p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// 2a. making a responder for receiving from the analysis data from the synthdef, and moving the knob</p>
+<p class="p10">~noisiness = <span class="s3">OSCresponder</span>(n, <span class="s5">'flatness'</span>, { <span class="s3">arg</span> time, resp, msg;<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="Apple-tab-span">	</span>msg[3].postln;</p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span>{~sendKnob.valueAction_(msg[3])}.defer; </span>// naturally, it would be more efficient to send the message directly to the remote server, this is just for demonstration purposes...</p>
+<p class="p10"><span class="Apple-tab-span">	</span>}).add;</p>
+<p class="p7"><br></p>
+<p class="p11"><br></p>
+<p class="p8">// 3. Making a GUI window with a knob to send, and a knob to receive:</p>
+<p class="p10">(</p>
+<p class="p10"><span class="s3">var</span> window = <span class="s3">Window</span>.new(<span class="s4">"Networking test"</span>,<span class="s3">Rect</span>(318, 456, 400, 400)).front;</p>
+<p class="p10">~recKnob = <span class="s3">Knob</span>.new(window,<span class="s3">Rect</span>(175, 205, 217, 189))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span> };</p>
+<p class="p10">~sendKnob = <span class="s3">Knob</span>.new(window,<span class="s3">Rect</span>(8, 11, 216, 188))</p>
+<p class="p10"><span class="Apple-tab-span">	</span>.action_{<span class="s3">|v|</span><span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s2"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>~serverConnx.sendMsg(</span><span class="s5">'test'</span><span class="s2">, v.value); </span>// &lt;&lt; action: sending to remote machine</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>};</p>
+<p class="p10"><span class="s3">StaticText</span>.new(window,<span class="s3">Rect</span>(24, 333, 148, 50))</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span>.string_(</span>"Receive some data --&gt;&gt;"<span class="s2">);</span></p>
+<p class="p10"><span class="s3">StaticText</span>.new(window,<span class="s3">Rect</span>(229, 15, 130, 47))</p>
+<p class="p9"><span class="s2"><span class="Apple-tab-span">	</span>.string_(</span>"&lt;&lt;-- Send some data"<span class="s2">);</span></p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p10">~note = ~fdbFM.new().freq_(160).fdbAmt_(3.5).amp_(0.5).play</p>
+<p class="p8">// change some numbers</p>
+<p class="p10">~note.freq_(124)</p>
+<p class="p10">~note.fdbAmt_(5.4)</p>
+<p class="p10">~note.fdbAmt_(1244)</p>
+<p class="p10">~mult = 4.6</p>
+<p class="p10">~note.pollFreq_(2.6)</p>
+<p class="p10">~note.release</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s2">~noisiness.remove; </span>// remove the responder</p>
+<p class="p8"><span class="s2">~serverConnx.close; </span>// close the server connection</p>
+<p class="p7"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p6"><br></p>
+<p class="p8"><b>// ====== SENDING AUDIO THROUGH THE INTERNET ======</b></p>
+<p class="p6"><br></p>
+<p class="p1">// You can only send data with OscGroupClient. Audio would require massive amounts of bandwidth, not really possible in real-time with household connections - though possible at some universities.</p>
+<p class="p1">// CCRMA has developed a fast protocol for sending multiple, high-quality audio channels, called JackTrip. Check it out:</p>
+<p class="p10"><span class="Apple-converted-space"> </span><a href="https://ccrma.stanford.edu/groups/soundwire/"><span class="s7">ccrma.stanford.edu—soundwire</span></a></p>
+<p class="p10"><span class="Apple-converted-space"> </span><a href="http://code.google.com/p/jacktrip/"><span class="s7">code.google.com—jacktrip</span></a></p>
+<p class="p6"><span class="Apple-converted-space"> </span></p>
+<p class="p1">// A more bandwidth-affordable method would be using something like icecast or nicecast, for streaming audio as mp3. However, as these require an encoding/decoding process, there is also a lot of latency built in.<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="s7"><a href="http://www.icecast.org/">www.icecast.org</a></span></p>
+<p class="p7"><br></p>
+<p class="p8">// Surprisingly enough, the best solution is using something like skype, and routing audio to/from it through Jack</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p8"><b>// ====== CAPTURING MP3 STREAMS ======</b></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// MP3 is a class that acts as an SC intrface for the <i>curl</i> (downloading utility) and <i>lame</i> (mp3 encoder/decoder) command line tools, allowing you to playback .mp3 and .ogg files and stream audio within SC. It works on Max OS X and Linux.</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// First, check if lame and curl are installed and where:</p>
+<p class="p10"><span class="s3">MP3</span>.lamepath;</p>
+<p class="p10"><span class="s3">MP3</span>.curlpath;</p>
+<p class="p10"><span class="s3">File</span>.exists(<span class="s3">MP3</span>.lamepath)</p>
+<p class="p10"><span class="s3">File</span>.exists(<span class="s3">MP3</span>.curlpath)</p>
+<p class="p7"><br></p>
+<p class="p8">// This class has 3 different modes: reading files locally (\readfile), online (\readurl), or writing files locally (\writefile).</p>
+<p class="p8">// If you want to stream audio online, you will need to use something like icecast:</p>
+<p class="p9">"open http://en.flossmanuals.net/icecast"<span class="s2">.unixCmd</span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p10">s.boot</p>
+<p class="p7"><br></p>
+<p class="p8">// Something you need to beware of: some streams are mono, others are stereo. Just make sure you use the appropriate synthdef and buffer for a stream:</p>
+<p class="p8">// SynthDefs:</p>
+<p class="p10">(</p>
+<p class="p13"><span class="s2">~mp3Stereo = </span>CtkSynthDef<span class="s2">(</span><span class="s4">"mp3StreamSter"</span><span class="s2">, { </span>|outbus = 0, bufnum = 0, amp = 1|</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> stream, chanAmt;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chanAmt = 2;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>stream = <span class="s3">DiskIn</span>.ar(chanAmt, bufnum);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">Pan2</span>.ar(stream, 0, amp));</p>
+<p class="p10">});</p>
+<p class="p7"><br></p>
+<p class="p13"><span class="s2">~mp3Mono = </span>CtkSynthDef<span class="s2">(</span><span class="s4">"mp3StreamMon"</span><span class="s2">, { </span>|outbus = 0, bufnum = 0, amp = 1|</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">var</span> stream, chanAmt;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>chanAmt = 1;</p>
+<p class="p10"><span class="Apple-tab-span">	</span>stream = <span class="s3">DiskIn</span>.ar(chanAmt, bufnum);</p>
+<p class="p10"><span class="Apple-tab-span">	</span><span class="s3">Out</span>.ar(0, <span class="s3">Pan2</span>.ar(stream, 0, amp));</p>
+<p class="p10">});</p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ------ Reading online streams --</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Choose a stream</p>
+<p class="p8">// Seattle's KEXP:</p>
+<p class="p9"><span class="s2">~stream = </span><span class="s3">MP3</span><span class="s2">(</span>"http://kexp-mp3-2.cac.washington.edu:8000/"<span class="s2">, </span><span class="s5">\readurl</span><span class="s2">);</span></p>
+<p class="p8">// Free Underground Tekno</p>
+<p class="p9"><span class="s2">~stream = </span><span class="s3">MP3</span><span class="s2">(</span>"http://ch1.freeundergroundtekno.org:8018/"<span class="s2">, </span><span class="s5">\readurl</span><span class="s2">);</span></p>
+<p class="p8">// many more streams here:</p>
+<p class="p9">"open http://www.streamfinder.com/"<span class="s2">.unixCmd</span></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// Some streames don't point you to the address of the stream, but use a playlist file instead (ex: .pls, .m3u). To get the address where these playlist files point at do:</p>
+<p class="p9">"curl http://ch1.freeundergroundtekno.org:8018/listen.pls"<span class="s2">.unixCmdGetStdOut</span></p>
+<p class="p7"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// start the stream:</p>
+<p class="p10">~stream.start;</p>
+<p class="p7"><br></p>
+<p class="p8">// Allocate the correct buffer for DiskIn to use:</p>
+<p class="p10">~bufSter = <span class="s3">Buffer</span>.cueSoundFile(s, ~stream.fifo, 0, 2);</p>
+<p class="p8">// OR:</p>
+<p class="p8">//~bufMon = Buffer.cueSoundFile(s, ~stream.fifo, 0, 2);</p>
+<p class="p7"><br></p>
+<p class="p8">// start the synth</p>
+<p class="p10">~mp3player = ~mp3Stereo.new().bufnum_(~bufMon).amp_(1).play;</p>
+<p class="p8">// OR:</p>
+<p class="p8">//~mp3player = ~mp3Mono.new().bufnum_(~bufSter).amp_(1).play;</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8">// ATTENTION: don't forget to clean up! MP3 creates a new instance of the Unix apps and if you don't turn them off from SC they 'll keep being active, and possibly freeze up your servers!</p>
+<p class="p10">~mp3player.free</p>
+<p class="p10">~bufSter.close.free;</p>
+<p class="p10">~bufMon.close.free;</p>
+<p class="p10">~stream.finish</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== INTERNET RADIO ALARM CLOCK ======</b></p>
+<p class="p7"><br></p>
+<p class="p8">// Here 's a fun application: use SC as an alarm clock to wake up to an internet radio station!<span class="Apple-converted-space"> </span></p>
+<p class="p7"><br></p>
+<p class="p8">// First download the <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/DayTimer/DayTimer.html"><span class="s8">DayTimer</span></a> quark, a class that lets you do specific things in specific times of a year/month/day/hour/minute</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s4">"DayTimer"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p7"><br></p>
+<p class="p8">// Alarm clock:</p>
+<p class="p10">~alarm = <span class="s3">DayTimer</span>(<span class="s5">\alarmClock</span>);</p>
+<p class="p8"><span class="s2">~alarm.start;<span class="Apple-tab-span">	</span></span>// start watching for dates</p>
+<p class="p7"><br></p>
+<p class="p8">// do once a day at a specific time [h, m, s]:</p>
+<p class="p10">(</p>
+<p class="p10">~alarm.putDate(<span class="s5">\wakeUpTime</span>, [22, 28, 10], {</p>
+<p class="p10"><span class="Apple-tab-span">	</span>~mp3player = ~mp3.new().bufnum_(~buf).amp_(1).play } ); <span class="s6">// start the stream at that specific time</span></p>
+<p class="p10">)</p>
+<p class="p7"><br></p>
+<p class="p8"><span class="s2">~alarm.stop;<span class="Apple-tab-span">	</span></span>// stop watching for dates</p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p12"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ====== MORE QUARKS ======</b></p>
+<p class="p8">// You may also want to get the FreeSound quark, for automatically quering and downloading files from the FreeSound database:</p>
+<p class="p10"><span class="s3">Quarks</span>.install( <span class="s4">"FreeSound"</span>, checkoutIfNeeded: <span class="s3">false</span>)</p>
+<p class="p6"><br></p>
+</body>
+</html>

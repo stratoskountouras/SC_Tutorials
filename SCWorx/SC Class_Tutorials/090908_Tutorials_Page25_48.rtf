@@ -1,0 +1,405 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs28 \cf2 //Making Sounds \cf3 \
+\cf2 //Playing a function\cf3 \
+\
+\cf4 Server\cf3 .default.boot;			\cf2 //Boot the default server\cf3 \
+\
+\cf2 //Play a sine tone of frequency 440Hz, phase 0, amplitude 0.1\cf3 \
+\{ \cf4 SinOsc\cf3 .ar(440, 0, 0.1)\}.play;\
+\
+\
+\cf2 //Stoping all sounds\cf3 \
+\
+\cf4 Server\cf3 .quitAll;			\cf2 //quits all servers (will require rebooting them)\cf3 \
+\cf4 Server\cf3 .default.freeAll; 	\cf2 //stop all sounds on the default server\cf3 \
+\
+\
+\cf2 //Viewing sound in a scope\cf3 \
+\
+\cf4 Server\cf3 .default = s = \cf4 Server\cf3 .internal; 	\cf2 //set defaults for this session\cf3 \
+s.boot										\cf2 //boot the internal server\cf3 \
+\
+s.scope;\
+\
+\cf2 //calculate and collect buffer sizes and their corresponding signal durations\cf3 \
+\cf2 //(using a List Comprehension.See help file ListComprehensions)\cf3 \
+\
+all \{: [x, (x/44100)round:0.01], x<-2**(10..16)\}\
+\
+\{ \cf4 SinOsc\cf3 .ar(440, 0, 0.1)\}.play\
+s.scope\
+\
+\
+\cf2 //Recording audio output to disk\cf3 \
+\
+\cf2 //Synths and UGens\cf3 \
+\
+\cf4 Server\cf3 .default.boot;\
+\
+\cf2 //Create a synth from a function\cf3 \
+\{\cf4 PinkNoise\cf3 .ar(\cf4 LFPulse\cf3 .kr(\cf4 LFNoise1\cf3 .kr(0.5, 15 ,15.05), 0, 0.4, 0.1)) \}.play\
+s.scope;\
+\
+\cf2 //Creating (starting) and freeing (stopping) individual synths\cf3 \
+\
+\cf2 //Store the synth created from the function in variable "a"\cf3 \
+\
+( \
+\cf2 //("Alien subtropic drummers")\cf3 \
+\cf2 //Select all 3 following lines and evaluate:\cf3 \
+a = \{ \cf4 RLPF\cf3 .ar(\cf4 LFTri\cf3 .ar(\cf4 Demand\cf3 .\cf4 Kr\cf3 (\cf4 Impulse\cf3 .kr([10, 5.1]), 0, \
+	\cf4 Dser\cf3 ((200, 300..1000).scramble, \cf4 inf\cf3 )), 0, 0.05), \
+		\cf4 LFNoise0\cf3 .kr([0.2,0.21], 300, 400), 0.01, 0.1)\}.play;\
+)\
+\
+\cf2 // ------------------ \cf3 \
+\cf2 // ("Data-space in a slightly lyric mood") \cf3 \
+\cf2 // Store another synth in variable "b" \cf3 \
+b=\{\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr([0.3, 0.31], 700, 900), 0, \
+\cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr([10,10],0.1)))\}.play; \
+\
+a.free \cf2 // Stop the synth stored in a \cf3 \
+ \
+\cf2 // ------------------ \cf3 \
+b.free \cf2 // Stop the synth stored in b \cf3 \
+\
+\cf2 //Anatomy of a synth\cf3 \
+\
+b = \{\cf4 SinOsc\cf3 .ar(\cf4 LFNoise0\cf3 .kr(0.3, 700, 900), 0, \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(10, 0.1)))\
+\}.play;\
+\
+\cf2 //UGens vs Synths\cf3 \
+\
+m = \cf4 MouseX\cf3 .kr(-1.0,1.0);\
+\
+\cf2 //Defining synths of limited duration: Envelopes\cf3 \
+\
+\{ \cf4 SinOsc\cf3 .ar(400, 0, 0.1 * \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc, doneAction: 2)) \}.play\
+\
+\
+\cf2 // Evaluate each line after one another - not all lines at the same time: \cf3 \
+\cf4 Env\cf3 .perc.test.plot; \cf2 // (close each plot window before making the next one) \cf3 \
+\cf4 Env\cf3 .sine.test.plot; \
+\cf4 Env\cf3 .new([0,1, 0.3, 0.8, 0], [2, 3, 1, 4],\cf5 'linear'\cf3 ).test.plot; \
+\cf4 Env\cf3 .new([0.001, 1, 0.3, 0.8, 0.001], [2, 3, 1, 4],\cf5 'exponential'\cf3 ).test.plot; \
+\cf4 Env\cf3 .new([0, 1, 0.3, 0.8, 0], [2, 3, 1, 4],\cf5 'sine'\cf3 ).test.plot; \
+\cf4 Env\cf3 .new([0.001, 1, 0.3, 0.8, 0.001],[2,3,1,4],\cf5 'welch'\cf3 ).test.plot; \
+\cf4 Env\cf3 .new([0, 1, 0.3, 0.8, 0], [2, 3, 1, 4],\cf5 'step'\cf3 ).test.plot; \
+\
+\{ \cf4 WhiteNoise\cf3 .ar(\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(level: 0.1), doneAction: 2)) \}.play;\
+\{ \cf4 GrayNoise\cf3 .ar(\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(1.5, 0.01, 0.1, 5), doneAction: 2)) \}.play; \
+\
+\
+(\
+\{\cf4 BrownNoise\cf3 .ar(\cf4 Decay\cf3 .kr(\cf4 Impulse\cf3 .kr(3,0,0.1)))\
+	* \cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(releaseTime: 46), doneAction: 2)\}.play\
+)\
+\
+\
+(\
+\{\cf4 GrayNoise\cf3 .ar(\cf4 Decay\cf3 .kr(\cf4 Impulse\cf3 .kr(\
+	\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 ([3, 10, 2, 25, 1], \{1.5\}!4, \cf5 \\exponential\cf3 ))))) \
+	*	\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(1.5, 15, 0.05, -1), doneAction: 2) \}.play\
+	)\
+\
+\cf2 //Storing synth algorithms in synth definitions (synthdefs) \cf3 \
+\
+\
+\{\cf4 WhiteNoise\cf3 .ar(\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(0.01, 025, 0.1), doneAction: 2)) \}.play;\
+\
+\
+( \
+	\cf4 Routine\cf3 (\{ 			\cf2 // create a routine \cf3 \
+		30.do \{ 		\cf2 // repeat 30 times \cf3 \
+		\{				 \cf2 // play a synth function \cf3 \
+				\cf4 WhiteNoise\cf3 .ar( \
+				\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(0.01, 0.25, 0.1), doneAction: 2)) \
+		\}.play; \
+						\cf2 // wait for a random interval between 0.01 and 0.15 sec: \cf3 \
+		0.01.rrand(0.15).wait; \
+		\} 				\cf2 // end of repeated function \cf3 \
+\}).play 				\cf2 // play the routine \cf3 \
+) \
+\
+\
+\
+\
+\cf2 //Create a new SynthDef\cf3 \
+\
+\cf4 SynthDef\cf3 (\cf6 "white_burst"\cf3 , 		\cf2 //name of the synthdef is "white_burst"\cf3 \
+								\cf2 //Star of synthesis function:\cf3 \
+		\{ \cf4 Out\cf3 .ar(0,			\cf2 //specification on the output bus!\cf3 \
+			\cf4 WhiteNoise\cf3 .ar(\
+					\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc(0.01, 0.25, 0.1), doneAction: 2)))\
+		\}						\cf2 //end of synthesis function\cf3 \
+).load(\cf4 Server\cf3 .local);		\cf2 //Load the sunthdef to the local server\cf3 \
+\
+\
+\cf2 //	I CANT MAKE IT WORK!!!\cf3 \
+\
+\
+\cf4 Synth\cf3 (\cf6 "white_burst"\cf3 );		\cf2 //Create a synth from synthdef "white_burst"\cf3 \
+\
+(\
+\cf4 Routine\cf3  (\{								\cf2 //create a routine\cf3 \
+	30.do \{							\cf2 //repeat 30 times\cf3 \
+		\cf4 Synth\cf3 (\cf6 "white_burst"\cf3 );		\cf2 //make a synth\cf3 \
+		\cf2 //wait for a random interval between 0.01 and 0.15sec:\cf3 \
+		0.01.rrand(0.15).wait;\
+	\};									\cf2 //end of repeated function\cf3 \
+\}).play\
+)\
+\
+\
+\cf2 //How synthdefs work \cf3 \
+\
+\cf2 //Control techniques \cf3 \
+\
+\cf2 //Creating interfaces for external control of a synth\cf3 \
+\
+\cf2 //Create a synth with controls for the paremeters freq and amp;\cf3 \
+a = \{ \cf4 arg\cf3  freq = 400, amp = 0.1; \cf4 SinOsc\cf3 .ar(freq, 0, amp)\}.play\
+\
+a.set(\cf5 \\freq\cf3 , 1070); \cf2 //set the value freq to 500\cf3 \
+\
+a.set(\cf5 \\freq\cf3 , 15000, \cf5 \\amp\cf3 , 0.8);\
+\
+\cf2 //Following routine changes the freq and amo parameters 50 times\cf3 \
+\
+( \
+\cf4 Routine\cf3 (\{ \
+	50.do \{ \cf4 |i|\cf3  \
+			a.set(\cf5 \\freq\cf3 , ((i * 200) + 200), \cf5 \\amp\cf3 , 1 / (1 + i)); \
+			0.2.wait; \
+		\}; \
+\}).play; \
+) \
+\
+\
+\cf2 //stop the synth in a to end the example:\cf3 \
+a.free;\
+\
+\cf2 //Setting parameters of a synth at its creation\cf3 \
+\
+\cf2 //Create and load a synthdef with controls:\cf3 \
+\
+\cf4 SynthDef\cf3 (\cf6 "ping"\cf3 , \{ \cf4 | freq = 400, amp = 0.1, dur = 1.0 |\cf3  \
+	\cf4 Out\cf3 .ar(0, \cf4 SinOsc\cf3 .ar(freq, 0, \
+		\cf4 EnvGen\cf3 .kr(\cf4 Env\cf3 .perc, 1.0, amp, 0, dur, 2))) \
+\}).load(\cf4 Server\cf3 .local); \
+\
+\
+\cf2 //Create a "ping" synth with default parameters:\cf3 \
+\cf4 Synth\cf3 (\cf6 "ping"\cf3 );\
+\
+\cf2 //Create a "ping" synth with customized parameters:\cf3 \
+\cf4 Synth\cf3 (\cf6 "ping"\cf3 , [\cf5 \\freq\cf3 , 350, \cf5 \\amp\cf3 , 0.4, \cf5 \\dur\cf3 , 5]);\
+\
+\
+\cf4 Synth\cf3 (\cf6 "ping"\cf3 , [0, 350, 1, 0.4, 2, 5]);\
+\
+\cf4 Synth\cf3 (\cf6 "ping"\cf3 , [0, 450, 1, 0.6, 4, 5]);\
+\
+( \
+\cf4 Routine\cf3 (\{ \
+	5.do \{ \
+	([0, -4, -3, 3, 11].choose + \
+	[60, 64, 65, 67, 69, 71]).midicps.scramble.pyramid(5).curdle(0.8) do: \
+		\{ \cf4 |c|\cf3  c do: \{ \cf4 |f|\cf3  \cf4 Synth\cf3 (\cf6 "ping"\cf3 , \
+		\cf2 // control 0 is freq, 1 is amp, 2 is dur: \cf3 \
+			[0, f, 1, 0.01.rrand(0.5), 2, 0.1 exprand: 1.5]) \
+		\}; \
+		[0.1, 0.1, 0.1, 0.2].choose.wait; \
+	\}; \
+	\} \
+\}).play; \
+)\
+\
+\cf2 //Working with live sound input\cf3 \
+\cf2 //Playing samples from disk with DiskIn \cf3 \
+\
+b = \cf4 Buffer\cf3 .cueSoundFile(s, p, 0, 1);\
+\
+\cf2 //Multichannel Expansion\cf3 \
+\
+(\
+a = \{ \cf4 arg\cf3  freq = 440, density = 1, rq = 0.05;\
+	\cf4 var\cf3  trigger;\
+	freq = [freq, freq * 1.25];\
+	trigger = \cf4 Dust\cf3 .kr(density, 0.01);\
+	\cf4 RLPF\cf3 .ar(\cf4 GrayNoise\cf3 .ar(\cf4 Decay2\cf3 .kr(trigger, 0.1)), freq, rq)\
+\
+\}.play;\
+)\
+\
+(\
+a = \{ \cf4 arg\cf3  freq = 440, density = 1, rq = 0.05;\
+	\cf4 var\cf3  trigger;\
+	freq = [freq, freq * 1.25];\
+	trigger = \{\cf4 Dust\cf3 .kr(density, 0.01) \}.dup;\
+	\cf4 RLPF\cf3 .ar(\cf4 GrayNoise\cf3 .ar(\cf4 Decay2\cf3 .kr(trigger, 0.1)), freq, rq)\
+\
+\}.play;\
+)\
+\
+\cf2 //Another Example\cf3 \
+\
+b = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar(300,0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 600, 800),0.1)\}.play; \
+\
+c = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 600, \
+800),0.1)\}.play;\
+\
+( \
+	d = \{ \
+	\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar(300,0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 600, 800),0.1) + \
+	\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 600, 800),0.1) \
+	\}.play \
+) \
+\
+( \
+	e = \{ \
+		\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar(300,0, 0.01), \cf4 LFNoise0\cf3 .kr([9.01,3.01], 800, 840),		0.1) + \
+		\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 800, 840),		0.1) \
+	\}.play \
+) \
+\
+\
+f = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 600, \
+		800).lag,0.1)\}.play; \
+\
+f = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 800, \
+		850).lag,0.1)\}.play; \
+\
+f = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 800, \
+		850),0.1)\}.play; \
+		\
+\
+f = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 3000, \
+		3000).lag,0.1)\}.play; \
+		\
+f = \{\cf4 RLPF\cf3 .ar(\cf4 LFSaw\cf3 .ar([250, 200],0, 0.01), \cf4 LFNoise0\cf3 .kr([9,3], 3000, \
+		3000),0.1)\}.play; \
+\
+\
+\
+\cf2 //Synthesis Techniques:Generation, Control and Transformation \cf3 \
+\
+(\
+\cf2 /* 1. From an earlier section. "Alien subtropic drummers" */\cf3  \
+	\{ \cf4 RLPF\cf3 .ar(\cf4 LFTri\cf3 .ar(\cf4 Demand\cf3 .kr(\cf4 Impulse\cf3 .kr([10, 5.1]), 0, \
+	\cf4 Dser\cf3 ((200,300..1100).scramble, \cf4 inf\cf3 )), 0, 0.05), \
+	\cf4 LFNoise0\cf3 .kr([0.2,0.21], 300, 400), 0.01, 0.1) \}.play; \
+) \
+\
+\
+\
+( \cf2 // 2. ("the winds whims") \cf3 \
+\{ \
+	\cf4 var\cf3  src, filt, mod, aburbl, fburbl; \
+	\
+	mod = \{ \cf4 LFNoise1\cf3 .kr( \cf2 // fluctuate the amplitude \cf3 \
+		\cf2 // fluctuate the speed of the fluctuation of the amplitude \cf3 \
+		\cf4 LFNoise1\cf3 .kr(0.005, 2, 2.001) \
+		\cf2 // Add some intermittent extra fluctuation \cf3 \
+			+ \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.1, 10), \cf4 LFNoise1\cf3 .kr(0.1, 5, 5.1)), \
+		\cf2 // fluctuate the amplitude of the fluctuation of the amplitude \cf3 \
+		\cf4 LFNoise1\cf3 .kr(0.1, 0.1) \
+	); \}; 		\cf2 // this is a function making 2 independent copies later \cf3 \
+	\cf2 // "fluttery ornament", similar technique as with "mod" above \cf3 \
+	aburbl = \{ \cf4 LFPulse\cf3 .kr(\cf4 LFNoise1\cf3 .kr(0.05, 10,11) \cf2 // pulse -> "flutter" \cf3 \
+			+ \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.25, 5), 2), 0, \
+			\cf4 LFNoise1\cf3 .kr(0.1 + \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.25, 3), 5), \
+				0.8, 0.9),  \
+			\cf4 LFNoise1\cf3 .kr(0.5, 0.1, 0.1001)) * \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.1), 5); \
+	\}; \cf2 // second function, to be combined with mod \cf3 \
+	\cf2 // source:            double copies for 2 independent voices, L-R \cf3 \
+	src = \cf4 WhiteNoise\cf3 .ar((\{ mod.value + aburbl.value \} ! 2) * 0.5); \
+	fburbl = \cf4 LFPulse\cf3 .kr(\cf4 LFNoise1\cf3 .kr(0.05, 10,15) \
+		+ \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.25, 5), 2), 0, \
+		\cf4 LFNoise1\cf3 .kr(0.1 + \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.25, 3), 5), \
+			0.5, 0.7),  \
+		\cf4 LFNoise1\cf3 .kr(0.5, 500.0)) * \cf4 Trig\cf3 .kr(\cf4 Dust\cf3 .kr(0.25), 5); \
+\
+	\cf2 // Filter source with fluctuating frequency and amplitude: \cf3 \
+	filt = \cf4 Ringz\cf3 .ar( \
+		src, \
+		\cf2 // fluctuate frequency with same curve as amplitude, \cf3 \
+		\cf2 // but scaled for frequency: \cf3 \
+		(mod * 1200) + 1250 + fburbl, \cf2 // ornament \cf3 \
+		\cf2 // fluctuate the ring time \cf3 \
+		\cf4 LFNoise1\cf3 .kr([0.05, 0.06], 0.1, 0.101), \
+		0.2 \
+	); \
+	\cf4 Out\cf3 .ar(0, filt); \cf2 // final output \cf3 \
+\}.play; \
+) \
+	 \
+\
+( \cf2 /* 3. \
+   From the Gendy1 help file, with "smoothed" LFNoise0 stubstituted \
+   for the MouseY and MouseX controls. \
+   ("Another traffic moment") \
+   This is a rough texture! \
+  */\cf3  \
+\{ \
+\cf4 var\cf3  n; \
+n=10; \cf2 // try also n=20 and n=30 \cf3 \
+\cf4 Resonz\cf3 .ar( \
+\cf4 Mix\cf3 .fill(n,\{ \
+\cf4 var\cf3  freq, numcps; \
+freq= rrand(50,560.3); \
+numcps= rrand(2,20); \
+\cf4 Pan2\cf3 .ar(\cf4 Gendy1\cf3 .ar(6.rand,6.rand,1.0.rand,1.0.rand,freq,freq,1.0.rand, \
+1.0.rand, numcps, \cf4 SinOsc\cf3 .kr(exprand(0.02,0.2), 0, numcps/2, numcps/2), 0.5/ \
+(n.sqrt)), 1.0.rand2) \
+\}) \
+, \cf4 Lag\cf3 .kr(\cf4 LFNoise0\cf3 .kr(0.1, 2000, 2100), 1.5), \
+  \cf4 Lag\cf3 .kr(\cf4 LFNoise0\cf3 .kr(0.21, 1.0, 1.01), 1.5) \
+); \
+\}.play \
+) \
+\
+\
+\cf2 // END\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+ \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs24 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs28 \cf3 \
+\
+\
+}

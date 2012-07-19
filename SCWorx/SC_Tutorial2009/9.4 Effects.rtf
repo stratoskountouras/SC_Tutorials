@@ -1,0 +1,331 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Geneva;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red0\green0\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs38 \cf2 //Some effects examples\cf3 \
+\
+\cf2 //use the internal server with the scope\cf3 \
+\
+\cf4 Server\cf3 .default= s=\cf4 Server\cf3 .internal; \
+\
+s.scope;\
+\
+\
+\cf2 //make some source sound recipe\cf3 \
+\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\impulse\cf3 , \{\
+\cf4 Out\cf3 .ar(0,\cf4 Pan2\cf3 .ar(\cf4 Saw\cf3 .ar(440,\cf4 Decay2\cf3 .ar(\cf4 Impulse\cf3 .ar(1),0.001,0.1,0.5)),0.0));\
+\}).send(s);  \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 SynthDef\cf3 (\cf5 \\continuous\cf3 , \{\
+\cf4 Out\cf3 .ar(0,\cf4 Pan2\cf3 .ar(\cf4 WhiteNoise\cf3 .ar(0.1),0.0));\
+\}).send(s);  \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 )\
+\
+a= \cf4 Group\cf3 .basicNew(s,1); \cf2 //get Group 1\cf3 \
+\
+x= \cf4 Synth\cf3 .head(a, \cf5 \\impulse\cf3 );\
+\
+s.scope\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //Delay\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 (\
+\cf4 SynthDef\cf3 (\cf5 \\fxexampledelay\cf3 , \{\cf4 arg\cf3  delaytime=0.1;\
+\cf4 var\cf3  input, effect; \
+\
+input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+effect= \cf4 DelayN\cf3 .ar(input, 1,delaytime); \cf2 //max delay of one second\cf3 \
+\
+\cf4 Out\cf3 .ar(0,effect); \cf2 //adds to bus 0 \cf3 \
+\}).send(s);  \
+)\
+\
+y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexampledelay\cf3 );\
+\
+y.free;\
+\
+y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexampledelay\cf3 , [\cf5 \\delaytime\cf3 , 0.4]);\
+\
+y.free;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\
+\
+\
+\cf2 //other UGens to explore:\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "SC://DelayN"}}{\fldrslt \cf6 DelayN}}, {\field{\*\fldinst{HYPERLINK "SC://DelayL"}}{\fldrslt \cf6 DelayL}}, {\field{\*\fldinst{HYPERLINK "SC://DelayC"}}{\fldrslt \cf6 DelayC}}, {\field{\*\fldinst{HYPERLINK "SC://Delay1"}}{\fldrslt \cf6 Delay1}}, {\field{\*\fldinst{HYPERLINK "SC://Tap"}}{\fldrslt \cf6 Tap}}, {\field{\*\fldinst{HYPERLINK "SC://MultiTap"}}{\fldrslt \cf6 MultiTap}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //Reverb\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 (\
+\cf4 SynthDef\cf3 (\cf5 \\fxexamplereverb\cf3 , \{\cf4 arg\cf3  delaytime=0.01, decaytime=1;\
+\cf4 var\cf3  input; \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf4 var\cf3  numc,numa,temp;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 numc = 4; \cf2 // number of comb delays\cf3 \
+numa = 6; \cf2 // number of allpass delays\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 // reverb predelay time :\cf3 \
+temp = \cf4 DelayN\cf3 .ar(input, 0.048,0.048);\
+\
+temp=\cf4 Mix\cf3 .fill(numc,\{\cf4 CombL\cf3 .ar(temp,0.1,rrand(0.01, 0.1),5)\});\
+	\
+\cf2 // chain of 4 allpass delays on each of two channels (8 total) :\cf3 \
+numa.do(\{ temp = \cf4 AllpassN\cf3 .ar(temp, 0.051, [rrand(0.01, 0.05),rrand(0.01, 0.05)], 1) \});\
+	\
+\cf2 // add original sound to reverb and play it :\cf3 \
+\cf4 Out\cf3 .ar(0,(0.2*temp));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \}).send(s);  \
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexamplereverb\cf3 );\
+\
+y.free;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\cf2 //readymade Reverbs in SC3.2 and later\cf3 \
+{\field{\*\fldinst{HYPERLINK "SC://FreeVerb"}}{\fldrslt \cf6 FreeVerb}}\
+{\field{\*\fldinst{HYPERLINK "SC://FreeVerb2"}}{\fldrslt \cf6 FreeVerb2}}\
+{\field{\*\fldinst{HYPERLINK "SC://GVerb"}}{\fldrslt \cf6 GVerb}}\
+\
+\cf2 //If you build your own reverbs, useful UGens are: \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "SC://CombN"}}{\fldrslt \cf6 CombN}}, {\field{\*\fldinst{HYPERLINK "SC://CombL"}}{\fldrslt \cf6 CombL}}, {\field{\*\fldinst{HYPERLINK "SC://CombC"}}{\fldrslt \cf6 CombC}}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "SC://AllpassN"}}{\fldrslt \cf6 AllpassN}}, {\field{\*\fldinst{HYPERLINK "SC://AllpassL"}}{\fldrslt \cf6 AllpassL}}, {\field{\*\fldinst{HYPERLINK "SC://AllpassC"}}{\fldrslt \cf6 AllpassC}}\
+\cf2 //and the delay reverbs above for early reflections\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //Phasing and Flanging\cf3 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //phasing = play a signal back in combination with a phase shifted copy of itself (using an allpass filter); vary the delaytime under 20 msec\cf3 \
+\
+\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\fxexamplephasing\cf3 , \{\cf4 arg\cf3  freq=0.2;\
+\cf4 var\cf3  input, effect; \
+\
+input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+effect= \cf4 AllpassN\cf3 .ar(input,0.02,\cf4 SinOsc\cf3 .kr(freq,0,0.01,0.01)); \cf2 //max delay of 20msec\cf3 \
+\
+\cf4 Out\cf3 .ar(0,effect); \cf2 //adds to bus 0 where original signal is already playing\cf3 \
+\}).send(s);  \
+)\
+\
+x.free\
+\
+x= \cf4 Synth\cf3 .head(a, \cf5 \\continuous\cf3 );\
+\
+y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexamplephasing\cf3 );\
+\
+y.set(\cf5 \\freq\cf3 , 0.1)\
+\
+y.set(\cf5 \\freq\cf3 , 1)\
+\
+y.free\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //flanging= play a signal back in combination with a delayed copy of itself; vary the delaytime around 10 msec\cf3 \
+\cf2 //flanging usually also involves some feedback, acheived here using LocalIn and LocalOut\cf3 \
+\
+(\
+\cf4 SynthDef\cf3 (\cf5 \\fxexampleflanging\cf3 , \{\cf4 arg\cf3  flangefreq=0.1, fdback=0.1;\
+\cf4 var\cf3  input, effect; \
+\
+input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+input= input+ \cf4 LocalIn\cf3 .ar(2); \cf2 //add some feedback\cf3 \
+\
+effect= \cf4 DelayN\cf3 .ar(input,0.02,\cf4 SinOsc\cf3 .kr(flangefreq,0,0.005,0.005)); \cf2 //max delay of 20msec\cf3 \
+\
+\cf4 LocalOut\cf3 .ar(fdback*effect);\
+\
+\cf4 Out\cf3 .ar(0,effect); \cf2 //adds to bus 0 where original signal is already playing\cf3 \
+\}).send(s);  \
+)\
+\
+x.free\
+\
+x= \cf4 Synth\cf3 .head(a, \cf5 \\continuous\cf3 );\
+\
+y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexampleflanging\cf3 );\
+\
+y.set(\cf5 \\flangefreq\cf3 ,0.4);\
+\
+y.set(\cf5 \\fdback\cf3 , 0.95);\
+\
+y.free;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //Dynamics Processing\cf3 \
+\
+s.scope\
+\
+\cf2 //compress or expand the dynamic range (amplitude variation) of a signal\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 (\
+\cf4 SynthDef\cf3 (\cf5 \\fxexamplecompression\cf3 , \{\cf4 arg\cf3  gain=1.5, threshold=0.5;\
+\cf4 var\cf3  input, effect; \
+\
+input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+effect= \cf4 CompanderD\cf3 .ar(gain*input,threshold,1,0.5); \
+\
+\cf4 ReplaceOut\cf3 .ar(0,effect); \cf2 //replaces bus 0 where original signal is already playing\cf3 \
+\}).send(s);  \
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 x.free\
+\
+x= \cf4 Synth\cf3 .head(a, \cf5 \\impulse\cf3 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexamplecompression\cf3 );\
+\
+y.free;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexamplecompression\cf3 ,[\cf5 \\gain\cf3 ,2, \cf5 \\threshold\cf3 ,0.1]);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 y.free;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf2 //a limiter forces a hard  on this limit, and is very useful as a final stage in a patch to avoid overloading \cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 (\
+\cf4 SynthDef\cf3 (\cf5 \\fxexamplelimiter\cf3 , \{\cf4 arg\cf3  gain=1;\
+\cf4 var\cf3  input, effect; \
+\
+input=\cf4 In\cf3 .ar(0,2); \cf2 //get two channels of input starting (and ending) on bus 0\cf3 \
+\
+effect= \cf4 Limiter\cf3 .ar(gain*input,0.99, 0.01); \
+\
+\cf4 ReplaceOut\cf3 .ar(0,effect); \cf2 //replaces bus 0 where original signal is already playing\cf3 \
+\}).send(s);  \
+)\
+\
+\
+\
+x.free\
+\
+x= \cf4 Synth\cf3 .head(a, \cf5 \\impulse\cf3 );\
+\
+y= \cf4 Synth\cf3 .tail(a, \cf5 \\fxexamplelimiter\cf3 );\
+\
+y.set(\cf5 \\gain\cf3 , 10) \cf2 //careful with your ears! \cf3 \
+\
+y.free;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\
+\
+{\field{\*\fldinst{HYPERLINK "SC://Compander"}}{\fldrslt \cf6 Compander}}, {\field{\*\fldinst{HYPERLINK "SC://Normalizer"}}{\fldrslt \cf6 Normalizer}}, {\field{\*\fldinst{HYPERLINK "SC://Limiter"}}{\fldrslt \cf6 Limiter}}\
+\
+\
+}

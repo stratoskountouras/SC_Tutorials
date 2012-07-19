@@ -1,0 +1,375 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 LucidaGrande;\f2\fnil\fcharset0 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red96\green96\blue96;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid0\'02\'05.;}{\levelnumbers\'01;}}{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid1\'02\'05.;}{\levelnumbers\'01;}}{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid2\'02\'05.;}{\levelnumbers\'01;}}{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid3\'02\'05.;}{\levelnumbers\'01;}}{\listlevel\levelnfc23\levelnfcn23\leveljc2\leveljcn2\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{square\}}{\leveltext\leveltemplateid4\'02\'05.;}{\levelnumbers\'01;}}{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class ??:
+\b0 \
+
+\b 	Sets: Dictionaries & Environments
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Sets\
+			\'95 Types of Dictionaries\
+				- Dictionary\
+				- IdentityDictionary\
+				- TwoWayIdentityDictionary\
+				- IdentitySet\
+				- Environment\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+
+\b \cf2 // ================= SETS =================
+\b0 \cf3 \
+\cf2 // Throughout the year, we have dealt extensively with\'a0{\field{\*\fldinst{HYPERLINK "http://../../../../../../Applications/SuperCollider/Help/Collections/SequenceableCollection.html"}}{\fldrslt \cf2 SequenceableCollections}}: Lists, Arrays, Wavetables, strings, etc. 
+\b Sets
+\b0  are a parallel branch, stemming from the same root-branch, the abstract superclass '
+\b Collection
+\b0 '/\cf3 \
+\cf2 // A Set is defined as a collection of objects, no two of which are equal. Whereas SequencableCollections are ordered, Sets are not always so.\cf3 \
+\
+\cf2 // Here are the sub-branches of Collection that this file deals with (for the entire tree look at {\field{\*\fldinst{HYPERLINK "SC://Collections"}}{\fldrslt \cf2 \ul \ulc2 Collections}}:\cf3 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "SC://Collection"}}{\fldrslt 
+\b \cf4 \ul \ulc4 Collection}}
+\b \ul  
+\b0 \ulnone \
+   ....\
+\pard\tx220\tx720\pardeftab560\li720\fi-720\ql\qnatural
+\ls1\ilvl0\cf3 {\listtext	\'95	}\'a0{\field{\*\fldinst{HYPERLINK "SC://Set"}}{\fldrslt 
+\b \cf4 Set}}\
+\pard\tx940\tx1440\pardeftab560\li1440\fi-1440\ql\qnatural
+\ls1\ilvl1\cf3 {\listtext	
+\f1 \uc0\u9702 
+\f0 	}\'a0{\field{\*\fldinst{HYPERLINK "SC://Dictionary"}}{\fldrslt 
+\b \cf4 Dictionary}}\
+\pard\tx1660\tx2160\pardeftab560\li2160\fi-2160\ql\qnatural
+\ls1\ilvl2\cf3 {\listtext	
+\f1 \uc0\u9642 
+\f0 	}\'a0{\field{\*\fldinst{HYPERLINK "SC://IdentityDictionary"}}{\fldrslt 
+\b \cf4 IdentityDictionary}}\
+\pard\tx2380\tx2880\pardeftab560\li2880\fi-2880\ql\qnatural
+\ls1\ilvl3\cf3 {\listtext	
+\f1 \uc0\u9642 
+\f0 	}\'a0{\field{\*\fldinst{HYPERLINK "SC://Environment"}}{\fldrslt 
+\b \cf4 Environment}}\
+\pard\tx3100\tx3600\pardeftab560\li3600\fi-3600\ql\qnatural
+\ls1\ilvl4\cf3 {\listtext	
+\f1 \uc0\u9642 
+\f0 	}...\
+\pard\tx940\tx1440\pardeftab560\li1440\fi-1440\ql\qnatural
+\ls1\ilvl1\cf3 {\listtext	
+\f1 \uc0\u9702 
+\f0 	}\'a0{\field{\*\fldinst{HYPERLINK "SC://IdentitySet"}}{\fldrslt 
+\b \cf4 IdentitySet}} \
+{\listtext	
+\f1 \uc0\u9702 
+\f0 	}  ...\
+\pard\tx1660\tx2160\pardeftab560\li2160\fi-2160\ql\qnatural
+\ls1\ilvl2\cf3 {\listtext	
+\f1 \uc0\u9642 
+\f0 	}  \'95		\'a0{\field{\*\fldinst{HYPERLINK "SC://TwoWayIdentityDictionary"}}{\fldrslt 
+\b \cf4 TwoWayIdentityDictionary}}\
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+\
+
+\b \cf2 // ====== TYPES OF DICTIONARIES ======
+\b0 \cf3 \
+\
+
+\b \cf2 // ------ Dictionary --
+\b0 \cf3 \
+\cf2 // A {\field{\*\fldinst{HYPERLINK "SC://Dictionary"}}{\fldrslt \cf2 \ul \ulc2 Dictionary}} is an 
+\b unordered
+\b0  collection mapping keys to values through association. Keys and values match if they are 
+\b equal
+\b0  (i.e. == returns true).\cf3 \
+\
+d = \cf4 Dictionary\cf3 .new; \cf2 //create a new dictionary\cf3 \
+d.add(\cf5 \\entry_1\cf3  -> 10); \cf2 // add an association of: symbol-or-string -> value\cf3 \
+d.add(\cf5 \\entry_2\cf3  -> 23);\
+d.put(\cf5 \\entry_3\cf3 , 31); \cf2 // create, then add an association between two objects\cf3 \
+d.put(\cf6 "entry_4"\cf3 , 44); \cf2 // a string also works\cf3 \
+d.put(5, 20); \cf2 // a number as well\cf3 \
+d; \cf2 // see what's in there\cf3 \
+\cf2 // or like this:\cf3 \
+d.postcs; \
+		\cf2 /* \
+		Note:\
+		.postcs can be very useful to look inside many objects: ex:\
+		e = Env([0, 1, 0], [0.2, 0.8], -4);\
+		e.postln;\
+		// BUT:\
+		e.postcs \
+		*/\cf3 		\
+d.removeAt(\cf6 "entry_4"\cf3 ); \cf2 // remove a key from the Dictionary\cf3 \
+d[\cf5 \\entry_1\cf3 ]; \cf2 // query the value of a key\cf3 \
+d.at(\cf5 \\entry_1\cf3 ); \cf2 // same thing, different syntax\cf3 \
+d[\cf6 "entry_1"\cf3 ]; \cf2 // this won't work: the key is a symbol, not a string\cf3 \
+\
+\cf2 // \'95 Iterating through a Dictionary\cf3 \
+d.do(\{\cf4 arg\cf3  me, i; [me, i].postln;\}); \cf2 // passes in value and incrementer\cf3 \
+d.keysDo(\{\cf4 arg\cf3  me, i; [me, i].postln\}); \cf2 // passes in keys and incrementer\cf3 \
+d.keysValuesDo(\{\cf4 arg\cf3  key, val, i; [key, val, i].postln\}); \cf2 // passes in key, val and incrementer\cf3 \
+d.findKeyForValue(10); \cf2 // return the key associated with this value\cf3 \
+\
+\cf2 // \'95 Dictionaries of dictionaries\cf3 \
+d.add(\cf5 \\entry_5\cf3  -> \cf4 Dictionary\cf3 [\cf5 \\a_node\cf3  -> 1000, \cf5 \\a_controlBus\cf3  -> 20, \cf5 \\a_group\cf3  -> 2000])\
+\cf2 // query the contens of the 2nd level dictionary:\cf3 \
+d[\cf5 \\entry_5\cf3 ][\cf5 \\a_node\cf3 ]; \cf2 // or:\cf3 \
+d.at(\cf5 \\entry_5\cf3 ).at(\cf5 \\a_node\cf3 ); \cf2 // same as with arrays, as this is a Collection nomenclature\cf3 \
+\
+\
+
+\b \cf2 // ------ IdentityDictionary --
+\b0 \cf3 \
+\cf2 // An {\field{\*\fldinst{HYPERLINK "SC://IdentityDictionary"}}{\fldrslt \cf2 \ul \ulc2 IdentityDictionary}} is similar in all accounts, except that keys match only if they are 
+\b identical 
+\b0 objects (i.e. == returns true). This makes it faster than the Dictionary\cf3 \
+\
+\cf2 // Notice this:\cf3 \
+\cf6 "aString"\cf3  == \cf6 "aString"\cf3  \cf2 // BUT\cf3 \
+\cf6 "aString"\cf3  === \cf6 "aString"\cf3 \
+\cf2 // whereas:\cf3 \
+\cf5 \\aSymbol\cf3  == \cf5 \\aSymbol\cf3 \
+\cf5 \\aSymbol\cf3  === \cf5 \\aSymbol\cf3 \
+\cf2 // and also:\cf3 \
+2 == 2\
+2 === 2\
+\cf2 // whereas:\cf3 \
+a = \cf4 Array\cf3 .new\
+b = \cf4 Array\cf3 .new\
+a == b\
+a===b\
+\
+
+\b \cf2 // ------ TwoWayIdentityDictionary --
+\b0 \cf3 \
+
+\b \cf2 // {\field{\*\fldinst{HYPERLINK "SC://TwoWayIdentityDictionary"}}{\fldrslt 
+\b0 \cf2 \ul \ulc2 TwoWayIdentityDictionary}}
+\b0  is similar to the IdentityDictionary, but it has the extra feature of allowing you to go from the key to the value as well as from the value to the key. However, it needs a bit more memory.\cf3 \
+\
+t = \cf4 TwoWayIdentityDictionary\cf3 .new; \cf2 // create a new instance\cf3 \
+t.put(\cf5 \\test\cf3 , 999); \cf2 // create and store an association\cf3 \
+t.put([\cf6 "some"\cf3 , \cf6 "strings"\cf3 ], 1200); \cf2 // yet another one\cf3 \
+t.at(\cf5 \\test\cf3 ); \cf2 // what is the value at this key?\cf3 \
+t.getID(999); \cf2 // and what is the key of this value?\cf3 \
+t.getID(1200); \cf2 // how about this value?\cf3 \
+t.getID(888); \cf2 // nil, as there is no such value\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ IdentitySet --
+\b0 \cf3 \
+\cf2 // An {\field{\*\fldinst{HYPERLINK "SC://IdentitySet"}}{\fldrslt \cf2 \ul \ulc2 IdentitySet}} is to a Set what in IdentityDictionary is to a Dictionary: similar in all accounts but for it checking for identity instead of equality, which makes it faster.\cf3 \
+\cf2 // A handy trick: You can use IdentitySet to remove duplicates from an Array:\cf3 \
+(\
+\cf4 var\cf3  e, f, g, h;\
+e = \cf6 "such"\cf3 ; f = \cf6 "fallacy"\cf3 ; g = \cf6 "is"\cf3 ; h = \cf6 "common"\cf3 ;\
+a = [e, e, f, g, e, h, e];\
+);\
+a.as(\cf4 IdentitySet\cf3 );	\cf2 // convert to set\cf3 \
+a.as(\cf4 Set\cf3 ).as(\cf4 Array\cf3 ); \cf2 // and convert back\cf3 \
+\
+\
+\
+
+\b \cf2 // ------ Environment --
+\b0 \cf3 \
+\cf2 // An 
+\b Environment 
+\b0 is an IdentityDictionary mapping Symbols to values; it has some with additional features and is commonly used as a storage 'name space' for creating, storing and accessing sets of persistent variables. In SC, there is always one Environment running, and this is were the global variables are stored. Upon startup, an Environment providing the memory space to store a universally accessible collection of named values, starting with '~'; this is the 
+\i currentEnvironment.
+\i0 \cf3 \
+
+\i \cf2 // 
+\i0 You can look at its state like this:\cf3 \
+currentEnvironment;\
+\cf2 // add a variable\cf3 \
+~a_variable = 3.14; \
+\cf2 // now check again:\cf3 \
+currentEnvironment;\
+\cf2 // ~a_variable = ... is actually a shortcut for this:\cf3 \
+currentEnvironment.put(\cf5 \\a_variable\cf3 , 3.14)\
+\cf2 // and the accessing method\cf3 \
+~a_variable;\
+\cf2 // is a shortcut for:\cf3 \
+currentEnvironment[\cf5 \\a_variable\cf3 ];\
+\
+\cf2 // You can create and Environment with the 
+\b .make
+\b0  method and then fill it with values. This
+\b  
+\b0 temporarily replaces the current Environment with a new one inside its scope. \cf3 \
+\cf2 // For example:\cf3 \
+~a = 124\
+(\
+\cf4 var\cf3  a;\
+a = \cf4 Environment\cf3 .make(\{\
+	~a = 100;\
+	~b = 200;\
+	~c = 300;\
+	\cf6 "inside the scope, ~a is: "\cf3 .post;\
+	~a.postln\
+\
+\});\
+a.postln;\
+\cf6 "outside the scope, ~a is: "\cf3 .post;\
+~a.postln\
+)\
+\
+\cf2 // You can use the contents of the Environment you created with the 
+\b .use
+\b0  method and a function:\cf3 \
+(\
+\cf4 var\cf3  a;\
+a = \cf4 Environment\cf3 .make(\{\
+	~a = 10;\
+	~b = 200;\
+	~c = 3000;\
+	\cf6 "inside the scope, ~a is: "\cf3 .post;\
+	~a.postln\
+\});\
+a.use(\{\
+	~a + ~b + ~c;\
+	\cf6 "inside the function, ~a is: "\cf3 .post;\
+	~a.postln\
+\}).postln;\
+\cf6 "outside the scope, ~a still is: "\cf3 .post;\
+~a.postln;\
+)\
+\
+\cf2 // you can also 
+\b .use 
+\b0 directly when creating the Environment:\cf3 \
+(\
+\cf4 var\cf3  a;\
+a = \cf4 Environment\cf3 .use(\{\
+	~a = 10;\
+	~b = 200;\
+	~c = 3000;\
+	~a + ~b + ~c\
+\}).postln;\
+)\
+\
+\cf2 // You can call a function inside an Environment evaluating it with the 
+\b valueEnvir
+\b0  and 
+\b valueArrayEnvir
+\b0  methods, to make it lookup any unspecified arguments from that environment; if there are any symbols with the same name there, then the function will use their values, if not it will just use the defaults.\cf3 \
+\cf2 // For example:\cf3 \
+(\
+\cf4 var\cf3  f;\
+\
+\cf2 // define a function\cf3 \
+f = \{ \cf4 arg\cf3  x, y, z; [x, y, z].postln; \};\
+\
+\cf4 Environment\cf3 .use(\{\
+	~x = 7;\
+	~y = 8;\
+	~z = 9;\
+	\
+	f.valueEnvir(1, 2, 3);	\cf2 // all values supplied\cf3 \
+	f.valueEnvir(1, 2);	\cf2 // z is looked up in the current Environment\cf3 \
+	f.valueEnvir(1);		\cf2 // y and z are looked up in the current Environment \cf3 \
+	f.valueEnvir;			\cf2 // all arguments are looked up in the current Environment\cf3 \
+	f.valueEnvir(z: 1);	\cf2 // x and y are looked up in the current Environment\cf3 \
+\});\
+\
+\cf4 Environment\cf3 .use(\{\
+	~x = 17;\
+	~y = 18;\
+	~z = 19;\
+	\
+	f.valueEnvir(1, 2, 3);	\cf2 // all values supplied\cf3 \
+	f.valueEnvir(1, 2);	\cf2 // z is looked up in the current Environment\cf3 \
+	f.valueEnvir(1);		\cf2 // y and z are looked up in the current Environment \cf3 \
+	f.valueEnvir;			\cf2 // all arguments are looked up in the current Environment\cf3 \
+	f.valueEnvir(z: 1);	\cf2 // x and y are looked up in the current Environment\cf3 \
+\});\
+\pard\pardeftab560\ql\qnatural
+
+\f2\fs18 \cf3 )\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf3 \
+\cf2 /* Let's look at a sound example from the Streams-Patterns-Events4 helpfile:\
+This is a somewhat contrived example of how the Environment might be used to manufacture SynthDefs.\
+Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because valueEnvir looks them up in the environment. \
+*/\cf3 \
+(\
+\cf4 var\cf3  a, b, c, n;\
+\
+n = 40; \cf2 // how many synths to create\cf3 \
+\
+\cf2 // 3 different processes\cf3 \
+a = \{ \cf4 arg\cf3  freq, amp, pan;\
+	\cf4 Pan2\cf3 .ar(\cf4 SinOsc\cf3 .ar(freq), pan, amp)\};\
+b =  \{ \cf4 arg\cf3  amp, pan, freq;\
+	\cf4 Pan2\cf3 .ar(\cf4 RLPF\cf3 .ar(\cf4 Saw\cf3 .ar(freq), freq * 6, 0.1), pan, amp)\};\
+c =  \{ \cf4 arg\cf3  pan, freq, amp;\
+	\cf4 Pan2\cf3 .ar(\cf4 Resonz\cf3 .ar(\cf4 GrayNoise\cf3 .ar, freq * 2, 0.1), pan, amp * 2)\};\
+\
+\cf2 // a task to automatically create the synthdefs \cf3 \
+\cf4 Task\cf3 (\{\
+	n.do(\{ \cf4 arg\cf3  i;\
+		\cf4 SynthDef\cf3 (\cf6 "Help-SPE4-EnvirDef-"\cf3  ++ i.asString, \{\
+			\cf4 var\cf3  out;\
+			\cf4 Environment\cf3 .use(\{\
+					\cf2 // set values in the environment\cf3 \
+				~freq = exprand(80, 600);\
+				~amp = 0.1 + 0.3.rand;\
+				~pan = 1.0.rand2;			\
+					\cf2 // call a randomly chosen instrument function \cf3 \
+					\cf2 // with values from the environment\cf3 \
+				out = [a,b,c].choose.valueEnvir;\
+			\});\
+			out = \cf4 CombC\cf3 .ar(out, 0.2, 0.2, 3, 1, out);\
+			out = out * \cf4 EnvGen\cf3 .kr( \
+				\cf4 Env\cf3 .sine, doneAction: 2, timeScale: 1.0 + 6.0.rand, levelScale: 0.3 \
+			);\
+			\cf4 Out\cf3 .ar( 0, out );\
+		\}).send(s);\
+		0.02.wait;\
+	\});\
+	\cf2 // play the synth\cf3 \
+	loop(\{\
+		\cf4 Synth\cf3 ( \cf6 "Help-SPE4-EnvirDef-"\cf3  ++ n.rand.asString );\
+		(0.5 + 2.0.rand).wait;\
+	\});\
+\}).play;\
+)\
+\
+\
+}

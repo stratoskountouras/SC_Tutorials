@@ -1,0 +1,67 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf110
+{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;\red0\green115\blue0;}
+\deftab560
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab560\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 b = \cf3 Buffer\cf2 .read(s, \cf4 "./sounds/Ultrabeat.aif"\cf2 ); \cf5 // remember to free the buffer later.\cf2 \
+\
+f = \cf3 SynthDef\cf2 (\cf6 \\help_PlayBuf\cf2 , \{ \cf3 | out = 0, bufnum = 0, loop = 1, rate = 1 |\cf2 	\
+	\cf3 Out\cf2 .ar(out, \
+		\cf3 PlayBuf\cf2 .ar(1, bufnum, \cf3 BufRateScale\cf2 .kr(bufnum) * rate, loop: loop, doneAction: 2)\
+	)\
+\}).play(s, [\cf6 \\out\cf2 , 0, \cf6 \\bufnum\cf2 , b]);\
+\
+\
+\cf5 /// =============\cf2 \
+\
+\
+(\
+\
+prepare = \{\
+\
+var ultrabeat, def;\
+\
+ultrabeat = \cf3 Buffer\cf2 .read(s, \cf4 "./sounds/Ultrabeat.aif"\cf2 ); \cf5 // remember to free the buffer later.\cf2 \
+\
+def = \cf3 SynthDef\cf2 (\cf6 \\help_PlayBuf\cf2 , \{ \cf3 | out = 0, bufnum = 0, loop = 1, rate = 1 |\cf2 	\
+	\cf3 Out\cf2 .ar(out, \
+		\cf3 PlayBuf\cf2 .ar(1, bufnum, \cf3 BufRateScale\cf2 .kr(bufnum) * rate, loop: loop, doneAction: 2)\
+	)\
+\});\
+\
+d.send(\cf3 Server\cf2 .default);\
+\
+\}\
+\
+\
+perform = \{\
+	f = \cf3 Synth\cf2 (\cf6 \\help_PlayBuf\cf2 , [\cf6 \\bufnum\cf2 , ultrabeat]);\
+	\}\
+\
+\cf5 /// =============\cf2 \
+\
+\
+\cf5 // the simplest version will give you a very long float\cf2 \
+(\
+w = \cf3 Window\cf2 .new.front;\
+n = \cf3 NumberBox\cf2 (w, \cf3 Rect\cf2 (20, 20, 150, 20));\
+a = \cf3 Slider\cf2 (w, \cf3 Rect\cf2 (20, 60, 150, 20))\
+	.action_(\{\
+		\cf3 var\cf2  therealvalue;\
+		therealvalue =  a.value - 0.5 * 5;\
+		n.value_(therealvalue);\
+		\
+		f.set(\cf6 \\rate\cf2 , therealvalue);\
+		\
+		\});\
+)\
+\};\
+\
+)\
+\
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+span.s1 {font: 13.0px Optima}
+span.s2 {text-decoration: underline}
+span.s3 {color: #000000}
+span.s4 {text-decoration: underline ; color: #0000ff}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 17.1:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>Creating Standalone SuperCollider applications</b></p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• About</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Standalones in different OS Platforms</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Making a standalone in Mac OSX</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Step-by-step process</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Additional customization</p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= CREATING STANDALONE APPS =================</b></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== ABOUT ======</b></p>
+<p class="p8">// Creating Standalones is a great way for sharing applications with the world or with specific users without having to worry about installing and running SuperCollider - or even without having to know that SC is involved at all. It also allows you to freeze a particular piece of finished code (ex. an instrument, a composition, an installation) into a package that works as-is, without having to worry about SC version compatibilities, re-installing quarks, plug-ins, extensions etc; you can add everything your application needs in the package, and it will always be there. In the same way, you can also remove everything you don't need from the package, meaning that your application can be as lightweight as you want/can make it.</p>
+<p class="p8">// Note that an SC application must be open-source and comply with SC's GPL.</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== STANDALONES IN DIFFERENT OS PLATFORMS ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// The description below is only for Mac OS X, the platform where it is the easiest to create standalones in. In Windows this takes considerably more work and there aren't any specific instructions as far as I know, but several forum posts can be found in the list archives. In Linux it is easier, but you still need some customization; some info can be found in the list as well, and there has been some recent activity which may lead to a more specific set of instructions.</p>
+<p class="p8">// If you want to create a cross-platform application, you will, of course, need to compile the standalones for each platform, but a first step is to ensure that your SC code is actually cross-platform compatible. This file explains in detail what you need to take care of: <a href="SC://Crossplatform"><span class="s2">Crossplatform</span></a></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== MAKING A STANDALONE IN MAC OSX ======</b></p>
+<p class="p8">// You can create your own Standalone, or modify an existing Standalone template - if one exists for the particular version of SC you're running and you're not concerned about having a bleeding edge, self-compiled SuperCollider version. If you're running one of the official builds, there should be one, if not yet, ask the sc-users list and Josh will probably whip one up for you in no time. Modifying the Standalone does not require you having Apple Developer Tools. However, if you do you can also easily customize a few more things, like SCs menu items (explained below).</p>
+<p class="p9"><br></p>
+<p class="p8">// You can download the latest (July 2010) standalone template for SC 3.4 (Mac OS X) here:</p>
+<p class="p10">"open http://sourceforge.net/projects/supercollider/files/Mac%20OS%20X/3.4RC/Standalone%20Template.app.zip/download"<span class="s3">.unixCmd</span></p>
+<p class="p8">// Or, look around here for an older or newer version - a new one for the official 3.4 release should be up a few days:</p>
+<p class="p10">"open http://sourceforge.net/projects/supercollider/files/"<span class="s3">.unixCmd</span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Step-by-step process --</b></p>
+<p class="p8">// The helpfiles that come with the distribution are very clear, so I suggest going through the <a href="SC://Modifying_Standalones"><span class="s4">Modifying_Standalones</span></a> file, and after that, <a href="SC://Creating-Standalone-Applications"><span class="s4">Creating-Standalone-Applications</span></a> - which describes how you can specify behaviors to happen upon loading the application with modifying the startup file.<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Additional Customizability<span class="Apple-converted-space">  </span>--</b></p>
+<p class="p8">// Here are just a couple of things not mentioned in these files, for further customizability, that you can do after you're done with what these files describe:</p>
+<p class="p9"><br></p>
+<p class="p8">// • Making it <b>lightweight</b>:</p>
+<p class="p8">// <span class="Apple-tab-span">	</span>Step 4 in Modifying Standalones explains how to add files; you can also remove classes, plugins, extensions that you don't use, to loose some weight - just make sure you test afterwards to make sure things do still work, as there is a high probability that many things you think you don't use are used inside other classes.</p>
+<p class="p9"><br></p>
+<p class="p8">// • You can <b>create your own icon </b>for your app:</p>
+<p class="p8">//<span class="Apple-tab-span">	</span>- First, you will need an application that converts any image format to .icns. I 've been using <i>FastIcns</i>, and it works pretty nice (and it's free):<span class="Apple-converted-space"> </span></p>
+<p class="p10"><span class="s3"><span class="Apple-tab-span">	</span></span>"open http://www.versiontracker.com/dyn/moreinfo/macosx/31205"<span class="s3">.unixCmd</span></p>
+<p class="p8">//<span class="Apple-tab-span">	</span>- Once you have the .icns file, all you need to do is swap the existing SCcube.icns inside <i>Standalone Template/ Contents / Resources </i>with your own icon! The easiest way to do that, is to just name your icon 'SCcube.icns'; if you want to use your own name you should change the reference to SCcube.icns to a reference to your file's name into the .plist files, and possibly elswhere.</p>
+<p class="p9"><br></p>
+<p class="p8">// • You can <b>modify the main menu </b>of your app:</p>
+<p class="p8">//<span class="Apple-tab-span">	</span>- If all you want to do is add some more menu items to the main menu of your standalon application, you can do that within SC, using the <a href="SC://CocoaMenuItem"><span class="s2">CocoaMenuItem</span></a> and it's subclasses: <a href="SC://SCMenuItem"><span class="s4">SCMenuItem</span></a>, <a href="SC://SCMenuGroup"><span class="s4">SCMenuGroup</span></a>, <a href="SC://SCMenuSeparator"><span class="s4">SCMenuSeparator</span></a>. Look at the helpfiles for some simple examples.</p>
+<p class="p8">// Note that you would most likely want to add this behavior in the startup file of your application.</p>
+<p class="p8">//<span class="Apple-tab-span">	</span>- If you want to remove any of SCs standard menu items, or create more complex nesting, you 'll need Apple Developer Tools. You can open the MainMenu.nib file located in "Standalone Template.app/Contents/Resources/English.lproj/MainMenu.nib" with InterfaceBuilder.app, from where you can edit, remove and add items, assign keyboard shortcuts to them, as well as specific actions to be performed by SC when selecting those items.</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+</body>
+</html>

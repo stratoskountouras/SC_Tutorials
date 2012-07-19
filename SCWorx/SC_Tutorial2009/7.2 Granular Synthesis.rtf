@@ -1,0 +1,317 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Geneva;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red0\green115\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red191\green0\blue0;\red0\green0\blue255;\red0\green0\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs36 \cf2 Granular Synthesis\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\cf3 Server\cf0 .default=s=\cf3 Server\cf0 .internal;\
+
+\f1 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+In Granular Synthesis sounds are modelled out of microscopic particles of sound, short grains in the region of 10-100 milliseconds long.\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+There are lots of choices for these grains, they might be enveloped sine tones, or tiny extracts of sampled sound:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0 \cf0 b = \cf3 Buffer\cf0 .read(s,\cf4 "sounds/a11wlk01.wav"\cf0 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 //three different possible grains \cf0 \
+(\
+\{\
+\cf3 var\cf0  singrain1, singrain2, sfgrain;\
+singrain1=\cf3 SinOsc\cf0 .ar(440,0,\cf3 XLine\cf0 .kr(1.0, 0.0001, 0.05));\
+singrain2=\cf3 FSinOsc\cf0 .ar(800, 0.0, \cf3 Line\cf0 .kr(1.0,0,0.05).squared);\
+sfgrain=(\cf3 PlayBuf\cf0 .ar(1,b.bufnum, \cf3 BufRateScale\cf0 .kr(b.bufnum)))*\cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 ([0,1,1,0],[0.01,0.01,0.01], -4));\
+\
+[singrain1,singrain2,sfgrain]\
+\}.plot(0.1,s)\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+When lots of these microsounds are combined into big swarms, we can make macroscopic soundscapes.  \
+\
+How would we control a swarm? Via the scheduling we introduced last week...\
+\
+\
+\cf5 //simple sine grain synthdef - note the all important doneAction\cf0 \
+(\
+\cf3 SynthDef\cf0 (\cf2 \\sinegrain\cf0 , \{\cf3 arg\cf0  pan, freq, amp; \cf3 var\cf0  grain; \
+\
+grain= \cf3 SinOsc\cf0 .ar(freq, 0, amp)*(\cf3 XLine\cf0 .kr(1.001,0.001,0.1,doneAction:2)-0.001);\
+\
+\cf3 Out\cf0 .ar(0,\cf3 Pan2\cf0 .ar(grain, pan))\}).send(s); \
+)\
+\
+\cf5 //listen to a single grain;\cf0 \
+\cf3 Synth\cf0 (\cf2 \\sinegrain\cf0 ,[\cf2 \\freq\cf0 ,rrand(100,10000),\cf2 \\amp\cf0 , exprand(0.05,0.1), \cf2 \\pan\cf0 , 1.0.rand2]);\
+\
+\cf5 //schedule 100 random grains over 1 second \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 (\
+\{\
+100.do\{arg i; \
+\
+	\cf3 Synth\cf0 (\cf2 \\sinegrain\cf0 ,[\cf2 \\freq\cf0 ,rrand(100,10000),\cf2 \\amp\cf0 , exprand(0.05,0.1), \cf2 \\pan\cf0 , 1.0.rand2]);  \
+	0.01.wait\
+\}; \
+\}.fork\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Over time, we can change the characteristics of the swarm, for example, playing with its density, and control individual parameters of grains within tendency masks or following certain paths\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 //schedule 200 random grains over time, decreasing the range of allowed random frequencies and lowering the density over time\cf0 \
+(\
+\{\
+200.do\{arg i; \
+var timeprop = (i/199.0)**3;\
+\
+	\cf3 Synth\cf0 (\cf2 \\sinegrain\cf0 ,[\cf2 \\freq\cf0 ,exprand(100,5000-(20*i)),\cf2 \\amp\cf0 , exprand(0.05,0.1), \cf2 \\pan\cf0 , 1.0.rand2]);  \
+	rrand((timeprop*0.1).max(0.01),timeprop*0.3).wait\
+\}; \
+\}.fork\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 //simple playbuf grain synthdef - note the all important doneAction\cf0 \
+(\
+\cf3 SynthDef\cf0 (\cf2 \\sfgrain\cf0 , \{\cf3 arg\cf0  bufnum=0, pan=0.0, startPos=0.0, amp=0.1, dur=0.04; \
+\cf3 var\cf0  grain; \
+\
+grain= \cf3 PlayBuf\cf0 .ar(1,bufnum, \cf3 BufRateScale\cf0 .kr(bufnum), 
+\f0 1, \cf3 BufFrames\cf0 .ir(bufnum)*startPos, 0
+\f1 )*(\cf3 EnvGen\cf0 .kr(\cf3 Env\cf0 .perc(0.01,dur),doneAction:2)-0.001);\
+\
+\cf3 Out\cf0 .ar(0,\cf3 Pan2\cf0 .ar(grain, pan))\}).send(s); \
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0 \cf0 b = \cf3 Buffer\cf0 .read(s,\cf4 "sounds/a11wlk01.wav"\cf0 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf5 //individual grain\cf0 \
+\cf3 Synth\cf0 (\cf2 \\sfgrain\cf0 ,[\cf2 \\bufnum\cf0 , b.bufnum, \cf2 \\startPos\cf0 ,rrand(0.0,1.0),\cf2 \\amp\cf0 , exprand(0.005,0.1), \cf2 \\pan\cf0 , 1.0.rand2]);  \
+\
+\
+\cf5 //schedule 200 random soundfile playback grains over time, with random offset positions into the soundfile and lowering the density over time\cf0 \
+(\
+\{\
+200.do\{\cf3 arg\cf0  i; \
+\cf3 var\cf0  timeprop = (i/199.0)**3;\
+\
+	\cf3 Synth\cf0 (\cf2 \\sfgrain\cf0 ,[\cf2 \\bufnum\cf0 , b.bufnum, \cf2 \\startPos\cf0 ,rrand(0.0,timeprop),\cf2 \\amp\cf0 , exprand(0.005,0.1), \cf2 \\pan\cf0 , 1.0.rand2]);  \
+	rrand((timeprop*0.1).max(0.01),timeprop*0.4).wait\
+\}; \
+\}.fork\
+)\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Each grain might have many different parameters attached to it; some salient ones might be the pitch, the duration of the envelope, the pan position in the stereo field or the amplitude. The overall cloud can also have some sort of distribution for these parameters, which might lead to a tendency mask determining the range of frequencies of the particles allowed at differnet points in time, or control of the evolving density of the cloud. \
+\
+The composer's work is to both specify the grains, and also control how they are used over time to make an interesting compositional structure. \
+\
+\
+These techniques were first conceptualised and explored in instrumental and electronic music by Iannis Xenakis (late 50s), and further investigated in computer implementation, notably by Curtis Roads and Barry Truax, from the early 1970s on. Real-time systems became plausible in the 1980s.  \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Because you can take tiny slices of sound, granular processing allows one to perform quite dramatic transformations on sound sources. The sound can be made to disappear into a stream of tiny quanta and reappear, coalescing out of distinct particles:\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 var\cf0  w, slid, lastval;\
+lastval=0.0;\
+\
+w=\cf3 SCWindow\cf0 (\cf4 "My Window"\cf0 , \cf3 Rect\cf0 (100,500,200,200)); \
+\cf5 //A 200 by 200 window appears at screen co-ordinates (100, 500)\cf0 \
+\
+slid=\cf3 SCSlider\cf0 (w,\cf3 Rect\cf0 (10,10,150,40)); \cf5 //a basic slider object \cf0 \
+\
+slid.action_(\{lastval= slid.value;\}); \cf5 //this is the callback- the function is called whenever you move the slider\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 inf\cf0 .do\{\cf3 arg\cf0  i; \
+\
+\cf3 var\cf0  prop, timestart, timeend;\
+\
+prop= (i%300)/300;\
+\
+timestart= prop*0.8;\
+timeend= prop*(0.8+(0.1*lastval));\
+\
+	\cf3 Synth\cf0 (\cf2 \\sfgrain\cf0 ,[\cf2 \\bufnum\cf0 , b.bufnum, \cf2 \\startPos\cf0 ,rrand(timestart,timeend),\cf2 \\amp\cf0 , exprand(0.005,0.1), \cf2 \\pan\cf0 , lastval.rand2, \\dur, 0.1+(lastval*0.5)]);  \
+	\cf5 //max in this to avoid ever going near 0.0 wait time, which would crash the computer!\cf0 \
+	(((lastval*0.2)+0.01).max(0.01)).wait\
+\}; \
+\}.fork;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+\
+w.front;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+Some classes to explore:\
+\
+[\cf3 \ul \ulc3 PitchShift\cf0 \ulnone ] \cf5 //A granular pitchshifter\cf0 \
+\
+[\cf3 \ul TGrains\cf0 \ulnone ]	\cf5 //efficient granular synthesis on a buffer, from a single UGen\cf0 \
+\
+Also see various granular UGens by Josh Parmenter added for SC3.2: {\field{\*\fldinst{HYPERLINK "SC://GrainSin"}}{\fldrslt \cf6 GrainSin}}\cf7 , {\field{\*\fldinst{HYPERLINK "SC://GrainFM"}}{\fldrslt \cf6 GrainFM}}, {\field{\*\fldinst{HYPERLINK "SC://GrainBuf"}}{\fldrslt \cf6 GrainBuf}}, {\field{\*\fldinst{HYPERLINK "SC://GrainIn"}}{\fldrslt \cf6 GrainIn}}, {\field{\*\fldinst{HYPERLINK "SC://Warp1"}}{\fldrslt \cf6 Warp1}}\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 \
+To read more on these techniques, Curtis Roads's Computer Music Tutorial is a good introduction, and his Microsound book explores many more possibilities. \
+\
+\
+\
+\
+}

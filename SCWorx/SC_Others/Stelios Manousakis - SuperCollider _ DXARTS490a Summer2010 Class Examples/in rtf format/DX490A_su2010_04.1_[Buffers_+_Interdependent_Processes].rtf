@@ -1,0 +1,271 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;\f1\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green0\blue191;\red0\green115\blue0;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 4.1:
+\b0 \
+
+\b 	Buffers and interdependent processes
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Buffers \
+				- About\
+				- Synchronous vs Asyncronous\
+					completion messages\
+					action function\
+			\'95 Condition\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 \
+\
+
+\b \cf2 // ================= BUFFERS =================
+\b0 \cf3 \
+\cf2 // Buffers are essentially arrays of floating point numbers (up to 32-bit), that you load in RAM and store in the Server, making them globally available. We tend to use buffers for audio, but you can really put in them any kind of data you 'd like to store temporarily or permanently.\cf3 \
+\cf2 // The number of buffers you can load in a Server is pre-assigned before you boot the Server from the ServerOptions. The default is 1024 buffers: \cf3 \
+\cf4 Server\cf3 .internal.options.numBuffers\
+\cf2 // The actual number of buffers you can load simultaneously, really depends on their length, and on the available memory of your machine. \cf3 \
+\
+\cf2 // Buffers can be accessed by referring to their index number inside the server, their bufnum; think of this as accessing a specific member inside an array. When loading a buffer, a bufnum will be automatically allocated to it, unless you provide one yourself to know where it is. Nevertheless, a much easier way to access a buffer is to assign it a specific variable in the language.\cf3 \
+b = {\field{\*\fldinst{HYPERLINK "SC://Buffer"}}{\fldrslt \cf4 Buffer}}.read(s, \cf5 "sounds/a11wlk01.wav"\cf3 );\
+b.bufnum.postln; \cf2 // see its bufnum\cf3 \
+\
+\cf2 // Loading buffers takes up valuable memory space, so don't forget to .free a buffer once you're done using it! Look at the memory load increase and decrease in Activity Monitor (OSX only):\cf3 \
+\cf5 "open '/Applications/Utilities/Activity Monitor.app'"\cf3 .unixCmd\
+\cf2 // let's load 20 buffers of 20 seconds:\cf3 \
+s.waitForBoot\{ ~a = \cf4 Array\cf3 .fill(20, \{\cf4 Buffer\cf3 .alloc(s,44100 * 12.0, 2)\})\};\
+\cf2 // You can see that the memory load increased\cf3 \
+\cf2 // And now:\cf3 \
+20.do(\{\cf4 arg\cf3  i; ~a[i].free;\})\
+\cf2 // or \cf3 \
+~a.collect(\cf4 _\cf3 .free;)\
+\cf2 // It went back down again\cf3 \
+\
+
+\b \cf2 // ====== Synchronous vs Asyncronous ======
+\b0 \cf3 \
+\cf2 // A buffer of just 1 second with a 44.1kHz sampling rate contains 44100 floating point values. Allocating the appropriate RAM and sending all that data to the server to fill that space up may take a while - and you can't really know how long, as it depends on your computer's available resources at any given moment (usually less than a second, but for very very large soundfiles it can take much longer). In order to make sure that this activity will not get in the way of other processes that are running, the Server loads buffers in a lower priority thread, running them asynchronously - that is, at its own convenience.\cf3 \
+\
+\cf2 // Given this property of reading (and writing) buffers, the Buffer class provides you with two methods for knowing when a buffer has finished loading (or writing), so that you can go on using it:\cf3 \
+\
+\
+
+\b \cf2 // ------ Completion messages ------
+\b0 \cf3 \
+\cf2 // This is a second OSC command (a direct command) included in the buffer filling message sent to the server, and ensuring it will happen immediately upon the first command has been executed.\cf3 \
+\
+\
+
+\b \cf2 // ------ Action functions ------
+\b0 \cf3 \
+\cf2 // In this case, the Server sends back to sclang an OSC message once the buffer bussiness has finished; upon reception of the message, the provided function gets evaluated. Action functions take a little extra time, as they need an additional message coming back from the server, but are more flexible.\cf3 \
+\
+\cf2 // Try this example, using a completion message:\cf3 \
+s.boot;\
+\cf2 // allocate an array of Buffers and fill them with different harmonics\cf3 \
+(\
+b = \cf4 Buffer\cf3 .allocConsecutive(8, s, 4096, 1, \{ \cf4 |buf, i|\cf3 \
+	buf.sine1Msg((1..((i+1)*6)).reciprocal) \cf2 // completion messages to fill each buffer as soon as it's created\cf3 \
+\});\
+		\
+a = \{ \cf4 VOsc\cf3 .ar(\cf4 SinOsc\cf3 .kr(0.5, 0).range(b.first.bufnum + 0.1, b.last.bufnum - 0.1), [440, 441], 0, 0.2) \}.play;\
+)\
+\cf2 // free the synth:\cf3 \
+a.free; \
+\cf2 // iterate over the array of buffers and free it:\cf3 \
+\pard\pardeftab560\li1120\fi-1120\ql\qnatural
+\cf3 b.do(\cf4 _\cf3 .free);\
+
+\f1\fs18 		\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 // Another example, using an action function:
+\f1\fs18 \cf2 		
+\f0\fs28 \cf3 \
+\pard\pardeftab560\li1700\fi-1700\ql\qnatural
+\cf3 (\
+b = \cf4 Buffer\cf3 .read(s, \cf5 "sounds/a11wlk01.wav"\cf3 , action: \{ \cf4 arg\cf3  buffer; \
+	(\cf5 "After update:"\cf3  + buffer.numFrames).postln;\
+	x = \{ \cf4 PlayBuf\cf3 .ar(1, buffer, \cf4 BufRateScale\cf3 .kr(buffer)) \}.play;\
+\});\
+(\cf5 "Before update:"\cf3  + b.numFrames).postln; \cf2 // notice that this happens first!\cf3 \
+)\
+x.free; b.free;\
+\pard\pardeftab560\li1120\fi-1120\ql\qnatural
+
+\f1\fs18 \cf3 		\
+\
+		\
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs28 \cf2 ///// Also check these two methods inside Buffer: very handy if you want to send very large data\cf3 \
+.loadCollection\
+.sendCollection\
+\
+\cf2 // Notice that if you want to create and modify a buffer within a SynthDef, you should use {\field{\*\fldinst{HYPERLINK "SC://LocalBuf"}}{\fldrslt 
+\b \cf2 LocalBuf}} instead!\cf3 \
+\
+\
+
+\b \cf2 // ================= CONDITION =================
+\b0 \cf3 \
+\cf2 // \cf2 \ul \ulc0 [\ulc6 Condition\ulc0 ]\cf2 \ulnone  is a very useful class which you can use to create networks of interdependend processes:\cf3 \
+\cf2 // For example:\cf3 \
+\
+(\
+\cf2 // create a condition\cf3 \
+c = \cf4 Condition\cf3 .new(\cf4 false\cf3 );\
+\
+\cf2 // a process\cf3 \
+~process1 = \{\cf4 arg\cf3  input;\
+	r = \cf4 Routine\cf3  \{\
+			\cf2 // 1\cf3 \
+			input.postln;\
+			1.wait;\
+			\cf2 // 2\cf3 \
+			\cf5 "waited for 1 second"\cf3 .postln;\
+			input = (input * 10).postln;\
+			1.wait;\
+			\cf2 // 3\cf3 \
+			\cf5 "waited for another second, now waiting for you ... "\cf3 .postln;\
+			input = (input * 10).postln;\
+			c.wait;\
+			\cf2 // 4\cf3 \
+			\cf5 "the condition has stopped waiting."\cf3 .postln;\
+			input = (input * 10).postln;\
+			1.wait;\
+			\cf2 // 5\cf3 \
+			\cf5 "waited for another second"\cf3 .postln;\
+			\cf5 "waiting for you ... "\cf3 .postln;\
+			c.test = \cf4 false\cf3 ;\
+			input = (input * 100).postln;\
+			c.wait;\
+			\cf2 // 6\cf3 \
+			\cf5 "the condition has stopped waiting."\cf3 .postln;\
+			input = (input * 10).postln;\
+			1.wait;\
+			\cf2 // 7\cf3 \
+			input = (input * 0.0001).postln;\
+			\cf5 "the end"\cf3 .postln;\
+		\};\
+		r.play; \
+\};\
+\
+\
+\cf2 // another process\cf3 \
+~process2 = \{\cf4 arg\cf3  input;\
+	if ((input > 0).postln, \{c.test = \cf4 true\cf3 ;\
+		c.signal\})\
+\};\
+);		\
+	\
+~process1.value(23); \cf2 // start first process\cf3 \
+\cf2 // do this when it stops:\cf3 \
+~process2.value(-1); \cf2 // second process is false; nothing happens\cf3 \
+\cf2 // try again:\cf3 \
+~process2.value(1.0);\
+\cf2 // once more:\cf3 \
+~process2.value(1.0);\
+\
+\
+\cf2 ///////////////////////////////\cf3 \
+\cf2 // Let's try a sound example:\
+(
+\i note that this exampe is just for demonstration purposes, you woudn't ordinarily want to use \{\}.play for creating synths in such manner
+\i0 ):\cf3 \
+\
+s.boot;\
+\cf2 // allocate a buffer:\cf3 \
+~test = \cf4 Buffer\cf3 .alloc(s, 1024); \
+\
+(\
+t = \cf4 TempoClock\cf3 (1); \
+\cf2 // create a condition\cf3 \
+c = \cf4 Condition\cf3 .new(\cf4 false\cf3 );\
+\
+\cf2 // A function to create random wavetables:\cf3 \
+~wrand  = \{\cf4 |bufnum, startTime, size, segments, minVal, maxVal, interp, action|\cf3   \
+		\cf4 var\cf3   pointVals, segLengths, env, sampVals;\
+		pointVals = \cf4 Array\cf3 .rand(segments, minVal, maxVal).cubed;  \
+		segLengths = (\cf4 Array\cf3 .rand(segments - 1, 1, 100).cubed).normalizeSum;\
+		env = \cf4 Env\cf3 (pointVals, segLengths, interp);\
+		sampVals = sampVals.addAll(env.asSignal(size));\
+		\cf4 SystemClock\cf3 .sched(startTime, \{bufnum.sendCollection(sampVals, action: action)\});\
+\};\
+\
+\cf2 // the function to make some sound in a Routine:\cf3 \
+~process1 = \{\cf4 arg\cf3  interpol; \cf2 // this should be a valid interpolation method\cf3 \
+	r = \cf4 Routine\cf3  (\{	\
+		loop (\{\
+		~wrand.value(~test, 0, ~test.numFrames, 5.rrand(500), -1.rrand(-0.333), 1.0.rrand(0.333), interpol, 2, action: \{\cf4 |buf|\cf3 \
+			\cf2 // do this once the buffer is ready:\cf3 \
+			\cf2 // free the synths if they're playing already\cf3 \
+			p.free;\
+			q.free;\
+			\cf2 // then start two new instances\cf3 \
+			p = \{ \cf4 Out\cf3 .ar(0, \cf4 PlayBuf\cf3 .ar(1, ~test, \cf4 BufRateScale\cf3 .kr(~test) * 1.0111, loop: 1) * 0.2 )\}.play;\
+			q = \{ \cf4 Out\cf3 .ar(1, \cf4 PlayBuf\cf3 .ar(1, ~test, \cf4 BufRateScale\cf3 .kr(~test) * 0.98567, loop: 1) * 0.2 )\}.play;\
+		\});\
+		[0.125, 0.25, 0.5, 1].wchoose([0.85, 0.09, 0.04, 0.02]).wait;\
+		c.wait;\
+		\cf2 // do it twice to avoid glitches from freeing\cf3 \
+		~wrand.value(~test, 0, ~test.numFrames, 5.rrand(500), -1.rrand(-0.333), 1.0.rrand(0.333), interpol, 2, action: \{\cf4 |buf|\cf3 \
+			\cf2 // free the other two synths if they're playing\cf3 \
+			x.free;\
+			y.free;\
+			\cf2 // then start two more new instances\cf3 \
+			x = \{ \cf4 Out\cf3 .ar(0, \cf4 PlayBuf\cf3 .ar(1, ~test, \cf4 BufRateScale\cf3 .kr(~test) * 1.0139, loop: 1) * 0.2 )\}.play;\
+			y = \{ \cf4 Out\cf3 .ar(1, \cf4 PlayBuf\cf3 .ar(1, ~test, \cf4 BufRateScale\cf3 .kr(~test) * 0.98432, loop: 1) * 0.2 )\}.play;\
+		\});\
+		[0.125, 0.25, 0.5, 1].wchoose([0.85, 0.1, 0.04, 0.01]).wait;\
+		c.wait;\
+		\});\
+	\});\
+	r.play(t); \
+\};\
+)\
+ \
+~process1.value(\cf7 \\sin\cf3 ); \cf2 // choose an interpolation type\cf3 \
+(\
+\cf2 // start triggering random wavetables by focusing on the SCWindow and pressing the spacebar; stop with any key\cf3 \
+w = \cf4 SCWindow\cf3 .new(\cf5 "random wavetable trigger"\cf3 );\
+w.view.keyDownAction = \{ \cf4 arg\cf3  view, char, modifiers, unicode, keycode;\
+	if (unicode == 32, \{\cf5 "start"\cf3 .postln; c.test = \cf4 true\cf3 ; c.signal\}, \{\cf5 "stop"\cf3 .postln; c.test = \cf4 false\cf3 ; c.signal\});\
+\};\
+w.front\
+)\
+t.tempo_(0.8); \cf2 // change the tempo\cf3 \
+p.free; q.free; x.free; y.free;\
+~test.free\
+\
+\
+\
+\
+\cf2 /* LAB exercise:\
+Using what you 've learned this week about scheduling and interfacing, make up a small instrument that incorporates timed processes controllable through interaction\
+*/\cf3 \
+}

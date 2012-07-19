@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="949.54">
+<style type="text/css">
+p.p1 {margin: 0.0px 0.0px 1.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p2 {margin: 0.0px 0.0px 1.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+p.p3 {margin: 0.0px 0.0px 1.0px 0.0px; font: 17.0px Optima; color: #bf0000}
+p.p4 {margin: 0.0px 0.0px 1.0px 0.0px; font: 13.0px Optima; color: #bf0000}
+p.p5 {margin: 0.0px 0.0px 1.0px 0.0px; font: 15.0px Optima; color: #bf0000}
+p.p6 {margin: 0.0px 0.0px 1.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 9.0px Monaco; color: #000000; min-height: 12.0px}
+p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #bf0000}
+p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000; min-height: 17.0px}
+p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #606060}
+p.p11 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Optima; color: #000000}
+p.p12 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Optima; color: #bf0000}
+span.s1 {font: 13.0px Optima}
+span.s2 {font: 15.0px Optima}
+span.s3 {color: #000000}
+span.s4 {text-decoration: underline ; color: #0000ff}
+span.s5 {color: #0000bf}
+span.s6 {color: #007300}
+span.s7 {color: #606060}
+span.s8 {color: #bf0000}
+span.Apple-tab-span {white-space:pre}
+</style>
+</head>
+<body>
+<p class="p1"><b>/*<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p3"><b>DX490a - Summer 2010</b></p>
+<p class="p4"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>Instructor: Stelios Manousakis</p>
+<p class="p2"><b>==========================================================</b><span class="s1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p5"><b>Class 17.2:</b></p>
+<p class="p5"><b><span class="Apple-tab-span">	</span>SuperCollider Audio Unit plug-ins</b></p>
+<p class="p1"><span class="s2"><b><span class="Apple-tab-span">	</span></b></span><span class="Apple-tab-span">	</span>Contents:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• About Audio Unit (AU) plug-ins</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• scsynth as an Audio Unit (AU) plug-in</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Installation</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Using scsynth as an AU</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>• Compiling 'standalone' Audio Unit (AU) plug-ins from within SC</p>
+<p class="p1"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>- Example: creating an SC Audio Unit plugin<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p2"><b>==========================================================</b></p>
+<p class="p1"><b>*/</b></p>
+<p class="p6"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p7"><br></p>
+<p class="p8"><b>// ================= CREATING AUDIO UNIT PLUG-INS WITH SC =================</b></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== ABOUT AUDIO UNIT PLUG-INS ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// Here is the wikipedia explanation:<span class="Apple-converted-space"> </span></p>
+<p class="p8">//<i> "Audio Units (AU) are a system-level plug-in architecture provided by Core Audio in Mac OS X developed by Apple Computer. Audio Units are a set of application programming interface services provided by the operating system to generate, process, receive, or otherwise manipulate streams of audio in near-real-time with minimal latency. It may be thought of as Apple's architectural equivalent to the other popular plug-in format, Steinberg's VST."</i></p>
+<p class="p9"><br></p>
+<p class="p8">// You can read more about Core Audio and AU Units in Apple's Core Audio page:</p>
+<p class="p10">"open http://developer.apple.com/iphone/library/documentation/MusicAudio/Conceptual/CoreAudioOverview/Introduction/Introduction.html#//apple_ref/doc/uid/TP40003577-CH1-SW1"<span class="s3">.unixCmd</span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// There are two ways in which you can use SC code as an AU plugin from any host program in Mac OSX that supports Audio Units.</p>
+<p class="p8">//<span class="Apple-tab-span">	</span>1. Using SuperCollider servers from within the host. <span class="Apple-converted-space"> </span></p>
+<p class="p8">//<span class="Apple-tab-span">	</span>2. Compiling an AU plugin from SC using the <a href="../../../../../../Users/steliosm/Library/Application Support/SuperCollider/quarks/AudioUnitBuilder/AudioUnitBuilder.html"><span class="s4">AudioUnitBuilder</span></a> quark.<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// This will create an autonomous plug-in for you that you can use and share without having to open SC, but having all its parameters being accesible and setable from your host.</p>
+<p class="p9"><br></p>
+<p class="p8">// Both these methods use the "SuperColliderAU.component" which comes together with SC and can be found in the application's main directory.<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8">// Here is a list of some (not all) programs supporting AUs:</p>
+<p class="p10">"open http://swiki.hfbk-hamburg.de:8888/MusicTechnology/823"<span class="s3">.unixCmd</span></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== SCSYNTH AS AN AUDIO UNIT PLUGIN ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// This method loads an scsynth server inside the host; each embedded scsynth (you can have many) is assigned a specific port in the loopback IP "127.0.0.1", through which you can talk to it as you would with a server inside your SC, or in a remote machine. By default this plugin does nothing. You need to write your own code in sclang and send messages to the specific scsynth instance, and make things happen inside your host application. This requires working in both your host and SC at the same time.</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Installation --</b></p>
+<p class="p8">// The first thing you need to do is copy the "SuperColliderAU.component" file into one of these paths:</p>
+<p class="p8">// <span class="Apple-tab-span">	</span>Library/Audio/Plug-ins/Components <span class="Apple-converted-space"> </span></p>
+<p class="p8">//<span class="Apple-tab-span">	</span>~/Library/Audio/Plug-ins/Components</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Using scsynth as an AU --</b></p>
+<p class="p8">// • 1: In your host application, make a new track and load an instance of the plug-in to it. If the host supportst this plugin (unfortunately, not all do - ex. Reaper v.3.11 doesn't yet), you will see in the plug-ins interface a 'Port nr' indication. This is the OSC port through which you can communicate between the host and SC. Every new instance of the SuperColliderAU that you make will give you a new port, so you can have multiple isntances open.</p>
+<p class="p8">// • 2: In SC you have to:</p>
+<p class="p8">//<span class="Apple-tab-span">	</span>a: <span class="Apple-tab-span">	</span>Connect to the particular scsynth instance:</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>~auServer1 = </span><span class="s5">Server</span><span class="s3">(</span><span class="s6">\scau1</span><span class="s3">, </span><span class="s5">NetAddr</span><span class="s3">(</span><span class="s7">"127.0.0.1"</span><span class="s3">, 9992)); </span>// Change the port from 9992 to the one seen in the plug-ins interface inside your host</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~auServer1.serverRunning = <span class="s5">true</span>; <span class="s8">// turn it on</span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>~auServer1.ping(10); </span>// confirms that communication is working</p>
+<p class="p9"><br></p>
+<p class="p8">// &gt;&gt; SC as a Filter/Effect</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// Now let's create a quick ring-modulator effect:</p>
+<p class="p11"><span class="Apple-tab-span">	</span>z = { <span class="s5">AudioIn</span>.ar([1,2]) * <span class="s5">SinOsc</span>.ar(<span class="s5">MouseX</span>.kr(100, 1000)) }.play(~auServer1);</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// You can activate many synths inside the same plug-in.<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// Here's a randomized Comb delay filter</p>
+<p class="p11"><span class="Apple-tab-span">	</span>x = { <span class="s5">AudioIn</span>.ar([1,2]) + (<span class="s5">CombC</span>.ar(<span class="s5">AudioIn</span>.ar([1,2]), 1, <span class="s5">LFDNoise3</span>.ar(<span class="s5">MouseX</span>.kr(0.0001, 100)).range(0.1, 0.9), 0.5))}.play(~auServer1);</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>z.free; </span>// free it, like you would normally do</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>x.free; </span>// free it, like you would normally do</p>
+<p class="p9"><br></p>
+<p class="p8">// &gt;&gt; SC as a Generator<span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// Create a generator within your host.<span class="Apple-converted-space"> </span></p>
+<p class="p12"><span class="s3"><span class="Apple-tab-span">	</span></span>// Note something strange (tested in Logic): there needs to be a soundfile loaded for the code below to work! Maybe the SuperColliderAU assumes it is a filter, so it only gets activated when there is something to process, regardless of whether it actually uses audio input or not?...</p>
+<p class="p11"><span class="Apple-tab-span">	</span>g = { <span class="s5">RosslerL</span>.ar(<span class="s5">MouseX</span>.kr(20, <span class="s5">SampleRate</span>.ir), 0.36, 0.35, 4.5) * 0.3 }.play(~auServer1);</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>g.free; </span>// free it, like you would normally do</p>
+<p class="p8">// &gt;&gt; Multiple instances</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// create a second instance of the SuperColliderAU plugin, and put it on the same channel</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>~auServer2 = </span><span class="s5">Server</span><span class="s3">(</span><span class="s6">\scau2</span><span class="s3">, </span><span class="s5">NetAddr</span><span class="s3">(</span><span class="s7">"127.0.0.1"</span><span class="s3">, 9996)); </span>// Change the port from 9992 to the one seen in the plug-ins interface inside your host</p>
+<p class="p11"><span class="Apple-tab-span">	</span>~auServer2.serverRunning = <span class="s5">true</span>; <span class="s8">// turn it on</span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span>~auServer2.ping(10); </span>// confirms that communication is working</p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// Now, turn on the filter to process the generator's output, within the host's channel!</p>
+<p class="p11"><b><span class="Apple-tab-span">	</span></b>x = { <span class="s5">AudioIn</span>.ar([1,2]) + (<span class="s5">CombC</span>.ar(<span class="s5">AudioIn</span>.ar([1,2]), 1, <span class="s5">LFDNoise3</span>.ar(<span class="s5">MouseX</span>.kr(0.0001, 100)).range(0.1, 0.9), 0.5))}.play(~auServer2);</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ====== COMPILING 'STANDALONE' AUDIO UNIT PLUGINS WITHIN SC ======</b></p>
+<p class="p9"><br></p>
+<p class="p8">// You can also create autonomous plug-ins. These compile an instance of scsynth that can be controlled through a standard interface from within the host, without requiring sclang or any other program to control them through OSC. Plugins made in this manner can be opened and used in the same manner as any commercial AU plug-in.</p>
+<p class="p9"><br></p>
+<p class="p8">// • First, get the AudioUnitBuilder quark:</p>
+<p class="p11"><span class="s5">Quarks</span>.install( <span class="s7">"AudioUnitBuilder"</span>, checkoutIfNeeded: <span class="s5">false</span>)</p>
+<p class="p8">// This is a utility class, allowing you to author AU plug-ins from inside sclang!</p>
+<p class="p8">// • You need to have Apple Developer Tools installed, as this class needs Rez for compiling. This would be located together with the Developer package, for example here: "/Developer/usr/bin/Rez"</p>
+<p class="p9"><br></p>
+<p class="p11"><span class="s5">CombC</span>.ar(<span class="s5">AudioIn</span>.ar([1,2]), 1, <span class="s5">LFDNoise3</span>.ar(<span class="s5">MouseX</span>.kr(0.0001, 100)).range(0.1, 0.9), 0.5))}.play(~auServer2);</p>
+<p class="p9"><br></p>
+<p class="p9"><br></p>
+<p class="p8"><b>// ------ Example: creating an SC Audio Unit plugin --</b></p>
+<p class="p8">// Here is an example, have a look at the AudioUnitBuilder help file for more information</p>
+<p class="p11">(</p>
+<p class="p11"><span class="s5">var</span> name, func, specs, componentType, componentSubtype, builder;</p>
+<p class="p9"><br></p>
+<p class="p8"><span class="s3">name = </span><span class="s7">"dx490a_XComb"</span><span class="s3">; </span>// name of the plugin</p>
+<p class="p11">func =<span class="Apple-converted-space">  </span>{<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// arguments that are going to be setable from the AU plug-in's interface</p>
+<p class="p11"><span class="Apple-tab-span">	</span>| gain, dry_wet,</p>
+<p class="p11"><span class="Apple-converted-space"> <span class="Apple-tab-span">	</span></span>del1TimeMin, del1TimeMax, del1Freq, del1Feedback, inAmount1, crossFdbAmount1,</p>
+<p class="p11"><span class="Apple-converted-space"> <span class="Apple-tab-span">	</span></span>del2TimeMin, del2TimeMax, del2Freq, del2Feedback, inAmount2, crossFdbAmount2|</p>
+<p class="p9"><span class="Apple-converted-space"> <span class="Apple-tab-span">	</span></span></p>
+<p class="p8"><span class="s3"><span class="Apple-converted-space"> <span class="Apple-tab-span">	</span></span></span>// internal variables</p>
+<p class="p11"><span class="Apple-converted-space"> <span class="Apple-tab-span">	</span></span><span class="s5">var</span> comb1, comb2;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s5">var</span> local, in, amp, feedBackMix, out;</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s5">var</span> maxDelay = 3;</p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>//Input from AU<span class="Apple-converted-space">  </span>host</p>
+<p class="p11"><span class="Apple-tab-span">	</span>in = <span class="s5">Mix</span>.new(<span class="s5">AudioIn</span>.ar([1,2]));<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>// Input from the comb filters</p>
+<p class="p11"><span class="Apple-tab-span">	</span>local = <span class="s5">LocalIn</span>.ar(2);<span class="Apple-converted-space"> </span></p>
+<p class="p9"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></p>
+<p class="p8"><span class="s3"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></span>/* comb filters with:<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>- input from outside as well as from the other comb filter, with adjustable input gains</p>
+<p class="p8"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>- randomized delay time, with adjustable min/max times and frequency<span class="Apple-converted-space"> </span></p>
+<p class="p8"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>- adjustable feedback</p>
+<p class="p8"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span>- amplitude and DC protection</p>
+<p class="p8"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span>*/</p>
+<p class="p11"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span>comb1 = <span class="s5">Limiter</span>.ar(<span class="s5">LeakDC</span>.ar(<span class="s5">CombC</span>.ar((in * inAmount1) + (local[1] * crossFdbAmount1), maxDelay, <span class="s5">LFDNoise3</span>.ar(del1Freq).range(del1TimeMin, del1TimeMax), del1Feedback)), 0.985);</p>
+<p class="p11"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span>comb2 = <span class="s5">Limiter</span>.ar(<span class="s5">LeakDC</span>.ar(<span class="s5">CombC</span>.ar((in * inAmount2) + (local[0] * crossFdbAmount2), maxDelay, <span class="s5">LFDNoise3</span>.ar(del2Freq).range(del2TimeMin, del2TimeMax), del2Feedback)), 0.985);</p>
+<p class="p9"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></p>
+<p class="p8"><span class="s3"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></span>// dry_wet is a cross-fader: 0 = only dry, 1 = only wet</p>
+<p class="p11"><span class="Apple-tab-span">	</span>out = (in * (1-dry_wet)) + ([comb1, comb2] * dry_wet);</p>
+<p class="p9"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></p>
+<p class="p8"><span class="s3"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span></span>// Feedback output of the comb filters</p>
+<p class="p11"><span class="Apple-converted-space">   <span class="Apple-tab-span">	</span></span><span class="s5">LocalOut</span>.ar([comb1, comb2]);</p>
+<p class="p9"><br></p>
+<p class="p8"><span class="s3"><span class="Apple-tab-span">	</span></span>//Output to AU host (mono)</p>
+<p class="p11"><span class="Apple-tab-span">	</span><span class="s5">Out</span>.ar(0, gain * <span class="s5">Mix</span>.new(out));<span class="Apple-converted-space"> </span></p>
+<p class="p11">};</p>
+<p class="p9"><br></p>
+<p class="p8">// These specs are not SC-related, but AU related. See the AudioUnitBuilder helpfile for more on that:</p>
+<p class="p8">// Each entry in the specs array should be an array like this:<span class="Apple-converted-space"> </span></p>
+<p class="p8">//<span class="Apple-tab-span">	</span>[min, max, display style, default value, unit]</p>
+<p class="p11">specs =<span class="Apple-converted-space">  </span>#[<span class="Apple-converted-space"> </span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 1 , <span class="s6">\Linear</span>, 0.75, <span class="s6">\LinearGain</span>] , <span class="s8">// gain (overall)</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 1 , <span class="s6">\Linear</span>, 0.5, <span class="s6">\LinearGain</span>] , <span class="s8">// dry_wet</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 2 , <span class="s6">\Linear</span>, 0.0001,<span class="s6">\Seconds</span> ] , <span class="s8">// del1TimeMin</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 2 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\Seconds</span> ] , <span class="s8">// del1TimeMax</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0.01, 200, <span class="s6">\Logarithmic</span>, 1, <span class="s6">\Hertz</span>], <span class="s8">//del1Freq</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[-0.9, 0.9 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// del1Feedback</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 1 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// inAmount1</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[-0.9, 0.9 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// crossFdbAmount1</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 2 , <span class="s6">\Linear</span>, 0.0001,<span class="s6">\Seconds</span> ] , <span class="s8">// del2TimeMin</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 2 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\Seconds</span> ] , <span class="s8">// del2TimeMax</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0.01, 200, <span class="s6">\Logarithmic</span>, 1, <span class="s6">\Hertz</span>], <span class="s8">//del2Freq</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[-0.9, 0.9 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// del2Feedback</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[0, 1 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// inAmount2</span></p>
+<p class="p11"><span class="Apple-tab-span">	</span>[-0.9, 0.9 , <span class="s6">\Linear</span>, 0.1,<span class="s6">\LinearGain</span> ] , <span class="s8">// crossFdbAmount2<span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></span></p>
+<p class="p9"><br></p>
+<p class="p11">];<span class="Apple-tab-span">	</span></p>
+<p class="p9"><span class="Apple-tab-span">	</span></p>
+<p class="p8">// Below is the bookkeeping stuff for compiling the AU plug-in:</p>
+<p class="p9"><br></p>
+<p class="p8">// this must be a four chars code. Either \aufx (effect) or \aumf (music effect).</p>
+<p class="p8">// music effects may receive MIDI but some applications won't recognize them</p>
+<p class="p8">// default is \aumf<span class="Apple-tab-span">	</span></p>
+<p class="p11">componentType = <span class="s6">\aufx</span>;</p>
+<p class="p9"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span></p>
+<p class="p8">// this must be a four chars code. It sould be unique in your system within all SuperColliderAU plugins.<span class="Apple-tab-span">	</span></p>
+<p class="p11">componentSubtype = <span class="s6">\d490</span>;<span class="Apple-converted-space"> </span></p>
+<p class="p9"><br></p>
+<p class="p11">builder = <span class="s5">AudioUnitBuilder</span>.new(name, componentSubtype,func, specs, componentType);</p>
+<p class="p9"><br></p>
+<p class="p8">//build and install into ~/Library/Audio/Plug-Ins/Components. You SuperColliderAU.component should be located in the same place</p>
+<p class="p11">builder.makeInstall;<span class="Apple-converted-space"> </span></p>
+<p class="p11">)</p>
+<p class="p9"><br></p>
+<p class="p8">// Now, you can go to your host of choice (try first one of the list above, to make sure it is one that fully supports the SuperColliderAU.component, and try your plug-in out!</p>
+<p class="p9"><br></p>
+<p class="p8">// Remember: Any plug-ins you write, need to be open-source, and comply with SuperCollider's GPL license</p>
+</body>
+</html>

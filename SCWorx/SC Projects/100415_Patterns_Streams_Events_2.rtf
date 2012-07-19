@@ -1,0 +1,184 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf290
+{\fonttbl\f0\fnil\fcharset0 Monaco;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red0\green115\blue0;\red157\green32\blue13;\red0\green26\blue173;\red40\green92\blue14;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 /* 100415 Algorithmiki Domisi toy Hxoy\
+Cygnus Thu, 15 April 2010, 12:34PM\
+\
+======= Patterns-Streams-Events ======== 2. Basic Vocabulary ( {\field{\*\fldinst{HYPERLINK "SC://PG_02_Basic_Vocabulary"}}{\fldrslt \cf2 PG_02_Basic_Vocabulary}} )\
+*/\cf3 \
+\
+\cf2 // Example using Pseq and Pser \cf3 \
+\
+\cf4 Pseq\cf3  (#[1, 3, 5], 8).asStream.all; \cf2 // gives 24 items = 8 repeats * 3 items\cf3 \
+\cf4 Pser\cf3  (#[1, 3, 5], 8).asStream.all; \cf2 // gives 8 items only\cf3 \
+\
+\
+\cf2 // Play patterns using Pbind. Make sure that the server is booted.\cf3 \
+\
+\cf2 // Example 1: Fibonacci Series\cf3 \
+\
+(\
+a = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pseq\cf3 (#[1, 1, 2, 3, 5, 8, 13, 21, 34], 1),\
+	\cf5 \\dur\cf3 , \cf4 Pseq\cf3 (#[0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2], 1)\
+	).play;\
+)\
+\
+a.stop;\
+	\
+\cf2 // Example 2: Greek Anthem \cf3 \
+\
+(\
+b = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pseq\cf3 (#[1, 2, 3, 2, 1, 2, 3, 1], 1),\
+	\cf5 \\dur\cf3 , \cf4 Pseq\cf3 (#[0.4, 0.2, 0.8, 0.2, 0.4, 0.2, 0.6, 0.4], 1)\
+	).play;	\
+)\
+\
+b.stop;\
+\
+\cf2 // Play patterns using PSlide. Make sure that the server is booted.\cf3 \
+\
+\cf4 Pslide\cf3 (#[1, 2, 3, 4, 5, 6, 7, 8, 9], 5, 3, 1, 0, \cf4 false\cf3 ).asStream.all;\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // or, to show the segments as separate arrays\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\cf4 Pslide\cf3 (#[1, 2, 3, 4, 5, 6, 7, 8, 9], 5, 5, 1, 0, \cf4 false\cf3 ).clump(5).asStream.all;\
+\
+\
+\cf2 // Example 1: Triplets\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 (\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pslide\cf3 ((1.. 18), 15, 3, 1, 0),\
+	\cf5 \\dur\cf3 , \cf4 Pseq\cf3 (#[0.1, 0.1, 0.2], \cf4 inf\cf3 ),\
+	\cf5 \\sustain\cf3 , 0.25\
+).play;\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 // Example 2: Duals\cf3 \
+\
+\pard\pardeftab560\ql\qnatural
+\cf3 (\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pslide\cf3 ((1.. 18), 15, 4, 1, 0),\
+	\cf5 \\dur\cf3 , \cf4 Pseq\cf3 (#[0.1, 0.2], \cf4 inf\cf3 ),\
+	\cf5 \\sustain\cf3 , 0.3\
+).play;\
+)\
+\
+\cf2 // ============= More Examples ==================\cf3 \
+\
+\
+\cf2 // Prand: given scale degrees (pentatonic) with equal probability of each\cf3 \
+(\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Prand\cf3 ([0, 1, 2, 4, 5], \cf4 inf\cf3 ),\
+	\cf5 \\dur\cf3 , 0.25\
+).play;\
+)\
+\
+\
+\cf2 // Pxrand: same as above but never repeats a pitch twice in a row\cf3 \
+(\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pxrand\cf3 ([0, 1, 2, 4, 5], \cf4 inf\cf3 ),\
+	\cf5 \\dur\cf3 , 0.25\
+).play;\
+)\
+\
+\
+\cf2 // Pshuf: randomly ordered once and repeated\cf3 \
+(\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pshuf\cf3 ([0, 1, 2, 4, 5], \cf4 inf\cf3 ),\
+	\cf5 \\dur\cf3 , 0.25\
+).play;\
+)\
+\
+\cf2 // Pwrand: these probabilities favor triadic notes from scale degrees\cf3 \
+(\
+p = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Pwrand\cf3 ((0..7), [4, 1, 3, 1, 3, 2, 1].normalizeSum, \cf4 inf\cf3 ),\
+	\cf5 \\dur\cf3 , 0.25\
+).play;\
+)\
+\
+\cf2 // Interlacing Values and Making Arrays\cf3 \
+\
+\cf4 Place\cf3 ([0, [1, 2], [3, 4, 5]], 3).asStream.all;\
+\
+\cf2 // Now read vertically\cf3 \
+\
+\cf4 Place\cf3 ([0, [1, 2], [3, 4, 5]], 3).clump(3).do(\cf4 _\cf3 .postln);\
+\
+\cf2 // A Hanon Exercise\cf3 \
+\
+(\
+a = \cf4 Pbind\cf3 (\
+	\cf5 \\degree\cf3 , \cf4 Ppatlace\cf3 ([\
+		\cf4 Pseries\cf3 (0, 1, 8),  \cf6 // first, third etc. notes\cf3 \
+		\cf4 Pseries\cf3 (2, 1, 7)	\cf6 // second, fourth etc. notes\cf3 \
+	], \cf4 inf\cf3 ), \
+	\cf5 \\dur\cf3 , 0.25\
+).play;\
+)\
+\
+\cf6 // Chords\
+// \\degree receives [7, 9, 4], then [6, 7, 4] successively, expanded to chords on the server\
+\pard\pardeftab560\ql\qnatural
+\cf0 (\
+p = \cf7 Pbind\cf0 (\
+	\cf8 \\degree\cf0 , \cf7 Ptuple\cf0 ([\cf8 \
+\cf0 		\cf7 Pseries\cf0 (7, -1, 8),\
+		\cf7 Pseq\cf0 ([9, 7, 7, 7, 4, 4, 2, 2], 1),\
+		\cf7 Pseq\cf0 ([4, 4, 4, 2, 2, 0, 0, -3], 1)\
+	], 1),\
+	\cf8 \\dur\cf0 , 1\
+).play;\
+)\cf3 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs24 \cf0 \
+\pard\pardeftab560\ql\qnatural
+
+\f0\fs18 \cf6 // Use Pseries for a scale and Pgeom for an accelerando\
+\pard\pardeftab560\ql\qnatural
+\cf0 (\
+p = \cf7 Pbind\cf0 (\
+	\cf8 \\degree\cf0 , \cf7 Pseries\cf0 (-7, 1, 15),\
+	\cf8 \\dur\cf0 , \cf7 Pgeom\cf0 (0.5, 0.8, 15)\
+).play;\
+)\cf3 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+}

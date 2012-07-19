@@ -1,0 +1,175 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 11.1:
+\b0 \
+
+\b 	Managing large projects
+\b0 \
+
+\fs28 		Contents:\
+			\'95 Managing large projects\
+				- General\
+				- A simple example\
+				- A more complex example (the instrument from 7.2)\
+				\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf3 \
+\
+\pard\pardeftab560\sa20\ql\qnatural
+
+\fs22 \cf2 /* NOTE: This example uses 4 supplemental files, which should be located in the same directory as this file:\
+\
+DX490A_su2010_Class11.1_[Managing-Large-Projects_Simple-example].rtf"\
+// and:\
+DX490A_su2010_Class11.1_[Managing-Large-Projects_synths].rtf"\
+DX490A_su2010_Class11.1_[Managing-Large-Projects_procmods].rtf"\
+DX490A_su2010_Class11.1_[Managing-Large-Projects_Mapping-SpaceNavigator].rtf"]\
+*/\cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+
+\fs28 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= MANAGING LARGE PROJECTS =================
+\b0 \cf3 \
+\
+
+\b \cf2 // ====== GENERAL ======
+\b0 \cf3 \
+\
+\cf2 // There comes a time when the code of a project becomes too large, making navigation within a single file far from easy. If you constantly spend more than a few seconds trying to locate your synthdefs or functions, or if you have a thousand lines of code in a single text file, it's maybe time to do something about it: sensibly splitting your code into several files (and a more advanced idea: create classes and/or standalone applications - but that will come in a later class).\cf3 \
+ \
+\
+\cf2 // A good strategy is to use a separate file for your synthdefs, and possibly another file for your functions, guis, real-time controls or score etc. The goal here would be that you can change elements in each of these components 
+\i without
+\i0  breaking anything on your piece. So, tweaking a SynthDef, but still having it work; changing mapping curves, but still being able to control your synths. Using a different controller altogether for the same system, without running into the danger of breaking code.\cf3 \
+\
+\cf2 // Having something like this in mind, you could setup a routine to load one component after another, so that you only need to evaluate one block in your main code, while making sure that the different components are loading in the right sequence, and with the appropriate delay times (if that is necessary) in between them. You may also need to establish interdependencies between files, having for example a file that loads your buffers give the OK to your synths to load using an action method and setting a condition in your routine, and then your synths setting another condition for your functions, etc. (for more on interdependent processes, see the code from Class4.1 of these examples).\cf3 \
+\
+\
+\
+
+\b \cf2 // ====== A SIMPLE EXAMPLE ======
+\b0 \cf3 \
+\cf2 // The basic class we need to use is {\field{\*\fldinst{HYPERLINK "SC://Document"}}{\fldrslt \cf2 \ul \ulc2 Document}}. \cf3 \
+\cf2 // Let's see a very simple example:\cf3 \
+s.boot;\
+\
+
+\b \cf2 // Step 1: 
+\b0 Create a simple file containing a Synth (we'll use a pre-baked one for now)\cf3 \
+\
+
+\b \cf2 // Step 2: 
+\b0 Save it in the same directory as this file (i.e. your main workspace file).\cf3 \
+\
+
+\b \cf2 // Step 3:
+\b0 \cf3 \
+\pard\pardeftab560\ql\qnatural
+
+\b \cf3 	\cf2 // (a):
+\b0  Get the path the current document (this file) is located:\cf3 \
+		~thisPath = \cf4 Document\cf3 .current.dir.postln;\
+	
+\b \cf2 // (b):
+\b0  Create a string concatanating the name of the file you want to load with the directory you are in:\cf3 \
+		~synths = ~thisPath ++ \cf5 "/DX490A_su2010_Class11.1_[Managing-Large-Projects_Simple-example].rtf"\cf3  \cf2 // don't forget the extra '/' before the name!\cf3 \
+	\cf2 /
+\b / (c): 
+\b0 Now, just .load the file!\cf3 \
+		~synths.load\
+	
+\b \cf2 // (d): 
+\b0 If you want to edit the file, just .open it:\cf3 \
+		\cf4 Document\cf3 .open(~synths)\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 // If you make sure you always have these files in the same directory, this will always work!\cf3 \
+\
+	\cf2 // Note: Instead of .load in step 3(c), you could also use this:\cf3 \
+		\cf4 thisProcess\cf3 .interpreter.executeFile(~synths)\
+\
+\
+\
+
+\b \cf2 // ====== A MORE COMPLEX EXAMPLE ======
+\b0 \cf3 \
+\
+\cf2 // We are going to use this example: Class7.2_[Example_ProcMod_w.HID].html\cf3 \
+\cf2 // The control interface for this example is the 
+\i 3DConnexxion SpaceNavigator
+\i0 , but one need only change the interface/mapping file to get this instrument working with another interface\cf3 \
+\
+\cf2 // First, check which devices are connected to the computer and where, to see where our 
+\i SpaceNavigator
+\i0  is located \cf3 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+(\
+\cf2 // Make a list of the devices:\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf4 GeneralHID\cf3 .buildDeviceList;\
+\cf4 GeneralHID\cf3 .postDevices;\
+d = \cf4 GeneralHID\cf3 .deviceList;\
+)\
+\cf2 // And set the one you want to use as this variable:\cf3 \
+~device = d[2];\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 \
+\pard\pardeftab560\ql\qnatural
+\cf3 s.boot;\
+\
+(\
+~loadMyPiece = \cf4 Routine\cf3  \{\
+	\cf2 // Get the path the current document (this file) is located:\cf3 \
+	~basePath = \cf4 Document\cf3 .current.dir.postln;\
+	\cf2 // \'95 first, load the synthdefs\cf3 \
+	~synths = ~basePath ++ \cf5 "/DX490A_su2010_Class11.1_[Managing-Large-Projects_synths].rtf"\cf3 ;\
+	~synths.load;\
+	\cf2 // wait a bit for good measure (not necessary)\cf3 \
+	0.2.wait;\
+	\cf2 // \'95 then, load the procmods\cf3 \
+	~procmods = ~basePath ++ \cf5 "/DX490A_su2010_Class11.1_[Managing-Large-Projects_procmods].rtf"\cf3 ;\
+	~procmods.load;\
+	\cf2 // wait a bit for good measure (not necessary)\cf3 \
+	0.2.wait;\
+	\cf2 // \'95 finally, load the interfacing and mapping. \cf3 \
+	~interface = ~basePath ++ \cf5 "/DX490A_su2010_Class11.1_[Managing-Large-Projects_Mapping-SpaceNavigator].rtf"\cf3 ;\
+	\cf2 // NOTE: This is actually a function, as we need to pass it the port we want to connect\cf3 \
+	~interface.load.value(~device);\
+\}\
+)\
+\
+\cf2 // Now, load everything, and you're ready to play!\cf3 \
+~loadMyPiece.play(\cf4 AppClock\cf3 );\
+	\
+\cf2 // Open the separate files to edit:\cf3 \
+\cf4 Document\cf3 .open(~synths);\
+\cf4 Document\cf3 .open(~procmods);\
+\cf4 Document\cf3 .open(~interface);\
+}

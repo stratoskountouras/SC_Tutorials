@@ -1,0 +1,163 @@
+{\rtf1\ansi\ansicpg1253\cocoartf949\cocoasubrtf540
+{\fonttbl\f0\fswiss\fcharset0 Optima-Regular;}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red96\green96\blue96;\red0\green0\blue191;
+\red0\green0\blue255;}
+\deftab560
+\pard\pardeftab560\sa20\ql\qnatural
+
+\f0\b\fs28 \cf2 /* 
+\b0 \
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs34 DX490a - Summer 2010
+\b0 \
+
+\fs26 		Instructor: Stelios Manousakis\
+
+\b\fs24 ==========================================================
+\b0\fs26 		
+\fs24 \
+
+\b\fs30 Class 2.4:
+\b0 \
+
+\b 	Interfacing 2: Multitouch trackpad
+\b0 \
+
+\fs28 		Contents:\
+			\'95 MultiTouchPad (MacBook/MacBookPro only)\
+			\'95 Lab exercise\
+
+\b\fs24 ==========================================================
+\b0 \
+
+\b\fs28 */
+\b0 \cf0 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\b \cf2 // ================= MULTITOUCHPAD =================\
+\pard\pardeftab560\ql\qnatural
+
+\b0 \cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 // Now, let's try our hands at a quite involved installation procedure of a very fun Quark: MultiTouchPad is a class created by Batuhan Bozkurt that acts as a wrapper of the 
+\i tongsengmod 
+\i0 application inside SuperCollider, allowing you to get multitouch data from your MacBook's touchpad! This will only work on newer MacBook family computers, and according to the developer it has been tested only on Leopard only so far. If your MacBook doesn't support 3-finger gestures, it is not multitouch-enabled, so this unfortunately won't work. Have a look at this thread to find out more on that:\cf0 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 "open http://new-supercollider-mailing-lists-forums-use-these.2681727.n2.nabble.com/New-Quark-MultiTouchPad-td3967869.html#a3968135"\cf0 .unixCmd\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // The protocol used behind the scenes by 
+\i \cf2 tongsengmod 
+\i0 \cf2 is TUIO (a protocol specifically designed for table-top tangible user interfaces). \cf0 \
+\cf2 // More info here:\cf0 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 "open http://tuio.lfsaw.de/index.shtml"\cf0 .unixCmd;\
+\cf3 "open http://www.tuio.org/?specification"\cf0 .unixCmd;\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // There are a few steps involved to get this going. \cf0 \
+	\cf2 // You can do 1a. (easy 2-step install) OR 1b. (3-step process) to install the 
+\i \cf2 tongsengmod
+\i0 \cf2  application to your machine.\cf0 \
+	\cf2 // Then do 2. to get the MultiTouchPad quark.\cf0 \
+\
+\cf2 /* 
+\b 1a
+\b0 .======\
+Download and install a pre-compiled version of 
+\i \cf2 tongsengmod
+\i0 \cf2 :\
+==========\
+*/\cf0 \
+\cf2 // 
+\b A:
+\b0  download the precompiled tongsengmod binary\cf0 \
+\pard\pardeftab560\sa20\ql\qnatural
+\cf3 "open http://github.com/downloads/batuhan/tongsengmod/tongsengmod.zip"\cf0 .unixCmd\
+\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 // 
+\b B:
+\b0 \cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 //* Open Terminal application:\cf0 \
+	\cf3 "open /Applications/Utilities/Terminal.app"\cf0 .unixCmd\
+\cf2 /*	Then, write the following inside Terminal (without the $ symbol, this just means it's a new command, after the previous one has come through):\
+	$ cd <drag-drop the tongsengmod binary here and this will give you the path>\
+\pard\pardeftab560\sa20\ql\qnatural
+\cf2 	$ sudo mv <same path as above>\
+	$ enter your password\
+// Now the application is installed, and SC should be able to access it - provided your computer is multitouch capable. Now go to 2.\
+*/\cf0 \
+\
+						
+\b \cf2 // OR:
+\b0 \cf0 \
+\cf2 /* 
+\b 1b.
+\b0  ======\
+Downloading and compiling 
+\i \cf2 tongsengmod
+\i0 \cf2  (From the MultiTouchPad helpfile):\
+==========\
+*/\cf0 \
+\pard\pardeftab560\ql\qnatural
+\cf2 /* 
+\b A:
+\b0  \
+Make sure you have Apple Developer Tools installed.\
+*/\cf0 \
+\
+\cf2 /*
+\b  B
+\b0 :\
+Download tongsengmod source from: http://github.com/batuhan/tongsengmod (or download via git://github.com/batuhan/tongsengmod.git ).\
+"open http://github.com/batuhan/tongsengmod/zipball/0.4".unixCmd \
+	
+\fs24 \cf2 // you could also have a look here and see if there is a newer version\
+	"open http://github.com/batuhan/tongsengmod/downloads".unixCmd\
+
+\fs28 \cf2 */\cf0 \
+\cf2 /* 
+\b C:
+\b0 \
+Extract the source archive (for example, to the desktop; if you put it elsewhere, you 'll need to replace cd ~/Desktop with the folder and path where you downloaded tongsengmod).\
+*/\cf0 \
+\cf2 // Open Terminal application:\cf0 \
+		\cf3 "open /Applications/Utilities/Terminal.app"\cf0 .unixCmd\
+\cf2 /*	Then, write the following inside Terminal (without the $ symbol, this just means it's a new command, after the previous one has come through)\
+	$ cd ~/Desktop 		\
+	$ cd <extracted folder name>\
+	$ make\
+	$ sudo make install\
+*/\cf0 \
+\
+\
+\
+\cf2 /*
+\b  2.  
+\b0 ======\
+\'95 Download the MultiTouchPad Quark:\
+==========\
+*/\cf0 \
+\cf4 Quarks\cf0 .install( \cf3 "MultiTouchPad"\cf0 , checkoutIfNeeded: \cf4 false\cf0 )\
+\
+\cf2 //\'95 Open up the helpfile, and enjoy!\cf0 \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "http://../../../../../../Users/steliosm/Library/Application%20Support/SuperCollider/quarks/MultiTouchPad/Help/MultiTouchPad.html"}}{\fldrslt \cf5 \ul \ulc4 MultiTouchPad}}\
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 /*\
+
+\b // ================= LAB EXERCISE =================
+\b0 \
+>>>> Lab exercise / homework:\
+	Make an instrument incorporating multitouch \
+*/\cf0 \
+}
